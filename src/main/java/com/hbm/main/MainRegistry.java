@@ -209,7 +209,6 @@ public class MainRegistry {
 	public static Achievement digammaKnow;
 	public static Achievement digammaKauaiMoho;
 	public static Achievement digammaUpOnTop;
-	public static Achievement rotConsum;
 	
 	public static Achievement achBurnerPress;
 	public static Achievement achBlastFurnace;
@@ -637,7 +636,7 @@ public class MainRegistry {
 
 			private boolean dispenseSound = true;
 			@Override protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
-				
+
 				EnumFacing facing = BlockDispenser.func_149937_b(source.getBlockMetadata());
 				World world = source.getWorld();
 				int x = source.getXInt() + facing.getFrontOffsetX();
@@ -658,7 +657,7 @@ public class MainRegistry {
 
 	@EventHandler
 	public static void load(FMLInitializationEvent event) {
-		
+
 		RodRecipes.registerInit();
 
 		achSacrifice = new Achievement("achievement.sacrifice", "sacrifice", -3, 1, ModItems.burnt_bark, null).initIndependentStat().setSpecial().registerStat();
@@ -679,7 +678,7 @@ public class MainRegistry {
 		achSlimeball = new Achievement("achievement.slimeball", "slimeball", -10, 6, DictFrame.fromOne(ModItems.achievement_icon, EnumAchievementType.ACID), null).initIndependentStat().registerStat();
 		achSulfuric = new Achievement("achievement.sulfuric", "sulfuric", -10, 8, DictFrame.fromOne(ModItems.achievement_icon, EnumAchievementType.BALLS), achSlimeball).initIndependentStat().setSpecial().registerStat();
 		achInferno = new Achievement("achievement.inferno", "inferno", -8, 10, ModItems.canister_napalm, null).initIndependentStat().setSpecial().registerStat();
-		
+
 		bobHidden = new Achievement("achievement.hidden", "hidden", 15, -4, ModItems.gun_dampfmaschine, null).initIndependentStat().registerStat();
 
 		horizonsStart = new Achievement("achievement.horizonsStart", "horizonsStart", -5, 4, ModItems.sat_gerald, null).initIndependentStat().registerStat();
@@ -841,7 +840,7 @@ public class MainRegistry {
 		AnvilRecipes.register();
 		RefineryRecipes.registerRefinery();
 		GasCentrifugeRecipes.register();
-		
+
 		CustomMachineConfigJSON.initialize();
 
 		//the good stuff
@@ -850,7 +849,7 @@ public class MainRegistry {
 
 		//has to register after cracking, and therefore after all serializable recipes
 		RadiolysisRecipes.registerRadiolysis();
-		
+
 		FalloutConfigJSON.initialize();
 
 		TileEntityNukeCustom.registerBombItems();
@@ -878,10 +877,10 @@ public class MainRegistry {
 		//new BiomeCave().setThreshold(1.5D).setRangeMult(20).setYLevel(40).setMaxRange(20);
 		//new OreLayer(Blocks.coal_ore, 0.2F).setThreshold(4).setRangeMult(3).setYLevel(70);
 		BedrockOre.init();
-		
+
 		Compat.handleRailcraftNonsense();
 		SuicideThreadDump.register();
-		
+
 		//ExplosionTests.runTest();
 	}
 
@@ -905,7 +904,7 @@ public class MainRegistry {
 		FMLCommonHandler.instance().bus().register(rogueHandler);
 		MinecraftForge.EVENT_BUS.register(rogueHandler);
 		MinecraftForge.TERRAIN_GEN_BUS.register(rogueHandler);
-		
+
 		OreDictManager oreMan = new OreDictManager();
 		MinecraftForge.EVENT_BUS.register(oreMan); //OreRegisterEvent
 		
@@ -918,7 +917,7 @@ public class MainRegistry {
 		PollutionHandler pollution = new PollutionHandler();
 		MinecraftForge.EVENT_BUS.register(pollution);
 		FMLCommonHandler.instance().bus().register(pollution);
-		
+
 		if(event.getSide() == Side.CLIENT) {
 			HbmKeybinds.register();
 			HbmKeybinds keyHandler = new HbmKeybinds();
@@ -936,10 +935,10 @@ public class MainRegistry {
 		event.registerServerCommand(new CommandDebugChunkLoad());
 		event.registerServerCommand(new CommandSatellites());
 	}
-	
+
 	@EventHandler
 	public void serverStart(FMLServerStartedEvent event) {
-		
+
 		if(GeneralConfig.enableStatReRegistering) {
 			logger.info("Attempting to re-register item stats...");
 			StatHelper.resetStatShitFuck(); //shit yourself
@@ -964,7 +963,7 @@ public class MainRegistry {
 		StructureConfig.loadFromConfig(config);
 
 		config.save();
-		
+
 		try {
 			if(GeneralConfig.enableThermosPreventer && Class.forName("thermos.ThermosClassTransformer") != null) {
 				throw new IllegalStateException("The mod tried to start on a Thermos or it's fork server and therefore stopped. To allow the server to start on Thermos, change the appropriate "
@@ -1174,14 +1173,14 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.primer_50");
 		ignoreMappings.add("hbm:item.primer_buckshot");
 		ignoreMappings.add("hbm:tile.ore_bedrock_coltan");
-		
+
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);
 		remapItems.put("hbm:item.man_explosive8", ModItems.explosive_lenses);
 		remapItems.put("hbm:item.briquette_lignite", ModItems.briquette);
 		
 		for(MissingMapping mapping : event.get()) {
-			
+
 			// ignore all ammo prefixes because those are from the time we threw out all the ammo items
 			if(mapping.name.startsWith("hbm:item.ammo_")) {
 				mapping.ignore();
