@@ -133,6 +133,7 @@ public class ShredderRecipes extends SerializableRecipe {
 	public void registerDefaults() {
 
 		/* Primary recipes */
+		ShredderRecipes.setRecipe(ModItems.nuclear_waste, new ItemStack(ModItems.scrap_nuclear, 9));
 		ShredderRecipes.setRecipe(ModItems.scrap, new ItemStack(ModItems.dust));
 		ShredderRecipes.setRecipe(ModItems.dust, new ItemStack(ModItems.dust));
 		ShredderRecipes.setRecipe(Blocks.glowstone, new ItemStack(Items.glowstone_dust, 4));
