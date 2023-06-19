@@ -116,13 +116,6 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements IFlu
 						ItemWasteShort.WasteClass wasteClass = ItemWasteShort.WasteClass.values()[ItemWasteLong.rectify(meta)];
 						liquid += wasteClass.liquid;
 						gas += wasteClass.gas;
-						slots[i] = new ItemStack(ModItems.scrap_nuclear, 9, meta);
-					}
-
-					if(item == ModItems.nuclear_waste_tiny && worldObj.rand.nextInt(VersatileConfig.getLongDecayChance() / 10) == 0) {
-						ItemWasteShort.WasteClass wasteClass = ItemWasteShort.WasteClass.values()[ItemWasteLong.rectify(meta)];
-						liquid += wasteClass.liquid / 10;
-						gas += wasteClass.gas / 10;
 						slots[i] = new ItemStack(ModItems.scrap_nuclear, 1, meta);
 					}
 
