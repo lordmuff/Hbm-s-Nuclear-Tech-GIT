@@ -8738,4 +8738,4 @@ public class ModItems {
 		GameRegistry.registerItem(remap, remap.getUnlocalizedName());
 	}
 }
-}
+
