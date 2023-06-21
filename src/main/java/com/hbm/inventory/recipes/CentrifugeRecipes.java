@@ -174,10 +174,10 @@ public class CentrifugeRecipes extends SerializableRecipe {
 				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
 
 		recipes.put(new ComparableStack(ModItems.waste_gravel), new ItemStack[] {
-				new ItemStack(ModItems.nugget_australium_lesser, 6),
-				new ItemStack(ModItems.nugget_australium, 3),
-				new ItemStack(ModItems.nugget_australium_greater, 1),
-				new ItemStack(ModItems.powder_boron_tiny, 1) });
+				new ItemStack(ModItems.billet_australium_lesser, 6),
+				new ItemStack(ModItems.billet_australium, 4),
+				new ItemStack(ModItems.billet_australium_greater, 2),
+				new ItemStack(ModItems.powder_boron_tiny, 3) });
 
 		recipes.put(new ComparableStack(ModItems.waste_plate_mox), new ItemStack[] {
 				new ItemStack(ModItems.powder_sr90_tiny, 1),
