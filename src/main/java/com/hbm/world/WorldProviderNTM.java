@@ -5,6 +5,7 @@ import com.hbm.handler.RogueWorldHandler;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ModEventHandlerRogue;
 import com.hbm.saveddata.RogueWorldSaveData;
+import com.hbm.handler.RogueWorldHandler;
 import com.hbm.saveddata.TomSaveData;
 
 import cpw.mods.fml.relauncher.Side;
@@ -63,10 +64,10 @@ public class WorldProviderNTM extends WorldProviderSurface {
 			float f5 = (f3 - f4) / f2 * 0.5F + 0.5F;
 			float f6 = 1.0F - (1.0F - MathHelper.sin(f5 * (float) Math.PI)) * 0.99F;
 			f6 *= f6;
-			this.colorsSunriseSunset[0] = (f5 * 0.3F + 0.7F)* Math.min(1, ModEventHandlerRogue.getSolarBrightnessClient(worldObj)) * MainRegistry.proxy.getAtmosphere(worldObj) * (1 - dust);
-			this.colorsSunriseSunset[1] = (f5 * f5 * 0.7F + 0.2F)*  Math.min(1, ModEventHandlerRogue.getSolarBrightnessClient(worldObj)) * MainRegistry.proxy.getAtmosphere(worldObj) * (1 - dust);
-			this.colorsSunriseSunset[2] = (f5 * f5 * 0.0F + 0.2F)*  Math.min(1, ModEventHandlerRogue.getSolarBrightnessClient(worldObj)) * MainRegistry.proxy.getAtmosphere(worldObj) * (1 - dust);
-			this.colorsSunriseSunset[3] = f6*  Math.min(1, ModEventHandlerRogue.getSolarBrightnessClient(worldObj)) * MainRegistry.proxy.getAtmosphere(worldObj) * (1 - dust);
+			this.colorsSunriseSunset[0] = (f5 * 0.3F + 0.7F)* Math.min(1, ModEventHandlerRogue.getSolarBrightnessClient(worldObj)) * RogueWorldHandler.getAtmosphereForClient(worldObj) * (1 - dust);
+			this.colorsSunriseSunset[1] = (f5 * f5 * 0.7F + 0.2F)*  Math.min(1, ModEventHandlerRogue.getSolarBrightnessClient(worldObj)) * RogueWorldHandler.getAtmosphereForClient(worldObj) * (1 - dust);
+			this.colorsSunriseSunset[2] = (f5 * f5 * 0.0F + 0.2F)*  Math.min(1, ModEventHandlerRogue.getSolarBrightnessClient(worldObj)) * RogueWorldHandler.getAtmosphereForClient(worldObj) * (1 - dust);
+			this.colorsSunriseSunset[3] = f6*  Math.min(1, ModEventHandlerRogue.getSolarBrightnessClient(worldObj)) * RogueWorldHandler.getAtmosphereForClient(worldObj) * (1 - dust);
 			System.out.println( ModEventHandlerRogue.getSolarBrightnessClient(worldObj));
 			System.out.println(colorsSunriseSunset);
 			return this.colorsSunriseSunset;
