@@ -934,6 +934,7 @@ public class MainRegistry {
 		if(GeneralConfig.enableStatReRegistering) {
 			logger.info("Attempting to re-register item stats...");
 			StatHelper.resetStatShitFuck(); //shit yourself
+			logger.info("Item stats re-registered");
 		}
 	}
 	
@@ -1039,7 +1040,6 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:tile.turret_cwis");
 		ignoreMappings.add("hbm:tile.turret_spitfire");
 		ignoreMappings.add("hbm:tile.turret_cheapo");
-		ignoreMappings.add("hbm:tile.tower_chimney");
 		ignoreMappings.add("hbm:item.turret_light_ammo");
 		ignoreMappings.add("hbm:item.turret_heavy_ammo");
 		ignoreMappings.add("hbm:item.turret_rocket_ammo");
@@ -1126,6 +1126,10 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.digamma_know");
 		ignoreMappings.add("hbm:item.digamma_kauai_moho");
 		ignoreMappings.add("hbm:item.digamma_up_on_top");
+		ignoreMappings.add("hbm:tile.oil_duct_solid");
+		ignoreMappings.add("hbm:tile.oil_duct");
+		ignoreMappings.add("hbm:tile.gas_duct_solid");
+		ignoreMappings.add("hbm:tile.gas_duct");
 		
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);
