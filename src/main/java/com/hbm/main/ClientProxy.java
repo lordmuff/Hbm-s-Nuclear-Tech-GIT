@@ -293,6 +293,10 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCryoDistill.class, new RenderCryoDistill());
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPistonInserter.class, new RenderPistonInserter());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityConveyorPress.class, new RenderConveyorPress());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRadioTelex.class, new RenderTelex());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePumpSteam.class, new RenderPump());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePumpElectric.class, new RenderPump());
 		//Foundry
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFoundryBasin.class, new RenderFoundry());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFoundryMold.class, new RenderFoundry());
@@ -1849,6 +1853,15 @@ public class ClientProxy extends ServerProxy {
 			float scale = data.getFloat("scale");
 			ParticleText text = new ParticleText(world, x, y, z, color, t);
 			text.multipleParticleScaleBy(scale);
+			Minecraft.getMinecraft().effectRenderer.addEffect(text);
+		}
+		
+		if("debugline".equals(type)) {
+			double mX = data.getDouble("mX");
+			double mY = data.getDouble("mY");
+			double mZ = data.getDouble("mZ");
+			int color = data.getInteger("color");
+			ParticleDebugLine text = new ParticleDebugLine(world, x, y, z, mX, mY, mZ, color);
 			Minecraft.getMinecraft().effectRenderer.addEffect(text);
 		}
 		

@@ -143,6 +143,7 @@ public class TileMappings {
 		put(TileEntityDecon.class, "tileentity_decon");
 		put(TileEntityMachineSatDock.class, "tileentity_miner_dock");
 		put(TileEntityMachineEPress.class, "tileentity_electric_press");
+		put(TileEntityConveyorPress.class, "tileentity_conveyor_press");
 		put(TileEntityCoreEmitter.class, "tileentity_v0_emitter");
 		put(TileEntityCoreReceiver.class, "tileentity_v0_receiver");
 		put(TileEntityCoreInjector.class, "tileentity_v0_injector");
@@ -280,6 +281,9 @@ public class TileMappings {
 		put(TileEntityHeatBoiler.class, "tileentity_heat_boiler");
 		put(TileEntityHeatBoilerIndustrial.class, "tileentity_heat_boiler_industrial");
 
+		put(TileEntityMachinePumpSteam.class, "tileentity_steam_pump");
+		put(TileEntityMachinePumpElectric.class, "tileentity_electric_pump");
+		
 		put(TileEntityFoundryMold.class, "tileentity_foundry_mold");
 		put(TileEntityFoundryBasin.class, "tileentity_foundry_basin");
 		put(TileEntityFoundryChannel.class, "tileentity_foundry_channel");
@@ -393,6 +397,7 @@ public class TileMappings {
 		put(TileEntityRadioTorchSender.class, "tileentity_rtty_sender");
 		put(TileEntityRadioTorchReceiver.class, "tileentity_rtty_rec");
 		put(TileEntityRadioTorchCounter.class, "tileentity_rtty_counter");
+		put(TileEntityRadioTelex.class, "tileentity_rtty_telex");
 	}
 	
 	private static void put(Class<? extends TileEntity> clazz, String... names) {
