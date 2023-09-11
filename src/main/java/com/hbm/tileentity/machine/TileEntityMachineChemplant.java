@@ -266,10 +266,10 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 	}
 	
 	private void setupTanks(ChemRecipe recipe) {
-		if(recipe.inputFluids[0] != null) tanks[0].setTankType(recipe.inputFluids[0].type);		else tanks[0].setTankType(Fluids.NONE);
-		if(recipe.inputFluids[1] != null) tanks[1].setTankType(recipe.inputFluids[1].type);		else tanks[1].setTankType(Fluids.NONE);
-		if(recipe.outputFluids[0] != null) tanks[2].setTankType(recipe.outputFluids[0].type);	else tanks[2].setTankType(Fluids.NONE);
-		if(recipe.outputFluids[1] != null) tanks[3].setTankType(recipe.outputFluids[1].type);	else tanks[3].setTankType(Fluids.NONE);
+		if(recipe.inputFluids[0] != null) tanks[0].withPressure(recipe.inputFluids[0].pressure).setTankType(recipe.inputFluids[0].type);	else tanks[0].setTankType(Fluids.NONE);
+		if(recipe.inputFluids[1] != null) tanks[1].withPressure(recipe.inputFluids[1].pressure).setTankType(recipe.inputFluids[1].type);	else tanks[1].setTankType(Fluids.NONE);
+		if(recipe.outputFluids[0] != null) tanks[2].withPressure(recipe.outputFluids[0].pressure).setTankType(recipe.outputFluids[0].type);	else tanks[2].setTankType(Fluids.NONE);
+		if(recipe.outputFluids[1] != null) tanks[3].withPressure(recipe.outputFluids[1].pressure).setTankType(recipe.outputFluids[1].type);	else tanks[3].setTankType(Fluids.NONE);
 	}
 	
 	private boolean hasRequiredFluids(ChemRecipe recipe) {
@@ -303,6 +303,8 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 		ChemRecipe recipe = ChemplantRecipes.indexMapping.get(slots[4].getItemDamage());
 		
 		this.maxProgress = recipe.getDuration() * this.speed / 100;
+		
+		if(maxProgress <= 0) maxProgress = 1;
 		
 		if(this.progress >= this.maxProgress) {
 			consumeFluids(recipe);
@@ -364,7 +366,10 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 				
 				for(AStack ingredient : recipe.inputs) {
 					
-					if(!InventoryUtil.doesArrayHaveIngredients(slots, 13, 16, ingredient)) {
+					outer:
+					while(!InventoryUtil.doesArrayHaveIngredients(slots, 13, 16, ingredient)) {
+						
+						boolean found = false;
 						
 						for(int i = 0; i < inv.getSizeInventory(); i++) {
 							
@@ -376,7 +381,7 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 									if(slots[j] != null && slots[j].stackSize < slots[j].getMaxStackSize() & InventoryUtil.doesStackDataMatch(slots[j], stack)) {
 										inv.decrStackSize(i, 1);
 										slots[j].stackSize++;
-										return;
+										continue outer;
 									}
 								}
 								
@@ -386,11 +391,13 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 										slots[j] = stack.copy();
 										slots[j].stackSize = 1;
 										inv.decrStackSize(i, 1);
-										return;
+										continue outer;
 									}
 								}
 							}
 						}
+						
+						if(!found) return;
 					}
 				}
 			}

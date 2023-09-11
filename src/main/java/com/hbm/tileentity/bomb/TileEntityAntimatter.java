@@ -1,6 +1,7 @@
 package com.hbm.tileentity.bomb;
 
 import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.inventory.container.ContainerNukeAntimatter;
 import com.hbm.inventory.container.ContainerNukeAntimatter;
@@ -105,7 +106,7 @@ public class TileEntityAntimatter extends TileEntityMachineBase implements IGUIP
 	public int getRest() {
 		
 		if(slots[0] != null && slots[1] != null && slots[3] != null && slots[4] != null && slots[1].getItem() == ModItems.particle_lead && slots[0].getItem() == ModItems.particle_lead && 
-				slots[3].getItem() == ModItems.ingot_gaas && slots[4].getItem() == ModItems.ingot_gaas) {
+				slots[3].getItem() == ModItems.ingot_hafnium && slots[4].getItem() == ModItems.ingot_hafnium) {
 			return 1;
 		}
 		
@@ -126,7 +127,7 @@ public class TileEntityAntimatter extends TileEntityMachineBase implements IGUIP
 		bf.posZ = zCoord + 0.5;
 		bf.destructionRange = (int) 150;
 		worldObj.spawnEntityInWorld(bf);
-		worldObj.spawnEntityInWorld(EntityNukeCloudSmall.statFacAnti(worldObj, xCoord + 0.5, yCoord + 5, zCoord + 0.5, 150 * 1.5F, 1000));
+		EntityNukeTorex.startFacAnti(worldObj, xCoord + 0.5, yCoord + 5, zCoord + 0.5, 1000);
 	}
 	
 	public String getMinutes() {

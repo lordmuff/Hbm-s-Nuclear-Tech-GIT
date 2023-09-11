@@ -99,6 +99,23 @@ public class MachineBigAssTank9000 extends BlockDummyable implements IPersistent
 	}
 
 	@Override
+	public boolean hasComparatorInputOverride() {
+		return true;
+	}
+
+	@Override
+	public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
+
+		TileEntity te = world.getTileEntity(x, y, z);
+
+		if(!(te instanceof TileEntityMachineBAT9000))
+			return 0;
+
+		TileEntityMachineBAT9000 tank = (TileEntityMachineBAT9000) te;
+		return tank.getComparatorPower();
+	}
+
+	@Override
 	public void addInformation(ItemStack stack, NBTTagCompound persistentTag, EntityPlayer player, List list, boolean ext) {
 		FluidTank tank = new FluidTank(Fluids.NONE, 0, 0);
 		tank.readFromNBT(persistentTag, "tank");

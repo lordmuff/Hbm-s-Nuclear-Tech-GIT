@@ -145,9 +145,16 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements IFlu
 							    slots[i].setTagCompound((NBTTagCompound)null); //fuck you nbt 
 							}
 						}
+
+					if(item == ModItems.powder_sr90 && worldObj.rand.nextInt(VersatileConfig.getShortDecayChance() / 10) == 0) {
+						slots[i] = new ItemStack(ModItems.powder_zirconium, 1, meta);
+					}
+					if(item == ModItems.nugget_sr90 && worldObj.rand.nextInt(VersatileConfig.getShortDecayChance() / 50) == 0) {
+						slots[i] = new ItemStack(ModItems.nugget_zirconium, 1, meta);
 					}
 				}
 			}
+		}
 
 			this.tanks[0].setFill(this.tanks[0].getFill() + liquid);
 			this.tanks[1].setFill(this.tanks[1].getFill() + gas);
@@ -184,6 +191,7 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements IFlu
 				radiate(worldObj, xCoord, yCoord, zCoord, rad, digamma);
 			}
 		}
+
 	}
 	
 	private void radiate(World world, int x, int y, int z, float rads, float digamma) {

@@ -241,6 +241,13 @@ public class AnvilRecipes {
 
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
+						new ComparableStack(Blocks.stone, 8),
+						new OreDictStack(STEEL.plate(), 2),
+						new OreDictStack(IRON.ingot(), 4)
+				}, new AnvilOutput(new ItemStack(ModBlocks.machine_ashpit))).setTier(2));
+
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[] {
 						new ComparableStack(ModItems.tank_steel, 4),
 						new ComparableStack(ModItems.pipes_steel, 1),
 						new OreDictStack(TI.ingot(), 12),
@@ -331,6 +338,13 @@ public class AnvilRecipes {
 						new OreDictStack(CU.plate528(), 16),
 						new ComparableStack(ModItems.plate_polymer, 8)
 				}, new AnvilOutput(new ItemStack(ModBlocks.machine_boiler))).setTier(2));
+
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[] {
+						new OreDictStack(STEEL.plateCast(), 8),
+						new OreDictStack(CU.ingot(), 8),
+						new OreDictStack(ANY_PLASTIC.ingot(), 4)
+				}, new AnvilOutput(new ItemStack(ModBlocks.machine_industrial_boiler))).setTier(3));
 
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
@@ -438,6 +452,13 @@ public class AnvilRecipes {
 		
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
+						new OreDictStack(STEEL.plate(), 4),
+						new ComparableStack(Blocks.brick_block, 16)
+				},
+				new AnvilOutput(new ItemStack(ModBlocks.chimney_brick))).setTier(2));
+		
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[] {
 						new ComparableStack(ModItems.tank_steel, 1),
 						new OreDictStack(PB.plate528(), 2),
 						new ComparableStack(ModItems.nuclear_waste, 10)
@@ -513,6 +534,9 @@ public class AnvilRecipes {
 			constructionRecipes.add(new AnvilConstructionRecipe(new ComparableStack(ModBlocks.fluid_duct_box, 1, i), new AnvilOutput(new ItemStack(ModItems.plate_iron))).setTier(2).setOverlay(OverlayType.RECYCLING));
 			constructionRecipes.add(new AnvilConstructionRecipe(new ComparableStack(ModBlocks.fluid_duct_box, 1, i + 1), new AnvilOutput(new ItemStack(ModItems.plate_copper))).setTier(2).setOverlay(OverlayType.RECYCLING));
 			constructionRecipes.add(new AnvilConstructionRecipe(new ComparableStack(ModBlocks.fluid_duct_box, 1, i + 2), new AnvilOutput(new ItemStack(ModItems.plate_aluminium))).setTier(2).setOverlay(OverlayType.RECYCLING));
+
+			constructionRecipes.add(new AnvilConstructionRecipe(new AStack[] {new OreDictStack(IRON.plate(), 1), new ComparableStack(ModItems.plate_polymer)}, new AnvilOutput(new ItemStack(ModBlocks.fluid_duct_exhaust, 8, i))).setTier(2).setOverlay(OverlayType.CONSTRUCTION));
+			constructionRecipes.add(new AnvilConstructionRecipe(new ComparableStack(ModBlocks.fluid_duct_exhaust, 8, i), new AnvilOutput[] {new AnvilOutput(new ItemStack(ModItems.plate_iron)), new AnvilOutput(new ItemStack(ModItems.plate_polymer))}).setTier(2));
 		}
 	}
 	
@@ -523,13 +547,7 @@ public class AnvilRecipes {
 		constructionRecipes.add(new AnvilConstructionRecipe(new OreDictStack(CU.plate()), new AnvilOutput(new ItemStack(ModItems.casing_9))).setTier(1));
 		constructionRecipes.add(new AnvilConstructionRecipe(new OreDictStack(CU.plate()), new AnvilOutput(new ItemStack(ModItems.casing_50))).setTier(1));
 		constructionRecipes.add(new AnvilConstructionRecipe(new OreDictStack(CU.plate()), new AnvilOutput(new ItemStack(ModItems.casing_buckshot))).setTier(1));
-		constructionRecipes.add(new AnvilConstructionRecipe(new AStack[] {new OreDictStack(IRON.plate()), new ComparableStack(Items.redstone)}, new AnvilOutput(new ItemStack(ModItems.primer_357))).setTier(1));
-		constructionRecipes.add(new AnvilConstructionRecipe(new AStack[] {new OreDictStack(IRON.plate()), new ComparableStack(Items.redstone)}, new AnvilOutput(new ItemStack(ModItems.primer_44))).setTier(1));
-		constructionRecipes.add(new AnvilConstructionRecipe(new AStack[] {new OreDictStack(IRON.plate()), new ComparableStack(Items.redstone)}, new AnvilOutput(new ItemStack(ModItems.primer_9))).setTier(1));
-		constructionRecipes.add(new AnvilConstructionRecipe(new AStack[] {new OreDictStack(IRON.plate()), new ComparableStack(Items.redstone)}, new AnvilOutput(new ItemStack(ModItems.primer_50))).setTier(1));
-		constructionRecipes.add(new AnvilConstructionRecipe(new AStack[] {new OreDictStack(IRON.plate()), new ComparableStack(Items.redstone)}, new AnvilOutput(new ItemStack(ModItems.primer_buckshot))).setTier(1));
-		constructionRecipes.add(new AnvilConstructionRecipe(new AStack[] {new ComparableStack(ModItems.ammo_4gauge.stackFromEnum(8, Ammo4Gauge.STOCK)), new OreDictStack(P_RED.dust()), new OreDictStack(AL.dust()),  new OreDictStack(KNO.dust())}, new AnvilOutput(ModItems.ammo_4gauge.stackFromEnum(8, Ammo4Gauge.LTBL))).setTier(3));
-		constructionRecipes.add(new AnvilConstructionRecipe(new AStack[] {new ComparableStack(ModItems.ammo_4gauge.stackFromEnum(8, Ammo4Gauge.STOCK)), new ComparableStack(ModItems.wire_schrabidium), new OreDictStack(AL.dust()),  new OreDictStack(KNO.dust())}, new AnvilOutput(ModItems.ammo_4gauge.stackFromEnum(8, Ammo4Gauge.LTBL_SUPER))).setTier(3));
+		
 		Object[][] recs = new Object[][] {
 			{ModItems.ammo_12gauge.stackFromEnum(20, Ammo12Gauge.STOCK),	P_RED.dust(),										ModItems.ammo_12gauge.stackFromEnum(20, Ammo12Gauge.INCENDIARY),	2},
 			{ModItems.ammo_12gauge.stackFromEnum(20, Ammo12Gauge.STOCK),	Item.getItemFromBlock(ModBlocks.gravel_obsidian),	ModItems.ammo_12gauge.stackFromEnum(20, Ammo12Gauge.SHRAPNEL),		2},
@@ -956,6 +974,14 @@ public class AnvilRecipes {
 						new AnvilOutput(new ItemStack(ModItems.plate_lead, 2)),
 						new AnvilOutput(new ItemStack(ModItems.nuclear_waste_vitrified, 10))
 				}).setTier(3));
+
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModItems.egg_glyphid), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModItems.glyphid_meat, 2)),
+						new AnvilOutput(new ItemStack(ModItems.glyphid_meat, 1), 0.5F),
+						new AnvilOutput(new ItemStack(Items.bone, 1), 0.75F),
+						new AnvilOutput(new ItemStack(Items.experience_bottle, 1), 0.5F)
+				}).setTier(1));
 	}
 	
 	public static void pullFromAssembler(ComparableStack result, int tier) {

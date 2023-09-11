@@ -6,6 +6,11 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
+import java.util.UUID;
+
+import com.hbm.config.RadiationConfig;
+
+import com.hbm.config.RadiationConfig;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -39,6 +44,9 @@ public class PollutionHandler {
 	/// UTILITY METHODS ///
 	///////////////////////
 	public static void incrementPollution(World world, int x, int y, int z, PollutionType type, float amount) {
+		
+		if(!RadiationConfig.enablePollution) return;
+		
 		PollutionPerWorld ppw = perWorld.get(world);
 		if(ppw == null) return;
 		ChunkCoordIntPair pos = new ChunkCoordIntPair(x >> 6, z >> 6);
@@ -55,6 +63,9 @@ public class PollutionHandler {
 	}
 	
 	public static void setPollution(World world, int x, int y, int z, PollutionType type, float amount) {
+		
+		if(!RadiationConfig.enablePollution) return;
+		
 		PollutionPerWorld ppw = perWorld.get(world);
 		if(ppw == null) return;
 		ChunkCoordIntPair pos = new ChunkCoordIntPair(x >> 6, z >> 6);
@@ -67,6 +78,9 @@ public class PollutionHandler {
 	}
 	
 	public static float getPollution(World world, int x, int y, int z, PollutionType type) {
+		
+		if(!RadiationConfig.enablePollution) return 0;
+		
 		PollutionPerWorld ppw = perWorld.get(world);
 		if(ppw == null) return 0F;
 		ChunkCoordIntPair pos = new ChunkCoordIntPair(x >> 6, z >> 6);
@@ -76,6 +90,9 @@ public class PollutionHandler {
 	}
 	
 	public static PollutionData getPollutionData(World world, int x, int y, int z) {
+		
+		if(!RadiationConfig.enablePollution) return null;
+		
 		PollutionPerWorld ppw = perWorld.get(world);
 		if(ppw == null) return null;
 		ChunkCoordIntPair pos = new ChunkCoordIntPair(x >> 6, z >> 6);
@@ -88,7 +105,7 @@ public class PollutionHandler {
 	//////////////////////
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load event) {
-		if(!event.world.isRemote) {
+		if(!event.world.isRemote && RadiationConfig.enablePollution) {
 			WorldServer world = (WorldServer) event.world;
 			String dirPath = getDataDir(world);
 
@@ -138,8 +155,10 @@ public class PollutionHandler {
 	
 	public String getDataDir(WorldServer world) {
 		String dir = world.getSaveHandler().getWorldDirectory().getAbsolutePath();
-		if(world.provider.dimensionId != 0) {
-			dir += File.separator + "DIM" + world.provider.dimensionId;
+		// Crucible and probably Thermos provide dimId by themselves
+		String dimId = File.separator + "DIM" + world.provider.dimensionId;
+		if(world.provider.dimensionId != 0 && !dir.endsWith(dimId)) {
+			dir += dimId;
 		}
 		dir += File.separator + "data";
 		return dir;
@@ -169,6 +188,7 @@ public class PollutionHandler {
 					float[] pollutionForNeightbors = new float[PollutionType.values().length];
 					int S = PollutionType.SOOT.ordinal();
 					int H = PollutionType.HEAVYMETAL.ordinal();
+					int P = PollutionType.POISON.ordinal();
 					
 					/* CALCULATION */
 					if(data.pollution[S] > 15) {
@@ -178,7 +198,14 @@ public class PollutionHandler {
 						data.pollution[S] *= 0.99F;
 					}
 
-					data.pollution[H] *= 0.999F;
+					data.pollution[H] *= 0.9995F;
+					
+					if(data.pollution[P] > 10) {
+						pollutionForNeightbors[P] = data.pollution[P] * 0.025F;
+						data.pollution[P] *= 0.9F;
+					} else {
+						data.pollution[P] *= 0.995F;
+					}
 
 					/* SPREADING */
 					//apply new data to self
@@ -282,9 +309,13 @@ public class PollutionHandler {
 	/// MOB EFFECTS ///
 	///////////////////
 
+	public static final UUID maxHealth = UUID.fromString("25462f6c-2cb2-4ca8-9b47-3a011cc61207");
+	public static final UUID attackDamage = UUID.fromString("8f442d7c-d03f-49f6-a040-249ae742eed9");
 	
 	@SubscribeEvent
 	public void decorateMob(LivingSpawnEvent event) {
+		
+		if(!RadiationConfig.enablePollution) return;
 		
 		World world = event.world;
 		if(world.isRemote) return;
@@ -295,9 +326,10 @@ public class PollutionHandler {
 		
 		if(living instanceof IMob) {
 			
-			if(data.pollution[PollutionType.SOOT.ordinal()] > 15) {
-				if(living.getEntityAttribute(SharedMonsterAttributes.maxHealth) != null) living.getEntityAttribute(SharedMonsterAttributes.maxHealth).applyModifier(new AttributeModifier("Soot Anger Health Increase", 2D, 1));
-				if(living.getEntityAttribute(SharedMonsterAttributes.attackDamage) != null) living.getEntityAttribute(SharedMonsterAttributes.attackDamage).applyModifier(new AttributeModifier("Soot Anger Damage Increase", 1.5D, 1));
+			if(data.pollution[PollutionType.SOOT.ordinal()] > RadiationConfig.buffMobThreshold) {
+				if(living.getEntityAttribute(SharedMonsterAttributes.maxHealth) != null && living.getEntityAttribute(SharedMonsterAttributes.maxHealth).getModifier(maxHealth) == null) living.getEntityAttribute(SharedMonsterAttributes.maxHealth).applyModifier(new AttributeModifier(maxHealth, "Soot Anger Health Increase", 1D, 1));
+				if(living.getEntityAttribute(SharedMonsterAttributes.attackDamage) != null && living.getEntityAttribute(SharedMonsterAttributes.attackDamage).getModifier(attackDamage) == null) living.getEntityAttribute(SharedMonsterAttributes.attackDamage).applyModifier(new AttributeModifier(attackDamage, "Soot Anger Damage Increase", 1.5D, 1));
+				living.heal(living.getMaxHealth());
 			}
 		}
 	}

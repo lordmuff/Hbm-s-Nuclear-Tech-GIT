@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
 import com.hbm.blocks.ICustomBlockHighlight;
+import com.hbm.config.RadiationConfig;
 import com.hbm.handler.pollution.PollutionHandler.PollutionType;
 import com.hbm.items.armor.IArmorDisableModel;
 import com.hbm.items.armor.IArmorDisableModel.EnumPlayerPart;
@@ -27,8 +28,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 
 public class ModEventHandlerRenderer {
@@ -330,7 +333,7 @@ public class ModEventHandlerRenderer {
 	@SubscribeEvent
 	public void worldTick(WorldTickEvent event) {
 		
-		if(event.phase == event.phase.START) {
+		if(event.phase == event.phase.START && RadiationConfig.enableSootFog) {
 
 			float step = 0.05F;
 			float soot = PermaSyncHandler.pollution[PollutionType.SOOT.ordinal()];
@@ -347,11 +350,11 @@ public class ModEventHandlerRenderer {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void thickenFog(FogDensity event) {
-		float soot = renderSoot - 35;
-		if(soot > 0) {
-			//event.density = Math.min((soot - 5) * 0.01F, 0.5F);
+		float soot = (float) (renderSoot - RadiationConfig.sootFogThreshold);
+		if(soot > 0 && RadiationConfig.enableSootFog) {
+			
 			float farPlaneDistance = (float) (Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16);
-			float fogDist = farPlaneDistance / (1 + soot * 0.05F);
+			float fogDist = farPlaneDistance / (1 + soot * 5F / (float) RadiationConfig.sootFogDivisor);
 			GL11.glFogf(GL11.GL_FOG_START, 0);
 			GL11.glFogf(GL11.GL_FOG_END, fogDist);
 
@@ -366,14 +369,25 @@ public class ModEventHandlerRenderer {
 	
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void tintFog(FogColors event) {
-		float soot = renderSoot - 35;
+		float soot = (float) (renderSoot - RadiationConfig.sootFogThreshold);
 		float sootColor = 0.15F;
-		float sootReq = 100F;
-		if(soot > 0) {
+		float sootReq = (float) RadiationConfig.sootFogDivisor;
+		if(soot > 0 && RadiationConfig.enableSootFog) {
 			float interp = Math.min(soot / sootReq, 1F);
 			event.red = event.red * (1 - interp) + sootColor * interp;
 			event.green = event.green * (1 - interp) + sootColor * interp;
 			event.blue = event.blue * (1 - interp) + sootColor * interp;
+		}
+	}
+	
+	@SubscribeEvent
+	public void onRenderHUD(RenderGameOverlayEvent.Pre event) {
+		
+		if(event.type == ElementType.HOTBAR && ModEventHandlerClient.flashTimer > 0) {
+			double mult = (ModEventHandlerClient.flashTimer + event.partialTicks) * 0.01D;
+			double horizontal = MathHelper.clamp_double(Math.sin(System.currentTimeMillis() * 0.02), -0.7, 0.7) * 5;
+			double vertical = MathHelper.clamp_double(Math.sin(System.currentTimeMillis() * 0.01 + 2), -0.7, 0.7) * 1;
+			GL11.glTranslated(horizontal * mult, vertical * mult, 0);
 		}
 	}
 }

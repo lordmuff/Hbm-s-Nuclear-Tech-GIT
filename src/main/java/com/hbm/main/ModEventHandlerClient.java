@@ -1,7 +1,6 @@
 package com.hbm.main;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -13,8 +12,11 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockAshes;
+import com.hbm.blocks.rail.IRailNTM;
+import com.hbm.blocks.rail.IRailNTM.MoveContext;
+import com.hbm.blocks.rail.IRailNTM.RailCheckType;
+import com.hbm.blocks.rail.IRailNTM.RailContext;
 import com.hbm.config.GeneralConfig;
-import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
 import com.hbm.entity.train.EntityRailCarRidable;
@@ -143,10 +145,37 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 public class ModEventHandlerClient {
 	
+	public static int flashTimer;
+	
 	@SubscribeEvent
 	public void onOverlayRender(RenderGameOverlayEvent.Pre event) {
 		
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		
+		/// NUKE FLASH ///
+		if(event.type == ElementType.CROSSHAIRS && flashTimer > 0) {
+			int width = event.resolution.getScaledWidth();
+			int height = event.resolution.getScaledHeight();
+			Tessellator tess = Tessellator.instance;
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+			GL11.glAlphaFunc(GL11.GL_GEQUAL, 0.0F);
+			GL11.glDepthMask(false);
+			tess.startDrawingQuads();
+			float brightness = (flashTimer - event.partialTicks) / 200F;
+			tess.setColorRGBA_F(1F, 1F, 1F, brightness * 0.8F);
+			tess.addVertex(width, 0, 0);
+			tess.addVertex(0, 0, 0);
+			tess.addVertex(0, height, 0);
+			tess.addVertex(width, height, 0);
+			tess.draw();
+			OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+			GL11.glDepthMask(true);
+			return;
+		}
 		
 		/// HANDLE GUN OVERLAYS ///
 		if(player.getHeldItem() != null && player.getHeldItem().getItem() instanceof IItemHUD) {
@@ -190,18 +219,6 @@ public class ModEventHandlerClient {
 						((ILookOverlay) entity).printHook(event, world, 0, 0, 0);
 					}
 				}
-			}
-			
-			List<EntityNukeTorex> torex = world.getEntitiesWithinAABB(EntityNukeTorex.class, player.boundingBox.expand(100, 100, 100));
-			
-			if(!torex.isEmpty()) {
-				EntityNukeTorex t = torex.get(0);
-				List<String> text = new ArrayList();
-				text.add("Speed: " + t.getSimulationSpeed());
-				text.add("Alpha: " + t.getAlpha());
-				text.add("Age: " + t.ticksExisted + " / " + t.getMaxAge());
-				text.add("Clouds: " + t.cloudlets.size());
-				ILookOverlay.printGeneric(event, "DEBUG", 0xff0000, 0x4040000, text);
 			}
 			
 			/*List<String> text = new ArrayList();
@@ -260,12 +277,12 @@ public class ModEventHandlerClient {
 						boolean flip = distanceToCover < 0;
 						
 						if(it == 1) {
-							Vec3 snap = next = rail.getTravelLocation(world, x, y, z, next.xCoord, next.yCoord, next.zCoord, rot.xCoord, rot.yCoord, rot.zCoord, 0, info, new MoveContext(RailCheckType.CORE));
+							Vec3 snap = next = rail.getTravelLocation(world, x, y, z, next.xCoord, next.yCoord, next.zCoord, rot.xCoord, rot.yCoord, rot.zCoord, 0, info, new MoveContext(RailCheckType.CORE, 0));
 							if(i == 0) world.spawnParticle("reddust", snap.xCoord, snap.yCoord + 0.25, snap.zCoord, 0.1, 1, 0.1);
 						}
 						
 						Vec3 prev = next;
-						next = rail.getTravelLocation(world, x, y, z, prev.xCoord, prev.yCoord, prev.zCoord, rot.xCoord, rot.yCoord, rot.zCoord, distanceToCover, info, new MoveContext(i == 0 ? RailCheckType.FRONT : RailCheckType.BACK));
+						next = rail.getTravelLocation(world, x, y, z, prev.xCoord, prev.yCoord, prev.zCoord, rot.xCoord, rot.yCoord, rot.zCoord, distanceToCover, info, new MoveContext(i == 0 ? RailCheckType.FRONT : RailCheckType.BACK, 0));
 						distanceToCover = info.overshoot;
 						anchor = info.pos;
 						if(i == 0) world.spawnParticle("reddust", next.xCoord, next.yCoord + 0.25, next.zCoord, 0, distanceToCover != 0 ? 0.5 : 0, 0);
@@ -1267,6 +1284,8 @@ public class ModEventHandlerClient {
 				client.sendQueue.addToSendQueue(new C0CPacketInput(client.moveStrafing, client.moveForward, client.movementInput.jump, client.movementInput.sneak));
 			}
 		}
+		
+		if(event.phase == Phase.START) if(flashTimer > 0) flashTimer--;
 	}
 	
 	@SubscribeEvent
@@ -1278,19 +1297,21 @@ public class ModEventHandlerClient {
 			
 			switch(rand) {
 			case 0: main.splashText = "Floppenheimer!"; break;
-			case 1: main.splashText = "i should dip my balls in sulfuic acid"; break;
+			case 1: main.splashText = "i should dip my balls in sulfuric acid"; break;
 			case 2: main.splashText = "All answers are popbob!"; break;
 			case 3: main.splashText = "None shall enter The Orb!"; break;
 			case 4: main.splashText = "Wacarb was here"; break;
 			case 5: main.splashText = "SpongeBoy me Bob I am overdosing on keramine agagagagaga"; break;
-			case 6: main.splashText = "I know where you live, " + System.getProperty("user.name"); break;
+			case 6: main.splashText = EnumChatFormatting.RED + "I know where you live, " + System.getProperty("user.name"); break;
 			case 7: main.splashText = "Nice toes, now hand them over."; break;
 			case 8: main.splashText = "I smell burnt toast!"; break;
 			case 9: main.splashText = "There are bugs under your skin!"; break;
 			case 10: main.splashText = "Fentanyl!"; break;
 			case 11: main.splashText = "Do drugs!"; break;
-			case 12: main.splashText = "post this on r/feedthememes for free internet points!"; break;
+			//case 12: main.splashText = "post this on r/feedthememes for free internet points!"; break;
 			}
+			
+			if(Math.random() < 0.1) main.splashText = "Visit r/feedthebeast if you hate yourself!";
 		}
 	}
 }

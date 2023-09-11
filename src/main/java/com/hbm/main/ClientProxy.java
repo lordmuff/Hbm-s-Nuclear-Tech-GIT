@@ -68,7 +68,6 @@ import com.hbm.entity.train.EntityRailCarRidable.SeatDummyEntity;
 import com.hbm.handler.CasingEjector;
 import com.hbm.handler.HbmKeybinds;
 import com.hbm.handler.ImpactWorldHandler;
-import com.hbm.handler.RogueWorldHandler;
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
 import com.hbm.items.IAnimatedItem;
 import com.hbm.items.ModItems;
@@ -170,6 +169,8 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBobble.class, new RenderBobble());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySnowglobe.class, new RenderSnowglobe());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEmitter.class, new RenderEmitter());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLantern.class, new RenderLantern());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLanternBehemoth.class, new RenderLanternBehemoth());
 		//bombs
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNukeGadget.class, new RenderNukeGadget());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNukeBoy.class, new RenderNukeBoy());
@@ -214,6 +215,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCyclotron.class, new RenderCyclotron());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineOilWell.class, new RenderDerrick());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineGasFlare.class, new RenderGasFlare());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChimneyBrick.class, new RenderChimneyBrick());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineMiningDrill.class, new RenderMiningDrill());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineMiningLaser.class, new RenderLaserMiner());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineAssembler.class, new RenderAssembler());
@@ -253,7 +255,6 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChungus.class, new RenderChungus());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTowerLarge.class, new RenderLargeTower());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTowerSmall.class, new RenderSmallTower());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTowerChimney.class, new RenderChimney());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDeuteriumTower.class, new RenderDeuteriumTower());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAtmoTower.class, new RenderAtmoTower());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAtmoVent.class, new RenderAtmoVent());
@@ -268,6 +269,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFurnaceCombination.class, new RenderFurnaceCombination());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterFirebox.class, new RenderFirebox());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterOven.class, new RenderHeatingOven());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAshpit.class, new RenderAshpit());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterOilburner.class, new RenderOilburner());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterElectric.class, new RenderElectricHeater());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterHeatex.class, new RenderHeaterHeatex());
@@ -275,6 +277,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySawmill.class, new RenderSawmill());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrucible.class, new RenderCrucible());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeatBoiler.class, new RenderBoiler());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeatBoilerIndustrial.class, new RenderIndustrialBoiler());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySteamEngine.class, new RenderSteamEngine());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineDiesel.class, new RenderDieselGen());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCombustionEngine.class, new RenderCombustionEngine());
@@ -284,6 +287,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineAutosaw.class, new RenderAutosaw());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineVacuumDistill.class, new RenderVacuumDistill());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCatalyticReformer.class, new RenderCatalyticReformer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineMilkReformer.class, new RenderMilkReformer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCoker.class, new RenderCoker());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFan.class, new RenderFan());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCryoDistill.class, new RenderCryoDistill());
@@ -313,8 +317,6 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySoyuzLauncher.class, new RenderSoyuzLauncher());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySoyuzCapsule.class, new RenderCapsule());
 		//network
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOilDuct.class, new RenderOilDuct());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGasDuct.class, new RenderGasDuct());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFluidDuct.class, new RenderFluidDuct());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRFDuct.class, new RenderRFCable());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPylon.class, new RenderPylon());
@@ -332,6 +334,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityITERStruct.class, new RenderITERMultiblock());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlasmaStruct.class, new RenderPlasmaMultiblock());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWatzStruct.class, new RenderWatzMultiblock());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCustomMachine.class, new RenderCustomMachine());
 		//RBMK
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKControlManual.class, new RenderRBMKControlRod());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKControlAuto.class, new RenderRBMKControlRod());
@@ -529,6 +532,11 @@ public class ClientProxy extends ServerProxy {
 		MinecraftForgeClient.registerItemRenderer(ModItems.gun_revolver_silver, new ItemRenderWeaponNovac());
 		MinecraftForgeClient.registerItemRenderer(ModItems.gun_revolver_red, new ItemRenderWeaponNovac());
 		MinecraftForgeClient.registerItemRenderer(ModItems.gun_lunatic_marksman, new ItemRenderLunaticSniper());
+		MinecraftForgeClient.registerItemRenderer(ModItems.gun_benelli, new ItemRenderBenelli());
+		MinecraftForgeClient.registerItemRenderer(ModItems.gun_uac_pistol, new ItemRenderUACPistol());
+		MinecraftForgeClient.registerItemRenderer(ModItems.gun_coilgun, new ItemRenderWeaponCoilgun());
+		MinecraftForgeClient.registerItemRenderer(ModItems.gun_cryocannon, new ItemRenderWeaponCryoCannon());
+		MinecraftForgeClient.registerItemRenderer(ModItems.gun_congolake, new ItemRenderWeaponCongo());
 		//multitool
 		MinecraftForgeClient.registerItemRenderer(ModItems.multitool_dig, new ItemRenderMultitool());
 		MinecraftForgeClient.registerItemRenderer(ModItems.multitool_silk, new ItemRenderMultitool());
@@ -552,7 +560,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityRocket.class, new RenderSnowball(ModItems.man_core));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySchrab.class, new RenderFlare());
 		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderRocket());
-		RenderingRegistry.registerEntityRenderingHandler(EntityBulletBase.class, new RenderBullet());
+		RenderingRegistry.registerEntityRenderingHandler(EntityBulletBaseNT.class, new RenderBullet());
 		RenderingRegistry.registerEntityRenderingHandler(EntityRainbow.class, new RenderRainbow());
 		RenderingRegistry.registerEntityRenderingHandler(EntityNightmareBlast.class, new RenderOminousBullet());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFire.class, new RenderFireball(ModItems.energy_ball));
@@ -703,6 +711,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(BoundingBoxDummyEntity.class, new RenderEmpty());
 		RenderingRegistry.registerEntityRenderingHandler(TrainCargoTram.class, new RenderTrainCargoTram());
 		RenderingRegistry.registerEntityRenderingHandler(TrainCargoTramTrailer.class, new RenderTrainCargoTramTrailer());
+		RenderingRegistry.registerEntityRenderingHandler(TrainTunnelBore.class, new RenderTunnelBore());
 		//items
 		RenderingRegistry.registerEntityRenderingHandler(EntityMovingItem.class, new RenderMovingItem());
 		RenderingRegistry.registerEntityRenderingHandler(EntityMovingPackage.class, new RenderMovingPackage());
@@ -739,6 +748,8 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityGlyphidBombardier.class, new RenderGlyphid());
 		RenderingRegistry.registerEntityRenderingHandler(EntityGlyphidBlaster.class, new RenderGlyphid());
 		RenderingRegistry.registerEntityRenderingHandler(EntityGlyphidScout.class, new RenderGlyphid());
+		RenderingRegistry.registerEntityRenderingHandler(EntityGlyphidNuclear.class, new RenderGlyphidNuclear());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFBIDrone.class, new RenderDrone());
 	    //"particles"
 	    RenderingRegistry.registerEntityRenderingHandler(EntitySmokeFX.class, new MultiCloudRenderer(new Item[] { ModItems.smoke1, ModItems.smoke2, ModItems.smoke3, ModItems.smoke4, ModItems.smoke5, ModItems.smoke6, ModItems.smoke7, ModItems.smoke8 }));
 	    RenderingRegistry.registerEntityRenderingHandler(EntityBSmokeFX.class, new MultiCloudRenderer(new Item[] { ModItems.b_smoke1, ModItems.b_smoke2, ModItems.b_smoke3, ModItems.b_smoke4, ModItems.b_smoke5, ModItems.b_smoke6, ModItems.b_smoke7, ModItems.b_smoke8 }));
@@ -808,6 +819,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerBlockHandler(new RenderStandardStraightRail());
 		RenderingRegistry.registerBlockHandler(new RenderStandardCurveRail());
 		RenderingRegistry.registerBlockHandler(new RenderStandardRampRail());
+		RenderingRegistry.registerBlockHandler(new RenderStandardBufferRail());
 		
 		RenderingRegistry.registerBlockHandler(new RenderBlockRotated(ModBlocks.charge_dynamite.getRenderType(), ResourceManager.charge_dynamite));
 		RenderingRegistry.registerBlockHandler(new RenderBlockRotated(ModBlocks.charge_c4.getRenderType(), ResourceManager.charge_c4));
@@ -1183,6 +1195,10 @@ public class ClientProxy extends ServerProxy {
 
 			if("greendust".equals(data.getString("mode"))) {
 				fx = new net.minecraft.client.particle.EntityReddustFX(world, x, y, z, 0.01F, 0.5F, 0.1F);
+			}
+
+			if("fireworks".equals(data.getString("mode"))) {
+				fx = new EntityFireworkSparkFX(world, x, y, z, 0, 0, 0, Minecraft.getMinecraft().effectRenderer);
 			}
 
 			if("largeexplode".equals(data.getString("mode"))) {
@@ -1897,6 +1913,14 @@ public class ClientProxy extends ServerProxy {
 			ParticleFoundry sploosh = new ParticleFoundry(man, world, x, y, z, color, dir, length, base, offset);
 			Minecraft.getMinecraft().effectRenderer.addEffect(sploosh);
 		}
+		
+		if("frozen".equals(type)) {
+			player.motionX = 0;
+			player.motionZ = 0;
+			player.motionY = Math.min(player.motionY, 0);
+			player.moveForward = 0;
+			player.moveStrafing = 0;
+		}
 	}
 	
 	
@@ -2012,23 +2036,10 @@ public class ClientProxy extends ServerProxy {
 	public boolean getImpact(World world) {
 		return ImpactWorldHandler.getImpactForClient(world);
 	}
-	@Override
-	public float getAtmosphere(World world) {
-		return RogueWorldHandler.getAtmosphereForClient(world);
-	}
-	@Override
-	public float getDistance(World world) {
-		return RogueWorldHandler.getDistanceForClient(world);
-	}
 
 	@Override
-	public boolean getStar(World world) {
-		return RogueWorldHandler.getStarForClient(world);
-	}
-
-	@Override
-	public boolean getRogue(World world) {
-		return RogueWorldHandler.getRogueWorldForClient(world);
+	public void playSoundClient(double x, double y, double z, String sound, float volume, float pitch) {
+		Minecraft.getMinecraft().getSoundHandler().playSound(new PositionedSoundRecord(new ResourceLocation(sound), volume, pitch, (float) x, (float) y, (float) z));
 	}
 }
 

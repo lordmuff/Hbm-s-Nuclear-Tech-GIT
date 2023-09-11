@@ -48,6 +48,7 @@ public class ResourceManager {
 	public static final IModelCustom crucible_heat = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/machines/crucible.obj"));
 	public static final IModelCustom boiler = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/boiler.obj"));
 	public static final IModelCustom boiler_burst = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/boiler_burst.obj"));
+	public static final IModelCustom boiler_industrial = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/industrial_boiler.obj"));
 	public static final IModelCustom hephaestus = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/hephaestus.obj"));
 	
 	//Furnaces
@@ -79,10 +80,13 @@ public class ResourceManager {
 	public static final IModelCustom compressor = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/compressor.obj"));
 	public static final IModelCustom coker = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/coker.obj"));
 	
+	public static final IModelCustom milk_reformer = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/milker.obj"));
+
 	public static final IModelCustom cryo_distill = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/cryo_distill.obj"));
 
 	//Flare Stack
 	public static final IModelCustom oilflare = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/flare_stack.obj"));
+	public static final IModelCustom chimney_brick = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/chimney_brick.obj"));
 
 	//Tank
 	public static final IModelCustom fluidtank = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/fluidtank.obj"));
@@ -106,7 +110,6 @@ public class ResourceManager {
 	//Cooling Tower
 	public static final IModelCustom tower_small = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/tower_small.obj"));
 	public static final IModelCustom tower_large = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/tower_large.obj"));
-	public static final IModelCustom tower_chimney = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/chimney.obj"));
 	
 	//IGen
 	public static final IModelCustom igen = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/igen.obj"));
@@ -247,7 +250,7 @@ public class ResourceManager {
 	public static final IModelCustom bomb_boy = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/LilBoy1.obj"));
 	public static final IModelCustom bomb_man = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/FatMan.obj")).asDisplayList();
 	public static final IModelCustom bomb_mike = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/bombs/ivymike.obj"));
-	public static final IModelCustom bomb_tsar = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/TsarBomba.obj"));
+	public static final IModelCustom bomb_tsar = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/bombs/tsar.obj")).asDisplayList();
 	public static final IModelCustom bomb_prototype = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/Prototype.obj"));
 	public static final IModelCustom bomb_fleija = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/Fleija.obj"));
 	public static final IModelCustom bomb_solinium = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/bombs/ufp.obj"));
@@ -298,11 +301,22 @@ public class ResourceManager {
 	public static final IModelCustom blast_door_tooth = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blast_door_tooth.obj"));
 	public static final IModelCustom blast_door_slider = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blast_door_slider.obj"));
 	public static final IModelCustom blast_door_block = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blast_door_block.obj"));
-	
+
+	//Sliding Blast Door
+	public static final ResourceLocation sliding_blast_door_tex = new ResourceLocation(RefStrings.MODID, "textures/models/doors/sliding_blast_door.png");
+	public static final ResourceLocation sliding_blast_door_variant1_tex = new ResourceLocation(RefStrings.MODID, "textures/models/doors/sliding_blast_door_variant1.png");
+	public static final ResourceLocation sliding_blast_door_variant2_tex = new ResourceLocation(RefStrings.MODID, "textures/models/doors/sliding_blast_door_variant2.png");
+
+	public static AnimatedModel sliding_blast_door;
+	public static Animation sliding_blast_door_anim;
+
 	//Doors
 	public static AnimatedModel transition_seal;
 	public static Animation transition_seal_anim;
 	public static final WavefrontObjDisplayList fire_door = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/doors/fire_door.obj")).asDisplayList();
+	
+	//Lantern
+	public static final IModelCustom lantern = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/trinkets/lantern.obj"));
 	
 	//Tesla Coil
 	public static final IModelCustom tesla = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/tesla.obj"));
@@ -314,6 +328,7 @@ public class ResourceManager {
 	public static final IModelCustom mini_ufo = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/mini_ufo.obj"));
 	public static final IModelCustom siege_ufo = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/siege_ufo.obj"));
 	public static final IModelCustom glyphid = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/glyphid.obj"));
+	public static final IModelCustom drone = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/mobs/quadcopter.obj"));
 	
 	//ZIRNOX
 	public static final IModelCustom zirnox = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/zirnox.obj"));
@@ -384,6 +399,7 @@ public class ResourceManager {
 	//Heaters
 	public static final ResourceLocation heater_firebox_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/firebox.png");
 	public static final ResourceLocation heater_oven_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/heating_oven.png");
+	public static final ResourceLocation ashpit_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/ashpit.png");
 	public static final ResourceLocation heater_oilburner_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/oilburner.png");
 	public static final ResourceLocation heater_electric_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/electric_heater.png");
 	public static final ResourceLocation heater_heatex_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/heater_heatex.png");
@@ -391,9 +407,11 @@ public class ResourceManager {
 	//Heat Engines
 	public static final ResourceLocation stirling_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/stirling.png");
 	public static final ResourceLocation stirling_steel_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/stirling_steel.png");
+	public static final ResourceLocation stirling_creative_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/stirling_creative.png");
 	public static final ResourceLocation sawmill_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/sawmill.png");
 	public static final ResourceLocation crucible_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/crucible_heat.png");
 	public static final ResourceLocation boiler_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/boiler.png");
+	public static final ResourceLocation boiler_industrial_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/industrial_boiler.png");
 	public static final ResourceLocation hephaestus_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/hephaestus.png");
 	
 	//Furnaces
@@ -418,11 +436,13 @@ public class ResourceManager {
 	public static final ResourceLocation compressor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/compressor.png");
 	public static final ResourceLocation coker_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/coker.png");
 	
-	
-	public static final ResourceLocation cryodistill_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/cryo_distiller.png");
+	public static final ResourceLocation milk_reformer_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/milker.png");
+
+	public static final ResourceLocation cryodistill_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/milker.png");
 
 	//Flare Stack
 	public static final ResourceLocation oilflare_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/flare_stack.png");
+	public static final ResourceLocation chimney_brick_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/chimney_brick.png");
 	
 	//Tank
 	public static final ResourceLocation tank_tex = new ResourceLocation(RefStrings.MODID, "textures/models/tank.png");
@@ -446,7 +466,6 @@ public class ResourceManager {
 	//Cooling Tower
 	public static final ResourceLocation tower_small_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/tower_small.png");
 	public static final ResourceLocation tower_large_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/tower_large.png");
-	public static final ResourceLocation tower_chimney_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/chimney.png");
 	//Deuterium Tower
 	public static final ResourceLocation deuterium_tower_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/machine_deuterium_tower.png");
 	public static final ResourceLocation atmo_tower_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/machine_atmo_tower.png");
@@ -608,7 +627,7 @@ public class ResourceManager {
 	public static final ResourceLocation bomb_boy_tex = new ResourceLocation(RefStrings.MODID, "textures/models/lilboy.png");
 	public static final ResourceLocation bomb_man_tex = new ResourceLocation(RefStrings.MODID, "textures/models/FatMan.png");
 	public static final ResourceLocation bomb_mike_tex = new ResourceLocation(RefStrings.MODID, "textures/models/bombs/ivymike.png");
-	public static final ResourceLocation bomb_tsar_tex = new ResourceLocation(RefStrings.MODID, "textures/models/TsarBomba.png");
+	public static final ResourceLocation bomb_tsar_tex = new ResourceLocation(RefStrings.MODID, "textures/models/bombs/tsar.png");
 	public static final ResourceLocation bomb_prototype_tex = new ResourceLocation(RefStrings.MODID, "textures/models/Prototype.png");
 	public static final ResourceLocation bomb_fleija_tex = new ResourceLocation(RefStrings.MODID, "textures/models/Fleija.png");
 	public static final ResourceLocation bomb_solinium_tex = new ResourceLocation(RefStrings.MODID, "textures/models/bombs/ufp.png");
@@ -664,6 +683,10 @@ public class ResourceManager {
 	public static final ResourceLocation transition_seal_tex = new ResourceLocation(RefStrings.MODID, "textures/models/doors/transition_seal.png");
 	public static final ResourceLocation fire_door_tex = new ResourceLocation(RefStrings.MODID, "textures/models/doors/fire_door.png");
 
+	//Lantern
+	public static final ResourceLocation lantern_tex = new ResourceLocation(RefStrings.MODID, "textures/models/trinkets/lantern.png");
+	public static final ResourceLocation lantern_rusty_tex = new ResourceLocation(RefStrings.MODID, "textures/models/trinkets/lantern_rusty.png");
+
 	//Tesla Coil
 	public static final ResourceLocation tesla_tex = new ResourceLocation(RefStrings.MODID, "textures/models/tesla.png");
 	public static final ResourceLocation teslacrab_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/teslacrab.png");
@@ -679,6 +702,7 @@ public class ResourceManager {
 	public static final ResourceLocation glyphid_bombardier_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/glyphid_bombardier.png");
 	public static final ResourceLocation glyphid_blaster_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/glyphid_blaster.png");
 	public static final ResourceLocation glyphid_scout_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/glyphid_scout.png");
+	public static final ResourceLocation glyphid_nuclear_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/glyphid_nuclear.png");
 	
 	//ZIRNOX
 	public static final ResourceLocation zirnox_tex = new ResourceLocation(RefStrings.MODID, "textures/models/zirnox.png");
@@ -748,6 +772,11 @@ public class ResourceManager {
 	public static final IModelCustom m2 = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/m2_browning.obj")).asDisplayList(); //large fella should be a display list
 	public static final IModelCustom lunatic_sniper = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/lunatic_sniper.obj")).asDisplayList();
 	public static final IModelCustom tau = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/tau.obj"));
+	public static final IModelCustom benelli = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/benelli_new.obj")).asDisplayList();
+	public static final IModelCustom coilgun = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/coilgun.obj")).asDisplayList();
+	public static final IModelCustom cryocannon = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/cryo_cannon.obj")).asDisplayList();
+	public static final IModelCustom uac_pistol = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/UAC pistol.obj")).asDisplayList();
+	public static final IModelCustom congolake = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/congolake.obj")).asDisplayList();
 	
 	public static final IModelCustom lance = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/lance.obj"));
 
@@ -770,6 +799,7 @@ public class ResourceManager {
 	public static final IModelCustom armor_wings = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/armor/murk.obj"));
 	public static final IModelCustom armor_solstice = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/armor/solstice.obj"));
 	public static final IModelCustom player_manly_af = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/armor/player_fem.obj"));
+	public static final IModelCustom armor_envsuit = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/armor/envsuit.obj"));
 	
 	////Texture Items
 
@@ -838,6 +868,11 @@ public class ResourceManager {
 	public static final ResourceLocation m2_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/m2_browning.png");
 	public static final ResourceLocation lunatic_sniper_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/lunatic_sniper.png");
 	public static final ResourceLocation tau_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/tau.png");
+	public static final ResourceLocation benelli_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/benelli_tex.png");
+	public static final ResourceLocation coilgun_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/coilgun.png");
+	public static final ResourceLocation cryocannon_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/cryo_cannon.png");
+	public static final ResourceLocation uac_pistol_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/pistol_texture.png");
+	public static final ResourceLocation congolake_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/congolake.png");
 	
 	public static final ResourceLocation lance_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/lance.png");
 
@@ -863,6 +898,12 @@ public class ResourceManager {
 	public static final ResourceLocation bj_chest = new ResourceLocation(RefStrings.MODID, "textures/armor/bj_chest.png");
 	public static final ResourceLocation bj_jetpack = new ResourceLocation(RefStrings.MODID, "textures/armor/bj_jetpack.png");
 	public static final ResourceLocation bj_arm = new ResourceLocation(RefStrings.MODID, "textures/armor/bj_arm.png");
+
+	public static final ResourceLocation envsuit_helmet = new ResourceLocation(RefStrings.MODID, "textures/armor/envsuit_helmet.png");
+	public static final ResourceLocation envsuit_leg = new ResourceLocation(RefStrings.MODID, "textures/armor/envsuit_leg.png");
+	public static final ResourceLocation envsuit_chest = new ResourceLocation(RefStrings.MODID, "textures/armor/envsuit_chest.png");
+	public static final ResourceLocation envsuit_arm = new ResourceLocation(RefStrings.MODID, "textures/armor/envsuit_arm.png");
+	public static final ResourceLocation envsuit_tail = new ResourceLocation(RefStrings.MODID, "textures/armor/envsuit_tail.png");
 
 	public static final ResourceLocation hev_helmet = new ResourceLocation(RefStrings.MODID, "textures/armor/hev_helmet.png");
 	public static final ResourceLocation hev_leg = new ResourceLocation(RefStrings.MODID, "textures/armor/hev_leg.png");
@@ -936,6 +977,7 @@ public class ResourceManager {
 	
 	//Projectiles
 	public static final IModelCustom projectiles = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/projectiles/projectiles.obj"));
+	public static final IModelCustom leadburster = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/projectiles/leadburster.obj"));
 	public static final IModelCustom casings = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/effect/casings.obj"));
 	
 	//Bomber
@@ -1037,6 +1079,7 @@ public class ResourceManager {
 	public static final IModelCustom cart_powder = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/vehicles/cart_powder.obj"));
 	public static final IModelCustom train_cargo_tram = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/vehicles/tram.obj"));
 	public static final IModelCustom train_cargo_tram_trailer = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/vehicles/tram_trailer.obj"));
+	public static final IModelCustom tunnel_bore = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/vehicles/tunnel_bore.obj"));
 	
 	////Texture Entities
 	
@@ -1065,6 +1108,7 @@ public class ResourceManager {
 	public static final ResourceLocation rocket_mirv_tex = new ResourceLocation(RefStrings.MODID, "textures/models/projectiles/rocket_mirv.png");
 	public static final ResourceLocation mini_nuke_tex = new ResourceLocation(RefStrings.MODID, "textures/models/projectiles/mini_nuke.png");
 	public static final ResourceLocation mini_mirv_tex = new ResourceLocation(RefStrings.MODID, "textures/models/projectiles/mini_mirv.png");
+	public static final ResourceLocation leadburster_tex = new ResourceLocation(RefStrings.MODID, "textures/models/projectiles/leadburster.png");
 	public static final ResourceLocation casings_tex = new ResourceLocation(RefStrings.MODID, "textures/particle/casings.png");
 	
 	//Bomber
@@ -1359,6 +1403,7 @@ public class ResourceManager {
 	public static final IModelCustom rail_standard_straight = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/rail_standard.obj"));
 	public static final IModelCustom rail_standard_curve = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/rail_standard_bend.obj"));
 	public static final IModelCustom rail_standard_ramp = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/rail_standard_ramp.obj"));
+	public static final IModelCustom rail_standard_buffer = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/rail_standard_buffer.obj"));
 	public static final IModelCustom capacitor = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/capacitor.obj"));
 
 	public static final IModelCustom charge_dynamite = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/charge_dynamite.obj"));
@@ -1381,5 +1426,8 @@ public class ResourceManager {
 	public static void loadAnimatedModels(){
 		transition_seal = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/doors/seal.dae"), true);
 		transition_seal_anim = ColladaLoader.loadAnim(24040, new ResourceLocation(RefStrings.MODID, "models/doors/seal.dae"));
+
+		sliding_blast_door = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/doors/sliding_blast_door.dae"));
+		sliding_blast_door_anim = ColladaLoader.loadAnim(1200, new ResourceLocation(RefStrings.MODID, "models/doors/sliding_blast_door.dae"));
 	}
 }
