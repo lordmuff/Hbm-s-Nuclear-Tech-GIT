@@ -136,6 +136,23 @@ public class MachineFluidTank extends BlockDummyable implements IPersistentInfoP
 	}
 
 	@Override
+	public boolean hasComparatorInputOverride() {
+		return true;
+	}
+
+	@Override
+	public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
+
+		TileEntity te = world.getTileEntity(x, y, z);
+
+		if(!(te instanceof TileEntityMachineFluidTank))
+			return 0;
+
+		TileEntityMachineFluidTank tank = (TileEntityMachineFluidTank) te;
+		return tank.getComparatorPower();
+	}
+
+	@Override
 	public boolean onScrew(World world, EntityPlayer player, int x, int y, int z, int side, float fX, float fY, float fZ, ToolType tool) {
 		
 		if(tool != ToolType.TORCH) return false;

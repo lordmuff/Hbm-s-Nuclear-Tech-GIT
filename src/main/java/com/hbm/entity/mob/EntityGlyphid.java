@@ -4,8 +4,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.hbm.config.MobConfig;
 import com.hbm.entity.pathfinder.PathFinderUtils;
+import com.hbm.handler.pollution.PollutionHandler;
+import com.hbm.handler.pollution.PollutionHandler.PollutionType;
 import com.hbm.items.ModItems;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.main.ResourceManager;
 
 import net.minecraft.entity.Entity;
@@ -15,6 +19,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -64,18 +69,30 @@ public class EntityGlyphid extends EntityMob {
 
 	@Override
 	protected Entity findPlayerToAttack() {
-		EntityPlayer entityplayer = this.worldObj.getClosestVulnerablePlayerToEntity(this, 128.0D);
+		if(this.isPotionActive(Potion.blindness)) return null;
+		EntityPlayer entityplayer = this.worldObj.getClosestVulnerablePlayerToEntity(this, useExtendedTargeting() ? 128D : 16D);
 		return entityplayer != null && this.canEntityBeSeen(entityplayer) ? entityplayer : null;
 	}
 
 	@Override
 	protected void updateEntityActionState() {
 		super.updateEntityActionState();
-
-		// hell yeah!!
-		if(this.entityToAttack != null && !this.hasPath()) {
-			this.setPathToEntity(PathFinderUtils.getPathEntityToEntityPartial(worldObj, this, this.entityToAttack, 16F, true, false, false, true));
+		
+		if(this.isPotionActive(Potion.blindness)) {
+			this.entityToAttack = null;
+			this.setPathToEntity(null);
+		} else {
+			
+			// hell yeah!!
+			if(useExtendedTargeting() && this.entityToAttack != null && !this.hasPath()) {
+				this.setPathToEntity(PathFinderUtils.getPathEntityToEntityPartial(worldObj, this, this.entityToAttack, 16F, true, false, false, true));
+			}
 		}
+
+	}
+	
+	public boolean useExtendedTargeting() {
+		return PollutionHandler.getPollution(worldObj, (int) Math.floor(posX), (int) Math.floor(posY), (int) Math.floor(posZ), PollutionType.SOOT) >= MobConfig.targetingThreshold;
 	}
 
 	@Override
@@ -86,7 +103,7 @@ public class EntityGlyphid extends EntityMob {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		
-		if(!source.isDamageAbsolute() && !source.isUnblockable() && !worldObj.isRemote) {
+		if(!source.isDamageAbsolute() && !source.isUnblockable() && !worldObj.isRemote && !source.isFireDamage() && !source.getDamageType().equals(ModDamageSource.s_cryolator)) {
 			byte armor = this.dataWatcher.getWatchableObjectByte(17);
 			
 			if(armor != 0) { //if at least one bit of armor is present
@@ -96,7 +113,7 @@ public class EntityGlyphid extends EntityMob {
 				int chance = getArmorBreakChance(amount); //chances of armor being broken off
 				if(this.rand.nextInt(chance) == 0 && amount > 1) {
 					breakOffArmor();
-					amount = 0;
+					amount *= 0.25F;
 				}
 				
 				amount -= getDamageThreshold();
@@ -105,6 +122,8 @@ public class EntityGlyphid extends EntityMob {
 			
 			amount = this.calculateDamage(amount);
 		}
+		
+		if(source.isFireDamage()) amount *= 4F;
 		
 		return super.attackEntityFrom(source, amount);
 	}

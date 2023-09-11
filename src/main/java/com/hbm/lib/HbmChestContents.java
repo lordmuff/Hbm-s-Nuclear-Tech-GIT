@@ -37,8 +37,6 @@ public class HbmChestContents {
 			new WeightedRandomChestContent(ModItems.ammo_20gauge, 0, 2, 6, 3),
 			new WeightedRandomChestContent(ModItems.casing_9, 0, 4, 10, 3),
 			new WeightedRandomChestContent(ModItems.casing_50, 0, 4, 10, 3),
-			new WeightedRandomChestContent(ModItems.primer_9, 0, 4, 10, 3),
-			new WeightedRandomChestContent(ModItems.primer_50, 0, 4, 10, 3),
 			new WeightedRandomChestContent(ModItems.cordite, 0, 4, 6, 5),
 			new WeightedRandomChestContent(ModItems.battery_generic, 0, 1, 1, 4),
 			new WeightedRandomChestContent(ModItems.battery_advanced, 0, 1, 1, 2),
@@ -272,11 +270,13 @@ public class HbmChestContents {
 
 	public static WeightedRandomChestContent[] vault1 = new WeightedRandomChestContent[] {
 			new WeightedRandomChestContent(Items.gold_ingot, 0, 3, 14, 1),
+			new WeightedRandomChestContent(ModItems.gun_uac_pistol, 0, 1, 1, 2),
 			new WeightedRandomChestContent(ModItems.pin, 0, 8, 8, 1),
 			new WeightedRandomChestContent(ModItems.gun_calamity, 0, 1, 1, 1),
 			new WeightedRandomChestContent(ModItems.bottle_quantum, 0, 1, 3, 1),
 			new WeightedRandomChestContent(ModItems.ingot_advanced_alloy, 0, 4, 12, 1),
 			new WeightedRandomChestContent(ModItems.ammo_50bmg, 0, 24, 48, 1),
+			new WeightedRandomChestContent(ModItems.ammo_45, 0, 48, 64, 2),
 			new WeightedRandomChestContent(ModItems.circuit_red_copper, 0, 6, 12, 1),
 			new WeightedRandomChestContent(ModItems.gas_mask_m65, 0, 1, 1, 1),
 			new WeightedRandomChestContent(ModItems.grenade_if_he, 0, 1, 1, 1),
@@ -392,6 +392,8 @@ public class HbmChestContents {
 	public static WeightedRandomChestContent[] lockersVault = new WeightedRandomChestContent[] {
 			new WeightedRandomChestContent(ModItems.robes_helmet, 0, 1, 1, 1),
 			new WeightedRandomChestContent(ModItems.robes_plate, 0, 1, 1, 1),
+			new WeightedRandomChestContent(ModItems.ammo_45, 0, 48, 64, 2),
+			new WeightedRandomChestContent(ModItems.gun_uac_pistol, 0, 1, 1, 1),
 			new WeightedRandomChestContent(ModItems.robes_legs, 0, 1, 1, 1),
 			new WeightedRandomChestContent(ModItems.robes_boots, 0, 1, 1, 1),
 			new WeightedRandomChestContent(ModItems.jackt, 0, 1, 1, 1),

@@ -1,5 +1,6 @@
 package com.hbm.main;
 
+import com.hbm.commands.CommandSatellites;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
@@ -208,7 +209,6 @@ public class MainRegistry {
 	public static Achievement digammaKnow;
 	public static Achievement digammaKauaiMoho;
 	public static Achievement digammaUpOnTop;
-	public static Achievement rotConsum;
 	
 	public static Achievement achBurnerPress;
 	public static Achievement achBlastFurnace;
@@ -289,7 +289,8 @@ public class MainRegistry {
 		SiegeTier.registerTiers();
 		HazardRegistry.registerItems();
 		HazardRegistry.registerTrafos();
-		OreDictManager.registerGroups();
+		OreDictManager.registerGroups(); //important to run first
+		OreDictManager.registerOres();
 
 		Library.superuser.add("192af5d7-ed0f-48d8-bd89-9d41af8524f8");
 		Library.superuser.add("5aee1e3d-3767-4987-a222-e7ce1fbdf88e");
@@ -636,7 +637,7 @@ public class MainRegistry {
 
 			private boolean dispenseSound = true;
 			@Override protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
-				
+
 				EnumFacing facing = BlockDispenser.func_149937_b(source.getBlockMetadata());
 				World world = source.getWorld();
 				int x = source.getXInt() + facing.getFrontOffsetX();
@@ -657,7 +658,7 @@ public class MainRegistry {
 
 	@EventHandler
 	public static void load(FMLInitializationEvent event) {
-		
+
 		RodRecipes.registerInit();
 
 		achSacrifice = new Achievement("achievement.sacrifice", "sacrifice", -3, 1, ModItems.burnt_bark, null).initIndependentStat().setSpecial().registerStat();
@@ -678,7 +679,7 @@ public class MainRegistry {
 		achSlimeball = new Achievement("achievement.slimeball", "slimeball", -10, 6, DictFrame.fromOne(ModItems.achievement_icon, EnumAchievementType.ACID), null).initIndependentStat().registerStat();
 		achSulfuric = new Achievement("achievement.sulfuric", "sulfuric", -10, 8, DictFrame.fromOne(ModItems.achievement_icon, EnumAchievementType.BALLS), achSlimeball).initIndependentStat().setSpecial().registerStat();
 		achInferno = new Achievement("achievement.inferno", "inferno", -8, 10, ModItems.canister_napalm, null).initIndependentStat().setSpecial().registerStat();
-		
+
 		bobHidden = new Achievement("achievement.hidden", "hidden", 15, -4, ModItems.gun_dampfmaschine, null).initIndependentStat().registerStat();
 
 		horizonsStart = new Achievement("achievement.horizonsStart", "horizonsStart", -5, 4, ModItems.sat_gerald, null).initIndependentStat().registerStat();
@@ -807,7 +808,6 @@ public class MainRegistry {
 
 		// MUST be initialized AFTER achievements!!
 		BobmazonOfferFactory.init();
-		OreDictManager.registerOres();
 
 		IMCHandler.registerHandler("blastfurnace", new IMCBlastFurnace());
 		IMCHandler.registerHandler("crystallizer", new IMCCrystallizer());
@@ -841,13 +841,15 @@ public class MainRegistry {
 		RefineryRecipes.registerRefinery();
 		GasCentrifugeRecipes.register();
 
+		CustomMachineConfigJSON.initialize();
+
 		//the good stuff
 		SerializableRecipe.registerAllHandlers();
 		SerializableRecipe.initialize();
 
 		//has to register after cracking, and therefore after all serializable recipes
 		RadiolysisRecipes.registerRadiolysis();
-		
+
 		FalloutConfigJSON.initialize();
 
 		TileEntityNukeCustom.registerBombItems();
@@ -875,10 +877,10 @@ public class MainRegistry {
 		//new BiomeCave().setThreshold(1.5D).setRangeMult(20).setYLevel(40).setMaxRange(20);
 		//new OreLayer(Blocks.coal_ore, 0.2F).setThreshold(4).setRangeMult(3).setYLevel(70);
 		BedrockOre.init();
-		
+
 		Compat.handleRailcraftNonsense();
 		SuicideThreadDump.register();
-		
+
 		//ExplosionTests.runTest();
 	}
 
@@ -898,6 +900,11 @@ public class MainRegistry {
 		MinecraftForge.EVENT_BUS.register(impactHandler);
 		MinecraftForge.TERRAIN_GEN_BUS.register(impactHandler);
 		
+		ModEventHandlerRogue rogueHandler = new ModEventHandlerRogue();
+		FMLCommonHandler.instance().bus().register(rogueHandler);
+		MinecraftForge.EVENT_BUS.register(rogueHandler);
+		MinecraftForge.TERRAIN_GEN_BUS.register(rogueHandler);
+
 		OreDictManager oreMan = new OreDictManager();
 		MinecraftForge.EVENT_BUS.register(oreMan); //OreRegisterEvent
 		
@@ -910,7 +917,7 @@ public class MainRegistry {
 		PollutionHandler pollution = new PollutionHandler();
 		MinecraftForge.EVENT_BUS.register(pollution);
 		FMLCommonHandler.instance().bus().register(pollution);
-		
+
 		if(event.getSide() == Side.CLIENT) {
 			HbmKeybinds.register();
 			HbmKeybinds keyHandler = new HbmKeybinds();
@@ -926,11 +933,12 @@ public class MainRegistry {
 		SiegeOrchestrator.createGameRules(world);
 		event.registerServerCommand(new CommandReloadRecipes());
 		event.registerServerCommand(new CommandDebugChunkLoad());
+		event.registerServerCommand(new CommandSatellites());
 	}
-	
+
 	@EventHandler
 	public void serverStart(FMLServerStartedEvent event) {
-		
+
 		if(GeneralConfig.enableStatReRegistering) {
 			logger.info("Attempting to re-register item stats...");
 			StatHelper.resetStatShitFuck(); //shit yourself
@@ -953,10 +961,12 @@ public class MainRegistry {
 		WeaponConfig.loadFromConfig(config);
 		MobConfig.loadFromConfig(config);
 		StructureConfig.loadFromConfig(config);
-		
+
+		config.save();
+
 		try {
-			if(GeneralConfig.enableThermosPreventer && Class.forName("thermos.Thermos") != null) {
-				throw new IllegalStateException("The mod tried to start on a Thermos server and therefore stopped. To allow the server to start on Thermos, change the appropriate "
+			if(GeneralConfig.enableThermosPreventer && Class.forName("thermos.ThermosClassTransformer") != null) {
+				throw new IllegalStateException("The mod tried to start on a Thermos or it's fork server and therefore stopped. To allow the server to start on Thermos, change the appropriate "
 						+ "config entry (0.00 in hbm.cfg). This was done because, by default, Thermos "
 						+ "uses a so-called \"optimization\" feature that reduces tile ticking a lot, which will inevitably break a lot of machines. Most people aren't even aware "
 						+ "of this, and start blaming random mods for all their stuff breaking. In order to adjust or even disable this feature, edit \"tileentities.yml\" in your "
@@ -965,8 +975,6 @@ public class MainRegistry {
 						+ "change Thermos' config anyway so that extra change in NTM's config can't be that big of a burden.");
 			}
 		} catch(ClassNotFoundException e) { }
-
-		config.save();
 	}
 	
 	private static HashSet<String> ignoreMappings = new HashSet();
@@ -1130,14 +1138,49 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:tile.oil_duct");
 		ignoreMappings.add("hbm:tile.gas_duct_solid");
 		ignoreMappings.add("hbm:tile.gas_duct");
-		
+		ignoreMappings.add("hbm:tile.dummy_block_assembler");
+		ignoreMappings.add("hbm:tile.dummy_port_assembler");
+		ignoreMappings.add("hbm:item.canned_beef");
+		ignoreMappings.add("hbm:item.canned_tuna");
+		ignoreMappings.add("hbm:item.canned_mystery");
+		ignoreMappings.add("hbm:item.canned_pashtet");
+		ignoreMappings.add("hbm:item.canned_cheese");
+		ignoreMappings.add("hbm:item.canned_jizz");
+		ignoreMappings.add("hbm:item.canned_milk");
+		ignoreMappings.add("hbm:item.canned_ass");
+		ignoreMappings.add("hbm:item.canned_pizza");
+		ignoreMappings.add("hbm:item.canned_tube");
+		ignoreMappings.add("hbm:item.canned_tomato");
+		ignoreMappings.add("hbm:item.canned_asbestos");
+		ignoreMappings.add("hbm:item.canned_bhole");
+		ignoreMappings.add("hbm:item.canned_hotdogs");
+		ignoreMappings.add("hbm:item.canned_leftovers");
+		ignoreMappings.add("hbm:item.canned_yogurt");
+		ignoreMappings.add("hbm:item.canned_stew");
+		ignoreMappings.add("hbm:item.canned_chinese");
+		ignoreMappings.add("hbm:item.canned_oil");
+		ignoreMappings.add("hbm:item.canned_fist");
+		ignoreMappings.add("hbm:item.canned_spam");
+		ignoreMappings.add("hbm:item.canned_fried");
+		ignoreMappings.add("hbm:item.canned_napalm");
+		ignoreMappings.add("hbm:item.canned_diesel");
+		ignoreMappings.add("hbm:item.canned_kerosene");
+		ignoreMappings.add("hbm:item.canned_recursion");
+		ignoreMappings.add("hbm:item.canned_bark");
+		ignoreMappings.add("hbm:item.primer_357");
+		ignoreMappings.add("hbm:item.primer_44");
+		ignoreMappings.add("hbm:item.primer_9");
+		ignoreMappings.add("hbm:item.primer_50");
+		ignoreMappings.add("hbm:item.primer_buckshot");
+		ignoreMappings.add("hbm:tile.ore_bedrock_coltan");
+
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);
 		remapItems.put("hbm:item.man_explosive8", ModItems.explosive_lenses);
 		remapItems.put("hbm:item.briquette_lignite", ModItems.briquette);
 		
 		for(MissingMapping mapping : event.get()) {
-			
+
 			// ignore all ammo prefixes because those are from the time we threw out all the ammo items
 			if(mapping.name.startsWith("hbm:item.ammo_")) {
 				mapping.ignore();

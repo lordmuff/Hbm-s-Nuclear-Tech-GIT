@@ -304,6 +304,8 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 		
 		this.maxProgress = recipe.getDuration() * this.speed / 100;
 		
+		if(maxProgress <= 0) maxProgress = 1;
+		
 		if(this.progress >= this.maxProgress) {
 			consumeFluids(recipe);
 			produceFluids(recipe);
@@ -364,7 +366,10 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 				
 				for(AStack ingredient : recipe.inputs) {
 					
-					if(!InventoryUtil.doesArrayHaveIngredients(slots, 13, 16, ingredient)) {
+					outer:
+					while(!InventoryUtil.doesArrayHaveIngredients(slots, 13, 16, ingredient)) {
+						
+						boolean found = false;
 						
 						for(int i = 0; i < inv.getSizeInventory(); i++) {
 							
@@ -376,7 +381,7 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 									if(slots[j] != null && slots[j].stackSize < slots[j].getMaxStackSize() & InventoryUtil.doesStackDataMatch(slots[j], stack)) {
 										inv.decrStackSize(i, 1);
 										slots[j].stackSize++;
-										return;
+										continue outer;
 									}
 								}
 								
@@ -386,11 +391,13 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 										slots[j] = stack.copy();
 										slots[j].stackSize = 1;
 										inv.decrStackSize(i, 1);
-										return;
+										continue outer;
 									}
 								}
 							}
 						}
+						
+						if(!found) return;
 					}
 				}
 			}

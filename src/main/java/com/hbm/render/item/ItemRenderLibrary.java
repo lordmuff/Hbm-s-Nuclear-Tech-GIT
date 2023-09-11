@@ -443,16 +443,6 @@ public class ItemRenderLibrary {
 		        ResourceManager.bomb_boy.renderAll();
 			}});
 		
-		renderers.put(Item.getItemFromBlock(ModBlocks.nuke_tsar), new ItemRenderBase() {
-			public void renderInventory() {
-				GL11.glScaled(2.25, 2.25, 2.25);
-			}
-			public void renderCommon() {
-				GL11.glTranslated(1.5, 0, 0);
-		        bindTexture(ResourceManager.bomb_tsar_tex);
-		        ResourceManager.bomb_tsar.renderAll();
-			}});
-		
 		renderers.put(Item.getItemFromBlock(ModBlocks.nuke_prototype), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glScaled(2.25, 2.25, 2.25);
@@ -1226,17 +1216,6 @@ public class ItemRenderLibrary {
 			GL11.glShadeModel(GL11.GL_SMOOTH);
 			bindTexture(ResourceManager.chemfac_tex); ResourceManager.chemfac.renderPart("Main");
 			GL11.glShadeModel(GL11.GL_FLAT);
-		}});
-		
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_electrolyser), new ItemRenderBase( ) {
-			public void renderInventory() {
-				GL11.glScaled(3, 3, 3);
-			}
-			public void renderCommon() {
-				GL11.glScaled(0.5, 0.5, 0.5);
-				GL11.glShadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.electrolyser_tex); ResourceManager.electrolyser.renderAll();
-				GL11.glShadeModel(GL11.GL_FLAT);
 		}});
 		
 		renderers.put(Item.getItemFromBlock(ModBlocks.red_pylon_large), new ItemRenderBase( ) {
