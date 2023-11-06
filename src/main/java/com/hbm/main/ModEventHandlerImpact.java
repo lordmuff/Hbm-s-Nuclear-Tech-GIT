@@ -36,6 +36,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.terraingen.BiomeEvent;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
@@ -63,11 +64,30 @@ public class ModEventHandlerImpact {
 				data.markDirty();
 			}
 			
+			
 			if(data.fire > 0) {
 				data.fire = Math.max(0, (data.fire - cool));
 				data.dust = Math.min(1, (data.dust + cool));
 				data.markDirty();
 			}
+			TomSaveData rata = TomSaveData.getLastCachedOrNull();
+			
+
+			if(data.stime < 100 && data.stime > 0) {
+				data.stime++;
+				data.markDirty();	
+			}
+
+			if (data.stime >= 100 ) {
+			data.divinity = true;
+		    data.flash += 0.2f;
+		    data.flash = Math.min(100.0f, data.flash + 0.2f * (100.0f - data.flash) * 0.15f);
+		    if (data.flash <= 4) {
+		        for (Object p : event.world.playerEntities) {
+		            ((EntityPlayer)p).worldObj.playSoundEffect(((EntityPlayer)p).posX, ((EntityPlayer)p).posY, ((EntityPlayer)p).posZ, "hbm:misc.flashe", 10F, 1F);
+		        }
+		    }
+		}
 			
 			
 			if(data.time > 0) {
@@ -160,6 +180,16 @@ public class ModEventHandlerImpact {
 			//}
 		}		
 	}
+
+	  @SubscribeEvent()
+	  public void preQuackosianDuckSpawn(LivingSpawnEvent.CheckSpawn event)
+	  {
+		  TomSaveData data = TomSaveData.forWorld(event.world);
+		  if(event.entity instanceof EntityDuck && data.dust > 0)
+		  {
+			  event.setResult(Result.DENY);
+		  }
+	  }
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onLoad(WorldEvent.Load event) {

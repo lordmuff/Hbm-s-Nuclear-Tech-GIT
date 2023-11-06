@@ -3,7 +3,8 @@
 	"misc.nullChopper": {"category": "player", "sounds": [{"name": "misc/null", "stream": false}]},
 	"misc.nullCrashing": {"category": "player", "sounds": [{"name": "misc/null", "stream": false}]},
 	"misc.nullMine": {"category": "player", "sounds": [{"name": "misc/null", "stream": false}]},
-
+    "misc.flashe": {"category": "player", "sounds": [{"name": "misc/a7", "stream": false}]},
+    "turret.battery_fire": {"category": "block", "sounds": [{"name": "turret/battery_fire", "stream": false}]},
 	"block.crateBreak": {"category": "block", "sounds": ["block/crateBreak1", "block/crateBreak2", "block/crateBreak3", "block/crateBreak4", "block/crateBreak5"]},
 	"block.shutdown": {"category": "block", "sounds": [{"name": "block/shutdown", "stream": true}]},
     "block.minerOperate": {"category": "block", "sounds": [{"name": "block/minerOperate", "stream": true}]},
@@ -120,6 +121,7 @@
 	"weapon.flamethrowerIgnite": {"category": "player", "sounds": [{"name": "weapon/flamethrowerIgnite", "stream": false}]},
 	"weapon.flamethrowerShoot": {"category": "player", "sounds": [{"name": "weapon/flamethrowerShoot", "stream": false}]},
    "weapon.flashbang": {"category": "hostile", "sounds": [{"name": "weapon/flashbang", "stream": false}]},
+   "weapon.splort": {"category": "hostile", "sounds": [{"name": "weapon/splort", "stream": false}]},
 	"weapon.immolatorIgnite": {"category": "player", "sounds": [{"name": "weapon/immolatorIgnite", "stream": false}]},
 	"weapon.immolatorShoot": {"category": "player", "sounds": [{"name": "weapon/immolatorShoot", "stream": false}]},
 	"weapon.cryolatorShoot": {"category": "player", "sounds": [{"name": "weapon/cryolatorShoot", "stream": false}]},
@@ -284,6 +286,15 @@
         "sounds": [
           {
             "name": "alarm/ducc",
+            "stream": false
+          }
+        ]
+      },
+    "misc.turk": {
+        "category": "record",
+        "sounds": [
+          {
+            "name": "music/izzy",
             "stream": false
           }
         ]

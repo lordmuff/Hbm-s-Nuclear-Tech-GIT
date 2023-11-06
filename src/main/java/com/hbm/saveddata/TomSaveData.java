@@ -14,6 +14,10 @@ public class TomSaveData extends WorldSavedData {
 	public long dtime;
 	public int x;
 	public int z;
+	public boolean divinity;
+	public float flash;
+	public float stime;
+	//public float size;
 	
 	private static TomSaveData lastCachedUnsafe = null;
 
@@ -54,6 +58,10 @@ public class TomSaveData extends WorldSavedData {
 		this.dtime = compound.getLong("dtime");
 		this.x = compound.getInteger("x");
 		this.z = compound.getInteger("z");
+		this.flash = compound.getFloat("flash");
+		this.divinity = compound.getBoolean("divinity");
+		this.flash = compound.getFloat("stime");
+
 	}
 
 	@Override
@@ -65,5 +73,10 @@ public class TomSaveData extends WorldSavedData {
 		nbt.setLong("dtime", dtime);
 		nbt.setInteger("x", x);
 		nbt.setInteger("z", z);
+		
+		nbt.setBoolean("divinity", divinity);
+		nbt.setFloat("flash", flash);
+		nbt.setFloat("stime", stime);
+
 	}
 }

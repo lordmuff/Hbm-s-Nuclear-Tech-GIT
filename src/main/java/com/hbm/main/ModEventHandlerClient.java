@@ -1,6 +1,8 @@
 package com.hbm.main;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -53,6 +55,7 @@ import com.hbm.render.util.RenderScreenOverlay;
 import com.hbm.render.util.SoyuzPronter;
 import com.hbm.render.world.RenderNTMSkyboxChainloader;
 import com.hbm.render.world.RenderNTMSkyboxImpact;
+import com.hbm.saveddata.TomSaveData;
 import com.hbm.sound.MovingSoundChopper;
 import com.hbm.sound.MovingSoundChopperMine;
 import com.hbm.sound.MovingSoundCrashing;
@@ -92,8 +95,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -126,6 +131,7 @@ import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -139,11 +145,11 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent17;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
-public class ModEventHandlerClient {
+public class ModEventHandlerClient  {
 	
 	public static final int flashDuration = 5_000;
 	public static long flashTimestamp;
-	
+	private static final ResourceLocation customBackground = new ResourceLocation(RefStrings.MODID, "textures/misc/fl.png");
 	@SubscribeEvent
 	public void onOverlayRender(RenderGameOverlayEvent.Pre event) {
 		
@@ -337,6 +343,11 @@ public class ModEventHandlerClient {
 		/// HANDLE FLASHBANG OVERLAY///
 		if(player.isPotionActive(HbmPotion.flashbang)) {		
 			RenderScreenOverlay.renderFlashbangOverlay(event.resolution);
+		}
+		float size = ImpactWorldHandler.getFlashForClient(player.worldObj);
+		boolean impact = ImpactWorldHandler.getDivinityForClient(player.worldObj);
+		if(size <= 90 && size > 0 && impact) {
+			this.flashTimestamp = System.currentTimeMillis();
 		}
 		/// HANDLE FSB HUD ///
 		ItemStack helmet = player.inventory.armorInventory[3];
@@ -1076,7 +1087,6 @@ public class ModEventHandlerClient {
 		GL11.glPushMatrix();
 
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-
 		double dx = player.prevPosX + (player.posX - player.prevPosX) * event.partialTicks;
 		double dy = player.prevPosY + (player.posY - player.prevPosY) * event.partialTicks;
 		double dz = player.prevPosZ + (player.posZ - player.prevPosZ) * event.partialTicks;
@@ -1313,7 +1323,7 @@ public class ModEventHandlerClient {
 			case 0: main.splashText = "Floppenheimer!"; break;
 			case 1: main.splashText = "i should dip my balls in sulfuric acid"; break;
 			case 2: main.splashText = "All answers are popbob!"; break;
-			case 3: main.splashText = "None shall enter The Orb!"; break;
+			case 3: main.splashText = "None may enter The Orb!"; break;
 			case 4: main.splashText = "Wacarb was here"; break;
 			case 5: main.splashText = "SpongeBoy me Bob I am overdosing on keramine agagagagaga"; break;
 			case 6: main.splashText = EnumChatFormatting.RED + "I know where you live, " + System.getProperty("user.name"); break;
@@ -1322,10 +1332,12 @@ public class ModEventHandlerClient {
 			case 9: main.splashText = "There are bugs under your skin!"; break;
 			case 10: main.splashText = "Fentanyl!"; break;
 			case 11: main.splashText = "Do drugs!"; break;
-			//case 12: main.splashText = "post this on r/feedthememes for free internet points!"; break;
+			case 12: main.splashText = "Imagine being scared by splash texts!"; break;
 			}
 			
-			if(Math.random() < 0.1) main.splashText = "Visit r/feedthebeast if you hate yourself!";
-		}
+			if(Math.random() < 0.1) main.splashText = "Redditors aren't people!";
+
+		}	
+
 	}
 }

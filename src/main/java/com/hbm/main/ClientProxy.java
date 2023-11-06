@@ -31,6 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import scala.reflect.internal.Trees.New;
 
 import java.awt.Color;
 import java.awt.Desktop;
@@ -216,6 +217,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineOilWell.class, new RenderDerrick());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineGasFlare.class, new RenderGasFlare());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChimneyBrick.class, new RenderChimneyBrick());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChimneyIndustrial.class, new RenderChimneyIndustrial());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineMiningDrill.class, new RenderMiningDrill());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineMiningLaser.class, new RenderLaserMiner());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineAssembler.class, new RenderAssembler());
@@ -240,6 +242,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityReactorResearch.class, new RenderSmallReactor());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineShredderLarge.class, new RenderMachineShredder());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTesla.class, new RenderTesla());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAABattery.class, new RenderAABattery());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new RenderFluidBarrel());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCrystallizer.class, new RenderCrystallizer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMicrowave.class, new RenderMicrowave());
@@ -255,6 +258,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChungus.class, new RenderChungus());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTowerLarge.class, new RenderLargeTower());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTowerSmall.class, new RenderSmallTower());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCondenserPowered.class, new RenderCondenser());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDeuteriumTower.class, new RenderDeuteriumTower());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAtmoTower.class, new RenderAtmoTower());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAtmoVent.class, new RenderAtmoVent());
@@ -297,6 +301,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRadioTelex.class, new RenderTelex());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePumpSteam.class, new RenderPump());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePumpElectric.class, new RenderPump());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineArcWelder.class, new RenderArcWelder());
 		//Foundry
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFoundryBasin.class, new RenderFoundry());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFoundryMold.class, new RenderFoundry());
@@ -720,6 +725,9 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityMovingItem.class, new RenderMovingItem());
 		RenderingRegistry.registerEntityRenderingHandler(EntityMovingPackage.class, new RenderMovingPackage());
 		RenderingRegistry.registerEntityRenderingHandler(EntityTNTPrimedBase.class, new RenderTNTPrimedBase());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDeliveryDrone.class, new RenderDeliveryDrone());
+		RenderingRegistry.registerEntityRenderingHandler(EntityRequestDrone.class, new RenderDeliveryDrone());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFallingBlockNT.class, new RenderFallingBlockNT());
 		//mobs
 		RenderingRegistry.registerEntityRenderingHandler(EntityCreeperNuclear.class, new RenderCreeperUniversal(RefStrings.MODID + ":" + "textures/entity/creeper.png", RefStrings.MODID + ":" + "textures/entity/creeper_armor.png").setSwellMod(5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCreeperTainted.class, new RenderCreeperUniversal(RefStrings.MODID + ":" + "textures/entity/creeper_tainted.png", RefStrings.MODID + ":" + "textures/entity/creeper_armor_taint.png"));
@@ -745,6 +753,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntitySiegeSkeleton.class, new RenderSiegeSkeleton());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySiegeTunneler.class, new RenderSiegeTunneler());
 		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new RenderGhost());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDoner.class, new RenderDoner());
 		RenderingRegistry.registerEntityRenderingHandler(EntityGlyphid.class, new RenderGlyphid());
 		RenderingRegistry.registerEntityRenderingHandler(EntityGlyphidBrawler.class, new RenderGlyphid());
 		RenderingRegistry.registerEntityRenderingHandler(EntityGlyphidBehemoth.class, new RenderGlyphid());
@@ -754,6 +763,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityGlyphidScout.class, new RenderGlyphid());
 		RenderingRegistry.registerEntityRenderingHandler(EntityGlyphidNuclear.class, new RenderGlyphidNuclear());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFBIDrone.class, new RenderDrone());
+		RenderingRegistry.registerEntityRenderingHandler(EntityPlasticBag.class, new RenderPlasticBag());
 	    //"particles"
 	    RenderingRegistry.registerEntityRenderingHandler(EntitySmokeFX.class, new MultiCloudRenderer(new Item[] { ModItems.smoke1, ModItems.smoke2, ModItems.smoke3, ModItems.smoke4, ModItems.smoke5, ModItems.smoke6, ModItems.smoke7, ModItems.smoke8 }));
 	    RenderingRegistry.registerEntityRenderingHandler(EntityBSmokeFX.class, new MultiCloudRenderer(new Item[] { ModItems.b_smoke1, ModItems.b_smoke2, ModItems.b_smoke3, ModItems.b_smoke4, ModItems.b_smoke5, ModItems.b_smoke6, ModItems.b_smoke7, ModItems.b_smoke8 }));
@@ -1865,6 +1875,23 @@ public class ClientProxy extends ServerProxy {
 			Minecraft.getMinecraft().effectRenderer.addEffect(text);
 		}
 		
+		if("debugdrone".equals(type)) {
+			Item held = player.getHeldItem() == null ? null : player.getHeldItem().getItem();
+			
+			if(held == ModItems.drone ||
+					held == Item.getItemFromBlock(ModBlocks.drone_crate_provider) ||
+					held == Item.getItemFromBlock(ModBlocks.drone_crate_requester) ||
+					held == Item.getItemFromBlock(ModBlocks.drone_dock) ||
+					held == Item.getItemFromBlock(ModBlocks.drone_waypoint_request)) {
+				double mX = data.getDouble("mX");
+				double mY = data.getDouble("mY");
+				double mZ = data.getDouble("mZ");
+				int color = data.getInteger("color");
+				ParticleDebugLine text = new ParticleDebugLine(world, x, y, z, mX, mY, mZ, color);
+				Minecraft.getMinecraft().effectRenderer.addEffect(text);
+			}
+		}
+		
 		if("network".equals(type)) {
 			ParticleDebug debug = null;
 			double mX = data.getDouble("mX");
@@ -2049,6 +2076,17 @@ public class ClientProxy extends ServerProxy {
 	public boolean getImpact(World world) {
 		return ImpactWorldHandler.getImpactForClient(world);
 	}
+	
+	@Override
+	public float getFlash(World world) {
+		return ImpactWorldHandler.getFlashForClient(world);
+	}
+
+	@Override
+	public boolean getDivinity(World world) {
+		return ImpactWorldHandler.getDivinityForClient(world);
+	}
+
 
 	@Override
 	public void playSoundClient(double x, double y, double z, String sound, float volume, float pitch) {

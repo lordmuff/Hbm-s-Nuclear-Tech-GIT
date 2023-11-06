@@ -26,6 +26,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class EntityMappings {
 
@@ -174,6 +176,8 @@ public class EntityMappings {
 		addEntity(EntitySoyuzCapsule.class, "entity_soyuz_capsule", 1000);
 		addEntity(EntityMovingItem.class, "entity_c_item", 1000);
 		addEntity(EntityMovingPackage.class, "entity_c_package", 1000);
+		addEntity(EntityDeliveryDrone.class, "entity_delivery_drone", 250, false);
+		addEntity(EntityRequestDrone.class, "entity_request_drone", 250, false);
 		addEntity(EntityCloudTom.class, "entity_moonstone_blast", 1000);
 		addEntity(EntityBeamVortex.class, "entity_vortex_beam", 1000);
 		addEntity(EntityFireworks.class, "entity_firework_ball", 1000);
@@ -190,6 +194,7 @@ public class EntityMappings {
 		addEntity(EntityMissileShuttle.class, "entity_missile_shuttle", 1000);
 		addEntity(EntityZirnoxDebris.class, "entity_zirnox_debris", 1000);
 		addEntity(EntityGhost.class, "entity_ntm_ghost", 1000);
+		//addEntity(EntityDoner.class, "entity_ntm_doner", 1000);
 		addEntity(EntityGrenadeDynamite.class, "entity_grenade_dynamite", 250);
 		addEntity(EntitySiegeLaser.class, "entity_ntm_siege_laser", 1000);
 		addEntity(EntitySiegeDropship.class, "entity_ntm_siege_dropship", 1000);
@@ -212,6 +217,7 @@ public class EntityMappings {
 		addEntity(EntityChemical.class, "entity_chemthrower_splash", 1000);
 		addEntity(EntityMist.class, "entity_mist", 250, false);
 		addEntity(EntityAcidBomb.class, "entity_acid_bomb", 1000);
+		addEntity(EntityFallingBlockNT.class, "entity_falling_block_nt", 1000);
 
 		addEntity(EntityItemWaste.class, "entity_item_waste", 100);
 		addEntity(EntityItemBuoyant.class, "entity_item_buoyant", 100);
@@ -249,10 +255,14 @@ public class EntityMappings {
 		addMob(EntityGlyphidBlaster.class, "entity_glyphid_blaster", 0xD83737, 0xDBB79D);
 		addMob(EntityGlyphidScout.class, "entity_glyphid_scout", 0x273038, 0xB9E36B);
 		addMob(EntityGlyphidNuclear.class, "entity_glyphid_nuclear", 0x267F00, 0xA0A0A0);
+		addMob(EntityPlasticBag.class, "entity_plastic_bag", 0xd0d0d0, 0x808080);
+		addMob(EntityDoner.class, "entity_ntm_doner", 0x890900, 0xB20B00);
+		//addEntity(EntityDoner.class, "entity_ntm_doner", 1000);
 
 		addSpawn(EntityCreeperPhosgene.class, 5, 1, 1, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray());
 		addSpawn(EntityCreeperVolatile.class, 10, 1, 1, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray());
 		addSpawn(EntityCreeperGold.class, 1, 1, 1, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray());
+		addSpawn(EntityPlasticBag.class, 1, 1, 3, EnumCreatureType.waterCreature, BiomeDictionary.getBiomesForType(Type.OCEAN));
 		
 		int id = 0;
 		for(Quartet<Class<? extends Entity>, String, Integer, Boolean> entry : entityMappings) {
