@@ -240,6 +240,7 @@ public class EntityMappings {
 		addMob(EntityMaskMan.class, "entity_mob_mask_man", 0x818572, 0xC7C1B7);
 		addMob(EntityDuck.class, "entity_fucc_a_ducc", 0xd0d0d0, 0xFFBF00);
 		addMob(EntityQuackos.class, "entity_elder_one", 0xd0d0d0, 0xFFBF00);
+		addMob(EntityPigeon.class, "entity_pigeon", 0xC8C9CD, 0x858894);
 		addMob(EntityFBI.class, "entity_ntm_fbi", 0x008000, 0x404040);
 		addMob(EntityFBIDrone.class, "entity_ntm_fbi_drone", 0x008000, 0x404040);
 		addMob(EntityRADBeast.class, "entity_ntm_radiation_blaze", 0x303030, 0x008000);
@@ -263,6 +264,7 @@ public class EntityMappings {
 		addSpawn(EntityCreeperVolatile.class, 10, 1, 1, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray());
 		addSpawn(EntityCreeperGold.class, 1, 1, 1, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray());
 		addSpawn(EntityPlasticBag.class, 1, 1, 3, EnumCreatureType.waterCreature, BiomeDictionary.getBiomesForType(Type.OCEAN));
+		addSpawn(EntityPigeon.class, 1, 5, 10, EnumCreatureType.creature, BiomeDictionary.getBiomesForType(Type.PLAINS));
 		
 		int id = 0;
 		for(Quartet<Class<? extends Entity>, String, Integer, Boolean> entry : entityMappings) {

@@ -6,8 +6,6 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
-import com.hbm.entity.mob.EntityDuck;
-import com.hbm.entity.projectile.EntityTom;
 import com.hbm.handler.ImpactWorldHandler;
 import com.hbm.saveddata.TomSaveData;
 import com.hbm.world.WorldProviderNTM;
@@ -28,18 +26,16 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent.CheckSpawn;
 import net.minecraftforge.event.terraingen.BiomeEvent;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType;
 import net.minecraftforge.event.world.WorldEvent;
 
@@ -64,42 +60,9 @@ public class ModEventHandlerImpact {
 				data.markDirty();
 			}
 			
-			
 			if(data.fire > 0) {
 				data.fire = Math.max(0, (data.fire - cool));
 				data.dust = Math.min(1, (data.dust + cool));
-				data.markDirty();
-			}
-			TomSaveData rata = TomSaveData.getLastCachedOrNull();
-			
-
-			if(data.stime < 100 && data.stime > 0) {
-				data.stime++;
-				data.markDirty();	
-			}
-
-			if (data.stime >= 100 ) {
-			data.divinity = true;
-		    data.flash += 0.2f;
-		    data.flash = Math.min(100.0f, data.flash + 0.2f * (100.0f - data.flash) * 0.15f);
-		    if (data.flash <= 4) {
-		        for (Object p : event.world.playerEntities) {
-		            ((EntityPlayer)p).worldObj.playSoundEffect(((EntityPlayer)p).posX, ((EntityPlayer)p).posY, ((EntityPlayer)p).posZ, "hbm:misc.flashe", 10F, 1F);
-		        }
-		    }
-		}
-			
-			
-			if(data.time > 0) {
-				data.time--;
-				if(data.time==data.dtime)
-				{
-					EntityTom tom = new EntityTom(event.world);
-					tom.setPosition(data.x + 0.5, 600, data.z + 0.5);
-					event.world.spawnEntityInWorld(tom);
-					IChunkProvider provider = event.world.getChunkProvider();
-					provider.loadChunk(data.x >> 4, data.z >> 4);
-				}
 				data.markDirty();
 			}
 			
@@ -138,58 +101,41 @@ public class ModEventHandlerImpact {
 	}*/
 
 	@SubscribeEvent
-	public void extinction(EntityJoinWorldEvent event) {
+	public void extinction(CheckSpawn event) {
 		
 		TomSaveData data = TomSaveData.forWorld(event.world);
 		
 		if(data.impact) {
-			if(!(event.entity instanceof EntityPlayer) && event.entity instanceof EntityLivingBase) {
-				EntityLivingBase living = (EntityLivingBase) event.entity;
+			if(!(event.entityLiving instanceof EntityPlayer) && event.entityLiving instanceof EntityLivingBase) {
 				if(event.world.provider.dimensionId == 0) {
-					if(event.entity.height >= 0.85f || event.entity.width >= 0.85f && event.entity.ticksExisted < 20 && !(event.entity instanceof EntityWaterMob) && !living.isChild()) {
-						event.setCanceled(true);
+					if(event.entityLiving.height >= 0.85F || event.entityLiving.width >= 0.85F && !(event.entity instanceof EntityWaterMob) && !event.entityLiving.isChild()) {
+						event.setResult(Result.DENY);
+						event.entityLiving.setDead();
 					}
 				}
-				if(event.entity instanceof EntityWaterMob && event.entity.ticksExisted < 20) {
+				if(event.entityLiving instanceof EntityWaterMob) {
 					Random rand = new Random();
-					if(rand.nextInt(9) != 0) {
-						event.setCanceled(true);
+					if(rand.nextInt(5) != 0) {
+						event.setResult(Result.DENY);
+						event.entityLiving.setDead();
 					}
 				}
 			}
 		}
-		if(!(event.entity instanceof EntityPlayer) && event.entity instanceof EntityDuck) {
-			double range = 2D;
-				
-			List<EntityLivingBase> entities = event.world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(event.entity.posX, event.entity.posY, event.entity.posZ, event.entity.posX, event.entity.posY, event.entity.posZ).expand(range, range, range));
-			if(data.impact)
-			{
-				event.setCanceled(false);
-				return;
-			}
-			for(EntityLivingBase e : entities) {
-				if(e instanceof EntityPlayer || e instanceof EntityDuck || data.impact)
-				{
-					event.setCanceled(false);
-					return;
-				}
-			}
-			//if(entities.size()==0 && !data.impact)
-			//{
-			//	event.setCanceled(true);	
-			//}
-		}		
 	}
 
-	  @SubscribeEvent()
-	  public void preQuackosianDuckSpawn(LivingSpawnEvent.CheckSpawn event)
-	  {
-		  TomSaveData data = TomSaveData.forWorld(event.world);
-		  if(event.entity instanceof EntityDuck && data.dust > 0)
-		  {
-			  event.setResult(Result.DENY);
-		  }
-	  }
+	@SubscribeEvent
+	public void onPopulate(Populate event) {
+		
+		if(event.type == Populate.EventType.ANIMALS) {
+			
+			TomSaveData data = TomSaveData.forWorld(event.world);
+			
+			if(data.impact) {
+				event.setResult(Result.DENY);
+			}
+		}
+	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onLoad(WorldEvent.Load event) {
@@ -272,8 +218,7 @@ public class ModEventHandlerImpact {
 				
 			} else if(data.dust == 0 && data.fire == 0) {
 				if(type == event.type.TREE || type == event.type.BIG_SHROOM || type == event.type.CACTUS) {
-					Random rand = new Random();
-					if(rand.nextInt(4) == 0) {
+					if(event.world.rand.nextInt(9) == 0) {
 						event.setResult(Result.DEFAULT);
 					} else {
 						event.setResult(Result.DENY);
