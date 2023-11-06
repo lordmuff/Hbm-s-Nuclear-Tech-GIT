@@ -8,7 +8,6 @@ import com.hbm.entity.mob.EntityCreeperNuclear;
 import com.hbm.entity.mob.EntityQuackos;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.handler.HazmatRegistry;
-import com.hbm.handler.RogueWorldHandler;
 import com.hbm.handler.radiation.ChunkRadiationManager;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.RogueWorldSaveData;

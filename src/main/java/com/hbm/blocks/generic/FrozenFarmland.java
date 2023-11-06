@@ -4,10 +4,8 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
-import com.hbm.handler.RogueWorldHandler;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
-import com.hbm.main.ModEventHandlerRogue;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.RogueWorldSaveData;
 
@@ -104,23 +102,11 @@ public class FrozenFarmland extends Block {
 
     @Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		System.out.println("Temperature: "+ModEventHandlerRogue.getTemperatureAtDepth(y, world));
-    	return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);    	
+    	return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
     }
     @Override
     public void updateTick(World world, int x, int y, int z, Random rand) {
     	RogueWorldSaveData data = RogueWorldSaveData.forWorld(world);
-		float temp = ModEventHandlerRogue.getTemperatureAtDepth(y, world);
-		if(temp <0)
-		{
-			for(int i = -1; i < 2; i++) {
-				for(int j = -1; j < 2; j++) {
-					for(int k = -1; k < 2; k++) {
-						RogueWorldHandler.freeze(world, x+i, y+j, z+k, temp);
-					}
-				}
-			}
-		}
 		for(int i = -1; i < 2; i++) {
 			for(int j = -1; j < 2; j++) {
 				for(int k = -1; k < 2; k++) {

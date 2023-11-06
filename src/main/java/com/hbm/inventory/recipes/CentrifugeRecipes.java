@@ -646,7 +646,96 @@ public class CentrifugeRecipes extends SerializableRecipe {
 		recipes.put(new ComparableStack(ModItems.crystal_cobalt), new ItemStack[] { new ItemStack(ModItems.powder_cobalt, 2), new ItemStack(ModItems.powder_iron, 3), new ItemStack(ModItems.powder_copper, 3), new ItemStack(ModItems.powder_lithium_tiny, 1) });
 		recipes.put(new ComparableStack(ModItems.crystal_mineral), new ItemStack[] { new ItemStack(ModItems.mineral_dust, 2), new ItemStack(ModItems.powder_iron, 2), new ItemStack(ModItems.powder_aluminium, 2), new ItemStack(ModItems.powder_lithium_tiny, 1) });
 		recipes.put(new ComparableStack(ModItems.crystal_nickel), new ItemStack[] { new ItemStack(ModItems.powder_nickel, 2), new ItemStack(ModItems.powder_nickel, 2), new ItemStack(ModItems.powder_iron, 2), new ItemStack(ModItems.powder_titanium, 1) });
-		}
+		//mayo zone
+
+		recipes.put(new ComparableStack(ModItems.waste_pu_mix), new ItemStack[] {
+				new ItemStack(ModItems.nugget_u235, 3),
+				new ItemStack(ModItems.nugget_thorium_fuel, 1),
+				new ItemStack(ModItems.nugget_th232, 2),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+
+		recipes.put(new ComparableStack(ModItems.waste_pu241), new ItemStack[] {
+				new ItemStack(ModItems.nugget_am242, 3),
+				new ItemStack(ModItems.nugget_am241, 2),
+				new ItemStack(ModItems.nugget_pu241, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+
+		recipes.put(new ComparableStack(ModItems.waste_amrg), new ItemStack[] {
+				new ItemStack(ModItems.nugget_cm_mix, 3),
+				new ItemStack(ModItems.nugget_bk247, 1),
+				new ItemStack(ModItems.nugget_am_mix, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 2) });
+
+		recipes.put(new ComparableStack(ModItems.waste_amf), new ItemStack[] {
+				new ItemStack(ModItems.nugget_cm_mix, 3),
+				new ItemStack(ModItems.nugget_bk247, 1),
+				new ItemStack(ModItems.nugget_americium_fuel, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 2) });
+
+		recipes.put(new ComparableStack(ModItems.waste_cmrg), new ItemStack[] {
+				new ItemStack(ModItems.nugget_cm_mix, 1),
+				new ItemStack(ModItems.nugget_cf252, 2),
+				new ItemStack(ModItems.nugget_cf251, 2),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+
+		recipes.put(new ComparableStack(ModItems.waste_cmf), new ItemStack[] {
+				new ItemStack(ModItems.nugget_cm_mix, 1),
+				new ItemStack(ModItems.nugget_es253, 2),
+				new ItemStack(ModItems.nugget_pu241, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+
+		recipes.put(new ComparableStack(ModItems.waste_cf251), new ItemStack[] {
+				new ItemStack(ModItems.nugget_cm247, 1),
+				new ItemStack(ModItems.nugget_cm_mix, 3),
+				new ItemStack(ModItems.nugget_cf251, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+
+		recipes.put(new ComparableStack(ModItems.waste_cf252), new ItemStack[] {
+				new ItemStack(ModItems.nugget_cm244, 1),
+				new ItemStack(ModItems.nugget_cm_mix, 3),
+				new ItemStack(ModItems.nugget_cf252, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+
+		recipes.put(new ComparableStack(ModItems.waste_bk247), new ItemStack[] {
+				new ItemStack(ModItems.nugget_pu239, 1),
+				new ItemStack(ModItems.nugget_am_mix, 2),
+				new ItemStack(ModItems.nugget_u235, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+
+		recipes.put(new ComparableStack(ModItems.waste_es253), new ItemStack[] {
+				new ItemStack(ModItems.nugget_am_mix, 2),
+				new ItemStack(ModItems.nugget_cm_mix, 2),
+				new ItemStack(ModItems.nugget_bk247, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+
+		recipes.put(new ComparableStack(ModItems.waste_leaus), new ItemStack[] {
+				new ItemStack(Items.gold_nugget, 3),
+				new ItemStack(ModItems.nugget_australium, 2),
+				new ItemStack(ModItems.nugget_australium_lesser, 5),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+
+		recipes.put(new ComparableStack(ModItems.waste_meaus), new ItemStack[] {
+				new ItemStack(Items.gold_nugget, 3),
+				new ItemStack(ModItems.nugget_australium_lesser, 5),
+				new ItemStack(ModItems.nugget_australium, 4),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+
+		recipes.put(new ComparableStack(ModItems.waste_heaus), new ItemStack[] {
+				new ItemStack(ModItems.nugget_australium_lesser, 3),
+				new ItemStack(ModItems.nugget_australium, 2),
+				new ItemStack(ModItems.nugget_australium_greater, 4),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+
+		recipes.put(new ComparableStack(ModItems.waste_gravel), new ItemStack[] {
+				new ItemStack(ModItems.nugget_australium_lesser, 6),
+				new ItemStack(ModItems.nugget_australium, 3),
+				new ItemStack(ModItems.nugget_australium_greater, 1),
+				new ItemStack(ModItems.powder_boron_tiny, 1) });
+
+
+		//mayo zone
+
+	}
 
 	
 	

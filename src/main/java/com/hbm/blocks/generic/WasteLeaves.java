@@ -26,14 +26,7 @@ public class WasteLeaves extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		if(this==ModBlocks.frozen_leaves)
-		{
-			this.blockIcon = iconRegister.registerIcon(RefStrings.MODID + ":frozen_leaves");
-		}
-		else
-		{
-			this.blockIcon = iconRegister.registerIcon(RefStrings.MODID + ":waste_leaves");
-		}
+
 	}
 
 	@Override

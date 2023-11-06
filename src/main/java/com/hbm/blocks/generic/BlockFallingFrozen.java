@@ -2,8 +2,6 @@ package com.hbm.blocks.generic;
 
 import java.util.Random;
 
-import com.hbm.handler.RogueWorldHandler;
-import com.hbm.main.ModEventHandlerRogue;
 import com.hbm.saveddata.RogueWorldSaveData;
 
 import net.minecraft.block.Block;
@@ -27,17 +25,7 @@ public class BlockFallingFrozen extends BlockFalling {
     {
     	super.updateTick(world, x, y, z, rand);
     	RogueWorldSaveData data = RogueWorldSaveData.forWorld(world);
-		float temp = ModEventHandlerRogue.getTemperatureAtDepth(y, world);
-		if(temp <0)
-		{
-			for(int i = -1; i < 2; i++) {
-				for(int j = -1; j < 2; j++) {
-					for(int k = -1; k < 2; k++) {
-						RogueWorldHandler.freeze(world, x+i, y+j, z+k, temp);
-					}
-				}
-			}
-		}
+
     }
 		/*
 		for(int i = -1; i < 2; i++) {

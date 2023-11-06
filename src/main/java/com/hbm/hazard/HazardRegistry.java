@@ -309,16 +309,16 @@ public class HazardRegistry {
 		registerOtherWaste(waste_u235, wst * billet * 11F);
 		registerOtherWaste(waste_schrabidium, wst * billet * 15F);
 		registerOtherWaste(waste_zfb_mox, wst * billet * 5F);
-		registerOtherWaste(waste_pu_mix, wst * billet * 11F);
-		registerOtherWaste(waste_pu241, wst * billet * 13F);
-		registerOtherWaste(waste_amrg,wst * billet * 15F);
-		registerOtherWaste(waste_amf, wst * billet * 12F);
-		registerOtherWaste(waste_cmrg, wst * billet * 17F);
-		registerOtherWaste(waste_cmf, wst * billet * 15F);
-		registerOtherWaste(waste_cf251, wst * billet * 22F);
-		registerOtherWaste(waste_cf252, wst * billet * 25F);
-		registerOtherWaste(waste_bk247, wst * billet * 26F);
-		registerOtherWaste(waste_es253, wst * billet * 29F);
+		registerOtherWaste(waste_pu_mix, wst * 11F);
+		registerOtherWaste(waste_pu241, wst * 13F);
+		registerOtherWaste(waste_amrg,wst * 15F);
+		registerOtherWaste(waste_amf, wst * 12F);
+		registerOtherWaste(waste_cmrg, wst * 17F);
+		registerOtherWaste(waste_cmf, wst * 15F);
+		registerOtherWaste(waste_cf251, wst * 22F);
+		registerOtherWaste(waste_cf252, wst * 25F);
+		registerOtherWaste(waste_bk247, wst * 26F);
+		registerOtherWaste(waste_es253, wst * 29F);
 
 		HazardSystem.register(waste_pu_mix, makeData(NEUTRON,wst * purg));
 		HazardSystem.register(waste_cmrg, makeData(NEUTRON,wst * cmrg));

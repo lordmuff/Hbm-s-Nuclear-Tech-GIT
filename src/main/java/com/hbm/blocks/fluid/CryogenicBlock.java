@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.handler.RogueWorldHandler;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.ContaminationUtil;
@@ -93,7 +92,6 @@ public class CryogenicBlock extends BlockFluidClassic {
 		
 		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 
-			RogueWorldHandler.freeze(world, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, -180);
 		}
 	}
 	
@@ -103,7 +101,6 @@ public class CryogenicBlock extends BlockFluidClassic {
 		
 		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 
-			RogueWorldHandler.freeze(world, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, -180);
 		}
 	}
 
