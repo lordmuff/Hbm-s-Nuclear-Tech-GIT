@@ -104,7 +104,8 @@ public class ModItems {
 	public static Item rod_zirnox_meaus_depleted;
 	public static Item rod_zirnox_heaus_depleted;
 	public static Item rod_zirnox_gravel_enriched;
-
+	public static Item nugget_francium;
+	public static Item ingot_francium;
 
 //mayo zone end
 
@@ -2702,6 +2703,9 @@ public class ModItems {
 		rod_zirnox_meaus_depleted = new Item().setUnlocalizedName("rod_zirnox_meaus_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
 		rod_zirnox_heaus_depleted = new Item().setUnlocalizedName("rod_zirnox_heaus_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
 		rod_zirnox_gravel_enriched = new Item().setUnlocalizedName("rod_zirnox_gravel_enriched").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		nugget_francium = new Item().setUnlocalizedName("nugget_francium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":nugget_francium");
+		ingot_francium = new Item().setUnlocalizedName("ingot_francium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":ingot_francium");
+
 
 		GameRegistry.registerItem(rod_zirnox_pu_mix_depleted, rod_zirnox_pu_mix_depleted.getUnlocalizedName());
 		GameRegistry.registerItem(rod_zirnox_pu241_depleted, rod_zirnox_pu241_depleted.getUnlocalizedName());
@@ -2731,6 +2735,10 @@ public class ModItems {
 		GameRegistry.registerItem(waste_meaus, waste_meaus.getUnlocalizedName());
 		GameRegistry.registerItem(waste_heaus, waste_heaus.getUnlocalizedName());
 		GameRegistry.registerItem(waste_gravel, waste_gravel.getUnlocalizedName());
+		GameRegistry.registerItem(nugget_francium, nugget_francium.getUnlocalizedName());
+		GameRegistry.registerItem(ingot_francium, ingot_francium.getUnlocalizedName());
+
+
 
 		//mayo zone end
 

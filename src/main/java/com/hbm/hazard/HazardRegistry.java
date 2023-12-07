@@ -169,13 +169,22 @@ public class HazardRegistry {
 	public static final HazardTypeBase ASBESTOS = new HazardTypeAsbestos();
 	public static final HazardTypeBase COAL = new HazardTypeCoal();
 	public static final HazardTypeBase HYDROACTIVE = new HazardTypeHydroactive();
+	public static final HazardTypeBase HYDROGOLIC = new HazardTypeHydrogolic();
+
 	public static final HazardTypeBase EXPLOSIVE = new HazardTypeExplosive();
 	public static final HazardTypeBase AUTISM = new HazardTypeAutism();
 	public static final HazardTypeBase GLITCH = new HazardTypeGlitch();
 	public static final HazardTypeBase NEUTRON = new HazardTypeNeutron();
 	
 	public static void registerItems() {
-		
+
+		//mayo zone!!!
+		HazardSystem.register(nugget_francium, makeData(HYDROGOLIC, 10F * nugget));
+		HazardSystem.register(ingot_francium, makeData(HYDROGOLIC, 10F * ingot));
+		HazardSystem.register(block_francium, makeData(HYDROGOLIC, 10F * block));
+
+		//mayo zone END!!!
+
 		HazardSystem.register(Items.gunpowder, makeData(EXPLOSIVE, 1F));
 		HazardSystem.register(Blocks.tnt, makeData(EXPLOSIVE, 4F));
 		HazardSystem.register(Items.pumpkin_pie, makeData(EXPLOSIVE, 1F));
