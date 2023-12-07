@@ -73,7 +73,43 @@ public class ModItems {
 		initializeItem();
 		registerItem();
 	}
-	
+
+
+	//mayo zone!!!
+
+	public static Item waste_pu_mix;
+	public static Item waste_pu241;
+	public static Item waste_amrg;
+	public static Item waste_amf;
+	public static Item waste_cmrg;
+	public static Item waste_cmf;
+	public static Item waste_cf251;
+	public static Item waste_cf252;
+	public static Item waste_bk247;
+	public static Item waste_es253;
+	public static Item waste_leaus;
+	public static Item waste_meaus;
+	public static Item waste_heaus;
+	public static Item waste_gravel;
+	public static Item rod_zirnox_pu_mix_depleted;
+	public static Item rod_zirnox_pu241_depleted;
+	public static Item rod_zirnox_amrg_depleted;
+	public static Item rod_zirnox_amf_depleted;
+	public static Item rod_zirnox_cmrg_depleted;
+	public static Item rod_zirnox_cmf_depleted;
+	public static Item rod_zirnox_cf251_depleted;
+	public static Item rod_zirnox_cf252_depleted;
+	public static Item rod_zirnox_bk247_depleted;
+	public static Item rod_zirnox_es253_depleted;
+	public static Item rod_zirnox_leaus_depleted;
+	public static Item rod_zirnox_meaus_depleted;
+	public static Item rod_zirnox_heaus_depleted;
+	public static Item rod_zirnox_gravel_enriched;
+	public static Item nugget_francium;
+	public static Item ingot_francium;
+
+//mayo zone end
+
 	public static Item redstone_sword;
 	public static Item big_sword;
 	public static Item butter_sword;
@@ -2630,7 +2666,92 @@ public class ModItems {
 	public static Item memory;
 
 	public static void initializeItem()
-	{			
+	{
+		//mayo zone!!!
+
+		rod_zirnox_pu_mix_depleted = new Item().setUnlocalizedName("rod_zirnox_pu_mix_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_pu241_depleted = new Item().setUnlocalizedName("rod_zirnox_pu241_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_amrg_depleted = new Item().setUnlocalizedName("rod_zirnox_amrg_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_amf_depleted = new Item().setUnlocalizedName("rod_zirnox_amf_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_cmrg_depleted = new Item().setUnlocalizedName("rod_zirnox_cmrg_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_cmf_depleted = new Item().setUnlocalizedName("rod_zirnox_cmf_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_cf251_depleted = new Item().setUnlocalizedName("rod_zirnox_cf251_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_cf252_depleted = new Item().setUnlocalizedName("rod_zirnox_cf252_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_bk247_depleted = new Item().setUnlocalizedName("rod_zirnox_bk247_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_es253_depleted = new Item().setUnlocalizedName("rod_zirnox_es253_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_leaus_depleted = new Item().setUnlocalizedName("rod_zirnox_leaus_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_meaus_depleted = new Item().setUnlocalizedName("rod_zirnox_meaus_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_heaus_depleted = new Item().setUnlocalizedName("rod_zirnox_heaus_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_gravel_enriched = new Item().setUnlocalizedName("rod_zirnox_gravel_enriched").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+
+		waste_pu_mix = new ItemDepletedFuel().setUnlocalizedName("waste_pu_mix").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+		waste_pu241 = new ItemDepletedFuel().setUnlocalizedName("waste_pu241").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+		waste_amrg = new ItemDepletedFuel().setUnlocalizedName("waste_amrg").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+		waste_amf = new ItemDepletedFuel().setUnlocalizedName("waste_amf").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+		waste_cmrg = new ItemDepletedFuel().setUnlocalizedName("waste_cmrg").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+		waste_cmf = new ItemDepletedFuel().setUnlocalizedName("waste_cmf").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+		waste_cf251 = new ItemDepletedFuel().setUnlocalizedName("waste_cf251").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+		waste_cf252 = new ItemDepletedFuel().setUnlocalizedName("waste_cf252").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+		waste_bk247 = new ItemDepletedFuel().setUnlocalizedName("waste_bk247").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+		waste_es253 = new ItemDepletedFuel().setUnlocalizedName("waste_es253").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+		waste_leaus = new ItemDepletedFuel().setUnlocalizedName("waste_leaus").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+		waste_meaus = new ItemDepletedFuel().setUnlocalizedName("waste_meaus").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+		waste_heaus = new ItemDepletedFuel().setUnlocalizedName("waste_heaus").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+		waste_gravel = new ItemDepletedFuel().setUnlocalizedName("waste_gravel").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
+
+		rod_zirnox_pu_mix_depleted = new Item().setUnlocalizedName("rod_zirnox_pu_mix_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_pu241_depleted = new Item().setUnlocalizedName("rod_zirnox_pu241_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_amrg_depleted = new Item().setUnlocalizedName("rod_zirnox_amrg_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_amf_depleted = new Item().setUnlocalizedName("rod_zirnox_amf_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_cmrg_depleted = new Item().setUnlocalizedName("rod_zirnox_cmrg_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_cmf_depleted = new Item().setUnlocalizedName("rod_zirnox_cmf_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_cf251_depleted = new Item().setUnlocalizedName("rod_zirnox_cf251_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_cf252_depleted = new Item().setUnlocalizedName("rod_zirnox_cf252_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_bk247_depleted = new Item().setUnlocalizedName("rod_zirnox_bk247_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_es253_depleted = new Item().setUnlocalizedName("rod_zirnox_es253_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_leaus_depleted = new Item().setUnlocalizedName("rod_zirnox_leaus_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_meaus_depleted = new Item().setUnlocalizedName("rod_zirnox_meaus_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_heaus_depleted = new Item().setUnlocalizedName("rod_zirnox_heaus_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		rod_zirnox_gravel_enriched = new Item().setUnlocalizedName("rod_zirnox_gravel_enriched").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+		nugget_francium = new Item().setUnlocalizedName("nugget_francium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":nugget_francium");
+		ingot_francium = new Item().setUnlocalizedName("ingot_francium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":ingot_francium");
+
+
+		GameRegistry.registerItem(rod_zirnox_pu_mix_depleted, rod_zirnox_pu_mix_depleted.getUnlocalizedName());
+		GameRegistry.registerItem(rod_zirnox_pu241_depleted, rod_zirnox_pu241_depleted.getUnlocalizedName());
+		GameRegistry.registerItem(rod_zirnox_amrg_depleted, rod_zirnox_amrg_depleted.getUnlocalizedName());
+		GameRegistry.registerItem(rod_zirnox_amf_depleted, rod_zirnox_amf_depleted.getUnlocalizedName());
+		GameRegistry.registerItem(rod_zirnox_cmrg_depleted, rod_zirnox_cmrg_depleted.getUnlocalizedName());
+		GameRegistry.registerItem(rod_zirnox_cmf_depleted, rod_zirnox_cmf_depleted.getUnlocalizedName());
+		GameRegistry.registerItem(rod_zirnox_cf251_depleted, rod_zirnox_cf251_depleted.getUnlocalizedName());
+		GameRegistry.registerItem(rod_zirnox_cf252_depleted, rod_zirnox_cf252_depleted.getUnlocalizedName());
+		GameRegistry.registerItem(rod_zirnox_bk247_depleted, rod_zirnox_bk247_depleted.getUnlocalizedName());
+		GameRegistry.registerItem(rod_zirnox_es253_depleted, rod_zirnox_es253_depleted.getUnlocalizedName());
+		GameRegistry.registerItem(rod_zirnox_leaus_depleted, rod_zirnox_leaus_depleted.getUnlocalizedName());
+		GameRegistry.registerItem(rod_zirnox_meaus_depleted, rod_zirnox_meaus_depleted.getUnlocalizedName());
+		GameRegistry.registerItem(rod_zirnox_heaus_depleted, rod_zirnox_heaus_depleted.getUnlocalizedName());
+		GameRegistry.registerItem(rod_zirnox_gravel_enriched, rod_zirnox_gravel_enriched.getUnlocalizedName());
+		GameRegistry.registerItem(waste_pu_mix, waste_pu_mix.getUnlocalizedName());
+		GameRegistry.registerItem(waste_pu241, waste_pu241.getUnlocalizedName());
+		GameRegistry.registerItem(waste_amrg, waste_amrg.getUnlocalizedName());
+		GameRegistry.registerItem(waste_amf, waste_amf.getUnlocalizedName());
+		GameRegistry.registerItem(waste_cmrg, waste_cmrg.getUnlocalizedName());
+		GameRegistry.registerItem(waste_cmf, waste_cmf.getUnlocalizedName());
+		GameRegistry.registerItem(waste_cf251, waste_cf251.getUnlocalizedName());
+		GameRegistry.registerItem(waste_cf252, waste_cf252.getUnlocalizedName());
+		GameRegistry.registerItem(waste_bk247, waste_bk247.getUnlocalizedName());
+		GameRegistry.registerItem(waste_es253, waste_es253.getUnlocalizedName());
+		GameRegistry.registerItem(waste_leaus, waste_leaus.getUnlocalizedName());
+		GameRegistry.registerItem(waste_meaus, waste_meaus.getUnlocalizedName());
+		GameRegistry.registerItem(waste_heaus, waste_heaus.getUnlocalizedName());
+		GameRegistry.registerItem(waste_gravel, waste_gravel.getUnlocalizedName());
+		GameRegistry.registerItem(nugget_francium, nugget_francium.getUnlocalizedName());
+		GameRegistry.registerItem(ingot_francium, ingot_francium.getUnlocalizedName());
+
+
+
+		//mayo zone end
+
 		redstone_sword = new RedstoneSword(ToolMaterial.STONE).setUnlocalizedName("redstone_sword").setCreativeTab(CreativeTabs.tabCombat).setTextureName(RefStrings.MODID + ":redstone_sword");
 		big_sword = new BigSword(ToolMaterial.EMERALD).setUnlocalizedName("big_sword").setCreativeTab(CreativeTabs.tabCombat).setTextureName(RefStrings.MODID + ":big_sword");
 		butter_sword = new BSword(ToolMaterial.WOOD).setUnlocalizedName("butter_sword").setCreativeTab(CreativeTabs.tabCombat).setTextureName(RefStrings.MODID + ":budder_sword");

@@ -45,7 +45,10 @@ public class ModBlocks {
 		initializeBlock();
 		registerBlock();
 	}
-	
+
+	//mayo zone!!!
+	public static Block block_francium;
+	//mayo zone END!!!
 	public static Block test_render;
 	public static Block test_bomb;
 	public static Block test_bomb_advanced;
@@ -1323,7 +1326,11 @@ public class ModBlocks {
 	public static Material materialGas = new MaterialGas();
 		
 	private static void initializeBlock() {
-		
+
+		//mayo zone!!!
+		block_francium = new BlockLithium(Material.iron).setBlockName("block_francium").setStepSound(Block.soundTypeMetal).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":block_francium");
+		//mayo zone END!!!
+
 		test_render = new TestRender(Material.rock).setBlockName("test_render").setCreativeTab(null);
 		test_bomb = new TestBomb(Material.tnt).setBlockName("test_bomb").setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":test_bomb");
 		test_bomb_advanced = new TestBombAdvanced(Material.tnt).setBlockName("test_bomb_advanced").setCreativeTab(null);
@@ -2542,6 +2549,11 @@ public class ModBlocks {
 	}
 
 	private static void registerBlock() {
+
+		//mayo zone!!!
+		GameRegistry.registerBlock(block_francium, block_francium.getUnlocalizedName());
+		//mayo zone END!!!
+
 		//Test
 		GameRegistry.registerBlock(test_render, test_render.getUnlocalizedName());
 		//GameRegistry.registerBlock(test_container, test_container.getUnlocalizedName());
