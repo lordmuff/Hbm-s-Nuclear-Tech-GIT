@@ -53,6 +53,13 @@ public class ModBlocks {
 		registerBlock();
 	}
 
+	//mayo zone!!!
+	public static Block block_francium;
+	//mayo zone END!!!
+	public static Block test_render;
+	public static Block test_bomb;
+	public static Block test_bomb_advanced;
+	public static Block test_nuke;
 	public static Block event_tester;
 	public static Block obj_tester;
 	public static Block test_core;
@@ -1238,6 +1245,14 @@ public class ModBlocks {
 
 	private static void initializeBlock() {
 
+		//mayo zone!!!
+		block_francium = new BlockLithium(Material.iron).setBlockName("block_francium").setStepSound(Block.soundTypeMetal).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":block_francium");
+		//mayo zone END!!!
+
+		test_render = new TestRender(Material.rock).setBlockName("test_render").setCreativeTab(null);
+		test_bomb = new TestBomb(Material.tnt).setBlockName("test_bomb").setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":test_bomb");
+		test_bomb_advanced = new TestBombAdvanced(Material.tnt).setBlockName("test_bomb_advanced").setCreativeTab(null);
+		test_nuke = new TestNuke(Material.iron).setBlockName("test_nuke").setCreativeTab(null).setHardness(2.5F).setResistance(6000.0F).setBlockTextureName(RefStrings.MODID + ":test_nuke");
 		event_tester = new TestEventTester(Material.iron).setBlockName("event_tester").setCreativeTab(null).setHardness(2.5F).setResistance(0.0F).setBlockTextureName(RefStrings.MODID + ":event_tester");
 		obj_tester = new TestObjTester(Material.iron).setBlockName("obj_tester").setCreativeTab(null).setHardness(2.5F).setResistance(10.0F);
 		test_core = new TestCore(Material.iron).setBlockName("test_core").setCreativeTab(null).setHardness(2.5F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":test_core");

@@ -6254,6 +6254,7 @@ trait.hlParticle=Particle Half-Life: %s
 trait.hlPlayer=Player Half-Life: %s
 trait.hot=Pyrophoric / Hot
 trait.hydro=Hydroreactive
+trait.hydrosuper=!!HYDROGOLIC!!
 trait.radioactive=Radioactive
 trait.radResistance=Radiation resistance: %s
 

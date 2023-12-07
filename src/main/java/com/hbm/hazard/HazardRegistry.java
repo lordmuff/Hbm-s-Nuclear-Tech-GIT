@@ -99,6 +99,19 @@ public class HazardRegistry {
 	public static final float pu241 = 25.0F;
 	public static final float puf = 4.25F;
 	public static final float am241 = 8.5F;
+	public static final float cm242 = 9.3F; //fertile but probably unused
+	public static final float cm243 = 5.6F; //fissile
+	public static final float cm244 = 2.0F; //fertile
+	public static final float cm245 = 0.8F; //fissile
+	public static final float cm246 = 2.5F; //fertile
+	public static final float cm247 = 0.2F; //fissile
+	public static final float cmrg = 6.0F; //reactor-grade curium
+	public static final float cmf = 2.2F; //curium fuel
+	public static final float bk247 = 10.5F;
+	public static final float cf251 = 14.3F;
+	public static final float cf252 = 15.3F;
+	public static final float es253 = 18.3F;
+	public static final float es255 = 19.3F;
 	public static final float am242 = 9.5F;
 	public static final float amrg = 9.0F;
 	public static final float amf = 4.75F;
@@ -153,9 +166,18 @@ public class HazardRegistry {
 	public static final HazardTypeBase ASBESTOS = new HazardTypeAsbestos();
 	public static final HazardTypeBase COAL = new HazardTypeCoal();
 	public static final HazardTypeBase HYDROACTIVE = new HazardTypeHydroactive();
+	public static final HazardTypeBase HYDROGOLIC = new HazardTypeHydrogolic();
+
 	public static final HazardTypeBase EXPLOSIVE = new HazardTypeExplosive();
 
 	public static void registerItems() {
+
+		//mayo zone!!!
+		HazardSystem.register(nugget_francium, makeData(HYDROGOLIC, 10F * nugget));
+		HazardSystem.register(ingot_francium, makeData(HYDROGOLIC, 10F * ingot));
+		HazardSystem.register(block_francium, makeData(HYDROGOLIC, 10F * block));
+
+		//mayo zone END!!!
 
 		HazardSystem.register(Items.gunpowder, makeData(EXPLOSIVE, 1F));
 		HazardSystem.register(Blocks.tnt, makeData(EXPLOSIVE, 4F));
