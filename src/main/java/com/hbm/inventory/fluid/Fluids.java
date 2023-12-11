@@ -190,6 +190,13 @@ public class Fluids {
 	public static FluidType CREAM;
 
 	public static FluidType FULLERENE;
+
+	//mayo zone!!!
+
+	//Naquadah (V) Boron Sulfide Coordination Complex
+	public static FluidType NQVBSCOMPLEX;
+
+	//mayo zone END!!!
 	
 	public static List<FluidType> customFluids = new ArrayList();
 
@@ -382,7 +389,8 @@ public class Fluids {
 		CMILK =					new FluidType("CMILK",				0xCFCFCF, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID);//F5DEE4
 		CREAM =					new FluidType("CREAM",				0xCFCFCF, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID);//F5DEE4
 		FULLERENE =				new FluidType(154, "FULLERENE",		0xFF7FED, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID, new FT_Corrosive(65));
-		
+		NQVBSCOMPLEX =				new FluidType(155, "NQVBSCOMPLEX",		0xCCCCFF, 3, 3, 3, EnumSymbol.RADIATION).addTraits(LIQUID, new FT_Corrosive(120));
+
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
 		
@@ -564,7 +572,7 @@ public class Fluids {
 		metaOrder.add(EMILK);
 		metaOrder.add(CMILK);
 		metaOrder.add(CREAM);
-
+		metaOrder.add(NQVBSCOMPLEX);
 
 
 

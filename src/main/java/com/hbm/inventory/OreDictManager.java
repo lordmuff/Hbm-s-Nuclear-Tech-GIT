@@ -115,6 +115,9 @@ public class OreDictManager {
 	/*
 	 * RADIOACTIVE
 	 */
+	public static final DictFrame NQ = new DictFrame(Compat.isModLoaded(Compat.MOD_GT6) ? "Naquadah" : "");
+	public static final DictFrame NQ528 = new DictFrame(Compat.isModLoaded(Compat.MOD_GT6) ? "NaquadahEnriched" : "");
+	public static final DictFrame NQ522 = new DictFrame(Compat.isModLoaded(Compat.MOD_GT6) ? "Naquadria" : "");
 	public static final DictFrame U = new DictFrame(Compat.isModLoaded(Compat.MOD_GT6) ? "Uraninite" : "Uranium");
 	public static final DictFrame U233 = new DictFrame("Uranium233", "U233");
 	public static final DictFrame U235 = new DictFrame("Uranium235", "U235");

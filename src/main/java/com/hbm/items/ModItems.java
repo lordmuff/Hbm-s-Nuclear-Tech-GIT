@@ -104,8 +104,21 @@ public class ModItems {
 	public static Item rod_zirnox_meaus_depleted;
 	public static Item rod_zirnox_heaus_depleted;
 	public static Item rod_zirnox_gravel_enriched;
+
+	public static ItemRBMKRod rbmk_fuel_henq528;
+	public static ItemRBMKRod rbmk_fuel_henq522;
+	public static ItemRBMKRod rbmk_fuel_lenq528;
+	public static ItemRBMKRod rbmk_fuel_lenq522;
+
+
 	public static Item nugget_francium;
 	public static Item ingot_francium;
+
+	public static Item billet_henq528;
+	public static Item billet_henq522;
+
+	public static Item billet_lenq528;
+	public static Item billet_lenq522;
 
 //mayo zone end
 
@@ -2706,6 +2719,9 @@ public class ModItems {
 		nugget_francium = new Item().setUnlocalizedName("nugget_francium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":nugget_francium");
 		ingot_francium = new Item().setUnlocalizedName("ingot_francium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":ingot_francium");
 
+		billet_lenq528 = new Item().setUnlocalizedName("billet_lenq528").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":billet_lenq528");
+		billet_lenq522 = new Item().setUnlocalizedName("billet_lenq522").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":billet_lenq522");
+
 
 		GameRegistry.registerItem(rod_zirnox_pu_mix_depleted, rod_zirnox_pu_mix_depleted.getUnlocalizedName());
 		GameRegistry.registerItem(rod_zirnox_pu241_depleted, rod_zirnox_pu241_depleted.getUnlocalizedName());
@@ -2737,6 +2753,7 @@ public class ModItems {
 		GameRegistry.registerItem(waste_gravel, waste_gravel.getUnlocalizedName());
 		GameRegistry.registerItem(nugget_francium, nugget_francium.getUnlocalizedName());
 		GameRegistry.registerItem(ingot_francium, ingot_francium.getUnlocalizedName());
+
 
 
 

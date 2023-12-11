@@ -11,8 +11,17 @@ import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.util.I18nUtil;
-
+import gregapi.data.MT;
+import gregapi.data.OP;
+import gregapi.util.OM;
 import net.minecraft.item.ItemStack;
+
+
+import net.minecraftforge.oredict.OreDictionary;
+
+import gregapi.util.OM.*;
+import static gregapi.data.AM.*;
+import static gregapi.data.OP.*;
 
 public class GasCentrifugeRecipes {
 	
@@ -30,8 +39,12 @@ public class GasCentrifugeRecipes {
 		MUD			(1000,	500,	MUD_HEAVY,	false,	new ItemStack(ModItems.powder_lead, 1), new ItemStack(ModItems.dust, 1)),
 		
 		MINSOLEE	(1000, 0,		NONE,		false,	new ItemStack(ModItems.crystal_cleaned, 1)),
-		MINSOLE		(1000, 1000,	MINSOLEE,	false,	new ItemStack(ModItems.powder_iron, 1));
-		
+		MINSOLE		(1000, 1000,	MINSOLEE,	false,	new ItemStack(ModItems.powder_iron, 1)),
+
+		NQVBSCOMP2		(600, 0,	NONE,	false,	 nugget.mat(MT.Nq_528, 17), nugget.mat(MT.Nq_522, 5), new ItemStack(ModItems.fluorite, 12)),
+
+		NQVBSCOMP		(1000, 200,	NQVBSCOMP2,	false, nugget.mat(MT.Nq_528, 17), nugget.mat(MT.Nq_522, 5), new ItemStack(ModItems.powder_boron, 8));
+
 		//TODO for bob: consider more fluid types
 		//Schraranium Trisulfide for more schrab-containing, pre-SILEX processing using the crystals?
 		//Gaseous Nuclear Waste: because why not? Large inputs could output Xe-135 and maybe some other fun stuff...
@@ -108,7 +121,7 @@ public class GasCentrifugeRecipes {
 	public static void register() {
 		gasCent.put(new FluidStack(1200, Fluids.UF6), new Object[] { new ItemStack[] 
 				{new ItemStack(ModItems.nugget_u238, 11), new ItemStack(ModItems.nugget_u235, 1), new ItemStack(ModItems.fluorite, 4)}, true, 4 });
-		gasCent.put(new FluidStack(1200, Fluids.UF6), new Object[] { new ItemStack[] 
+		gasCent.put(new FluidStack(1200, Fluids.UF6), new Object[] { new ItemStack[]
 				{new ItemStack(ModItems.nugget_u238, 6), new ItemStack(ModItems.nugget_uranium_fuel, 6), new ItemStack(ModItems.fluorite, 4)}, false, 2 });
 		gasCent.put(new FluidStack(900, Fluids.PUF6), new Object[] { new ItemStack[] 
 				{new ItemStack(ModItems.nugget_pu238, 3), new ItemStack(ModItems.nugget_pu_mix, 6), new ItemStack(ModItems.fluorite, 3)}, false, 1 });
@@ -116,6 +129,13 @@ public class GasCentrifugeRecipes {
 				{new ItemStack(ModItems.powder_iron, 1), new ItemStack(ModItems.powder_lead, 1), new ItemStack(ModItems.nuclear_waste_tiny, 1), new ItemStack(ModItems.dust, 2)}, false, 2 });
 		gasCent.put(new FluidStack(1000, Fluids.MINSOL), new Object[] { new ItemStack[] 
 				{new ItemStack(ModItems.powder_iron, 1), new ItemStack(ModItems.crystal_cleaned, 1),}, false, 2 });
-		
+		if(OreDictionary.doesOreNameExist("ingotNaquadah"))
+		{
+			gasCent.put(new FluidStack(1000, Fluids.NQVBSCOMPLEX), new Object[]{new ItemStack[]
+					{nugget.mat(MT.Nq_528, 17), nugget.mat(MT.Nq_522, 5), new ItemStack(ModItems.fluorite, 12), new ItemStack(ModItems.powder_boron, 8)}, true, 2});
+		}
 	}
 }
+
+
+

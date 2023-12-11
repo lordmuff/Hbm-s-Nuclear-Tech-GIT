@@ -9,6 +9,8 @@ import com.hbm.items.machine.ItemZirnoxRod.EnumZirnoxType;
 import com.hbm.main.CraftingManager;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import gregapi.data.MT;
+import gregapi.data.OP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -157,6 +159,8 @@ public class RodRecipes {
 		addRBMKRod(ModItems.billet_cm_fuel, ModItems.rbmk_fuel_lecm);
 		addRBMKRod(CMRG, ModItems.rbmk_fuel_mecm);
 		addRBMKRod(CM245, ModItems.rbmk_fuel_hecm);
+		addRBMKRod(NQ528, ModItems.rbmk_fuel_henq528);
+		addRBMKRod(NQ522, ModItems.rbmk_fuel_henq522);
 
 		addPellet(SA326,							EnumWatzType.SCHRABIDIUM);
 		addPellet(ModItems.ingot_hes,				EnumWatzType.HES);

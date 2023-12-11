@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import static com.hbm.inventory.OreDictManager.*;
+import static gregapi.data.AM.*;
+import static gregapi.data.OP.*;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.fluid.Fluids;
@@ -17,6 +20,9 @@ import com.hbm.items.special.ItemWasteLong;
 import com.hbm.items.special.ItemWasteShort;
 import com.hbm.util.WeightedRandomObject;
 
+import gregapi.data.MT;
+import gregapi.data.OP;
+import gregapi.util.OM;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -32,6 +38,20 @@ public class SILEXRecipes {
 
 		itemTranslation.put(new ComparableStack(ModItems.fluid_icon, 1, Fluids.UF6.getID()), new ComparableStack(ModItems.ingot_uranium));
 		dictTranslation.put(U.dust(), U.ingot());
+
+		//mayo zone!!!
+
+		for(ItemStack naq : OreDictionary.getOres("dustNaquadah")) {
+
+			recipes.put(new ComparableStack(naq), new SILEXRecipe(1100, 100, EnumWavelengths.UV)
+					.addOut(new WeightedRandomObject(OP.nugget.mat(MT.Nq_528, 1), 27))
+					.addOut(new WeightedRandomObject(OP.nugget.mat(MT.Nq_522, 1), 19))
+			);
+
+		}
+
+		//mayo zone END!!!
+
 		recipes.put(U.ingot(), new SILEXRecipe(900, 100, EnumWavelengths.VISIBLE)
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_u235), 1))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_u238), 11))

@@ -8,6 +8,14 @@ buildscript {
 	repositories {
 		maven { url = 'https://maven.minecraftforge.net/' }
 		maven { url = 'https://plugins.gradle.org/m2' }
+		maven {
+			name = "gt"
+			url = "https://gregtech.mechaenetia.com/"
+		}
+		maven {
+			name = "gtovermind"
+			url = "http://gregtech.overminddl1.com/"
+		}
 		mavenCentral()
 	}
 	dependencies {
@@ -71,10 +79,18 @@ repositories {
 		name = 'ModMaven'
 		url = 'https://modmaven.dev'
 	}
-	//maven {
-	//	name = "CurseForge"
-	//	url = "https://minecraft.curseforge.com/api/maven/"
-	//}
+	maven {
+		name = "gt"
+		url = "https://gregtech.mechaenetia.com/"
+	}
+	maven {
+		name = "gtovermind"
+		url = "http://gregtech.overminddl1.com/"
+	}
+	maven {
+		name = "CurseForge"
+		url = "https://minecraft.curseforge.com/api/maven/"
+	}
 }
 
 dependencies {
@@ -86,6 +102,9 @@ dependencies {
 	
 	implementation 'codechicken:NotEnoughItems:1.7.10-1.0.3.74:dev'
 	compileOnly 'codechicken:NotEnoughItems:1.7.10-1.0.3.74:src'
+
+	implementation 'com.gregoriust.gregtech:gregtech_1.7.10:6-SNAPSHOT:dev'
+	compileOnly 'com.gregoriust.gregtech:gregtech_1.7.10:6-SNAPSHOT:dev'
 
 	//compileOnly 'inventory-tweaks:InventoryTweaks:1.62+beta.84:api'
 	implementation "li.cil.oc:OpenComputers:MC1.7.10-1.5.+:api"

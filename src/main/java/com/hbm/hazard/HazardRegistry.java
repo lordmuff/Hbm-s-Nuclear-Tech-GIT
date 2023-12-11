@@ -182,7 +182,6 @@ public class HazardRegistry {
 		HazardSystem.register(nugget_francium, makeData(HYDROGOLIC, 10F * nugget));
 		HazardSystem.register(ingot_francium, makeData(HYDROGOLIC, 10F * ingot));
 		HazardSystem.register(block_francium, makeData(HYDROGOLIC, 10F * block));
-
 		//mayo zone END!!!
 
 		HazardSystem.register(Items.gunpowder, makeData(EXPLOSIVE, 1F));
