@@ -4,12 +4,14 @@ import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.Set;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.Level;
@@ -21,8 +23,6 @@ import com.hbm.blocks.generic.BlockAshes;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.MobConfig;
 import com.hbm.config.RadiationConfig;
-import com.hbm.entity.missile.EntityMissileBaseAdvanced;
-import com.hbm.entity.missile.EntityMissileCustom;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.mob.EntityDuck;
 import com.hbm.entity.mob.EntityCreeperNuclear;
@@ -67,6 +67,7 @@ import com.hbm.packet.PermaSyncPacket;
 import com.hbm.packet.PlayerInformPacket;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.AuxSavedData;
+import com.hbm.tileentity.machine.TileEntityMachineRadarNT;
 import com.hbm.saveddata.TomSaveData;
 import com.hbm.tileentity.network.RTTYSystem;
 import com.hbm.tileentity.network.RequestNetwork;
@@ -210,7 +211,7 @@ public class ModEventHandler {
 				player.inventory.addItemStackToInventory(new ItemStack(ModItems.beta));
 		}
 	}
-	
+
 
 	@SubscribeEvent
 	public void onEntityConstructing(EntityEvent.EntityConstructing event) {
@@ -336,14 +337,14 @@ public class ModEventHandler {
 				if(event.entityLiving instanceof EntityCyberCrab && event.entityLiving.getRNG().nextInt(500) == 0) {
 					event.entityLiving.dropItem(ModItems.wd40, 1);
 				}
-				
+
 				if(event.entityLiving instanceof EntityVillager&& event.entityLiving.getRNG().nextInt(1) == 0) {
 					event.entityLiving.dropItem(ModItems.flesh, 5);
 			}
 		}
 	}
 }
-	
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onEntityDeathLast(LivingDeathEvent event) {
 		
@@ -697,7 +698,7 @@ public class ModEventHandler {
 				        	if(entity instanceof EntityPlayer)
 				        		((EntityPlayer)entity).triggerAchievement(MainRegistry.achRadPoison);
 						}
-						
+
 			        	if(entity instanceof EntityPlayer)
 			        	{
 			        		EntityPlayer player = (EntityPlayer) entity;
@@ -710,8 +711,8 @@ public class ModEventHandler {
 									float activation = stack2.stackTagCompound.getFloat("ntmNeutron");
 									if(activation<1e-5)
 										stack2.stackTagCompound.removeTag("ntmNeutron");
-									stack2.stackTagCompound.setFloat("ntmNeutron",activation*0.999916f);		
-								}	
+									stack2.stackTagCompound.setFloat("ntmNeutron",activation*0.999916f);
+								}
 							}
 			        	}
 					}
@@ -852,7 +853,7 @@ public class ModEventHandler {
 		EntityPlayer player = event.entityPlayer;
 		ItemStack chestplate = player.inventory.armorInventory[2];
 		
-		if(player.getHeldItem() == null && chestplate != null && ArmorModHandler.hasMods(chestplate)) {
+		if(!player.worldObj.isRemote && player.getHeldItem() == null && chestplate != null && ArmorModHandler.hasMods(chestplate)) {
 			ItemStack[] mods = ArmorModHandler.pryMods(chestplate);
 			ItemStack servo = mods[ArmorModHandler.servos];
 			
@@ -1003,14 +1004,14 @@ public class ModEventHandler {
 	}
 	@SubscribeEvent
 	public void onEntityTick(LivingUpdateEvent event) {
-		//because fuck you and your scrubs 
+		//because fuck you and your scrubs
 		//eventually i will condesne this to one eventhandler just give me a minute
 		Entity e = event.entityLiving;
 		if(e.worldObj.isRemote) return;
 		if(((EntityLivingBase) e).isPotionActive(HbmPotion.slippery.id) && e instanceof EntityLiving) {
 			EntityLiving ent = (EntityLiving) e;
 		    if (ent.onGround) {
-		        double slipperiness = 0.6; 
+		        double slipperiness = 0.6;
 		        double inertia = 0.1;
 		        boolean isMoving = ent.moveForward != 0.0 || ent.moveStrafing != 0.0;
 		        double entMotion = Math.sqrt(ent.motionX * ent.motionX + ent.motionZ * ent.motionZ);
@@ -1025,7 +1026,7 @@ public class ModEventHandler {
 
 		        ent.motionX += diffX * inertia; //god weeps
 		        ent.motionZ += diffZ * inertia;
-		        
+
 		        if (!isMoving) {
 		            ent.motionX *= (1.0 - 0.1);
 
@@ -1037,14 +1038,14 @@ public class ModEventHandler {
 		    }
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		
 		EntityPlayer player = event.player;
 		if(player.isPotionActive(HbmPotion.slippery.id) && !player.capabilities.isFlying) {
 		    if (player.onGround) {
-		        double slipperiness = 0.6; 
+		        double slipperiness = 0.6;
 		        double inertia = 0.1;
 		        boolean isMoving = player.moveForward != 0.0 || player.moveStrafing != 0.0;
 		        double playerMotion = Math.sqrt(player.motionX * player.motionX + player.motionZ * player.motionZ);
@@ -1059,7 +1060,7 @@ public class ModEventHandler {
 
 		        player.motionX += diffX * inertia; //god weeps
 		        player.motionZ += diffZ * inertia;
-		        
+
 		        if (!isMoving) {
 		            player.motionX *= (1.0 - 0.1);
 
@@ -1140,7 +1141,7 @@ public class ModEventHandler {
 				//if (!(Library.checkForHazmat((EntityPlayer)player) || Library.checkForRads((EntityPlayer)player)))
 				//{
 				Random rand = new Random();
-				
+
 				if (Library.checkInventory(player, Items.experience_bottle, slot))
 				{
 					((EntityPlayer)player).inventory.mainInventory[slot] = new ItemStack(Items.glass_bottle);
@@ -1208,12 +1209,12 @@ public class ModEventHandler {
 				player.worldObj.spawnParticle("townaura", player.posX + vec.xCoord, player.posY + 1 + vec.yCoord, player.posZ + vec.zCoord, 0.0, 0.0, 0.0);
 			}
 			if(player.getUniqueID().toString().equals(Library.DUODEC_)) {
-				
+
 				Vec3 vec = Vec3.createVectorHelper(3 * rand.nextDouble(), 0, 0);
-				
+
 				vec.rotateAroundZ((float) (rand.nextDouble() * Math.PI));
 				vec.rotateAroundY((float) (rand.nextDouble() * Math.PI * 2));
-				
+
 				//player.worldObj.spawnParticle("magicCrit", player.posX + vec.xCoord, player.posY + 1 + vec.yCoord, player.posZ + vec.zCoord, 0.0, 0.0, 0.0);
 				ParticleUtil.spawnTuneFlame(player.worldObj, player.posX + vec.xCoord, player.posY + 1 + vec.yCoord, player.posZ + vec.zCoord);
 				ParticleUtil.spawnJesusFlame(player.worldObj, player.posX + vec.xCoord, player.posY + 1 + vec.yCoord, player.posZ + vec.zCoord);
@@ -1228,19 +1229,20 @@ public class ModEventHandler {
 		if(event.phase == event.phase.START) {
 			RTTYSystem.updateBroadcastQueue();
 			RequestNetwork.updateEntries();
+			TileEntityMachineRadarNT.updateSystem();
 		}
 	}
 	
 	@SubscribeEvent
 	public void enteringChunk(EnteringChunk evt) {
 		
-		if(evt.entity instanceof EntityMissileBaseAdvanced) {
-			((EntityMissileBaseAdvanced) evt.entity).loadNeighboringChunks(evt.newChunkX, evt.newChunkZ);
+		/*if(evt.entity instanceof EntityMissileBaseNT) {
+			((EntityMissileBaseNT) evt.entity).loadNeighboringChunks(evt.newChunkX, evt.newChunkZ);
 		}
 
 		if(evt.entity instanceof EntityMissileCustom) {
 			((EntityMissileCustom) evt.entity).loadNeighboringChunks(evt.newChunkX, evt.newChunkZ);
-		}
+		}*/
 	}
 	
 	@SubscribeEvent
@@ -1331,10 +1333,16 @@ public class ModEventHandler {
 		}
 	}
 	
+	private static final Set<String> hashes = new HashSet();
+
+	static {
+		hashes.add("41de5c372b0589bbdb80571e87efa95ea9e34b0d74c6005b8eab495b7afd9994");
+		hashes.add("31da6223a100ed348ceb3254ceab67c9cc102cb2a04ac24de0df3ef3479b1036");
+	}
 	private static final String hash = "cce6b36fbaa6ec2327c1af5cbcadc4e2d340738ab9328c459365838e79d12e5e";
-	
+
 	private static final String lol = "popbobisgod";
-	
+
 	@SubscribeEvent
 	public void onClickSign(PlayerInteractEvent event) {
 
@@ -1343,13 +1351,14 @@ public class ModEventHandler {
 		int z = event.z;
 		World world = event.world;
 		
-		if(!world.isRemote && event.action == Action.RIGHT_CLICK_BLOCK && world.getBlock(x, y, z) == Blocks.standing_sign) {
+		if(!world.isRemote && event.action == Action.RIGHT_CLICK_BLOCK && world.getTileEntity(x, y, z) instanceof TileEntitySign) {
 			
 			TileEntitySign sign = (TileEntitySign)world.getTileEntity(x, y, z);
 			
 			String result = smoosh(sign.signText[0], sign.signText[1], sign.signText[2], sign.signText[3]);
+			System.out.println(result);
 			
-			if(result.equals(hash)) {
+			if(hashes.contains(result)) {
 				world.func_147480_a(x, y, z, false);
 				EntityItem entityitem = new EntityItem(world, x, y, z, new ItemStack(ModItems.bobmazon_hidden));
 				entityitem.delayBeforeCanPickup = 1;
@@ -1357,9 +1366,9 @@ public class ModEventHandler {
 				MainRegistry.logger.log(Level.FATAL, "THE HIDDENCAT HAS BEEN OBTAINED " + " x: " + x + " / "	+ " y: " + + y + " / "+ "z: " + + z + " by " + event.entityPlayer.getDisplayName() + "!");
 
 			}
-		}		
+		}
 	}
-	
+
     @SubscribeEvent
     public void onEntityHeal(LivingHealEvent event)
     {
@@ -1380,7 +1389,7 @@ public class ModEventHandler {
                 double rad = HbmLivingProps.getRadiation(entity);
                 if (rad > 100 && rad < 800) ///TODO get per entity
                 {
-                	amount *=1-(((rad-100)*(1-0))/(800-100))+0;                	
+                	amount *=1-(((rad-100)*(1-0))/(800-100))+0;
                 }
                 if (rad > 800) ///TODO get per entity
                 {
@@ -1391,29 +1400,29 @@ public class ModEventHandler {
         }
     }
 
-	
+
 	@SubscribeEvent
 	public void onPull(PlayerInteractEvent event) {
 		int x = event.x;
 		int y = event.y;
 		int z = event.z;
 		World world = event.world;
-		
+
 		if(!world.isRemote && event.action == Action.RIGHT_CLICK_BLOCK && world.getBlock(x, y, z) == Blocks.lever && GeneralConfig.enableExtendedLogging == true) {
-			
+
 			EntityPlayer player = event.entityPlayer;
 			BlockLever sign = (BlockLever)world.getBlock(x, y, z);
-			
+
 
 			MainRegistry.logger.log(Level.INFO, "[DET] pulled lever at " + x + " / " + y + " / " + z + " by " + player.getDisplayName() + "!");
-			
+
 			//System.out.println(result);
 		
 			}
 		}
-	
-	
-		
+
+
+
 	
 	private String smoosh(String s1, String s2, String s3, String s4) {
 		
