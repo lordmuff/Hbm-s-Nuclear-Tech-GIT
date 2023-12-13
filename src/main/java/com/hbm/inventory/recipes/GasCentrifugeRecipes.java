@@ -13,6 +13,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.util.I18nUtil;
 
+import gregapi.data.MT;
 import net.minecraft.item.ItemStack;
 
 
@@ -34,21 +35,26 @@ public class GasCentrifugeRecipes {
 		public static PseudoFluidType LEUF6 	= new PseudoFluidType("LEUF6",		300,	200,	MEUF6,		false,	new ItemStack(ModItems.nugget_u238, 1), new ItemStack(ModItems.fluorite, 1));
 		public static PseudoFluidType NUF6 		= new PseudoFluidType("NUF6",		400,	300,	LEUF6,		false,	new ItemStack(ModItems.nugget_u238, 1));
 
-		MUD_HEAVY	(500,	0,		NONE,		false,	new ItemStack(ModItems.powder_iron, 1), new ItemStack(ModItems.dust, 1), new ItemStack(ModItems.nuclear_waste_tiny, 1)),
-		MUD			(1000,	500,	MUD_HEAVY,	false,	new ItemStack(ModItems.powder_lead, 1), new ItemStack(ModItems.dust, 1)),
+		public static PseudoFluidType PF6		= new PseudoFluidType("PF6",		300,	0,		NONE,		false,	new ItemStack(ModItems.nugget_pu238, 1), new ItemStack(ModItems.nugget_pu_mix, 2), new ItemStack(ModItems.fluorite, 1));
 
-		NQVBSCOMP2		(600, 0,	NONE,	false,	 nugget.mat(MT.Nq_528, 17), nugget.mat(MT.Nq_522, 5), new ItemStack(ModItems.fluorite, 12)),
+		public static PseudoFluidType MUD_HEAVY 		= new PseudoFluidType("MUD_HEAVY",	500,	0,		NONE,		false,	new ItemStack(ModItems.powder_iron, 1), new ItemStack(ModItems.dust, 1), new ItemStack(ModItems.nuclear_waste_tiny, 1));
+		public static PseudoFluidType MUD 		= new PseudoFluidType("MUD"	,		1000,	500,	MUD_HEAVY,	false,	new ItemStack(ModItems.powder_lead, 1), new ItemStack(ModItems.dust, 1));
 
-		NQVBSCOMP		(1000, 200,	NQVBSCOMP2,	false, nugget.mat(MT.Nq_528, 17), nugget.mat(MT.Nq_522, 5), new ItemStack(ModItems.powder_boron, 8));
+
+		public static PseudoFluidType MINSOLEE 		= new PseudoFluidType("MINSOLEE",	1000, 0,		NONE,		false,	new ItemStack(ModItems.crystal_cleaned, 1));
+		public static PseudoFluidType MINSOLE 		= new PseudoFluidType("MINSOLE",		1000, 1000,	MINSOLEE,	false,	new ItemStack(ModItems.powder_iron, 1));
+
+
+
+		public static PseudoFluidType NQVBSCOMP2 		= new PseudoFluidType("NQVBSCOMP2",		600, 0,NONE,	false, nugget.mat(MT.Nq_528, 17), nugget.mat(MT.Nq_522, 5), new ItemStack(ModItems.fluorite, 12));
+
+		public static PseudoFluidType NQVBSCOMP 		= new PseudoFluidType("NQVBSCOMP",		1000, 200,	NQVBSCOMP2,	false, nugget.mat(MT.Nq_528, 17), nugget.mat(MT.Nq_522, 5), new ItemStack(ModItems.powder_boron, 8));
+
 
 		//TODO for bob: consider more fluid types
 		//Schraranium Trisulfide for more schrab-containing, pre-SILEX processing using the crystals?
 		//Gaseous Nuclear Waste: because why not? Large inputs could output Xe-135 and maybe some other fun stuff...
 		//
-		public static PseudoFluidType PF6		= new PseudoFluidType("PF6",		300,	0,		NONE,		false,	new ItemStack(ModItems.nugget_pu238, 1), new ItemStack(ModItems.nugget_pu_mix, 2), new ItemStack(ModItems.fluorite, 1));
-
-		public static PseudoFluidType MUD_HEAVY	= new PseudoFluidType("MUD_HEAVY",	500,	0,		NONE,		false,	new ItemStack(ModItems.powder_iron, 1), new ItemStack(ModItems.dust, 1), new ItemStack(ModItems.nuclear_waste_tiny, 1));
-		public static PseudoFluidType MUD		= new PseudoFluidType("MUD", 		1000,	500,	MUD_HEAVY,	false,	new ItemStack(ModItems.powder_lead, 1), new ItemStack(ModItems.dust, 1));
 
 		public String name;
 		int fluidConsumed;
@@ -105,15 +111,11 @@ public class GasCentrifugeRecipes {
 	}
 	
 	public static HashMap<FluidType, PseudoFluidType> fluidConversions = new HashMap();
+	public static void register() {
 
 		fluidConversions.put(Fluids.UF6, PseudoFluidType.NUF6);
 		fluidConversions.put(Fluids.PUF6, PseudoFluidType.PF6);
 		fluidConversions.put(Fluids.WATZ, PseudoFluidType.MUD);
-
-		gasCent.put(new FluidStack(1200, Fluids.UF6), new Object[] { new ItemStack[] {new ItemStack(ModItems.nugget_u238, 11), new ItemStack(ModItems.nugget_u235, 1), new ItemStack(ModItems.fluorite, 4)}, true, 4 });
-		gasCent.put(new FluidStack(1200, Fluids.UF6), new Object[] { new ItemStack[] {new ItemStack(ModItems.nugget_u238, 6), new ItemStack(ModItems.nugget_uranium_fuel, 6), new ItemStack(ModItems.fluorite, 4)}, false, 2 });
-		gasCent.put(new FluidStack(900, Fluids.PUF6), new Object[] { new ItemStack[] {new ItemStack(ModItems.nugget_pu238, 3), new ItemStack(ModItems.nugget_pu_mix, 6), new ItemStack(ModItems.fluorite, 3)}, false, 1 });
-		gasCent.put(new FluidStack(1000, Fluids.WATZ), new Object[] { new ItemStack[] {new ItemStack(ModItems.powder_iron, 1), new ItemStack(ModItems.powder_lead, 1), new ItemStack(ModItems.nuclear_waste_tiny, 1), new ItemStack(ModItems.dust, 2)}, false, 2 });
 
 		if(OreDictionary.doesOreNameExist("ingotNaquadah"))
 		{

@@ -1,8 +1,10 @@
 package com.hbm.blocks.bomb;
 
 import java.util.Random;
+import java.util.logging.Level;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.GeneralConfig;
 import com.hbm.interfaces.IBomb;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
@@ -13,12 +15,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class LaunchPad extends BlockContainer implements IBomb {
@@ -132,12 +136,8 @@ public class LaunchPad extends BlockContainer implements IBomb {
 		if(i == 3) {
 			world.setBlockMetadataWithNotify(x, y, z, 2, 2);
 		}
-		if(!world.isRemote) {
-			if(GeneralConfig.enableExtendedLogging) {
-				MainRegistry.logger.log(Level.INFO, "[BOMBPL]" + this.getLocalizedName() + " placed at " + x + " / " + y + " / " + z + "! " + "by "+ player.getCommandSenderName());
-		}
 	}
-	}
+
 
 	/*
 	 * @Override public void setBlockBoundsBasedOnState(IBlockAccess

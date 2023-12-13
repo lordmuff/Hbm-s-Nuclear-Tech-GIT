@@ -33,6 +33,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.HashMap;
+
 //epic!
 public class TileEntityMachineGasCent extends TileEntityMachineBase implements IEnergyUser, IFluidStandardReceiver, IGUIProvider {
 	
@@ -196,7 +198,7 @@ public class TileEntityMachineGasCent extends TileEntityMachineBase implements I
 
 			power = Library.chargeTEFromItems(slots, 4, power, maxPower);
 			setTankType(5);
-			
+
 			if(GasCentrifugeRecipes.fluidConversions.containsValue(inputTank.getTankType())) {
 				attemptConversion();
 			}
