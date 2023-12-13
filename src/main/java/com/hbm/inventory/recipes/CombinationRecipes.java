@@ -29,6 +29,7 @@ import com.hbm.util.Tuple.Pair;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class CombinationRecipes extends SerializableRecipe {
 
@@ -49,6 +50,16 @@ public class CombinationRecipes extends SerializableRecipe {
 		recipes.put(new ComparableStack(Items.glowstone_dust),	new Pair(new ItemStack(ModItems.sulfur), new FluidStack(Fluids.CHLORINE, 100)));
 		recipes.put(SODALITE.gem(),								new Pair(new ItemStack(ModItems.powder_sodium), new FluidStack(Fluids.CHLORINE, 100)));
 		recipes.put(new ComparableStack(DictFrame.fromOne(ModBlocks.stone_resource, EnumStoneType.BAUXITE)), new Pair(new ItemStack(ModItems.ingot_aluminium, 2), new FluidStack(Fluids.REDMUD, 250)));
+
+		for(ItemStack GT6bauxiteraw : OreDictionary.getOres("oreRawBauxite")) {
+			recipes.put(new ComparableStack(GT6bauxiteraw), new Pair(new ItemStack(ModItems.ingot_aluminium, 2), new FluidStack(Fluids.REDMUD, 250)));
+		}
+		for(ItemStack GT6bauxiteblock : OreDictionary.getOres("oreDenseBauxite")) {
+			recipes.put(new ComparableStack(GT6bauxiteblock), new Pair(new ItemStack(ModItems.ingot_aluminium, 2), new FluidStack(Fluids.REDMUD, 250)));
+		}
+		for(ItemStack GT6bauxitedust : OreDictionary.getOres("dustBauxite")) {
+			recipes.put(new ComparableStack(GT6bauxitedust), new Pair(new ItemStack(ModItems.ingot_aluminium, 1), new FluidStack(Fluids.REDMUD, 75)));
+		}
 		recipes.put(NA.dust(),									new Pair(null, new FluidStack(Fluids.SODIUM, 100)));
 
 		recipes.put(KEY_LOG,		new Pair(new ItemStack(Items.coal, 1 ,1),							new FluidStack(Fluids.WOODOIL, 250)));
