@@ -647,6 +647,7 @@ chem.MASS_CAKE=Cake Production
 chem.BUTTER=Butter Mixing
 chem.STRAWICE=Strawberry ice cream freezing
 chem.NQCOMP=Naquadah (V) Boron Sulfide Complex Synthesis
+chem.LATEXVULC=Latex Vulcanization
 
 commands.satellite.no_satellite=No satellite using this frequency found!
 commands.satellite.not_a_satellite=The held item is not a satellite!

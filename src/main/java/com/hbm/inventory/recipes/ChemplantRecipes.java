@@ -525,6 +525,15 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.inputFluids(new FluidStack(Fluids.ACID, 1000))
 				.outputFluids(new FluidStack(Fluids.NQVBSCOMPLEX, 2215)));
 
+		recipes.add(new ChemRecipe(124, "LATEXVULC", 400)
+				.inputItems(
+						new OreDictStack(S.dust(), 2),
+						new OreDictStack(LATEX.ingot(), 2))
+				.inputFluids(new FluidStack(Fluids.WATER, 500))
+				.outputItems(
+						new ItemStack(ModItems.ingot_rubber, 2)));
+
+
 		//mayo zone END!!!
 	}
 	
