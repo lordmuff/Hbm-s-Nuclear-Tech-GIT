@@ -515,6 +515,17 @@ public class ChemplantRecipes extends SerializableRecipe {
 				new ComparableStack(ModItems.strawberry, 4))
 				.outputItems(
 						new ItemStack(ModItems.s_cream, 4)));
+		//mayo zone!!!
+
+		recipes.add(new ChemRecipe(124, "LATEXVULC", 400)
+				.inputItems(
+						new OreDictStack(S.dust(), 2),
+						new OreDictStack(LATEX.ingot(), 2))
+				.inputFluids(new FluidStack(Fluids.WATER, 500))
+				.outputItems(
+						new ItemStack(ModItems.ingot_rubber, 2)));
+
+		//mayo zone END!!!
 	}
 	
 	
