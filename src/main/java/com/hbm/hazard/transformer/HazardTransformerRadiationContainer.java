@@ -33,14 +33,17 @@ public class HazardTransformerRadiationContainer extends HazardTransformerBase {
 		boolean isDissed = Block.getBlockFromItem(stack.getItem()) instanceof MachineDischarger;
 		boolean isBox = stack.getItem() == ModItems.containment_box;
 		if(!isCrate && !isBox && !isDissed) return;
+		boolean isBag = stack.getItem() == ModItems.plastic_bag;
+
+		if(!isCrate && !isBox && !isBag) return;
 		if(!stack.hasTagCompound()) return;
 		
 		float radiation = 0;
 		float pyphor = 0;
-		
+
 		if(isCrate) {
 			
-			for(int i = 0; i < 54; i++) {
+			for(int i = 0; i < 104; i++) {
 				ItemStack held = ItemStack.loadItemStackFromNBT(stack.stackTagCompound.getCompoundTag("slot" + i));
 				
 				if(held != null) {
@@ -63,9 +66,23 @@ public class HazardTransformerRadiationContainer extends HazardTransformerBase {
 			radiation = (float) BobMathUtil.squirt(radiation);
 		}
 		
+		if(isBag) {
+
+			ItemStack[] fromNBT = ItemStackUtil.readStacksFromNBT(stack, 1);
+			if(fromNBT == null) return;
+
+			for(ItemStack held : fromNBT) {
+				if(held != null) {
+					radiation += HazardSystem.getHazardLevelFromStack(held, HazardRegistry.RADIATION) * held.stackSize;
+				}
+			}
+
+			radiation *= 2F;
+		}
+
 		if(radiation > 0) {
 			entries.add(new HazardEntry(HazardRegistry.RADIATION, radiation));
-			
+
 		}
 		if(isDissed) {
             ItemStack droppedItem = new ItemStack(Block.getBlockFromItem(stack.getItem()));
@@ -85,12 +102,12 @@ public class HazardTransformerRadiationContainer extends HazardTransformerBase {
                 		stack.setTagCompound((NBTTagCompound)null); // to prevent duplicate stacking i guess?
                 		}
                 }
-					
+
 	}
 }
 	}
-	
+
 }
-	
+
 
 

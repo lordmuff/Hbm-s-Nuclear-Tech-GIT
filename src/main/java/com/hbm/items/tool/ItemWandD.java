@@ -16,6 +16,7 @@ import com.hbm.saveddata.TomSaveData;
 import com.hbm.util.TrackerUtil;
 import com.hbm.world.feature.OilBubble;
 import com.hbm.world.generator.DungeonToolbox;
+import com.hbm.saveddata.TomSaveData;
 
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import net.minecraft.block.Block;
@@ -45,10 +46,10 @@ public class ItemWandD extends Item {
 		MovingObjectPosition pos = Library.rayTrace(player, 500, 1, false, true, false);
 		
 		if(pos != null) {
-	
-			
-			
-			
+
+
+
+
 			/*ExplosionVNT vnt = new ExplosionVNT(world, pos.hitVec.xCoord, pos.hitVec.yCoord, pos.hitVec.zCoord, 7);
 			vnt.setBlockAllocator(new BlockAllocatorBulkie(60));
 			vnt.setBlockProcessor(new BlockProcessorStandard().withBlockEffect(new BlockMutatorBulkie(ModBlocks.block_slag)).setNoDrop());
@@ -76,7 +77,7 @@ public class ItemWandD extends Item {
 	                int chunkX = playerChunkX + dX;
 	                int chunkZ = playerChunkZ + dZ;
 	                Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
-	                
+
 	                // Your logic for seeding ores in each chunk
 	                for (int x = 0; x < 16; x++) {
 	                    for (int z = 0; z < 16; z++) {
@@ -87,13 +88,13 @@ public class ItemWandD extends Item {
 
 	                            	    for (int i = 0; i < ores.length; i++) {
 	                            	        randomChance -= chances[i];
-	                            	        
+
 	                            	        if (randomChance <= 0) {
 	                            	        	if (rand.nextInt(100) < 1) {
-	                            	        	generateVein(world, chunkX * 16 + x, y, chunkZ * 16 + z, ores[i], 4); 
+	                            	        	generateVein(world, chunkX * 16 + x, y, chunkZ * 16 + z, ores[i], 4);
 	                            	        	break;
 	                            	        	}
-	                            	        	
+
 	                            	        }
 	                            	    }
                         	        	if (rand.nextInt(400) < 1) {
@@ -108,15 +109,15 @@ public class ItemWandD extends Item {
                         	        	    // Spawn the oil bubble
                         	        	    OilBubble.spawnOil(world, oilX, oilY, oilZ, oilRadius);
                         	        	}
-	                            	
+
 	                                }
 	                            }
 	                        }
 	                    }
 	                }
 	            }
-	        
-	   
+
+
 			//data.stime = 1;
 			//data.markDirty();
 
@@ -134,6 +135,8 @@ public class ItemWandD extends Item {
 			torex.setScale(1.5F);
 			torex.setType(2);
 			world.spawnEntityInWorld(torex);
+			TrackerUtil.setTrackingRange(world, torex, 1000);*/
+
 			/*EntityTracker entitytracker = ((WorldServer) world).getEntityTracker();
 			IntHashMap map = ReflectionHelper.getPrivateValue(EntityTracker.class, entitytracker, "trackedEntityIDs", "field_72794_c");
 			EntityTrackerEntry entry = (EntityTrackerEntry) map.lookup(torex.getEntityId());
@@ -221,10 +224,10 @@ public class ItemWandD extends Item {
 
 	public void generateVein(World world, int startX, int startY, int startZ, Block oreBlock, int veinSize) {
 	    Random rand = new Random();
-	    
+
 	    LinkedList<int[]> blocksToCheck = new LinkedList<>();
 	    blocksToCheck.add(new int[]{ startX, startY, startZ });
-	    
+
 	    int blocksChanged = 0;
 
 	    while (!blocksToCheck.isEmpty() && blocksChanged < veinSize) {

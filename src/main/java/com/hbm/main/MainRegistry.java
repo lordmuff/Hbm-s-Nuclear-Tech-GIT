@@ -5,9 +5,7 @@ import com.hbm.blocks.BlockEnums.EnumStoneType;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockMotherOfAllOres;
 import com.hbm.blocks.generic.BlockToolConversion;
-import com.hbm.commands.CommandDebugChunkLoad;
-import com.hbm.commands.CommandReloadRecipes;
-import com.hbm.commands.CommandSatellites;
+import com.hbm.commands.*;
 import com.hbm.config.*;
 import com.hbm.crafting.RodRecipes;
 import com.hbm.creativetabs.*;
@@ -42,6 +40,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.tileentity.TileMappings;
+import com.hbm.tileentity.bomb.TileEntityLaunchPad;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityNukeFurnace;
@@ -327,6 +326,7 @@ public class MainRegistry {
 		
 		TileMappings.writeMappings();
 		MachineDynConfig.initialize();
+		TileEntityLaunchPad.registerLaunchables();
 		
 		for(Entry<Class<? extends TileEntity>, String[]> e : TileMappings.map.entrySet()) {
 			
@@ -926,6 +926,7 @@ public class MainRegistry {
 		event.registerServerCommand(new CommandReloadRecipes());
 		event.registerServerCommand(new CommandDebugChunkLoad());
 		event.registerServerCommand(new CommandSatellites());
+		event.registerServerCommand(new CommandRadiation());
 	}
 	
 	@EventHandler
