@@ -85,7 +85,7 @@ public class WorldUtil {
 
 	private static Chunk loadChunk(WorldServer world, ChunkProviderServer provider, int chunkX, int chunkZ) {
 		long chunkCoord = ChunkCoordIntPair.chunkXZ2Int(chunkX, chunkZ);
-		provider.chunksToUnload.remove(Long.valueOf(chunkCoord));
+		provider.loadedChunks.remove(Long.valueOf(chunkCoord));
 		Chunk chunk = (Chunk) provider.loadedChunkHashMap.getValueByKey(chunkCoord);
 		AnvilChunkLoader loader = null;
 
