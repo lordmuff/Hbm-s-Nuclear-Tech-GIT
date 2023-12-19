@@ -159,8 +159,6 @@ public class RodRecipes {
 		addRBMKRod(ModItems.billet_cm_fuel, ModItems.rbmk_fuel_lecm);
 		addRBMKRod(CMRG, ModItems.rbmk_fuel_mecm);
 		addRBMKRod(CM245, ModItems.rbmk_fuel_hecm);
-		addRBMKRod(NQ528, ModItems.rbmk_fuel_henq528);
-		addRBMKRod(NQ522, ModItems.rbmk_fuel_henq522);
 
 		addPellet(SA326,							EnumWatzType.SCHRABIDIUM);
 		addPellet(ModItems.ingot_hes,				EnumWatzType.HES);
@@ -198,6 +196,18 @@ public class RodRecipes {
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.HES327), new Object[] { "F", "I", "F", 'F', SA327.billet(), 'I', ModItems.plate_polymer });
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.BFB_AM_MIX), new Object[] { "NFN", "NIN", "NBN", 'F', ModItems.billet_am_mix, 'I', ModItems.plate_polymer, 'B', BI.billet(), 'N', ModItems.nugget_plutonium_fuel });
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.BFB_PU241), new Object[] { "NFN", "NIN", "NBN", 'F', PU241.billet(), 'I', ModItems.plate_polymer, 'B', BI.billet(), 'N', ModItems.nugget_uranium_fuel });
+
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.PU_MIX), new Object[] { "F", "I", "F", 'F', ModItems.billet_pu_mix, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.AM_RG), new Object[] { "F", "I", "F", 'F', ModItems.billet_am_mix, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.AM_FUEL), new Object[] { "F", "I", "F", 'F', ModItems.billet_americium_fuel, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.CM_RG), new Object[] { "F", "I", "F", 'F', ModItems.billet_cm_mix, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.CM_FUEL), new Object[] { "F", "I", "F", 'F', ModItems.billet_cm_fuel, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.HECM245), new Object[] { "F", "I", "F", 'F', ModItems.billet_cm245, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.HECM247), new Object[] { "F", "I", "F", 'F', ModItems.billet_cm247, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.CF251), new Object[] { "F", "I", "F", 'F', ModItems.billet_cf251, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.CF252), new Object[] { "F", "I", "F", 'F', ModItems.billet_cf252, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.BK247), new Object[] { "F", "I", "F", 'F', ModItems.billet_bk247, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.ES253), new Object[] { "F", "I", "F", 'F', ModItems.billet_es253, 'I', ModItems.plate_polymer });
 	}
 
 	public static void registerInit() {

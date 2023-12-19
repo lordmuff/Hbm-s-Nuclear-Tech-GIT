@@ -44,13 +44,6 @@ public class GasCentrifugeRecipes {
 		public static PseudoFluidType MINSOLEE 		= new PseudoFluidType("MINSOLEE",	1000, 0,		NONE,		false,	new ItemStack(ModItems.crystal_cleaned, 1));
 		public static PseudoFluidType MINSOLE 		= new PseudoFluidType("MINSOLE",		1000, 1000,	MINSOLEE,	false,	new ItemStack(ModItems.powder_iron, 1));
 
-
-
-		public static PseudoFluidType NQVBSCOMP2 		= new PseudoFluidType("NQVBSCOMP2",		600, 0,NONE,	false, nugget.mat(MT.Nq_528, 17), nugget.mat(MT.Nq_522, 5), new ItemStack(ModItems.fluorite, 12));
-
-		public static PseudoFluidType NQVBSCOMP 		= new PseudoFluidType("NQVBSCOMP",		1000, 200,	NQVBSCOMP2,	false, nugget.mat(MT.Nq_528, 17), nugget.mat(MT.Nq_522, 5), new ItemStack(ModItems.powder_boron, 8));
-
-
 		//TODO for bob: consider more fluid types
 		//Schraranium Trisulfide for more schrab-containing, pre-SILEX processing using the crystals?
 		//Gaseous Nuclear Waste: because why not? Large inputs could output Xe-135 and maybe some other fun stuff...
@@ -117,10 +110,5 @@ public class GasCentrifugeRecipes {
 		fluidConversions.put(Fluids.PUF6, PseudoFluidType.PF6);
 		fluidConversions.put(Fluids.WATZ, PseudoFluidType.MUD);
 
-		if(OreDictionary.doesOreNameExist("ingotNaquadah"))
-		{
-			gasCent.put(new FluidStack(1000, Fluids.NQVBSCOMPLEX), new Object[]{new ItemStack[]
-					{nugget.mat(MT.Nq_528, 17), nugget.mat(MT.Nq_522, 5), new ItemStack(ModItems.fluorite, 12), new ItemStack(ModItems.powder_boron, 8)}, true, 2});
-		}
 	}
 }
