@@ -533,6 +533,14 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.outputItems(
 						new ItemStack(ModItems.ingot_rubber, 2)));
 
+		recipes.add(new ChemRecipe(125, "POLYVULC", 400)
+				.inputItems(
+						new OreDictStack(KNO.dust(), 2),
+						new OreDictStack(S.dust(), 4),
+						new OreDictStack(LATEX.ingot(), 2))
+				.inputFluids(new FluidStack(Fluids.ACID, 500))
+				.outputItems(
+						new ItemStack(ModItems.ingot_polymer, 4)));
 
 		//mayo zone END!!!
 	}
