@@ -80,6 +80,21 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IF
 		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.LES_FUEL.ordinal()), new ItemStack(ModItems.rod_zirnox_les_fuel_depleted));
 		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.LITHIUM.ordinal()), new ItemStack(ModItems.rod_zirnox_tritium));
 		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.ZFB_MOX.ordinal()), new ItemStack(ModItems.rod_zirnox_zfb_mox_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.PU_MIX.ordinal()), new ItemStack(ModItems.rod_zirnox_pu_mix_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.PU241.ordinal()), new ItemStack(ModItems.rod_zirnox_pu241_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.AMRG.ordinal()), new ItemStack(ModItems.rod_zirnox_amrg_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.AMF.ordinal()), new ItemStack(ModItems.rod_zirnox_amf_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.CMRG.ordinal()), new ItemStack(ModItems.rod_zirnox_cmrg_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.CMF.ordinal()), new ItemStack(ModItems.rod_zirnox_cmf_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.CF251.ordinal()), new ItemStack(ModItems.rod_zirnox_cf251_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.CF252.ordinal()), new ItemStack(ModItems.rod_zirnox_cf252_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.BK247.ordinal()), new ItemStack(ModItems.rod_zirnox_bk247_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.ES253.ordinal()), new ItemStack(ModItems.rod_zirnox_es253_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.LEAUS.ordinal()), new ItemStack(ModItems.rod_zirnox_leaus_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.MEAUS.ordinal()), new ItemStack(ModItems.rod_zirnox_meaus_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.HEAUS.ordinal()), new ItemStack(ModItems.rod_zirnox_heaus_depleted));
+		fuelMap.put(new ComparableStack(ModItems.rod_zirnox, 1, EnumZirnoxType.GRAVEL.ordinal()), new ItemStack(ModItems.rod_zirnox_gravel_enriched));
+
 	}
 
 	public TileEntityReactorZirnox() {
