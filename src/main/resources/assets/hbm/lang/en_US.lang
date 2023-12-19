@@ -646,7 +646,9 @@ chem.ANIMAN=Synthetic Horrorfication
 chem.MASS_CAKE=Cake Production
 chem.BUTTER=Butter Mixing
 chem.STRAWICE=Strawberry ice cream freezing
-chem.LATEXVULC=Latex Vulcanization
+chem.LATEXVULC=Latex Vulcanization (Rubber)
+chem.POLYVULC=Latex Vulcanization (Polymer)
+
 
 commands.satellite.no_satellite=No satellite using this frequency found!
 commands.satellite.not_a_satellite=The held item is not a satellite!
@@ -2930,6 +2932,7 @@ item.ingot_australium.name=Australium Ingot
 item.ingot_bakelite.name=Bakelite Bar
 item.ingot_beryllium.name=Beryllium Ingot
 item.ingot_bk247.name=Berkelium-247 Ingot
+item.ingot_biorubber.name=Latex Bar
 item.ingot_bismuth.name=Bismuth Ingot
 item.ingot_boron.name=Boron Ingot
 item.ingot_c4.name=Bar of Composition C-4
@@ -3130,6 +3133,8 @@ item.liquidator_helmet.name=Liquidator Suit Helmet
 item.liquidator_legs.name=Liquidator Suit Leggins
 item.liquidator_plate.name=Liquidator Suit Chestplate
 item.lithium.name=Lithium Cube
+item.nugget_francium.name=Francium Nugget
+item.ingot_francium.name=Francium Cube
 item.lodestone.name=Lodestone
 item.loop_stew.name=IT Breakfast
 item.loops.name==Lööps
@@ -4812,6 +4817,7 @@ tile.block_graphite_tritium.name=Pile Lithium Fuel (Bred)
 tile.block_lead.name=Block of Lead
 tile.block_lanthanium.name=Block of Lanthanium
 tile.block_lithium.name=Block of Lithium
+tile.block_francium.name=Block of Francium
 tile.block_magnetized_tungsten.name=Block of Magnetized Tungsten
 tile.block_meteor.name=Meteorite Block
 tile.block_meteor_broken.name=Broken Meteorite Block
