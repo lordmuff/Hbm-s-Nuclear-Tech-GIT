@@ -52,7 +52,21 @@ public class FuelPoolRecipes extends SerializableRecipe {
 		recipes.put(new ComparableStack(ModItems.waste_plate_sa326, 1, 1), new ItemStack(ModItems.waste_plate_sa326));
 		recipes.put(new ComparableStack(ModItems.waste_plate_ra226be, 1, 1), new ItemStack(ModItems.waste_plate_ra226be));
 		recipes.put(new ComparableStack(ModItems.waste_plate_pu238be, 1, 1), new ItemStack(ModItems.waste_plate_pu238be));
-		
+		recipes.put(new ComparableStack(ModItems.waste_pu_mix, 1, 1), new ItemStack(ModItems.waste_pu_mix));
+		recipes.put(new ComparableStack(ModItems.waste_pu241, 1, 1), new ItemStack(ModItems.waste_pu241));
+		recipes.put(new ComparableStack(ModItems.waste_amrg, 1, 1), new ItemStack(ModItems.waste_amrg));
+		recipes.put(new ComparableStack(ModItems.waste_amf, 1, 1), new ItemStack(ModItems.waste_amf));
+		recipes.put(new ComparableStack(ModItems.waste_cmrg, 1, 1), new ItemStack(ModItems.waste_cmrg));
+		recipes.put(new ComparableStack(ModItems.waste_cmf, 1, 1), new ItemStack(ModItems.waste_cmf));
+		recipes.put(new ComparableStack(ModItems.waste_cf251, 1, 1), new ItemStack(ModItems.waste_cf251));
+		recipes.put(new ComparableStack(ModItems.waste_cf252, 1, 1), new ItemStack(ModItems.waste_cf252));
+		recipes.put(new ComparableStack(ModItems.waste_bk247, 1, 1), new ItemStack(ModItems.waste_bk247));
+		recipes.put(new ComparableStack(ModItems.waste_es253, 1, 1), new ItemStack(ModItems.waste_es253));
+		recipes.put(new ComparableStack(ModItems.waste_leaus, 1, 1), new ItemStack(ModItems.waste_leaus));
+		recipes.put(new ComparableStack(ModItems.waste_meaus, 1, 1), new ItemStack(ModItems.waste_meaus));
+		recipes.put(new ComparableStack(ModItems.waste_heaus, 1, 1), new ItemStack(ModItems.waste_heaus));
+		recipes.put(new ComparableStack(ModItems.waste_gravel, 1, 1), new ItemStack(ModItems.waste_gravel));
+
 		for(EnumPWRFuel pwr : EnumPWRFuel.values()) recipes.put(new ComparableStack(ModItems.pwr_fuel_hot, 1, pwr.ordinal()), new ItemStack(ModItems.pwr_fuel_depleted, 1, pwr.ordinal()));
 	}
 
