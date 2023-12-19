@@ -193,13 +193,10 @@ public class Fluids {
 
 	//mayo zone!!!
 
-	//Naquadah (V) Boron Sulfide Coordination Complex
-	public static FluidType NQVBSCOMPLEX;
-
 	//Lead Bismuth Eutectic Coolant (Cool)
 	public static FluidType LEADBISMUTHEUT;
 
-	//Lead Bismuth Eutectic Coolant (Cool)
+	//Lead Bismuth Eutectic Coolant (Hot)
 	public static FluidType LEADBISMUTHEUT_HOT;
 
 	//mayo zone END!!!
@@ -395,9 +392,8 @@ public class Fluids {
 		CMILK =					new FluidType("CMILK",				0xCFCFCF, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID);//F5DEE4
 		CREAM =					new FluidType("CREAM",				0xCFCFCF, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID);//F5DEE4
 		FULLERENE =				new FluidType(154, "FULLERENE",		0xFF7FED, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID, new FT_Corrosive(65));
-		NQVBSCOMPLEX =				new FluidType(155, "NQVBSCOMPLEX",		0xCCCCFF, 3, 3, 3, EnumSymbol.RADIATION).addTraits(LIQUID, new FT_Corrosive(120));
-		LEADBISMUTHEUT =				new FluidType(156, "LEADBISMUTHEUT",		0xCCCCFF, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID).setTemp(300);
-		LEADBISMUTHEUT_HOT =				new FluidType(157, "LEADBISMUTHEUT_HOT",		0xCCCCFF, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID).setTemp(3000);
+		LEADBISMUTHEUT =				new FluidType(155, "LEADBISMUTHEUT",		0xCCCCFF, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID).setTemp(300);
+		LEADBISMUTHEUT_HOT =				new FluidType(156, "LEADBISMUTHEUT_HOT",		0xCCCCFF, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID).setTemp(3000);
 
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
@@ -580,7 +576,6 @@ public class Fluids {
 		metaOrder.add(EMILK);
 		metaOrder.add(CMILK);
 		metaOrder.add(CREAM);
-		metaOrder.add(NQVBSCOMPLEX);
 		metaOrder.add(LEADBISMUTHEUT);
 		metaOrder.add(LEADBISMUTHEUT_HOT);
 
@@ -629,8 +624,8 @@ public class Fluids {
 		COOLANT.addTraits(new FT_Heatable().setEff(HeatingType.HEATEXCHANGER, 1.0D).setEff(HeatingType.PWR, 1.0D).addStep(300, 1, COOLANT_HOT, 1));
 		COOLANT_HOT.addTraits(new FT_Coolable(COOLANT, 1, 1, 300).setEff(CoolingType.HEATEXCHANGER, 1.0D));
 
-		LEADBISMUTHEUT.addTraits(new FT_Heatable().setEff(HeatingType.HEATEXCHANGER, 1.0D).setEff(HeatingType.PWR, 1.0D).addStep(800, 1, LEADBISMUTHEUT_HOT, 1));
-		LEADBISMUTHEUT_HOT.addTraits(new FT_Coolable(COOLANT, 1, 1, 800).setEff(CoolingType.HEATEXCHANGER, 3.0D));
+		LEADBISMUTHEUT.addTraits(new FT_Heatable().setEff(HeatingType.HEATEXCHANGER, 1.0D).setEff(HeatingType.PWR, 1.0D).addStep(800, 1, LEADBISMUTHEUT_HOT, 1), new FT_PWRModerator(3.0D));
+		LEADBISMUTHEUT_HOT.addTraits(new FT_Coolable(LEADBISMUTHEUT, 1, 1, 800).setEff(CoolingType.HEATEXCHANGER, 3.0D));
 
 		MUG.addTraits(new FT_Heatable().setEff(HeatingType.HEATEXCHANGER, 1.0D).setEff(HeatingType.PWR, 1.0D).addStep(400, 1, MUG_HOT, 1), new FT_PWRModerator(1.15D));
 		MUG_HOT.addTraits(new FT_Coolable(MUG, 1, 1, 400).setEff(CoolingType.HEATEXCHANGER, 1.0D));

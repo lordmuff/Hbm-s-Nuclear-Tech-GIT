@@ -517,14 +517,6 @@ public class ChemplantRecipes extends SerializableRecipe {
 						new ItemStack(ModItems.s_cream, 4)));
 		//mayo zone!!!
 
-		recipes.add(new ChemRecipe(123, "NQCOMP", 750)
-				.inputItems(
-						new OreDictStack(NQ.dust(), 2),
-						new OreDictStack(B.dust(), 10),
-						new OreDictStack(F.dust(), 14))
-				.inputFluids(new FluidStack(Fluids.ACID, 1000))
-				.outputFluids(new FluidStack(Fluids.NQVBSCOMPLEX, 2215)));
-
 		recipes.add(new ChemRecipe(124, "LATEXVULC", 400)
 				.inputItems(
 						new OreDictStack(S.dust(), 2),

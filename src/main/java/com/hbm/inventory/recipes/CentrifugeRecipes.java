@@ -401,9 +401,62 @@ public class CentrifugeRecipes extends SerializableRecipe {
 				new ItemStack(ModItems.nugget_pu_mix, 2),
 				new ItemStack(ModItems.nugget_bismuth, 6),
 				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
-		
-		
-	
+		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.PU_MIX)), new ItemStack[] {
+				new ItemStack(ModItems.nugget_pu241, 4),
+				new ItemStack(ModItems.nugget_pu239, 2),
+				new ItemStack(ModItems.nugget_pu_mix, 4),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.AM_RG)), new ItemStack[] {
+				new ItemStack(ModItems.nugget_am_mix, 3),
+				new ItemStack(ModItems.nugget_cm_mix, 12),
+				new ItemStack(ModItems.nugget_bk247, 2),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.AM_FUEL)), new ItemStack[] {
+				new ItemStack(ModItems.nugget_am_mix, 6),
+				new ItemStack(ModItems.nugget_cm_mix, 3),
+				new ItemStack(ModItems.nugget_bk247, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.CM_RG)), new ItemStack[] {
+				new ItemStack(ModItems.nugget_am_mix, 4),
+				new ItemStack(ModItems.nugget_cm_mix, 6),
+				new ItemStack(ModItems.nugget_es253, 3),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.CM_FUEL)), new ItemStack[] {
+				new ItemStack(ModItems.nugget_americium_fuel, 5),
+				new ItemStack(ModItems.nugget_cm_fuel, 8),
+				new ItemStack(ModItems.nugget_cf252, 5),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.HECM245)), new ItemStack[] {
+				new ItemStack(ModItems.nugget_cm247, 4),
+				new ItemStack(ModItems.nugget_cm245, 6),
+				new ItemStack(ModItems.nugget_am_mix, 3),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.HECM247)), new ItemStack[] {
+				new ItemStack(ModItems.nugget_cm247, 6),
+				new ItemStack(ModItems.nugget_cm245, 4),
+				new ItemStack(ModItems.nugget_am_mix, 3),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.CF251)), new ItemStack[] {
+				new ItemStack(ModItems.nugget_cf252, 3),
+				new ItemStack(ModItems.nugget_cm_mix, 3),
+				new ItemStack(ModItems.nugget_cf251, 4),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.CF252)), new ItemStack[] {
+				new ItemStack(ModItems.nugget_cf251, 3),
+				new ItemStack(ModItems.nugget_cf252, 4),
+				new ItemStack(ModItems.nugget_cm_mix, 3),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.BK247)), new ItemStack[] {
+				new ItemStack(ModItems.nugget_bk247, 2),
+				new ItemStack(ModItems.nugget_am_mix, 12),
+				new ItemStack(ModItems.nugget_pu239, 3),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.ES253)), new ItemStack[] {
+				new ItemStack(ModItems.nugget_es253, 2),
+				new ItemStack(ModItems.nugget_cm_mix, 3),
+				new ItemStack(ModItems.nugget_cf251, 6),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
+
 		ArrayList<ItemStack> naquadriaNuggets = OreDictionary.getOres("nuggetNaquadria");
 		if(naquadriaNuggets.size() != 0) {
 			ItemStack nuggetNQR = naquadriaNuggets.get(0);

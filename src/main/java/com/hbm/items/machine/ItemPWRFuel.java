@@ -33,7 +33,23 @@ public class ItemPWRFuel extends ItemEnumMulti {
 		HES326(		12.5D,	new FunctionSqrt(27.5)),
 		HES327(		12.5D,	new FunctionSqrt(30)),
 		BFB_AM_MIX(	2.5D,	new FunctionSqrt(15), 250_000_000),
-		BFB_PU241(	2.5D,	new FunctionSqrt(15), 250_000_000);
+		BFB_PU241(	2.5D,	new FunctionSqrt(15), 250_000_000),
+
+		PU_MIX(		08.0D,	new FunctionLogarithmic(20 * 30).withDiv(2_500)),
+		AM_RG(		09.7D,	new FunctionSqrt(28.5)),
+		CM_RG(		09.9D,	new FunctionSqrt(29.5)),
+		AM_FUEL(		08.0D,	new FunctionSqrt(30.5)),
+		CM_FUEL(		08.3D,	new FunctionSqrt(31.5)),
+		HECM245(		011.3D,	new FunctionSqrt(30)),
+		HECM247(		013.5D,	new FunctionSqrt(35.3)),
+
+		CF251(		06.8D,	new FunctionSqrt(32)),
+		CF252(		03.7D,	new FunctionSqrt(48)),
+		BK247(		011.5D,	new FunctionSqrt(31.9)),
+		ES253(		015.5D,	new FunctionSqrt(50));
+
+
+
 
 		public double yield = 1_000_000_000;
 		public double heatEmission;
