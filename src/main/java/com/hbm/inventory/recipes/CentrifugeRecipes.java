@@ -312,11 +312,6 @@ public class CentrifugeRecipes extends SerializableRecipe {
 				new ItemStack(ModItems.nugget_pu_mix, 2),
 				new ItemStack(ModItems.nugget_bismuth, 6),
 				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
-		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.PU_MIX)), new ItemStack[] {
-				new ItemStack(ModItems.nugget_pu241, 4),
-				new ItemStack(ModItems.nugget_pu239, 2),
-				new ItemStack(ModItems.nugget_pu_mix, 4),
-				new ItemStack(ModItems.nuclear_waste_tiny, 1) });
 		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.AM_RG)), new ItemStack[] {
 				new ItemStack(ModItems.nugget_am_mix, 3),
 				new ItemStack(ModItems.nugget_cm_mix, 12),
