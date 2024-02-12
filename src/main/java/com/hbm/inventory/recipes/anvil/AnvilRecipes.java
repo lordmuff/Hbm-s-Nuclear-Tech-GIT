@@ -13,6 +13,7 @@ import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.recipes.AssemblerRecipes;
 import com.hbm.items.ItemAmmoEnums.*;
+import com.hbm.items.ItemEnums.EnumChunkType;
 import com.hbm.items.ModItems;
 import com.hbm.items.food.ItemFlask.EnumInfusion;
 
@@ -455,6 +456,7 @@ public class AnvilRecipes {
 						new ComparableStack(ModBlocks.concrete_smooth, 4),
 						new ComparableStack(ModBlocks.heater_heatex),
 						new ComparableStack(ModBlocks.deco_pipe_quad, 10),
+						new OreDictStack(STEEL.plateCast(), 2),
 				},
 				new AnvilOutput(new ItemStack(ModBlocks.machine_atmo_tower))).setTier(2));
 		constructionRecipes.add(new AnvilConstructionRecipe(
@@ -463,6 +465,8 @@ public class AnvilRecipes {
 						new ComparableStack(ModItems.plate_stainless, 4),
 						new ComparableStack(ModBlocks.concrete_smooth, 4),
 						new ComparableStack(ModItems.turbine_titanium, 1),
+						new ComparableStack(ModItems.motor, 4),
+
 				},
 				new AnvilOutput(new ItemStack(ModBlocks.machine_atmo_vent))).setTier(2));
 		
@@ -537,7 +541,7 @@ public class AnvilRecipes {
 				new AnvilOutput(new ItemStack(ModItems.plate_dineutronium, 4))).setTier(7));
 
 		constructionRecipes.add(new AnvilConstructionRecipe(
-				new AStack[] {new OreDictStack(TI.plate(), 2), new OreDictStack(STEEL.ingot(), 1), new ComparableStack(ModItems.bolt_tungsten, 2)},
+				new AStack[] {new OreDictStack(TI.plate(), 2), new OreDictStack(STEEL.ingot(), 1), new OreDictStack(STEEL.bolt(), 4)},
 				new AnvilOutput(new ItemStack(ModItems.plate_armor_titanium))).setTier(2));
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {new OreDictStack(IRON.plate(), 4), new OreDictStack(BIGMT.plate(), 2), new ComparableStack(ModItems.plate_armor_titanium, 1)},
@@ -725,6 +729,20 @@ public class AnvilRecipes {
 	}
 	
 	public static void registerConstructionRecycling() {
+
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(DictFrame.fromOne(ModItems.chunk_ore, EnumChunkType.RARE)),
+				new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModItems.fragment_boron)),
+						new AnvilOutput(new ItemStack(ModItems.fragment_boron), 0.5F),
+						new AnvilOutput(new ItemStack(ModItems.fragment_lanthanium), 0.1F),
+						new AnvilOutput(new ItemStack(ModItems.fragment_cobalt)),
+						new AnvilOutput(new ItemStack(ModItems.fragment_cobalt), 0.5F),
+						new AnvilOutput(new ItemStack(ModItems.fragment_cerium), 0.1F),
+						new AnvilOutput(new ItemStack(ModItems.fragment_neodymium), 0.5F),
+						new AnvilOutput(new ItemStack(ModItems.fragment_niobium), 0.5F),
+				}
+		).setTier(2));
 
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new ComparableStack(ModBlocks.heater_firebox),

@@ -73,7 +73,7 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 		}
 		
 		if(!worldObj.isRemote && fallout && explosion != null && this.ticksExisted < 10) {
-			radiate(500_000, this.length * 2);
+			radiate(2_500_000F / (this.ticksExisted * 5 + 1), this.length * 2);
 		}
 		
 		if(!mute) {
@@ -144,37 +144,7 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 			eRads /= (float)res;
 			eRads /= (float)(len * len);
 			
-			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
-			ContaminationUtil.contaminate(e, HazardType.NEUTRON, ContaminationType.CREATIVE, eRads);
-			if(e instanceof EntityPlayer && !RadiationConfig.disableNeutron) {
-				//Random rand = target.getRNG();
-				EntityPlayer player = (EntityPlayer) e;
-				for(int i2 = 0; i2 < player.inventory.mainInventory.length; i2++)
-				{
-					ItemStack stack2 = player.inventory.getStackInSlot(i2);
-					
-					if(stack2 != null) {
-							if(!stack2.hasTagCompound())
-								stack2.stackTagCompound = new NBTTagCompound();
-							float activation = stack2.stackTagCompound.getFloat("ntmNeutron");
-							stack2.stackTagCompound.setFloat("ntmNeutron", activation+(eRads/stack2.stackSize));
-							
-						//}
-					}
-				}
-				for(int i2 = 0; i2 < player.inventory.armorInventory.length; i2++)
-				{
-					ItemStack stack2 = player.inventory.armorItemInSlot(i2);
-					
-					//only affect unstackables (e.g. tools and armor) so that the NBT tag's stack restrictions isn't noticeable
-					if(stack2 != null) {					
-							if(!stack2.hasTagCompound())
-								stack2.stackTagCompound = new NBTTagCompound();
-							float activation = stack2.stackTagCompound.getFloat("ntmNeutron");
-							stack2.stackTagCompound.setFloat("ntmNeutron", activation+(eRads/stack2.stackSize));
-					}
-				}	
-			}
+			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.RAD_BYPASS, eRads);
 		}
 	}
 

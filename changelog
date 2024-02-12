@@ -1,55 +1,36 @@
 ## Added
-* Doors!
-  * Your favorites from 1.12, the 7 remaining doors have finally been ported
-  * Thanks to KoblizekXD for biting the bullet
-* Rubber boat
-  * Made from latex or synthetic rubber
-  * A much less jankier alternative to the vanilla boat. Rotations are silky smooth and done via the strafe keys instead of based on the player's orientation
-  * Won't break from ramming into blocks
-  * Faster than a regular boat, but will decelerate quicker when there's nobody sitting in it, preventing the boat from drifting off too far when empty
-* Exposure chamber
-  * Now performs the particle transmutation recipes that were previously done in the crafting table
-  * Stylish as hell
-* Decoy missile
-  * A cheap tier 1 missile that shows up on radar screens as tier 4 (eg. nuclear) missiles
-* Printing press stamps
-  * 8 different stamps for printing certain pages
-  * If a meteor dungeon safe is generated without a black book inside, it will generate two random stamps instead
-  * With all 8 stamps, allows you to print your own black book
+* Muffler
+  * An upgrade-like item that replaces the old muffler block
+  * Creates 16 when crafted, however it is not returned when the muffled machine is broken
+  * Should work with pretty much all machines that use looped sounds, as well as a few other noisy ones (compressors, diesel generators, presses)
+  * Simply right-click to install, doesn't need to be inserted into an upgrade slot, in fact it works on a few machines that have no GUI at all
+* Lemegeton
+  * A book that can do material upgrading, like turning steel into HSS, HSS into Tc-steel, lead into gold, gold into bismuth, bismuth into osmiridium, etc.
+  * Basically allows a material to be upgraded to the next gating material in progression
+  * Obviously unobtainable in survival mode
+  * I don't know how this would ever be useful but I was stuck in a phonecall at work for two consecutive hours and didn't have anything else to do
+  * They should invent handsets that don't hurt when you hold them onto your head for too long
+  * Has no NEI handler because the call ended before I got to that
 
 ## Changed
-* Updated russian localization
-* Reduced the blast resistance of the large doors from absurdly high to still very but not quite as high
-* Custom missiles are now launchable using the radar
-* NTM's structures should no longer spawn in dimensions besides the overworld. Ores will still generate, assuming the config option is set.
-* Decreased M1tty's radiation resistance
-  * It's really damn cheap, what did you expect
-* M1tty's helmet now acts like a protective mask
-* Most non-custom missiles except tier 0s are now assembled in the arc welder
-  * Crafting complexity has been reduced, the recipes only need the three major components without any extra loose plates
-* Non-custom missiles have been slightly buffed
-  * Explosions are now slightly larger and they use the new cross-detection entity damage code which still affects entities behind small hills that would otherwise be shielded
-  * Explosions now have a 2x larger entity damage radius
-* Updated the digiminer recipe for mekanism compat
-* Added config options to the ground water pumps
-* Missile parts such as non-custom thrusters and fuselages are now made in the arc welder, recipe ingredients have been adjusted as well
-* Null grenades now have a slightly larger radius, should no longer wipe playerdata and require UNDEFINED to make
-* Added some breedable material to BFB PWR fuel rods, meaning that the recycling recipes now actually yield a net positive instead of being a massive waste of time
-* The RBMK control panel has been upgraded
-  * Right.clicking the color buttons will now assign the color to the selected control rods
-  * There's now a new button that allows to cycle through compressor settings on RBMK steam channels
-  * The flux display is now functional. It will display the flux curve of the last 30 seconds, as well as labels for the total flux level.
-  * With the color assigning buttons and the flux display finished, the console is now finally complete
-* Compressing blood at 4 PU now turns it into crude oil at a ratio of 2:1
-* Increased the cap for the overdrive upgrade in acidizers, tier 2 should now yield the proper amount and tier 3 should now be better than tier 2
-* The tooltip of valid upgrades now changes when a compatible machine GUI is open
+* Large turbines, levis and geothermal heat exchangers now have their own sounds when operating
+* Anvils will now list ingredients in red if those aren't present in the player's inventory
+* Derricks now only need one set of steel pipes instead of 3. They can also be recycled by shredding, returning 32 steel
+* Pumpjacks now need a single desh motor instead of two regular ones
+* Rare earth ore, instead of detonating into a million fragments that are annoying to process, clog inventories and just cause everyone to not mine that ore in earlygame, will now drop a chunk of rare earth ore
+  * Rare earth chunks can be shredded directly into one unit of desh blend
+  * For efficiencymaxxers, silk-touching rare earth still works as expected, yielding two units when shredded
+  * The fortune enchantment should work as expected, dropping multiple chunks. Yay!
+  * To get things that can be useful in small amounts in earlygame like boron and cobalt (boron for Atlas and cobalt for tools), the rare earth chunk can be hammered down into fragments on a steel anvil
+    * Cerium and lanthanium, due to being useless, only have a 10% chance of producing a fragment
+    * Boron and cobalt each produce a guaranteed fragment, as well as an additional one with a 50% chance
+    * Neodymium and niobium both yield a shard 50% of the time
+* Rebalanced all the food items so their saturation values aren't ridiculously high (turns out - the number represents a *multiplier* for the hunger value and not a flat number)
+* Dirt MREs are now just regular low-quality MREs made from latex packaging and some easily obtainable earlygame ingredients - wheat, rotten flesh and saplings (makes 4)
+* The recipe for the chemical plant has been slightly simplified (again)
 
 ## Fixed
-* Fixed ancient bug where custom missiles launched using the launch table would not use the accuracy calculation and always be pin-point accurate
-* Fixed RBMK heat exchangers being able to use heatable fluids that don't have heat exchanger efficiency defined like liquid sodium, heavy water and thorium salt
-* Fixed RBMK heat exchangers not using the heat exchanger efficiency variable to determine cooling power
-* Fixed the ballistic gauntlet spawning a client-side ghost bullet that doesn't move or despawn
-* Fixed bug where different custom machine cores would merge in a stack when picked up, turning them into the same type
-* Fixed radar screen blips being visible through the back of the model
-* Fixed desh crate's last half of slots preventing radiation entirely
-* Fixed large mining drill shift-clicking
+* Fixed basalt ores dropping their items with invalid metadata
+* Fixed creative infinite fluid tanks not being able to fill fluid gauges at >0PU
+* Fixed an issue where repeatedly opening and closing certain doors would cause their sound loop to get stuck running forever
+* Fixed radar screens behaving weirdly when out of then intended range. The max interaction range for radars is now infinite, and radars will send a second information packet to players near connected radars

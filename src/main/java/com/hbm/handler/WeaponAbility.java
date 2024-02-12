@@ -37,8 +37,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.WeightedRandom;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 
 public abstract class WeaponAbility {
@@ -136,21 +134,21 @@ public abstract class WeaponAbility {
 		}
 	}
 	public static class BlendAbility extends WeaponAbility {
-
+		
 		int divider;
-
+		
 		public BlendAbility(int divider) {
 			this.divider = divider;
 		}
 
 		@Override
 		public void onHit(World world, EntityPlayer player, Entity victim, IItemAbility tool) {
-
+			
 			if(victim instanceof EntityLivingBase) {
-
+				
 				EntityLivingBase living = (EntityLivingBase) victim;
-
-
+				
+				
 				if(living.getHealth() <= 0.0F) {
 					int count = Math.min((int)Math.ceil(living.getMaxHealth() / divider), 250); //safeguard to prevent funnies from bosses with obscene health
 					world.playSoundEffect(living.posX, living.posY + living.height * 0.5, living.posZ, "mob.zombie.woodbreak", 0.5F, 1.0F);
@@ -165,9 +163,9 @@ public abstract class WeaponAbility {
 			    }
 			}
 		}
+	
 
-
-
+				
 		@Override
 		public String getName() {
 			return "weapon.ability.blender";
@@ -178,7 +176,7 @@ public abstract class WeaponAbility {
 			return I18n.format(getName()) + " (1:" + divider + ")";
 		}
 	}
-
+	
 	public static class PhosphorusAbility extends WeaponAbility {
 		
 		int duration;
@@ -252,7 +250,7 @@ public abstract class WeaponAbility {
 				EntityLivingBase living = (EntityLivingBase) victim;
 				
 				if(living.getHealth() <= 0.0F) {
-
+					
 					int count = Math.min((int)Math.ceil(living.getMaxHealth() / divider), 250); //safeguard to prevent funnies from bosses with obscene health
 					
 					for(int i = 0; i < count; i++) {
@@ -327,7 +325,7 @@ public abstract class WeaponAbility {
 				}
 			}
 		}
-
+		
 
 		@Override
 		public String getName() {

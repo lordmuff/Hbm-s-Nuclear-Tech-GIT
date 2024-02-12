@@ -8,11 +8,9 @@ import com.hbm.blocks.IPersistentInfoProvider;
 import com.hbm.blocks.ITooltipProvider;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.fluid.FluidType;
-import com.hbm.entity.projectile.EntityBombletZeta;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.items.machine.IItemFluidIdentifier;
-import com.hbm.inventory.fluid.trait.FT_Flammable;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.IPersistentNBT;
 import com.hbm.tileentity.machine.storage.TileEntityBarrel;
@@ -164,21 +162,21 @@ public class BlockFluidBarrel extends BlockContainer implements ITooltipProvider
 	}
 	@Override
 	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion) {
-
+		
 		TileEntity core = world.getTileEntity(x, y, z);
 		if(!(core instanceof TileEntityBarrel)) return;
-
+		
 		TileEntityBarrel tank = (TileEntityBarrel) core;
 		if(tank.lastExplosion == explosion) return;
 		tank.lastExplosion = explosion;
-
+		
 		if(!tank.hasExploded) {
 			tank.explode(world, x, y, z);
-
+			
 		} else {
 			world.setBlock(x, y, z, Blocks.air);
 		}
-
+		
 	}
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {

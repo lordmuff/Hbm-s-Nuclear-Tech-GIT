@@ -33,8 +33,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.HashMap;
-
 //epic!
 public class TileEntityMachineGasCent extends TileEntityMachineBase implements IEnergyUser, IFluidStandardReceiver, IGUIProvider {
 	
@@ -49,15 +47,6 @@ public class TileEntityMachineGasCent extends TileEntityMachineBase implements I
 	public PseudoFluidTank outputTank;
 	
 	private static final int[] slots_io = new int[] { 0, 1, 2, 3 };
-	
-	private static HashMap<FluidType, PseudoFluidType> fluidConversions = new HashMap();
-	
-	static {
-		fluidConversions.put(Fluids.UF6, PseudoFluidType.NUF6);
-		fluidConversions.put(Fluids.PUF6, PseudoFluidType.PF6);
-		fluidConversions.put(Fluids.WATZ, PseudoFluidType.MUD);
-		fluidConversions.put(Fluids.MINSOL, PseudoFluidType.MINSOLE); //not a good idea
-	}
 	
 	public TileEntityMachineGasCent() {
 		super(7); 
@@ -178,6 +167,8 @@ public class TileEntityMachineGasCent extends TileEntityMachineBase implements I
 	}
 	
 	public void networkUnpack(NBTTagCompound data) {
+		super.networkUnpack(data);
+		
 		this.power = data.getLong("power");
 		this.progress = data.getInteger("progress");
 		this.isProgressing = data.getBoolean("isProgressing");
@@ -197,7 +188,7 @@ public class TileEntityMachineGasCent extends TileEntityMachineBase implements I
 
 			power = Library.chargeTEFromItems(slots, 4, power, maxPower);
 			setTankType(5);
-
+			
 			if(GasCentrifugeRecipes.fluidConversions.containsValue(inputTank.getTankType())) {
 				attemptConversion();
 			}
@@ -317,7 +308,7 @@ public class TileEntityMachineGasCent extends TileEntityMachineBase implements I
 			
 		}
 	}
-
+	
 	@Override
 	public FluidTank[] getReceivingTanks() {
 		return new FluidTank[] { tank };

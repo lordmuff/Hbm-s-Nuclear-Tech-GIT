@@ -25,6 +25,7 @@ public class CommonConfig {
 	public static final String CATEGORY_HAZARD = "14_hazard";
 	public static final String CATEGORY_STRUCTURES = "15_structures";
 	public static final String CATEGORY_POLLUTION = "16_pollution";
+	public static final String CATEGORY_BIOMES = "17_biomes";
 
 	public static final String CATEGORY_528 = "528";
 	public static final String CATEGORY_LBSM = "LESS BULLSHIT MODE";
@@ -74,7 +75,11 @@ public class CommonConfig {
 		prop.comment = comment;
 		return prop.getString();
 	}
-
+    public static int[] createConfigIntList(Configuration config, String category, String name, String comment, int[] def){
+		Property prop = config.get(category, name, def);
+		prop.comment = comment;
+		return prop.getIntList();
+	}
 	public static String[] createConfigStringList(Configuration config, String category, String name, String comment) {
 		Property prop = config.get(category, name, new String[] { "PLACEHOLDER" });
 		prop.comment = comment;
