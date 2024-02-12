@@ -44,10 +44,10 @@ public class ItemWandD extends Item {
 		MovingObjectPosition pos = Library.rayTrace(player, 500, 1, false, true, false);
 		
 		if(pos != null) {
-	
-			
-			
-			
+
+
+
+
 			/*ExplosionVNT vnt = new ExplosionVNT(world, pos.hitVec.xCoord, pos.hitVec.yCoord, pos.hitVec.zCoord, 7);
 			vnt.setBlockAllocator(new BlockAllocatorBulkie(60));
 			vnt.setBlockProcessor(new BlockProcessorStandard().withBlockEffect(new BlockMutatorBulkie(ModBlocks.block_slag)).setNoDrop());
@@ -58,6 +58,14 @@ public class ItemWandD extends Item {
 			
 			//PollutionHandler.incrementPollution(world, pos.blockX, pos.blockY, pos.blockZ, PollutionType.SOOT, 15);
 			
+			/*int i = pos.blockX >> 4;
+			int j = pos.blockZ >> 4;
+
+			i = (i << 4) + 8;
+			j = (j << 4) + 8;
+			Component comp = new RuralHouse1(world.rand, i, j);
+			comp.addComponentParts(world, world.rand, new StructureBoundingBox(i, j, i + 32, j + 32));*/
+
 			/*TimeAnalyzer.startCount("setBlock");
 			world.setBlock(pos.blockX, pos.blockY, pos.blockZ, Blocks.dirt);
 			TimeAnalyzer.startEndCount("getBlock");
@@ -83,12 +91,13 @@ public class ItemWandD extends Item {
 			tom.destructionRange = 600;
 			world.spawnEntityInWorld(tom);*/
 			
-			/*EntityNukeTorex torex = new EntityNukeTorex(world);
-			torex.setPositionAndRotation(pos.blockX, pos.blockY + 1, pos.blockZ, 0, 0);
-			torex.setScale(1.5F);
-			torex.setType(2);
-			world.spawnEntityInWorld(torex);
-			TrackerUtil.setTrackingRange(world, torex, 1000);*/
+			List<EntityNukeTorex> del = world.getEntitiesWithinAABB(EntityNukeTorex.class, AxisAlignedBB.getBoundingBox(pos.blockX, pos.blockY + 1, pos.blockZ, pos.blockX, pos.blockY + 1, pos.blockZ).expand(50, 50, 50));
+			
+			if(!del.isEmpty()) {
+				for(EntityNukeTorex torex : del) torex.setDead();
+			} else {
+				EntityNukeTorex.statFac(world, pos.blockX, pos.blockY + 1, pos.blockZ, 150);
+			}
 			
 			/*EntityTracker entitytracker = ((WorldServer) world).getEntityTracker();
 			IntHashMap map = ReflectionHelper.getPrivateValue(EntityTracker.class, entitytracker, "trackedEntityIDs", "field_72794_c");
@@ -175,10 +184,10 @@ public class ItemWandD extends Item {
 
 	public void generateVein(World world, int startX, int startY, int startZ, Block oreBlock, int veinSize) {
 	    Random rand = new Random();
-	    
+
 	    LinkedList<int[]> blocksToCheck = new LinkedList<>();
 	    blocksToCheck.add(new int[]{ startX, startY, startZ });
-	    
+
 	    int blocksChanged = 0;
 
 	    while (!blocksToCheck.isEmpty() && blocksChanged < veinSize) {

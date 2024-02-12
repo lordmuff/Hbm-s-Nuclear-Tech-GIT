@@ -39,8 +39,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 	
 	@Override
 	public void registerDefaults() {
-		
-		registerFuelProcessing();
+
 		//6-30, formerly oil cracking, coal liquefaction and solidifciation
 		registerOtherOil();
 		
@@ -314,7 +313,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.inputFluids(
 						new FluidStack(Fluids.PETROLEUM, 100),
 						new FluidStack(Fluids.STEAM, 1000))
-				.outputItems(new ItemStack(ModItems.antiknock)));
+				.outputItems(new ItemStack(ModItems.fuel_additive)));
 		recipes.add(new ChemRecipe(4, "FR_REOIL", 30)
 				.inputFluids(new FluidStack(1000, Fluids.SMEAR))
 				.outputFluids(new FluidStack(800, Fluids.RECLAIMED)));
@@ -324,18 +323,18 @@ public class ChemplantRecipes extends SerializableRecipe {
 						new FluidStack(200, Fluids.LUBRICANT))
 				.outputFluids(new FluidStack(1000, Fluids.PETROIL)));
 		recipes.add(new ChemRecipe(86, "PETROIL_LEADED", 40)
-				.inputItems(new ComparableStack(ModItems.antiknock))
+				.inputItems(new ComparableStack(ModItems.fuel_additive))
 				.inputFluids(new FluidStack(Fluids.PETROIL, 10_000))
 				.outputFluids(new FluidStack(Fluids.PETROIL_LEADED, 12_000)));
 		recipes.add(new ChemRecipe(71, "GASOLINE", 40)
 				.inputFluids(new FluidStack(Fluids.NAPHTHA, 1000))
 				.outputFluids(new FluidStack(Fluids.GASOLINE, 800)));
 		recipes.add(new ChemRecipe(85, "GASOLINE_LEADED", 40)
-				.inputItems(new ComparableStack(ModItems.antiknock))
+				.inputItems(new ComparableStack(ModItems.fuel_additive))
 				.inputFluids(new FluidStack(Fluids.GASOLINE, 10_000))
 				.outputFluids(new FluidStack(Fluids.GASOLINE_LEADED, 12_000)));
 		recipes.add(new ChemRecipe(87, "COALGAS_LEADED", 40)
-				.inputItems(new ComparableStack(ModItems.antiknock))
+				.inputItems(new ComparableStack(ModItems.fuel_additive))
 				.inputFluids(new FluidStack(Fluids.COALGAS, 10_000))
 				.outputFluids(new FluidStack(Fluids.COALGAS_LEADED, 12_000)));
 		recipes.add(new ChemRecipe(72, "FRACKSOL", 20)
@@ -494,21 +493,21 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.outputItems(
 						new ItemStack(ModItems.nugget_u233, 1),
 						new ItemStack(ModItems.nuclear_waste_tiny, 1)));
-		
+
 		recipes.add(new ChemRecipe(120, "MASS_CAKE", 30)
 				.inputFluids(new FluidStack(Fluids.CMILK, 4000), new FluidStack(Fluids.CREAM, 1000)) // why not regular milk? well its because the refined products allow for higher mass cakes while still needing less milk
 				.inputItems(
 						new ComparableStack(Items.sugar, 8),				// if there is a hole in my logic i will shoot myself
-						new ComparableStack(Items.egg, 4))				//ex: since a cake needs 3 buckets of milk, c-milk is more dense, leading to it being only 4 buckets of condensed milk, thats 1 bucket per cake. 
+						new ComparableStack(Items.egg, 4))				//ex: since a cake needs 3 buckets of milk, c-milk is more dense, leading to it being only 4 buckets of condensed milk, thats 1 bucket per cake.
 				.outputItems(
 						new ItemStack(Items.cake, 4)));
-		
+
 		recipes.add(new ChemRecipe(121, "BUTTER", 50)
-				.inputFluids(new FluidStack(Fluids.EMILK, 1000)) 
+				.inputFluids(new FluidStack(Fluids.EMILK, 1000))
 				.outputItems(
 						new ItemStack(ModItems.butter)));
 		recipes.add(new ChemRecipe(122, "STRAWICE", 50)
-				.inputFluids(new FluidStack(Fluids.CREAM, 1000)) 
+				.inputFluids(new FluidStack(Fluids.CREAM, 1000))
 				.inputItems(
 				new ComparableStack(ModItems.butter, 2),
 				new ComparableStack(Blocks.packed_ice, 1),
@@ -537,9 +536,9 @@ public class ChemplantRecipes extends SerializableRecipe {
 		//mayo zone END!!!
 	}
 	
-	
-	
-	
+
+
+
 	public static void registerFuelProcessing() {
 		recipes.add(new ChemRecipe(0, "FP_HEAVYOIL", 50)
 				.inputFluids(new FluidStack(1000, Fluids.HEAVYOIL))

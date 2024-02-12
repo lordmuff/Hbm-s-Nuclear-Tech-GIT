@@ -328,7 +328,10 @@ public class ModEventHandlerClient  {
 			
 			if(animation == null)
 				continue;
-			
+
+			if(animation.holdLastFrame)
+				continue;
+
 			long time = System.currentTimeMillis() - animation.startMillis;
 			
 			if(time > animation.animation.getDuration())
@@ -353,7 +356,7 @@ public class ModEventHandlerClient  {
 		}
 		
 		/// HANDLE FLASHBANG OVERLAY///
-		if(player.isPotionActive(HbmPotion.flashbang)) {		
+		if(player.isPotionActive(HbmPotion.flashbang)) {
 			RenderScreenOverlay.renderFlashbangOverlay(event.resolution);
 		}
 		float size = ImpactWorldHandler.getFlashForClient(player.worldObj);
@@ -399,8 +402,8 @@ public class ModEventHandlerClient  {
         	long time = ImpactWorldHandler.getTimeForClient(player.worldObj);
         	if(time>0)
         	{
-        		RenderScreenOverlay.renderCountdown(event.resolution, Minecraft.getMinecraft().ingameGUI, Minecraft.getMinecraft().theWorld);	
-        	}        	
+        		RenderScreenOverlay.renderCountdown(event.resolution, Minecraft.getMinecraft().ingameGUI, Minecraft.getMinecraft().theWorld);
+        	}
         }
 		if(!event.isCanceled() && event.type == event.type.ARMOR) {
 			
@@ -1367,9 +1370,9 @@ public class ModEventHandlerClient  {
 			case 12: main.splashText = "Imagine being scared by splash texts!"; break;
 			}
 			
-			if(Math.random() < 0.1) main.splashText = "Redditors aren't people!";
-
-		}	
-
+			double d = Math.random();
+			if(d < 0.1) main.splashText = "Redditors aren't people!";
+			else if(d < 0.2) main.splashText = "Can someone tell me what corrosive fumes the people on Reddit are huffing so I can avoid those more effectively?";
+		}
 	}
 }
