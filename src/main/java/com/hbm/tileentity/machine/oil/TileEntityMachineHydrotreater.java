@@ -19,6 +19,7 @@ import api.hbm.energy.IEnergyUser;
 import api.hbm.fluid.IFluidStandardTransceiver;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -40,7 +41,7 @@ public class TileEntityMachineHydrotreater extends TileEntityMachineBase impleme
 		this.tanks = new FluidTank[4];
 		this.tanks[0] = new FluidTank(Fluids.OIL, 64_000);
 		this.tanks[1] = new FluidTank(Fluids.HYDROGEN, 64_000).withPressure(1);
-		this.tanks[2] = new FluidTank(Fluids.NONE, 24_000);
+		this.tanks[2] = new FluidTank(Fluids.OIL_DS, 24_000);
 		this.tanks[3] = new FluidTank(Fluids.SOURGAS, 24_000);
 	}
 
@@ -73,7 +74,23 @@ public class TileEntityMachineHydrotreater extends TileEntityMachineBase impleme
 					}
 				}
 			}
+			
+			this.networkPackNT(25);
 		}
+	}
+
+	@Override
+	public void serialize(ByteBuf buf) {
+		super.serialize(buf);
+		buf.writeLong(power);
+		for(int i = 0; i < 4; i++) tanks[i].serialize(buf);
+	}
+	
+	@Override
+	public void deserialize(ByteBuf buf) {
+		super.deserialize(buf);
+		this.power = buf.readLong();
+		for(int i = 0; i < 4; i++) tanks[i].deserialize(buf);
 	}
 	
 	private void reform() {
@@ -90,14 +107,14 @@ public class TileEntityMachineHydrotreater extends TileEntityMachineBase impleme
 		tanks[3].setTankType(out.getZ().type);
 		
 		if(power < 20_000) return;
-		if(tanks[0].getFill() < 50) return;
+		if(tanks[0].getFill() < 100) return;
 		if(tanks[1].getFill() < out.getX().fill) return;
 		if(slots[10] == null || slots[10].getItem() != ModItems.catalytic_converter) return;
 
 		if(tanks[2].getFill() + out.getY().fill > tanks[2].getMaxFill()) return;
 		if(tanks[3].getFill() + out.getZ().fill > tanks[3].getMaxFill()) return;
 
-		tanks[0].setFill(tanks[0].getFill() - 50);
+		tanks[0].setFill(tanks[0].getFill() - 100);
 		tanks[1].setFill(tanks[1].getFill() - out.getX().fill);
 		tanks[2].setFill(tanks[2].getFill() + out.getY().fill);
 		tanks[3].setFill(tanks[3].getFill() + out.getZ().fill);

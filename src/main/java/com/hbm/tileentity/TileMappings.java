@@ -45,14 +45,11 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileMappings {
 
-	public static HashMap<Class<? extends TileEntity>, String[]> map = new HashMap();
-	public static List<Class<? extends IConfigurableMachine>> configurables = new ArrayList();
+	public static HashMap<Class<? extends TileEntity>, String[]> map = new HashMap<Class<? extends TileEntity>, String[]>();
+	public static List<Class<? extends IConfigurableMachine>> configurables = new ArrayList<Class<? extends IConfigurableMachine>>();
 	
 	public static void writeMappings() {
-		put(TileEntityTestBombAdvanced.class, "tilentity_testbombadvanced");
 		put(TileEntityDiFurnace.class, "tilentity_diFurnace");
-		put(TileEntityTestNuke.class, "tilentity_testnuke");
-		put(TileEntityTestRender.class, "tilentity_testrenderer");
 		put(TileEntityObjTester.class, "tilentity_objtester");
 		put(TileEntityMachineCentrifuge.class, "tileentity_centrifuge");
 		put(TileEntityNukeMan.class, "tileentity_nukeman");
@@ -74,6 +71,7 @@ public class TileMappings {
 		put(TileEntityBrownBarrel.class, "tileentity_brown_barrel");
 		put(TileEntityYellowBarrel.class, "tileentity_nukebarrel");
 		put(TileEntityLaunchPad.class, "tileentity_launch1");
+		put(TileEntityLaunchPadRusted.class, "tileentity_launchpad_rusted");
 		put(TileEntityLaunchPadLarge.class, "tileentity_launchpad_large");
 		put(TileEntityDecoBlock.class, "tileentity_deco");
 		put(TileEntityDecoBlockAltW.class, "tileentity_deco_w");
@@ -99,6 +97,7 @@ public class TileMappings {
 		put(TileEntityMachineExcavator.class, "tileentity_ntm_excavator");
 		put(TileEntityFluidDuctSimple.class, "tileentity_universal_duct_simple");
 		put(TileEntityFluidDuct.class, "tileentity_universal_duct");
+		put(TileEntityMachineDrain.class, "tileentity_fluid_drain");
 		put(TileEntityMachineFluidTank.class, "tileentity_fluid_tank");
 		put(TileEntityMachineTurbofan.class, "tileentity_machine_turbofan");
 		put(TileEntityMachineTurbineGas.class, "tileentity_machine_gasturbine");
@@ -137,8 +136,6 @@ public class TileMappings {
 		put(TileEntityGeiger.class, "tileentity_geiger");
 		put(TileEntityFF.class, "tileentity_forcefield");
 		put(TileEntityForceField.class, "tileentity_machine_field");
-		put(TileEntityMachineShredderLarge.class, "tileentity_machine_big_shredder");
-		put(TileEntityRFDuct.class, "tileentity_hbm_rfduct");
 		put(TileEntityReactorControl.class, "tileentity_reactor_remote_control");
 		put(TileEntityWasteDrum.class, "tileentity_waste_drum");
 		put(TileEntityDecon.class, "tileentity_decon");
@@ -193,7 +190,6 @@ public class TileMappings {
 		put(TileEntityLantern.class, "tileentity_lantern_ordinary");
 		put(TileEntityLanternBehemoth.class, "tileentity_lantern_behemoth");
 		put(TileEntityStorageDrum.class, "tileentity_waste_storage_drum");
-		put(TileEntityDeaerator.class, "tileentity_deaerator");
 		put(TileEntityCableBaseNT.class, "tileentity_ohgod"); // what?
 		put(TileEntityCablePaintable.class, "tileentity_cable_paintable");
 		put(TileEntityCableGauge.class, "tileentity_cable_gauge");
@@ -229,7 +225,9 @@ public class TileMappings {
 
 		put(TileEntityBlockPWR.class, "tileentity_block_pwr");
 		put(TileEntityPWRController.class, "tileentity_pwr_controller");
-		
+
+		put(TileEntityData.class, "tileentity_data");
+
 		putNetwork();
 		putBombs();
 		putTurrets();
@@ -270,6 +268,7 @@ public class TileMappings {
 		put(TileEntityTurretArty.class, "tileentity_turret_arty");
 		put(TileEntityTurretHIMARS.class, "tileentity_turret_himars");
 		put(TileEntityTurretSentry.class, "tileentity_turret_sentry");
+		put(TileEntityTurretSentryDamaged.class, "tileentity_turret_sentry_damaged");
 	}
 	
 	private static void putMachines() {
@@ -348,6 +347,7 @@ public class TileMappings {
 		put(TileEntityMachineCryoDistill.class, "tileentity_cryogenic_distillator");
 		put(TileEntityMachineMilkReformer.class, "tileentity_milk_reformer");
 
+		put(TileEntityMachineHydrotreater.class, "tileentity_hydrotreater");
 		put(TileEntityMachineCoker.class, "tileentity_coker");
 		put(TileEntityChimneyBrick.class, "tileentity_chimney_brick");
 		put(TileEntityChimneyIndustrial.class, "tileentity_chimney_industrial");

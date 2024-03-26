@@ -30,10 +30,12 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
+import com.hbm.util.CompatEnergyControl;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
 import api.hbm.energy.IEnergyUser;
 import api.hbm.fluid.IFluidStandardTransceiver;
+import api.hbm.tile.IInfoProviderEC;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -51,7 +53,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityITER extends TileEntityMachineBase implements IEnergyUser, IFluidAcceptor, IFluidSource, IFluidStandardTransceiver, IGUIProvider /* TODO: finish fluid API impl */ {
+public class TileEntityITER extends TileEntityMachineBase implements IEnergyUser, IFluidAcceptor, IFluidSource, IFluidStandardTransceiver, IGUIProvider, IInfoProviderEC {
 	
 	public long power;
 	public static final long maxPower = 10000000;
@@ -61,7 +63,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyUser
 	public FluidTank[] tanks;
 	public FluidTank plasma;
 	public static final int CoolReq = 1;
-	
+
 	public int progress;
 	public static final int duration = 100;
 	EntityPlayer player;
@@ -84,7 +86,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyUser
 		tanks[2] = new FluidTank(Fluids.COOLANT, 16_000, 0);
 		tanks[3] = new FluidTank(Fluids.COOLANT_HOT, 16_000, 1);
 		plasma = new FluidTank(Fluids.PLASMA_DT, 16000, 2);
-		
+
 	}
 
 	@Override
@@ -171,13 +173,13 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyUser
 							tanks[1].setFill(tanks[1].getMaxFill());
 							tanks[0].setFill(tanks[0].getMaxFill()); //this should stop it from eating fluids when buffers are full
 						}
-							
+
 						if(tanks[2].getFill() >= lod) {
 							int coolantToDrain = (int) (Math.min(tanks[3].getMaxFill(), tanks[2].getFill()));
 							coolantToDrain = Math.min(lod, tanks[1].getMaxFill() - tanks[1].getFill());
 							tanks[2].setFill(tanks[2].getFill() - coolantToDrain);
 							tanks[3].setFill(tanks[3].getFill() + coolantToDrain);
-								
+
 						}
 						if(tanks[3].getFill() > tanks[3].getMaxFill()) {
 							tanks[3].setFill(tanks[3].getMaxFill());
@@ -218,7 +220,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyUser
 			tanks[2].writeToNBT(data, "coolant");
 			tanks[3].writeToNBT(data, "hotlant");
 			plasma.writeToNBT(data, "plasma");
-			
+
 			if(slots[3] == null) {
 				data.setInteger("blanket", 0);
 			} else if(slots[3].getItem() == ModItems.fusion_shield_tungsten) {
@@ -349,10 +351,10 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyUser
 		
 		if(slots[1] != null && slots[1].getItem() == ModItems.meteorite_sword_fused)
 			out = new BreederRecipe(ModItems.meteorite_sword_baleful, 4000);
-	
+
 		if(slots[1] != null && slots[1].getItem() == Item.getItemFromBlock(ModBlocks.lattice_log))
 			out = new BreederRecipe(ModItems.woodemium_briquette, 4000);
-		
+
 		if(out == null) {
 			this.progress = 0;
 			return;
@@ -504,10 +506,10 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyUser
 			tanks[3].setFill(i);
 		else if (type.name().equals(plasma.getTankType().name()))
 			plasma.setFill(i);
-			
+
 	}
 	*/
-	
+
 
 	public void setTypeForSync(FluidType type, int index) {
 		if (index < 2 && tanks[index] != null)
@@ -618,7 +620,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyUser
 		plasma.readFromNBT(nbt, "plasma");
 	}
 	
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
@@ -738,7 +740,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyUser
 	@Override
 	public void setFluidFill(int fill, FluidType type) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -750,13 +752,13 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyUser
 	@Override
 	public void fillFluidInit(FluidType type) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void fillFluid(int x, int y, int z, boolean newTact, FluidType type) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -774,12 +776,20 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyUser
 	@Override
 	public void clearFluidList(FluidType type) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public int getMaxFluidFill(FluidType type) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void provideExtraInfo(NBTTagCompound data) {
+		data.setBoolean(CompatEnergyControl.B_ACTIVE, this.isOn && plasma.getFill() > 0);
+		int output = FusionRecipes.getSteamProduction(plasma.getTankType());
+		data.setDouble("consumption", output * 10);
+		data.setDouble("outputmb", output);
 	}
 }

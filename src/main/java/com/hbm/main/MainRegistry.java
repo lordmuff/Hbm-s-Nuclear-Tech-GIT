@@ -41,7 +41,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.tileentity.TileMappings;
-import com.hbm.tileentity.bomb.TileEntityLaunchPad;
+import com.hbm.tileentity.bomb.TileEntityLaunchPadBase;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.machine.TileEntityNukeFurnace;
 import com.hbm.tileentity.machine.rbmk.RBMKDials;
@@ -286,7 +286,6 @@ public class MainRegistry {
 		Satellite.register();
 		HTTPHandler.loadStats();
 		CraftingManager.mainRegistry();
-		AssemblerRecipes.preInit(PreEvent.getModConfigurationDirectory());
 		SiegeTier.registerTiers();
 		HazardRegistry.registerItems();
 		HazardRegistry.registerTrafos();
@@ -333,7 +332,7 @@ public class MainRegistry {
 		
 		TileMappings.writeMappings();
 		MachineDynConfig.initialize();
-		TileEntityLaunchPad.registerLaunchables();
+		TileEntityLaunchPadBase.registerLaunchables();
 		
 		for(Entry<Class<? extends TileEntity>, String[]> e : TileMappings.map.entrySet()) {
 			
@@ -845,11 +844,9 @@ public class MainRegistry {
 	@EventHandler
 	public static void PostLoad(FMLPostInitializationEvent PostEvent) {
 		TileEntityNukeFurnace.registerFuels();
-		AssemblerRecipes.loadRecipes();
 		MagicRecipes.register();
 		LemegetonRecipes.register();
 		SILEXRecipes.register();
-		AnvilRecipes.register();
 		RefineryRecipes.registerRefinery();
 		GasCentrifugeRecipes.register();
 		
@@ -858,11 +855,15 @@ public class MainRegistry {
 		//the good stuff
 		SerializableRecipe.registerAllHandlers();
 		SerializableRecipe.initialize();
+		
+		//Anvil has to come after serializables (i.e. anvil)
+		AnvilRecipes.register();
 
 		//has to register after cracking, and therefore after all serializable recipes
 		RadiolysisRecipes.registerRadiolysis();
 		
 		FalloutConfigJSON.initialize();
+		ItemPoolConfigJSON.initialize();
 
 		TileEntityNukeCustom.registerBombItems();
 		ArmorUtil.register();
@@ -933,7 +934,6 @@ public class MainRegistry {
 	public void serverStart(FMLServerStartingEvent event) {
 		World world = event.getServer().getEntityWorld();
 		RBMKDials.createDials(world);
-		SiegeOrchestrator.createGameRules(world);
 		event.registerServerCommand(new CommandReloadRecipes());
 		event.registerServerCommand(new CommandDebugChunkLoad());
 		event.registerServerCommand(new CommandSatellites());
@@ -1225,6 +1225,38 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.warhead_thermo_endo");
 		ignoreMappings.add("hbm:item.warhead_thermo_exo");
 		ignoreMappings.add("hbm:item.gun_dampfmaschine");
+		ignoreMappings.add("hbm:item.canteen_13");
+		ignoreMappings.add("hbm:tile.residue");
+		ignoreMappings.add("hbm:item.powder_cloud");
+		ignoreMappings.add("hbm:item.gun_detonator");
+		ignoreMappings.add("hbm:item.gun_avenger");
+		ignoreMappings.add("hbm:tile.block_cap_nuka");
+		ignoreMappings.add("hbm:tile.block_cap_quantum");
+		ignoreMappings.add("hbm:tile.block_cap_rad");
+		ignoreMappings.add("hbm:tile.block_cap_sparkle");
+		ignoreMappings.add("hbm:tile.block_cap_korl");
+		ignoreMappings.add("hbm:tile.block_cap_fritz");
+		ignoreMappings.add("hbm:tile.block_cap_sunset");
+		ignoreMappings.add("hbm:tile.block_cap_star");
+		ignoreMappings.add("hbm:tile.machine_deaerator");
+		ignoreMappings.add("hbm:item.bottle2_sunset");
+		ignoreMappings.add("hbm:item.cap_sunset");
+		ignoreMappings.add("hbm:item.cap_star");
+		ignoreMappings.add("hbm:tile.test_render");
+		ignoreMappings.add("hbm:tile.test_bomb");
+		ignoreMappings.add("hbm:tile.test_bomb_advanced");
+		ignoreMappings.add("hbm:tile.test_nuke");
+		ignoreMappings.add("hbm:tile.test_pipe");
+		ignoreMappings.add("hbm:tile.test_ct");
+		ignoreMappings.add("hbm:tile.test_rail");
+		ignoreMappings.add("hbm:tile.block_niter_reinforced");
+		ignoreMappings.add("hbm:tile.siege_shield");
+		ignoreMappings.add("hbm:tile.siege_internal");
+		ignoreMappings.add("hbm:tile.siege_circuit");
+		ignoreMappings.add("hbm:tile.siege_emergency");
+		ignoreMappings.add("hbm:tile.siege_hole");
+		ignoreMappings.add("hbm:tile.machine_shredder_large");
+		ignoreMappings.add("hbm:tile.turret_brandon");
 		
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);

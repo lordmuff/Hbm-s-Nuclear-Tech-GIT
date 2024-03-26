@@ -15,10 +15,6 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockAshes;
-import com.hbm.blocks.rail.IRailNTM;
-import com.hbm.blocks.rail.IRailNTM.MoveContext;
-import com.hbm.blocks.rail.IRailNTM.RailCheckType;
-import com.hbm.blocks.rail.IRailNTM.RailContext;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
@@ -74,7 +70,6 @@ import com.hbm.tileentity.machine.TileEntityNukeFurnace;
 import com.hbm.util.I18nUtil;
 import com.hbm.util.ItemStackUtil;
 import com.hbm.util.LoggingUtil;
-import com.hbm.util.fauxpointtwelve.BlockPos;
 import com.hbm.wiaj.GuiWorldInAJar;
 import com.hbm.wiaj.cannery.CanneryBase;
 import com.hbm.wiaj.cannery.Jars;
@@ -222,6 +217,11 @@ public class ModEventHandlerClient  {
 					} else if(world.getBlock(mop.blockX, mop.blockY, mop.blockZ) instanceof ILookOverlay) {
 						((ILookOverlay) world.getBlock(mop.blockX, mop.blockY, mop.blockZ)).printHook(event, world, mop.blockX, mop.blockY, mop.blockZ);
 					}
+					
+					/*List<String> text = new ArrayList();
+					text.add("Meta: " + world.getBlockMetadata(mop.blockX, mop.blockY, mop.blockZ));
+					ILookOverlay.printGeneric(event, "DEBUG", 0xffff00, 0x4040000, text);*/
+					
 				} else if(mop.typeOfHit == mop.typeOfHit.ENTITY) {
 					Entity entity = mop.entityHit;
 					
@@ -380,34 +380,34 @@ public class ModEventHandlerClient  {
 		}
 	}
 	
-	@SubscribeEvent
-	public void onOverlayRender(RenderGameOverlayEvent.Post event) {
-		
-		/// HANDLE ELECTRIC FSB HUD ///
-		
+	@SubscribeEvent(receiveCanceled = true)
+	public void onHUDRenderShield(RenderGameOverlayEvent.Pre event) {
+
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		Tessellator tess = Tessellator.instance;
 		
-		if(!event.isCanceled() && event.type == event.type.HEALTH) {
+		if(event.type == event.type.ARMOR) {
+
 			HbmPlayerProps props = HbmPlayerProps.getData(player);
-			if(props.maxShield > 0) {
+			if(props.getEffectiveMaxShield() > 0) {
 				RenderScreenOverlay.renderShieldBar(event.resolution, Minecraft.getMinecraft().ingameGUI);
 			}
 			if(player.isPotionActive(HbmPotion.nitan)) {
 				RenderScreenOverlay.renderTaintBar(event.resolution, Minecraft.getMinecraft().ingameGUI);
 			}
 		}
-        if (!event.isCanceled() && event.type == event.type.ALL)
-        {
-        	long time = ImpactWorldHandler.getTimeForClient(player.worldObj);
-        	if(time>0)
-        	{
-        		RenderScreenOverlay.renderCountdown(event.resolution, Minecraft.getMinecraft().ingameGUI, Minecraft.getMinecraft().theWorld);
-        	}
-        }
-		if(!event.isCanceled() && event.type == event.type.ARMOR) {
+	}
+	
+	@SubscribeEvent(receiveCanceled = true, priority = EventPriority.LOW)
+	public void onHUDRenderBar(RenderGameOverlayEvent.Post event) {
+		
+		/// HANDLE ELECTRIC FSB HUD ///
+		
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		Tessellator tess = Tessellator.instance;
+		
+		if(event.type == event.type.ARMOR) {
 			
-			if(ForgeHooks.getTotalArmorValue(player) == 0/* && GuiIngameForge.left_height == 59*/) {
+			if(ForgeHooks.getTotalArmorValue(player) == 0) {
 				GuiIngameForge.left_height -= 10;
 			}
 
@@ -424,7 +424,7 @@ public class ModEventHandlerClient  {
 
 				for(int i = 0; i < (noHelmet ? 3 : 4); i++) {
 					
-					int top = height - GuiIngameForge.left_height + 6;
+					int top = height - GuiIngameForge.left_height + 7;
 
 					ItemStack stack = player.inventory.armorInventory[i];
 
@@ -478,7 +478,6 @@ public class ModEventHandlerClient  {
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 			}
-
 		}
 	}
 	
@@ -837,6 +836,8 @@ public class ModEventHandlerClient  {
 			CanneryBase cannery = Jars.canneries.get(comp);
 			if(cannery != null) {
 				list.add(EnumChatFormatting.GREEN + I18nUtil.resolveKey("cannery.f1"));
+				lastCannery = comp;
+				canneryTimestamp = System.currentTimeMillis();
 			}
 		} catch(Exception ex) {
 			list.add(EnumChatFormatting.RED + "Error loading cannery: " + ex.getLocalizedMessage());
@@ -851,6 +852,9 @@ public class ModEventHandlerClient  {
 			}
 		}*/
 	}
+	
+	private static long canneryTimestamp;
+	private static ComparableStack lastCannery = null;
 	
 	private ResourceLocation ashes = new ResourceLocation(RefStrings.MODID + ":textures/misc/overlay_ash.png");
 	
@@ -963,9 +967,14 @@ public class ModEventHandlerClient  {
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_F1)) {
 			
-			ItemStack stack = getMouseOverStack();
-			if(stack != null) {
-				ComparableStack comp = new ComparableStack(stack).makeSingular();
+			ComparableStack comp = canneryTimestamp > System.currentTimeMillis() - 100 ? lastCannery : null;
+			
+			if(comp == null) {
+				ItemStack stack = getMouseOverStack();
+				if(stack != null) comp = new ComparableStack(stack).makeSingular();
+			}
+			
+			if(comp != null) {
 				CanneryBase cannery = Jars.canneries.get(comp);
 				if(cannery != null) {
 					FMLCommonHandler.instance().showGuiScreen(new GuiWorldInAJar(cannery.createScript(), cannery.getName(), cannery.getIcon(), cannery.seeAlso()));
@@ -1267,8 +1276,7 @@ public class ModEventHandlerClient  {
 	public static IIcon particleLeaf;
 	public static IIcon particleSwen;
 	public static IIcon particleLen;
-
-
+	public static IIcon particleSplash;
 
 	@SubscribeEvent
 	public void onTextureStitch(TextureStitchEvent.Pre event) {
@@ -1276,6 +1284,7 @@ public class ModEventHandlerClient  {
 		if(event.map.getTextureType() == 0) {
 			particleBase = event.map.registerIcon(RefStrings.MODID + ":particle/particle_base");
 			particleLeaf = event.map.registerIcon(RefStrings.MODID + ":particle/dead_leaf");
+			particleSplash = event.map.registerIcon(RefStrings.MODID + ":particle/particle_splash");
 			particleSwen = event.map.registerIcon(RefStrings.MODID + ":particle/particlenote2");
 			particleLen = event.map.registerIcon(RefStrings.MODID + ":particle/particlenote1");
 

@@ -63,7 +63,7 @@ public class FluidTraitSimple {
 		@Override public void addInfoHidden(List<String> info) {
 		info.add(EnumChatFormatting.RED + "[Explosive]");
 	}}
-	
+
 	public static class FT_Leaded extends FluidTrait {
 		@Override public void addInfoHidden(List<String> info) {
 			info.add(EnumChatFormatting.BLUE + "[Leaded Fuel]");

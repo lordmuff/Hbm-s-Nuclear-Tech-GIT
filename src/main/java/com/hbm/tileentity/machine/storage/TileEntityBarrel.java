@@ -15,6 +15,8 @@ import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.fluid.trait.FT_Corrosive;
+import com.hbm.inventory.fluid.trait.FT_Polluting;
+import com.hbm.inventory.fluid.trait.FluidTrait.FluidReleaseType;
 import com.hbm.inventory.fluid.trait.FT_Flammable;
 import com.hbm.inventory.gui.GUIBarrel;
 import com.hbm.lib.Library;
@@ -58,7 +60,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements IFluidAcc
 	public int age = 0;
 	public List<IFluidAcceptor> list = new ArrayList();
 	protected boolean sendingBrake = false;
-	
+
 	public Explosion lastExplosion = null;
 	public byte lastRedstone = 0;
 
@@ -261,7 +263,10 @@ public class TileEntityBarrel extends TileEntityMachineBase implements IFluidAcc
 		}
 		
 		if(b == ModBlocks.barrel_corroded ) {
-			if(worldObj.rand.nextInt(3) == 0) tank.setFill(tank.getFill() - 1);
+			if(worldObj.rand.nextInt(3) == 0) {
+				tank.setFill(tank.getFill() - 1);
+				FT_Polluting.pollute(worldObj, xCoord, yCoord, zCoord, tank.getTankType(), FluidReleaseType.SPILL, 1F);
+			}
 			if(worldObj.rand.nextInt(3 * 60 * 20) == 0) worldObj.func_147480_a(xCoord, yCoord, zCoord, false);
 		}
 		
@@ -459,13 +464,13 @@ public class TileEntityBarrel extends TileEntityMachineBase implements IFluidAcc
 	    			EntityNukeExplosionMK3 ex = EntityNukeExplosionMK3.statFacFleija(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, (int) aschrab);
 	    			if(!ex.isDead) {
 	    				worldObj.spawnEntityInWorld(ex);
-	    	
+
 	    				EntityCloudFleija cloud = new EntityCloudFleija(worldObj, (int) aschrab);
 	    				cloud.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
 	    				worldObj.spawnEntityInWorld(cloud);
 	    			}
-	    			return;			
-	    		}	
+	    			return;
+	    		}
 	    	}
 	    	this.markChanged();
 	    }
