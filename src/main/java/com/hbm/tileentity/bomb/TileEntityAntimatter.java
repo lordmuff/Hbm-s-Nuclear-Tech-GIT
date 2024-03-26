@@ -1,6 +1,5 @@
 package com.hbm.tileentity.bomb;
 
-import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.inventory.container.ContainerNukeAntimatter;
@@ -127,7 +126,7 @@ public class TileEntityAntimatter extends TileEntityMachineBase implements IGUIP
 		bf.posZ = zCoord + 0.5;
 		bf.destructionRange = (int) 150;
 		worldObj.spawnEntityInWorld(bf);
-		EntityNukeTorex.startFacAnti(worldObj, xCoord + 0.5, yCoord + 5, zCoord + 0.5, 1000);
+		EntityNukeTorex.statFacAnti(worldObj, xCoord + 0.5, yCoord + 5, zCoord + 0.5, 1000);
 	}
 	
 	public String getMinutes() {

@@ -123,6 +123,7 @@ public class ItemZirnoxRod extends ItemEnumMulti {
 		LEAUS(1_000_000, 20),
 		MEAUS(750_000, 40),
 		HEAUS(400_000, 90),
+
 		GRAVEL(4_000_000, 10, true);
 
 		public final int maxLife;

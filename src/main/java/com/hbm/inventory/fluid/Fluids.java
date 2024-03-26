@@ -179,7 +179,27 @@ public class Fluids {
 	public static FluidType CREAM;
 
 	public static FluidType FULLERENE;
-
+	public static FluidType HCL;
+	public static FluidType HTcO4;
+	public static FluidType AMMONIA;
+	public static FluidType HYDRAZINE;
+	public static FluidType NITROGEN;
+	public static FluidType BLOODGAS;
+	public static FluidType OLIVEOIL;
+	public static FluidType ELBOWGREASE;
+	public static FluidType NMASSTETRANOL;
+	public static FluidType NMASS;
+	public static FluidType AIR;
+	public static FluidType MINSOL;
+	public static FluidType MILK;
+	public static FluidType SMILK;
+	public static FluidType COFFEE;
+	public static FluidType TEA;
+	public static FluidType HONEY;
+	public static FluidType RIZZ;
+	public static FluidType NEON;
+	public static FluidType ARGON;
+	public static FluidType KRYPTON;
 	//mayo zone!!!
 
 	//Lead Bismuth Eutectic Coolant (Cool)
@@ -247,7 +267,7 @@ public class Fluids {
 		 * In addition, you have to add your fluid to 'metaOrder' which is what is used to sort fluid identifiers and whatnot in the inventory.
 		 * You may screw with metaOrder as much as you like, as long as you keep all fluids in the list exactly once.
 		 */
-		
+
 		NONE =					new FluidType("NONE",				0x888888, 0, 0, 0, EnumSymbol.NONE);
 		WATER =					new FluidType("WATER",				0x3333FF, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, UNSIPHONABLE);
 		STEAM =					new FluidType("STEAM",				0xe5e5e5, 3, 0, 0, EnumSymbol.NONE).setTemp(100).addTraits(GASEOUS, UNSIPHONABLE);
@@ -406,10 +426,10 @@ public class Fluids {
         NMASS =					new FluidType("NMASS",				0x53A9F4, 1, 2, 0, EnumSymbol.NONE).addTraits(LIQUID, new FT_Corrosive(10), new FT_Poison(true, 0), new FT_VentRadiation(0.04F));
         RIZZ =					new FluidType("RIZZ",				0x53A9F4, 1, 2, 0, EnumSymbol.NONE).addTraits(LIQUID, new FT_Corrosive(10), new FT_Poison(true, 0), NOID, NOCON);
         HTcO4 =					new FluidType("HTcO4",				0x675454, 1, 3, 0, EnumSymbol.RADIATION).addTraits(LIQUID, new FT_Corrosive(10), new FT_VentRadiation(0.5F));
-
-
-        LEADBISMUTHEUT =				new FluidType(157, "LEADBISMUTHEUT",		0xCCCCFF, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID).setTemp(300);
-        LEADBISMUTHEUT_HOT =				new FluidType(158, "LEADBISMUTHEUT_HOT",		0xCCCCFF, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID).setTemp(3000);
+		BLOODGAS =				new FluidType("BLOODGAS",		    0x591000, 3, 1, 1, EnumSymbol.NONE).addContainers(new CD_Canister(0x591000)).addTraits(new FT_Flammable(1_000_000), new FT_Combustible(FuelGrade.AERO, 2_500_000)).addTraits(LIQUID);
+		MINSOL =				new FluidType("MINSOL",				0xFADF6A, 3, 0, 3, EnumSymbol.ACID).addTraits(new FT_Corrosive(10), LIQUID);
+        LEADBISMUTHEUT =				new FluidType("LEADBISMUTHEUT",		0xCCCCFF, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID).setTemp(300);
+        LEADBISMUTHEUT_HOT =				new FluidType("LEADBISMUTHEUT_HOT",		0xCCCCFF, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID).setTemp(3000);
 
         // ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
@@ -421,7 +441,7 @@ public class Fluids {
 		
 		//AND DON'T FORGET THE META DOWN HERE
 		// V V V V V V V V
-		
+
 		//null
 		metaOrder.add(NONE);
 		//vanilla
@@ -576,7 +596,29 @@ public class Fluids {
 		//bug meth
 		metaOrder.add(PHEROMONE);
 		metaOrder.add(PHEROMONE_M);
-		
+		metaOrder.add(NEON);
+		metaOrder.add(ARGON);
+		metaOrder.add(KRYPTON);
+		metaOrder.add(NITROGEN);
+		metaOrder.add(COFFEE);
+		metaOrder.add(TEA);
+		metaOrder.add(HONEY);
+		metaOrder.add(MILK);
+		metaOrder.add(SMILK);
+		metaOrder.add(OLIVEOIL);
+		metaOrder.add(EMILK);
+		metaOrder.add(CMILK);
+		metaOrder.add(CREAM);
+		metaOrder.add(ELBOWGREASE);
+		metaOrder.add(NMASSTETRANOL);
+		metaOrder.add(NMASS);
+		metaOrder.add(RIZZ);
+		metaOrder.add(HTcO4);
+		metaOrder.add(LEADBISMUTHEUT);
+		metaOrder.add(LEADBISMUTHEUT_HOT);
+		metaOrder.add(BLOODGAS);
+		metaOrder.add(MINSOL);
+
 		for(FluidType custom : customFluids) metaOrder.add(custom);
 
 		CHLORINE.addTraits(new FT_Toxin().addEntry(new ToxinDirectDamage(ModDamageSource.cloud, 2F, 20, HazardClass.GAS_LUNG, false)));
@@ -692,7 +734,7 @@ public class Fluids {
 		registerCalculatedFuel(LPG, (baseline / 0.1 * flammabilityNormal * demandMedium * complexityRefinery * complexityChemplant), 2.5, FuelGrade.HIGH);
 		registerCalculatedFuel(NITAN, KEROSENE.getTrait(FT_Flammable.class).getHeatEnergy() * 25L, 2.5, FuelGrade.HIGH);
 		registerCalculatedFuel(BALEFIRE, KEROSENE.getTrait(FT_Flammable.class).getHeatEnergy() * 100L, 2.5, FuelGrade.HIGH);
-		registerCalculatedFuel(BLOODGAS, KEROSENE.getTrait(FT_Flammable.class).getHeatEnergy() * 0.8, 2.5, FuelGrade.AERO); //0.8
+		registerCalculatedFuel(BLOODGAS, KEROSENE.getTrait(FT_Flammable.class).getHeatEnergy() * 80L, 2.5, FuelGrade.AERO); //0.8
 		registerCalculatedFuel(HEAVYOIL_VACUUM, (baseline / 0.4 * flammabilityLow * demandLow * complexityVacuum), 1.25D, FuelGrade.LOW);
 		registerCalculatedFuel(REFORMATE, (baseline / 0.25 * flammabilityNormal * demandHigh * complexityVacuum), 2.5D, FuelGrade.HIGH);
 		registerCalculatedFuel(LIGHTOIL_VACUUM, (baseline / 0.20 * flammabilityNormal * demandHigh * complexityVacuum), 1.5D, FuelGrade.MEDIUM);

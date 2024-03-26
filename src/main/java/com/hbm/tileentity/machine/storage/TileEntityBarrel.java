@@ -2,8 +2,8 @@ package com.hbm.tileentity.machine.storage;
 
 import api.hbm.fluid.*;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.effect.EntityCloudFleija;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.explosion.vanillant.ExplosionVNT;
@@ -450,9 +450,9 @@ public class TileEntityBarrel extends TileEntityMachineBase implements IFluidAcc
 	    				bf.antimatter();
 	    	    		bf.setPosition(xCoord, yCoord, zCoord);
 	    				bf.destructionRange = (int) amat;
-	    				worldObj.spawnEntityInWorld(bf);
-	    				worldObj.spawnEntityInWorld(EntityNukeCloudSmall.statFacAnti(worldObj, xCoord, yCoord, zCoord, amat * 1.5F, 1000));
-	    				return;
+						worldObj.spawnEntityInWorld(bf);
+						EntityNukeTorex.statFacAnti(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, amat * 1.5F);
+						return;
 	    			}
 	    			else
 	    			{

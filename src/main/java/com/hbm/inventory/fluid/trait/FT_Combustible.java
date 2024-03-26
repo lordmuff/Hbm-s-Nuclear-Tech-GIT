@@ -13,9 +13,7 @@ public class FT_Combustible extends FluidTrait {
 	
 	protected FuelGrade fuelGrade;
 	protected long combustionEnergy;
-	
-	public FT_Combustible() { }
-	
+
 	public FT_Combustible(FuelGrade grade, long energy) {
 		this.fuelGrade = grade;
 		this.combustionEnergy = energy;

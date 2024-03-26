@@ -64,7 +64,6 @@ public class WorldProviderNTM extends WorldProviderSurface {
 			float f5 = (f3 - f4) / f2 * 0.5F + 0.5F;
 			float f6 = 1.0F - (1.0F - MathHelper.sin(f5 * (float) Math.PI)) * 0.99F;
 			f6 *= f6;
-			System.out.println(colorsSunriseSunset);
 			return this.colorsSunriseSunset;
 		} else {
 			return null;

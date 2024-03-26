@@ -46,13 +46,6 @@ public class BlockSellafieldOre extends Block implements IBlockMultiPass {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-		if(RenderBlockMultipass.currentPass == 1) return this.blockIcon;
-		return icons[0];
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
 	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
 		if(RenderBlockMultipass.currentPass == 1) return 0xffffff;
 		return super.colorMultiplier(world, x, y, z);

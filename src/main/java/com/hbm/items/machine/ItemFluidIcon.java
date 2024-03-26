@@ -42,7 +42,7 @@ public class ItemFluidIcon extends Item {
 			if(getQuantity(stack) > 0) list.add(getQuantity(stack) + "mB");
 			if(getPressure(stack) > 0) list.add(EnumChatFormatting.RED + "" + getPressure(stack) + "PU");
 		}
-		
+
 		Fluids.fromID(stack.getItemDamage()).addInfo(list);
 	}
 

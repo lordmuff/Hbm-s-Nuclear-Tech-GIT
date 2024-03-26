@@ -36,7 +36,7 @@ public class ItemMissile extends ItemCustomLore {
 		this.fuelCap = fuelCap;
 		return this;
 	}
-	
+
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean bool) {
 		list.add(EnumChatFormatting.ITALIC + this.tier.display);
@@ -86,7 +86,7 @@ public class ItemMissile extends ItemCustomLore {
 		KEROSENE_PEROXIDE(EnumChatFormatting.BLUE + "Kerosene / Hydrogen Peroxide", 8_000),
 		KEROSENE_LOXY(EnumChatFormatting.LIGHT_PURPLE + "Kerosene / Liquid Oxygen", 12_000),
 		JETFUEL_LOXY(EnumChatFormatting.RED + "Jet Fuel / Liquid Oxygen", 16_000);
-		
+
 		public String display;
 		public int defaultCap;
 

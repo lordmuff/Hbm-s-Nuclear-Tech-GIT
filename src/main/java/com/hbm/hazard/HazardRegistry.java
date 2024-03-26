@@ -299,16 +299,16 @@ public class HazardRegistry {
 		HazardSystem.register(rod_zirnox_les_fuel_depleted, makeData().addEntry(RADIATION, wst * rod_dual * 15F).addEntry(BLINDING, 20F));
 		HazardSystem.register(rod_zirnox_tritium, makeData(RADIATION, 0.001F * rod_dual));
 		HazardSystem.register(rod_zirnox_zfb_mox_depleted, makeData(RADIATION, wst * rod_dual * 5F));
-		HazardSystem.register(rod_zirnox_pu_mix_depleted, makeData(RADIATION, wst * rod_dual * 11F).addEntry(NEUTRON,purg * billet));
+		HazardSystem.register(rod_zirnox_pu_mix_depleted, makeData(RADIATION, wst * rod_dual * 11F));
 		HazardSystem.register(rod_zirnox_pu241_depleted, makeData(RADIATION, wst * rod_dual * 13F));
 		HazardSystem.register(rod_zirnox_amrg_depleted, makeData(RADIATION, wst * rod_dual * 15F));
 		HazardSystem.register(rod_zirnox_amf_depleted, makeData(RADIATION, wst * rod_dual * 12F));
-		HazardSystem.register(rod_zirnox_cmrg_depleted, makeData(RADIATION, wst * rod_dual * 17F).addEntry(NEUTRON,cmrg * billet));
-		HazardSystem.register(rod_zirnox_cmf_depleted, makeData(RADIATION, wst * rod_dual * 15F).addEntry(NEUTRON,cmf * billet));
-		HazardSystem.register(rod_zirnox_cf251_depleted, makeData(RADIATION, wst * rod_dual * 22F).addEntry(NEUTRON,cf251 * billet));
-		HazardSystem.register(rod_zirnox_cf252_depleted, makeData(RADIATION, wst * rod_dual * 25F).addEntry(NEUTRON,cf252 * billet));
+		HazardSystem.register(rod_zirnox_cmrg_depleted, makeData(RADIATION, wst * rod_dual * 17F));
+		HazardSystem.register(rod_zirnox_cmf_depleted, makeData(RADIATION, wst * rod_dual * 15F));
+		HazardSystem.register(rod_zirnox_cf251_depleted, makeData(RADIATION, wst * rod_dual * 22F));
+		HazardSystem.register(rod_zirnox_cf252_depleted, makeData(RADIATION, wst * rod_dual * 25F));
 		HazardSystem.register(rod_zirnox_bk247_depleted, makeData(RADIATION, wst * rod_dual * 26F));
-		HazardSystem.register(rod_zirnox_es253_depleted, makeData(RADIATION, wst * rod_dual * 29F).addEntry(NEUTRON,es253 * billet));
+		HazardSystem.register(rod_zirnox_es253_depleted, makeData(RADIATION, wst * rod_dual * 29F));
 
 
 		registerOtherWaste(waste_natural_uranium, wst * billet * 11.5F);
@@ -331,12 +331,6 @@ public class HazardRegistry {
 		registerOtherWaste(waste_bk247, wst * 26F);
 		registerOtherWaste(waste_es253, wst * 29F);
 
-		HazardSystem.register(waste_pu_mix, makeData(NEUTRON,wst * purg));
-		HazardSystem.register(waste_cmrg, makeData(NEUTRON,wst * cmrg));
-		HazardSystem.register(waste_cmf, makeData(NEUTRON,wst * cmf));
-		HazardSystem.register(waste_cf251, makeData(NEUTRON,wst * cf251));
-		HazardSystem.register(waste_cf252, makeData(NEUTRON,wst * cf252));
-		HazardSystem.register(waste_es253, makeData(NEUTRON,wst * es253));
 
 		registerOtherFuel(pellet_schrabidium, sa326 * ingot * 5, wst * ingot * 100, true);
 		registerOtherFuel(pellet_hes, saf * ingot * 5, wst * ingot * 75, true);

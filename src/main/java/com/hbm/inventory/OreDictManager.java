@@ -146,11 +146,27 @@ public class OreDictManager {
 	public static final DictFrame SRN = new DictFrame("Schraranium");
 	public static final DictFrame GH336 = new DictFrame("Ghiorsium336", "Gh336");
 	public static final DictFrame MUD = new DictFrame("WatzMud");
+	public static final DictFrame CM242 = new DictFrame ("Curium242", "Cm242");
+	public static final DictFrame CM243 = new DictFrame ("Curium243", "Cm243");
+	public static final DictFrame CM244 = new DictFrame ("Curium244", "Cm244");
+	public static final DictFrame CM245 = new DictFrame ("Curium245", "Cm245");
+	public static final DictFrame CM246 = new DictFrame ("Curium246", "Cm246");
+	public static final DictFrame CM247 = new DictFrame ("Curium247", "Cm247");
+	public static final DictFrame CMRG = new DictFrame ("CuriumRG");
+	public static final DictFrame CMF = new DictFrame ("CuriumFuel");
+	public static final DictFrame BK247 = new DictFrame ("Berkelium247", "Bk247");
+	public static final DictFrame CF251 = new DictFrame ("Californium251", "Cf251");
+	public static final DictFrame CF252 = new DictFrame ("Californium252", "Cf252");
+	public static final DictFrame ES253 = new DictFrame ("Einsteinium253", "Es253");
+	public static final DictFrame ES255 = new DictFrame ("Einsteinium255", "Es255");
+	public static final DictFrame AMF = new DictFrame("AmericiumFuel");
 	/*
 	 * STABLE
 	 */
 	/** TITANIUM */ 
 	public static final DictFrame TI = new DictFrame("Titanium");
+	/** NICKEL */
+	public static final DictFrame NI = new DictFrame("Nickel");
 	/** COPPER */ 
 	public static final DictFrame CU = new DictFrame("Copper");
 	public static final DictFrame MINGRADE = new DictFrame("Mingrade");
@@ -160,6 +176,7 @@ public class OreDictManager {
 	/** ALUMINUM */ 
 	public static final DictFrame AL = new DictFrame("Aluminum");
 	public static final DictFrame STEEL = new DictFrame("Steel");
+	public static final DictFrame STAINLESS = new DictFrame("StainlessSteel");
 	/** TECHNETIUM STEEL */ 
 	public static final DictFrame TCALLOY = new DictFrame("TcAlloy");
 	/** CADMIUM STEEL */
@@ -201,6 +218,12 @@ public class OreDictManager {
 	public static final DictFrame FIBER = new DictFrame("Fiberglass");
 	public static final DictFrame ASBESTOS = new DictFrame("Asbestos");
 	public static final DictFrame OSMIRIDIUM = new DictFrame("Osmiridium");
+	public static final DictFrame IRIDIUM = new DictFrame("Iridium");
+	public static final DictFrame ZI = new DictFrame("Zinc");
+	public static final DictFrame GALLIUM = new DictFrame("Gallium");
+	public static final DictFrame GAAS = new DictFrame("GalliumArsenide");
+	public static final DictFrame PLATNIUM = new DictFrame("Platnium"); //ah shit forgot this was in the mod
+
 	/*
 	 * DUST AND GEM ORES
 	 */

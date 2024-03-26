@@ -4,8 +4,6 @@ import com.hbm.blocks.BlockDummyable;
 import java.util.Random;
 import java.util.logging.Level;
 
-import org.apache.logging.log4j.Level;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.interfaces.IBomb;

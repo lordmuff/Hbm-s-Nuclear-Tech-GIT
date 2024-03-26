@@ -13,8 +13,9 @@ import com.hbm.inventory.fluid.trait.FluidTraitSimple.*;
 import net.minecraft.world.World;
 
 public abstract class FluidTrait {
-	
+
 	public static List<Class<? extends FluidTrait>> traitList = new ArrayList();
+	public static HashBiMap<String, Class<? extends FluidTrait>> traitNameMap = HashBiMap.create();
 	
 	static {
 		//complex traits with values
