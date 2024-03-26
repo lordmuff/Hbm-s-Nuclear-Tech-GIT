@@ -428,7 +428,12 @@ public class Fluids {
         HTcO4 =					new FluidType("HTcO4",				0x675454, 1, 3, 0, EnumSymbol.RADIATION).addTraits(LIQUID, new FT_Corrosive(10), new FT_VentRadiation(0.5F));
 		BLOODGAS =				new FluidType("BLOODGAS",		    0x591000, 3, 1, 1, EnumSymbol.NONE).addContainers(new CD_Canister(0x591000)).addTraits(new FT_Flammable(1_000_000), new FT_Combustible(FuelGrade.AERO, 2_500_000)).addTraits(LIQUID);
 		MINSOL =				new FluidType("MINSOL",				0xFADF6A, 3, 0, 3, EnumSymbol.ACID).addTraits(new FT_Corrosive(10), LIQUID);
-        LEADBISMUTHEUT =				new FluidType("LEADBISMUTHEUT",		0xCCCCFF, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID).setTemp(300);
+		AMMONIA =				new FluidType("AMMONIA",			0x00A0F7, 2, 0, 1, EnumSymbol.ASPHYXIANT).addTraits(new FT_Poison(true, 4), GASEOUS);
+		HYDRAZINE =				new FluidType("HYDRAZINE",			0x31517D, 2, 3, 2, EnumSymbol.NONE).addContainers(0x31517D, ExtContainer.CANISTER).addTraits((new FT_Flammable(500_000)), new FT_Combustible(FuelGrade.HIGH, 1_250_000), new FT_Corrosive(30), LIQUID);
+		HCL =					new FluidType("HCL",				0x00D452, 3, 0, 3, EnumSymbol.ACID).addTraits(new FT_Corrosive(30), LIQUID);
+		AIR =					new FluidType("AIR",				0xD1CEBE, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
+
+		LEADBISMUTHEUT =				new FluidType("LEADBISMUTHEUT",		0xCCCCFF, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID).setTemp(300);
         LEADBISMUTHEUT_HOT =				new FluidType("LEADBISMUTHEUT_HOT",		0xCCCCFF, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID).setTemp(3000);
 
         // ^ ^ ^ ^ ^ ^ ^ ^
@@ -618,6 +623,10 @@ public class Fluids {
 		metaOrder.add(LEADBISMUTHEUT_HOT);
 		metaOrder.add(BLOODGAS);
 		metaOrder.add(MINSOL);
+		metaOrder.add(AMMONIA);
+		metaOrder.add(HYDRAZINE);
+		metaOrder.add(AIR);
+		metaOrder.add(HCL);
 
 		for(FluidType custom : customFluids) metaOrder.add(custom);
 
