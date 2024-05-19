@@ -12,6 +12,8 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.handler.radiation.ChunkRadiationManager;
+import com.hbm.items.ModItems;
+import com.hbm.util.ContaminationUtil;
 import com.hbm.util.I18nUtil;
 
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -48,8 +50,8 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 
 	private String texture = "";
 	private ResourceLocation overlay = null;
-	public List<PotionEffect> effects = new ArrayList();
-	public HashMap<String, Float> resistance = new HashMap();
+	public List<PotionEffect> effects = new ArrayList<PotionEffect>();
+	public HashMap<String, Float> resistance = new HashMap<String, Float>();
 	public float blastProtection = -1;
 	public float projectileProtection = -1;
 	public float damageCap = -1;
@@ -474,46 +476,6 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 				} catch(Exception x) {
 				}
 			}
-			/*
-			if(dashCount > 0) {
-				
-				int perDash = 60;
-				
-				HbmPlayerProps props = (HbmPlayerProps) player.getExtendedProperties("NTM_EXT_PLAYER");
-				
-				props.setDashCount(dashCount);
-				
-				int stamina = props.getStamina();
-
-				if(props.getDashCooldown() <= 0) {
-					
-					if(!player.capabilities.isFlying && player.isSneaking() && stamina >= perDash) {
-						
-						Vec3 lookingIn = player.getLookVec();
-						lookingIn.yCoord = 0;
-						lookingIn.normalize();
-						player.addVelocity(lookingIn.xCoord, 0, lookingIn.zCoord);
-						player.playSound("hbm:player.dash", 1.0F, 1.0F);
-						
-						props.setDashCooldown(HbmPlayerProps.dashCooldownLength);
-						stamina -= perDash;
-					}
-				} else {	
-					props.setDashCooldown(props.getDashCooldown() - 1);
-				}
-				
-				if(stamina < props.getDashCount() * perDash) {
-					stamina++;
-					
-					if(stamina % perDash == perDash-1) {
-						
-						player.playSound("hbm:player.dashRecharge", 1.0F, (1.0F + ((1F/12F)*(stamina/perDash))));
-						stamina++;
-					}
-				}
-				
-				props.setStamina(stamina);
-			}	*/
 		}
 	}
 
@@ -572,34 +534,34 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 		if(this.armorType != 1)
 			return;
 
-		if(!this.hasFSBArmor(entity) || !this.geigerSound)
+		if(!hasFSBArmor(entity) || !this.geigerSound)
+			return;
+
+		if(entity.inventory.hasItem(ModItems.geiger_counter) || entity.inventory.hasItem(ModItems.dosimeter))
 			return;
 
 		if(world.getTotalWorldTime() % 5 == 0) {
-			
-			float x = HbmLivingProps.getRadBuf((EntityLivingBase)entity);
+
+			// Armor piece dosimeters indicate radiation dosage inside the armor, so reduce the counts by the effective protection
+			float mod = ContaminationUtil.calculateRadiationMod(entity);
+			float x = HbmLivingProps.getRadBuf(entity) * mod;
 			
 			if(x > 1E-5) {
-	
-				if(x > 0) {
-					List<Integer> list = new ArrayList<Integer>();
-	
-					if(x < 1) list.add(0);
-					if(x < 5) list.add(0);
-					if(x < 10) list.add(1);
-					if(x > 5 && x < 15) list.add(2);
-					if(x > 10 && x < 20) list.add(3);
-					if(x > 15 && x < 25) list.add(4);
-					if(x > 20 && x < 30) list.add(5);
-					if(x > 25) list.add(6);
-	
-					int r = list.get(world.rand.nextInt(list.size()));
-	
-					if(r > 0)
-						world.playSoundAtEntity(entity, "hbm:item.geiger" + r, 1.0F, 1.0F);
-				} else if(world.rand.nextInt(50) == 0) {
-					world.playSoundAtEntity(entity, "hbm:item.geiger" + (1 + world.rand.nextInt(1)), 1.0F, 1.0F);
-				}
+				List<Integer> list = new ArrayList<Integer>();
+
+				if(x < 1) list.add(0);
+				if(x < 5) list.add(0);
+				if(x < 10) list.add(1);
+				if(x > 5 && x < 15) list.add(2);
+				if(x > 10 && x < 20) list.add(3);
+				if(x > 15 && x < 25) list.add(4);
+				if(x > 20 && x < 30) list.add(5);
+				if(x > 25) list.add(6);
+
+				int r = list.get(world.rand.nextInt(list.size()));
+
+				if(r > 0)
+					world.playSoundAtEntity(entity, "hbm:item.geiger" + r, 1.0F, 1.0F);
 			}
 		}
 	}
@@ -645,7 +607,7 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
-	private HashSet<EnumPlayerPart> hidden = new HashSet();
+	private HashSet<EnumPlayerPart> hidden = new HashSet<EnumPlayerPart>();
 	private boolean needsFullSet = false;
 	
 	public ArmorFSB hides(EnumPlayerPart... parts) {

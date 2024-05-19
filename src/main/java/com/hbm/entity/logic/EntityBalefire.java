@@ -72,24 +72,24 @@ public class EntityBalefire extends EntityExplosionChunkloading  {
     @Override
 	public void onUpdate() {
         super.onUpdate();
-        	
+
         if(!this.did)
         {
     		if(GeneralConfig.enableExtendedLogging && !worldObj.isRemote)
     			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized BF explosion at " + posX + " / " + posY + " / " + posZ + " with strength " + destructionRange + "!");
-    		
+
         	exp = new ExplosionBalefire((int)this.posX, (int)this.posY, (int)this.posZ, this.worldObj, this.destructionRange, this.antimatter);
-        	
+
         	this.did = true;
         }
-        
+
         speed += 1;	//increase speed to keep up with expansion
-        
+
         boolean flag = false;
         for(int i = 0; i < this.speed; i++)
         {
         	flag = exp.update();
-        	
+
         	if(flag) {
 				clearChunkLoader();
         		this.setDead();
@@ -100,46 +100,46 @@ public class EntityBalefire extends EntityExplosionChunkloading  {
 		}
     	if(!mute && rand.nextInt(5) == 0)
         	this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.explode", 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
-        	
+
         if(!flag) {
-        	
+
         	if(!mute)
         		this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "ambient.weather.thunder", 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
-        	
+
         	ExplosionNukeGeneric.dealDamage(this.worldObj, this.posX, this.posY, this.posZ, this.destructionRange * 2);
         }
-        
+
         age++;
     }
 
 	private void radiate(float rads, double range) {
-		
+
 		List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(posX, posY, posZ, posX, posY, posZ).expand(range, range, range));
-		
+
 		for(EntityLivingBase e : entities) {
-			
+
 			Vec3 vec = Vec3.createVectorHelper(e.posX - posX, (e.posY + e.getEyeHeight()) - posY, e.posZ - posZ);
 			double len = vec.lengthVector();
 			vec = vec.normalize();
-			
+
 			float res = 0;
-			
+
 			for(int i = 1; i < len; i++) {
 
 				int ix = (int)Math.floor(posX + vec.xCoord * i);
 				int iy = (int)Math.floor(posY + vec.yCoord * i);
 				int iz = (int)Math.floor(posZ + vec.zCoord * i);
-				
+
 				res += worldObj.getBlock(ix, iy, iz).getExplosionResistance(null);
 			}
-			
+
 			if(res < 1)
 				res = 1;
-			
+
 			float eRads = rads;
 			eRads /= (float)res;
 			eRads /= (float)(len * len);
-			
+
 			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
 			if(eRads>=500)
 			{
@@ -154,12 +154,12 @@ public class EntityBalefire extends EntityExplosionChunkloading  {
 			}
 		}
 	}
-  
+
 	public EntityBalefire mute() {
 		this.mute = true;
 		return this;
 	}
-	
+
 	public EntityBalefire antimatter() {
 		this.antimatter = true;
 		return this;

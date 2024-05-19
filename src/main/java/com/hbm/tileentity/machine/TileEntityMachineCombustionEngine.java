@@ -7,7 +7,6 @@ import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.fluid.trait.FT_Combustible;
-import com.hbm.inventory.fluid.trait.FT_Polluting;
 import com.hbm.inventory.fluid.trait.FluidTrait.FluidReleaseType;
 import com.hbm.inventory.gui.GUICombustionEngine;
 import com.hbm.items.ModItems;
@@ -20,7 +19,7 @@ import com.hbm.tileentity.TileEntityMachinePolluting;
 import com.hbm.util.EnumUtil;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
-import api.hbm.energy.IEnergyGenerator;
+import api.hbm.energymk2.IEnergyProviderMK2;
 import api.hbm.fluid.IFluidStandardTransceiver;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -33,7 +32,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityMachineCombustionEngine extends TileEntityMachinePolluting implements IEnergyGenerator, IFluidStandardTransceiver, IControlReceiver, IGUIProvider {
+public class TileEntityMachineCombustionEngine extends TileEntityMachinePolluting implements IEnergyProviderMK2, IFluidStandardTransceiver, IControlReceiver, IGUIProvider {
 	
 	public boolean isOn = false;
 	public static long maxPower = 2_500_000;
@@ -52,7 +51,7 @@ public class TileEntityMachineCombustionEngine extends TileEntityMachinePollutin
 
 	public TileEntityMachineCombustionEngine() {
 		super(5, 50);
-		this.tank = new FluidTank(Fluids.DIESEL, 24_000, 0);
+		this.tank = new FluidTank(Fluids.DIESEL, 24_000);
 	}
 
 	@Override
@@ -87,7 +86,7 @@ public class TileEntityMachineCombustionEngine extends TileEntityMachinePollutin
 					fill -= toBurn;
 
 					if(worldObj.getTotalWorldTime() % 5 == 0 && toBurn > 0) {
-						FT_Polluting.pollute(worldObj, xCoord, yCoord, zCoord, tank.getTankType(), FluidReleaseType.BURN, toBurn * 5);
+						super.pollute(tank.getTankType(), FluidReleaseType.BURN, toBurn * 0.5F);
 					}
 					
 					if(toBurn > 0) {
@@ -105,7 +104,7 @@ public class TileEntityMachineCombustionEngine extends TileEntityMachinePollutin
 			this.power = Library.chargeItemsFromTE(slots, 3, power, power);
 			
 			for(DirPos pos : getConPos()) {
-				this.sendPower(worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
+				this.tryProvide(worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 				this.trySubscribe(tank.getTankType(), worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 				this.sendSmoke(pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 			}

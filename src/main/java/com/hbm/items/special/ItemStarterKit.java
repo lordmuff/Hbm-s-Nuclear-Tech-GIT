@@ -8,7 +8,7 @@ import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBattery;
 import com.hbm.items.machine.ItemBreedingRod.BreedingRodType;
-import com.hbm.lib.Library;
+import com.hbm.util.ShadyUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -217,7 +217,6 @@ public class ItemStarterKit extends Item {
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.screwdriver, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_excavator, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_diesel, 2));
-			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_selenium, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.red_cable, 64));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.red_wire_coated, 16));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.red_pylon, 8));
@@ -484,7 +483,7 @@ public class ItemStarterKit extends Item {
 		
 		if(this == ModItems.letter && world.isRemote)
 		{
-			if(player.getUniqueID().toString().equals(Library.a20)) {
+			if(player.getUniqueID().toString().equals(ShadyUtil.a20)) {
 				player.addChatMessage(new ChatComponentText("Error: null reference @ com.hbm.items.ItemStarterKit.class, please report this to the modder!"));
 			} else {
 				player.addChatMessage(new ChatComponentText("You rip the letter in half; nothing happens."));

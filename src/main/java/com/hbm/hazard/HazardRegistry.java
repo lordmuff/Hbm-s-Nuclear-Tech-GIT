@@ -27,6 +27,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+@SuppressWarnings("unused") //shut the fuck up
 public class HazardRegistry {
 
 	//CO60		             5a		β−	030.00Rad/s	Spicy
@@ -52,7 +53,7 @@ public class HazardRegistry {
 	//PU241		            14a		β−	025.00Rad/s	Spicy
 	//		           432a		α	008.50Rad/s
 	//AM242		           141a		β−	009.50Rad/s
-	
+
 	//from newguy: if the neutron system is a bit convoluted for you (or i'm just retarded), basically just assign the radiation value here as usual, then in OreDictManager add ".neutron(HazardRegistry.yourmaterial/number you want to divide by", which will take the radiation value assigned here and divide it by the number you put there
 
 	//simplified groups for ReC compat
@@ -105,7 +106,7 @@ public class HazardRegistry {
 	public static final float cm243 = 5.6F; //fissile
 	public static final float cm244 = 2.0F; //fertile
 	public static final float cm245 = 0.8F; //fissile
-	public static final float cm246 = 2.5F; //fertile 
+	public static final float cm246 = 2.5F; //fertile
 	public static final float cm247 = 0.2F; //fissile
 	public static final float cmrg = 6.0F; //reactor-grade curium
 	public static final float cmf = 2.2F; //curium fuel
@@ -175,7 +176,7 @@ public class HazardRegistry {
 	public static final HazardTypeBase EXPLOSIVE = new HazardTypeExplosive();
 	public static final HazardTypeBase AUTISM = new HazardTypeAutism();
 	public static final HazardTypeBase GLITCH = new HazardTypeGlitch();
-	
+
 	public static void registerItems() {
 
 		//mayo zone!!!
@@ -189,11 +190,11 @@ public class HazardRegistry {
 		HazardSystem.register(Items.pumpkin_pie, makeData(EXPLOSIVE, 1F));
 		
 		HazardSystem.register(new ItemStack(Item.getItemFromBlock(ModBlocks.bobblehead), 1, 22), makeData(ASBESTOS, 1F)); //this works okay
-		
-		HazardSystem.register(new ItemStack(Item.getItemFromBlock(ModBlocks.bobblehead), 1, 25), makeData(GLITCH, 1F)); 
-		
+
+		HazardSystem.register(new ItemStack(Item.getItemFromBlock(ModBlocks.bobblehead), 1, 25), makeData(GLITCH, 1F));
+
 		HazardSystem.register(ModItems.ammonium_nitrate, makeData(EXPLOSIVE, 4F));
-		
+
 		HazardSystem.register(ball_dynamite, makeData(EXPLOSIVE, 2F));
 		HazardSystem.register(stick_dynamite, makeData(EXPLOSIVE, 1F));
 		HazardSystem.register(stick_tnt, makeData(EXPLOSIVE, 1.5F));
@@ -201,11 +202,11 @@ public class HazardRegistry {
 		HazardSystem.register(stick_c4, makeData(EXPLOSIVE, 2.5F));
 
 		HazardSystem.register(ModItems.sat_gerald, makeData(AUTISM, 1F));
-		
-		
+
+
 		HazardSystem.register(ModItems.powder_wd2004, makeData(DIGAMMA, 1F));
 		HazardSystem.register(ModItems.powder_wd2004_tiny, makeData(DIGAMMA, 0.05F));
-		
+
 		HazardSystem.register(cordite, makeData(EXPLOSIVE, 2F));
 		HazardSystem.register(ballistite, makeData(EXPLOSIVE, 1F));
 
@@ -331,16 +332,6 @@ public class HazardRegistry {
 		registerOtherWaste(waste_bk247, wst * 26F);
 		registerOtherWaste(waste_es253, wst * 29F);
 
-
-		registerOtherFuel(pellet_schrabidium, sa326 * ingot * 5, wst * ingot * 100, true);
-		registerOtherFuel(pellet_hes, saf * ingot * 5, wst * ingot * 75, true);
-		registerOtherFuel(pellet_mes, saf * ingot * 5, wst * ingot * 50, true);
-		registerOtherFuel(pellet_les, saf * ingot * 5, wst * ingot * 20, false);
-		registerOtherFuel(pellet_beryllium, 0F, 10F, false);
-		registerOtherFuel(pellet_neptunium, np237 * ingot * 5, wst * ingot * 10, false);
-		registerOtherFuel(pellet_lead, 0F, 15F, false);
-		registerOtherFuel(pellet_advanced, 0F, 20F, false);
-		
 		registerOtherFuel(plate_fuel_u233, u233 * ingot, wst * ingot * 13F, false);
 		registerOtherFuel(plate_fuel_u235, u235 * ingot, wst * ingot * 10F, false);
 		registerOtherFuel(plate_fuel_mox, mox * ingot, wst * ingot * 16F, false);
@@ -393,7 +384,7 @@ public class HazardRegistry {
 		HazardSystem.register(billet_americium_fuel, makeData(RADIATION, amf * billet));
 		HazardSystem.register(ingot_americium_fuel, makeData(RADIATION, amf * ingot));
 		
-		
+
 		HazardSystem.register(nugget_schrabidium_fuel, makeData().addEntry(RADIATION, saf * nugget).addEntry(BLINDING, 5F * nugget));
 		HazardSystem.register(billet_schrabidium_fuel, makeData().addEntry(RADIATION, saf * billet).addEntry(BLINDING, 5F * billet));
 		HazardSystem.register(ingot_schrabidium_fuel, makeData().addEntry(RADIATION, saf * ingot).addEntry(BLINDING, 5F * ingot));
@@ -429,7 +420,7 @@ public class HazardRegistry {
 		HazardSystem.register(pile_rod_pu239, makeData(RADIATION, !GeneralConfig.enable528 ? purg * billet + pu239 * billet + u * billet : purg * billet + pu239 * billet + wst * billet));
 		HazardSystem.register(pile_rod_plutonium, makeData().addEntry(RADIATION, !GeneralConfig.enable528 ? purg * billet * 2 + u * billet : purg * billet * 2 + wst * billet));
 		HazardSystem.register(pile_rod_source, makeData().addEntry(RADIATION, rabe * billet * 3));
-		
+
 		
 		registerBreedingRodRadiation(BreedingRodType.TRITIUM, 0.001F);
 		registerBreedingRodRadiation(BreedingRodType.CO60, co60);
@@ -481,8 +472,8 @@ public class HazardRegistry {
 		registerRBMKRod(rbmk_fuel_lecm, cmrg * 2.2F * rod_rbmk / 5F, wst * rod_rbmk);
 		registerRBMKRod(rbmk_fuel_mecm, cmrg * 2.2F * rod_rbmk / 3F, wst * rod_rbmk * 3F);
 		registerRBMKRod(rbmk_fuel_hecm, cmrg * 2.2F * rod_rbmk /1.5F, wst * rod_rbmk * 5F);
-		
-		
+
+
 		registerRBMKPellet(rbmk_pellet_ueu, u * billet, wst * billet * 20F);
 		registerRBMKPellet(rbmk_pellet_meu, uf * billet, wst * billet * 21.5F);
 		registerRBMKPellet(rbmk_pellet_heu233, u233 * billet, wst * billet * 31F);
@@ -518,7 +509,7 @@ public class HazardRegistry {
 		registerRBMKPellet(rbmk_pellet_lecm, cmrg * billet, wst * cf252 * 2.5F);
 		registerRBMKPellet(rbmk_pellet_mecm, cmrg * billet, wst * cf252 * 2.6F);
 		registerRBMKPellet(rbmk_pellet_hecm, cmrg * billet, wst * cf252 * 2.7F);
-		
+
 		HazardSystem.register(DictFrame.fromOne(ModItems.watz_pellet, EnumWatzType.SCHRABIDIUM), makeData(RADIATION, sa326 * ingot * 4));
 		HazardSystem.register(DictFrame.fromOne(ModItems.watz_pellet, EnumWatzType.HES), makeData(RADIATION, saf * ingot * 4));
 		HazardSystem.register(DictFrame.fromOne(ModItems.watz_pellet, EnumWatzType.MES), makeData(RADIATION, saf * ingot * 4));

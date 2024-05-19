@@ -1,10 +1,14 @@
 ## Changed
-* Glyphid hive treasures, hive bone piles and bottlecap stashes now have configurable item pools
-* Adjusted glyphid hive treasures, there's now more variety
-* Launch code pieces can now be found in the "expensive" loot pool with low chance
-* Removed Brandon
+* Updated russian localization
+* Nerfed conventional explosives (dynamite, TNT, semtex, C4) in order to not outclass small nukes
+* Plastic explosive blocks no longer drop and blocks
+* Sellafite diamond ore now shreds into diamond gravel
+* ICF vessel blocks now use half as much fullerite as before
+* ICF capacitor and turbocharger blocks are now quite a bit cheaper
+* Nerfed MEP, it only outputs 75% the heat it used to per outgoing flux and its self-ignition rate has been reduced from 20 flux to 2.5
 
 ## Fixed
-* Fixed satellite item pool not being registered, resulting in satellites only delivering things from the backup pool
-* Fixed drill bits not correctly setting the tier when customizing a bedrock ore
-* Fixed debugging display showing glyphid damage still being in the game
+* Fixed missing localization for meteorite ores and the new crucible materials
+* Removed the starmetal crystallization recipe, despite starmetal ore no longer existing
+* Fixed the ICF structure block detection being incorrect, omitting some parts
+* Fixed armor mods adding health showing only half as much as they actually do

@@ -13,6 +13,7 @@ import com.hbm.tileentity.TileEntityLoadedBase;
 
 import api.hbm.energy.IEnergyUser;
 import api.hbm.fluid.IFluidStandardReceiver;
+import api.hbm.energymk2.IEnergyReceiverMK2;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -36,8 +37,9 @@ import net.minecraft.util.IntHashMap;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityMachineTeleporter extends TileEntityLoadedBase implements IEnergyUser, IFluidStandardReceiver, INBTPacketReceiver {
+public class TileEntityMachineTeleporter extends TileEntityLoadedBase implements IEnergyReceiverMK2, INBTPacketReceiver {
 
 	public long power = 0;
 	public int targetX = -1;
@@ -52,16 +54,15 @@ public class TileEntityMachineTeleporter extends TileEntityLoadedBase implements
 
 	public TileEntityMachineTeleporter() {
 		tank = new FluidTank(Fluids.NMASS, 16000);
-		
+
 	}
 
 	@Override
 	public void updateEntity() {
 		
 		if(!this.worldObj.isRemote) {
-			this.updateStandardConnections(worldObj, xCoord, yCoord, zCoord);
-			this.subscribeToAllAround(tank.getTankType(), this);
-
+			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) this.trySubscribe(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir);
+			
 			if(this.targetY != -1) {
 				List<Entity> entities = this.worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(this.xCoord + 0.25, this.yCoord, this.zCoord + 0.25, this.xCoord + 0.75, this.yCoord + 2, this.zCoord + 0.75));
 				
@@ -144,7 +145,7 @@ public class TileEntityMachineTeleporter extends TileEntityLoadedBase implements
 			
 		} else {
 			
-			
+
 			if(entity.dimension == this.targetDim) {
 				entity.setPositionAndRotation(this.targetX + 0.5D, this.targetY + 1.5D + entity.getYOffset(), this.targetZ + 0.5D, entity.rotationYaw, entity.rotationPitch);
 				
@@ -173,7 +174,7 @@ public class TileEntityMachineTeleporter extends TileEntityLoadedBase implements
 			int amountToBurn = Math.min(1000, this.tank.getFill());
 			if(amountToBurn > 0) {
 				this.tank.setFill(this.tank.getFill() - amountToBurn);
-			}	
+			}
 		}
 		this.markDirty();
 	}

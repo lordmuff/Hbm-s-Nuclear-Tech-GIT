@@ -18,7 +18,7 @@ import com.hbm.util.BobMathUtil;
 import com.hbm.util.CompatEnergyControl;
 import com.hbm.util.I18nUtil;
 
-import api.hbm.energy.IEnergyUser;
+import api.hbm.energymk2.IEnergyReceiverMK2;
 import api.hbm.tile.IInfoProviderEC;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -31,8 +31,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityMachineCentrifuge extends TileEntityMachineBase implements IEnergyUser, IGUIProvider, IUpgradeInfoProvider, IInfoProviderEC {
+public class TileEntityMachineCentrifuge extends TileEntityMachineBase implements IEnergyReceiverMK2, IGUIProvider, IUpgradeInfoProvider, IInfoProviderEC {
 	
 	public int progress;
 	public long power;
@@ -155,8 +156,8 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	public void updateEntity() {
 
 		if(!worldObj.isRemote) {
-			
-			this.updateStandardConnections(worldObj, xCoord, yCoord, zCoord);
+
+			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) this.trySubscribe(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir);
 
 			power = Library.chargeTEFromItems(slots, 1, power, maxPower);
 			
@@ -329,7 +330,7 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	public void provideInfo(UpgradeType type, int level, List<String> info, boolean extendedInfo) {
 		info.add(IUpgradeInfoProvider.getStandardLabel(ModBlocks.machine_centrifuge));
 		if(type == UpgradeType.SPEED) {
-			info.add(EnumChatFormatting.GREEN + I18nUtil.resolveKey(this.KEY_DELAY, "-" + (level * 100) + "%"));
+			info.add(EnumChatFormatting.GREEN + I18nUtil.resolveKey(this.KEY_DELAY, "-" + (100 - 100 / (level + 1)) + "%"));
 			info.add(EnumChatFormatting.RED + I18nUtil.resolveKey(this.KEY_CONSUMPTION, "+" + (level * 100) + "%"));
 		}
 		if(type == UpgradeType.POWER) {

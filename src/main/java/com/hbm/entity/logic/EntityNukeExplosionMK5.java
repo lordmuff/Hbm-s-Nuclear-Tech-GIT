@@ -37,9 +37,7 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 	//How many rays are calculated per tick
 	public int speed;
 	public int length;
-	
-	public boolean mute = false;
-	
+
 	public boolean fallout = true;
 	public boolean salted = false;
 	private int falloutAdd = 0;
@@ -75,13 +73,7 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 		if(!worldObj.isRemote && fallout && explosion != null && this.ticksExisted < 10) {
 			radiate(2_500_000F / (this.ticksExisted * 5 + 1), this.length * 2);
 		}
-		
-		if(!mute) {
-			this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "ambient.weather.thunder", 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
-			if(rand.nextInt(5) == 0)
-				this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.explode", 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
-		}
-		
+
 		ExplosionNukeGeneric.dealDamage(this.worldObj, this.posX, this.posY, this.posZ, this.length * 2);
 		
 		if(explosion == null) {
@@ -150,7 +142,7 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 
 	@Override
 	protected void entityInit() { }
-	
+
 	public static HashMap<ATEntry2, Long> at = new HashMap();
 
 	@Override
@@ -178,35 +170,35 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 		mk5.speed = (int)Math.ceil(100000 / mk5.strength);
 		mk5.setPosition(x, y, z);
 		mk5.length = mk5.strength / 2;
-		
+
 		Iterator<Entry<ATEntry2, Long>> it = at.entrySet().iterator();
-		
+
 		while(it.hasNext()) {
-			
+
 			Entry<ATEntry2, Long> next = it.next();
 			if(next.getValue() < world.getTotalWorldTime()) {
 				it.remove();
 				continue;
 			}
-			
+
 			ATEntry2 entry = next.getKey();
 			if(entry.dim != world.provider.dimensionId)  continue;
-			
+
 			Vec3 vec = Vec3.createVectorHelper(x - entry.x, y - entry.y, z - entry.z);
-			
+
 			if(vec.lengthVector() < 300) {
 				mk5.setDead();
 
 				/* just to make sure */
 				if(!world.isRemote) {
-					
+
 					for(int i = 0; i < 2; i++) {
 						double ix = i == 0 ? x : (entry.x + 0.5);
 						double iy = i == 0 ? y : (entry.y + 0.5);
 						double iz = i == 0 ? z : (entry.z + 0.5);
-						
+
 						world.playSoundEffect(ix, iy, iz, "hbm:entity.ufoBlast", 15.0F, 0.7F + world.rand.nextFloat() * 0.2F);
-						
+
 						NBTTagCompound data = new NBTTagCompound();
 						data.setString("type", "plasmablast");
 						data.setFloat("r", 0.0F);
@@ -216,21 +208,21 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 						PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, ix, iy, iz), new TargetPoint(entry.dim, ix, iy, iz, 150));
 					}
 				}
-				
+
 				break;
 			}
 		}
-		
+
 		return mk5;
 	}
 
-	
+
 	public static class ATEntry2 {
 		public int dim;
 		public int x;
 		public int y;
 		public int z;
-		
+
 		public ATEntry2(int dim, int x, int y, int z) {
 			this.dim = dim;
 			this.x = x;
@@ -270,30 +262,25 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 		}
 	}
 
-		
-	
-	
+
+
+
 	public static EntityNukeExplosionMK5 statFacNoRad(World world, int r, double x, double y, double z) {
 		
 		EntityNukeExplosionMK5 mk5 = statFac(world, r, x, y ,z);
 		mk5.fallout = false;
 		return mk5;
 	}
-	
+
 	public static EntityNukeExplosionMK5 statFacSalted(World world, int r, double x, double y, double z) {
-		
+
 		EntityNukeExplosionMK5 mk5 = statFac(world, r, x, y ,z);
 		mk5.salted = true;
 		return mk5;
 	}
-	
+
 	public EntityNukeExplosionMK5 moreFallout(int fallout) {
 		falloutAdd = fallout;
-		return this;
-	}
-	
-	public EntityNukeExplosionMK5 mute() {
-		this.mute = true;
 		return this;
 	}
 }

@@ -1,10 +1,7 @@
 package com.hbm.main;
 
 import java.lang.reflect.Field;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -57,10 +54,8 @@ import com.hbm.items.food.ItemConserve.EnumFoodType;
 import com.hbm.items.tool.ItemGuideBook.BookType;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.lib.HbmCollection;
-import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
-import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PermaSyncPacket;
 import com.hbm.packet.PlayerInformPacket;
@@ -75,14 +70,15 @@ import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorUtil;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.EnchantmentUtil;
-import com.hbm.util.EntityDamageUtil;
 import com.hbm.util.EnumUtil;
 import com.hbm.util.InventoryUtil;
 import com.hbm.util.ParticleUtil;
+import com.hbm.util.ShadyUtil;
 import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.world.generator.TimedGenerator;
 
 import cpw.mods.fml.common.eventhandler.Event.Result;
+import api.hbm.energymk2.Nodespace;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
@@ -90,7 +86,6 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockIce;
@@ -206,7 +201,7 @@ public class ModEventHandler {
 		
 		EntityPlayer player = event.player;
 		
-		if((player.getUniqueID().toString().equals(Library.Dr_Nostalgia) || player.getDisplayName().equals("Dr_Nostalgia")) && !player.worldObj.isRemote) {
+		if((player.getUniqueID().toString().equals(ShadyUtil.Dr_Nostalgia) || player.getDisplayName().equals("Dr_Nostalgia")) && !player.worldObj.isRemote) {
 			
 			if(!player.inventory.hasItem(ModItems.hat))
 				player.inventory.addItemStackToInventory(new ItemStack(ModItems.hat));
@@ -215,7 +210,7 @@ public class ModEventHandler {
 				player.inventory.addItemStackToInventory(new ItemStack(ModItems.beta));
 		}
 	}
-	
+
 
 	@SubscribeEvent
 	public void onEntityConstructing(EntityEvent.EntityConstructing event) {
@@ -305,7 +300,7 @@ public class ModEventHandler {
 			event.entity.worldObj.spawnEntityInWorld(foeq);
 		}
 		
-		if(event.entity.getUniqueID().toString().equals(Library.HbMinecraft) || event.entity.getCommandSenderName().equals("HbMinecraft")) {
+		if(event.entity.getUniqueID().toString().equals(ShadyUtil.HbMinecraft) || event.entity.getCommandSenderName().equals("HbMinecraft")) {
 			event.entity.dropItem(ModItems.book_of_, 1);
 		}
 		
@@ -343,35 +338,17 @@ public class ModEventHandler {
 				if(event.entityLiving instanceof EntityCyberCrab && event.entityLiving.getRNG().nextInt(500) == 0) {
 					event.entityLiving.dropItem(ModItems.wd40, 1);
 				}
-				
+
 				if(event.entityLiving instanceof EntityVillager&& event.entityLiving.getRNG().nextInt(1) == 0) {
 					event.entityLiving.dropItem(ModItems.flesh, 5);
 			}
 		}
 	}
 }
-	
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onEntityDeathLast(LivingDeathEvent event) {
-		
-		EntityLivingBase entity = event.entityLiving;
-		
-		if(EntityDamageUtil.wasAttackedByV1(event.source)) {
 
-			NBTTagCompound vdat = new NBTTagCompound();
-			vdat.setString("type", "giblets");
-			vdat.setInteger("ent", entity.getEntityId());
-			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(vdat, entity.posX, entity.posY + entity.height * 0.5, entity.posZ), new TargetPoint(entity.dimension, entity.posX, entity.posY + entity.height * 0.5, entity.posZ, 150));
-			
-			entity.worldObj.playSoundEffect(entity.posX, entity.posY, entity.posZ, "mob.zombie.woodbreak", 2.0F, 0.95F + entity.worldObj.rand.nextFloat() * 0.2F);
-			
-			EntityPlayer attacker = (EntityPlayer) ((EntityDamageSource)event.source).getEntity();
-			
-			if(attacker.getDistanceSqToEntity(entity) < 100) {
-				attacker.heal(entity.getMaxHealth() * 0.25F);
-			}
-		}
-		
 		if(event.entityLiving instanceof EntityPlayer) {
 			
 			EntityPlayer player = (EntityPlayer) event.entityLiving;
@@ -566,12 +543,24 @@ public class ModEventHandler {
 		BobmazonOfferFactory.init();
 	}
 	
+	public static boolean didSit = false;
+	public static Field reference = null;
+
 	@SubscribeEvent
 	public void worldTick(WorldTickEvent event) {
 		
 		/// RADIATION STUFF START ///
 		if(event.world != null && !event.world.isRemote) {
 			
+			if(reference != null) {
+				for(Object player : event.world.playerEntities) {
+					if(((EntityPlayer) player).ridingEntity != null) { didSit = true; }
+				}
+				if(didSit && event.world.getTotalWorldTime() % (1 * 20 * 20) == 0) {
+					try { reference.setFloat(null, (float) (rand.nextGaussian() * 0.1 + Math.PI)); } catch(Throwable e) { }
+				}
+			}
+
 			int thunder = AuxSavedData.getThunder(event.world);
 			
 			if(thunder > 0)
@@ -699,7 +688,7 @@ public class ModEventHandler {
 				        	if(entity instanceof EntityPlayer)
 				        		((EntityPlayer)entity).triggerAchievement(MainRegistry.achRadPoison);
 						}
-						
+
 			        	if(entity instanceof EntityPlayer)
 			        	{
 			        		EntityPlayer player = (EntityPlayer) entity;
@@ -712,8 +701,8 @@ public class ModEventHandler {
 									float activation = stack2.stackTagCompound.getFloat("ntmNeutron");
 									if(activation<1e-5)
 										stack2.stackTagCompound.removeTag("ntmNeutron");
-									stack2.stackTagCompound.setFloat("ntmNeutron",activation*0.999916f);		
-								}	
+									stack2.stackTagCompound.setFloat("ntmNeutron",activation*0.999916f);
+								}
 							}
 			        	}
 					}
@@ -787,24 +776,7 @@ public class ModEventHandler {
 		
 		if(HbmLivingProps.getContagion(e) > 0 && event.ammount < 100)
 			event.ammount *= 2F;
-		
-		/// V1 ///
-		if(EntityDamageUtil.wasAttackedByV1(event.source)) {
-			EntityPlayer attacker = (EntityPlayer) ((EntityDamageSource)event.source).getEntity();
-			
-			NBTTagCompound data = new NBTTagCompound();
-			data.setString("type", "vanillaburst");
-			data.setInteger("count", (int)Math.min(e.getMaxHealth() / 2F, 250));
-			data.setDouble("motion", 0.1D);
-			data.setString("mode", "blockdust");
-			data.setInteger("block", Block.getIdFromBlock(Blocks.redstone_block));
-			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, e.posX, e.posY + e.height * 0.5, e.posZ), new TargetPoint(e.dimension, e.posX, e.posY, e.posZ, 50));
-			
-			if(attacker.getDistanceSqToEntity(e) < 25) {
-				attacker.heal(event.ammount * 0.5F);
-			}
-		}
-		
+
 		/// ARMOR MODS ///
 		for(int i = 1; i < 5; i++) {
 			
@@ -915,9 +887,8 @@ public class ModEventHandler {
 			
 			if(player.getCurrentArmor(2) == null && !player.onGround) {
 				
-				boolean isBob = player.getUniqueID().toString().equals(Library.HbMinecraft) || player.getDisplayName().equals("HbMinecraft");
-				boolean isOther = player.getUniqueID().toString().equals(Library.SolsticeUnlimitd) || player.getDisplayName().equals("SolsticeUnlimitd") ||
-						player.getUniqueID().toString().equals(Library.the_NCR) || player.getDisplayName().equals("the_NCR");
+				boolean isBob = player.getUniqueID().toString().equals(ShadyUtil.HbMinecraft) || player.getDisplayName().equals("HbMinecraft");
+				boolean isOther = player.getUniqueID().toString().equals(ShadyUtil.the_NCR) || player.getDisplayName().equals("the_NCR");
 				
 				if(isBob || isOther) {
 					
@@ -1004,14 +975,14 @@ public class ModEventHandler {
 	}
 	@SubscribeEvent
 	public void onEntityTick(LivingUpdateEvent event) {
-		//because fuck you and your scrubs 
+		//because fuck you and your scrubs
 		//eventually i will condesne this to one eventhandler just give me a minute
 		Entity e = event.entityLiving;
 		if(e.worldObj.isRemote) return;
 		if(((EntityLivingBase) e).isPotionActive(HbmPotion.slippery.id) && e instanceof EntityLiving) {
 			EntityLiving ent = (EntityLiving) e;
 		    if (ent.onGround) {
-		        double slipperiness = 0.6; 
+		        double slipperiness = 0.6;
 		        double inertia = 0.1;
 		        boolean isMoving = ent.moveForward != 0.0 || ent.moveStrafing != 0.0;
 		        double entMotion = Math.sqrt(ent.motionX * ent.motionX + ent.motionZ * ent.motionZ);
@@ -1026,7 +997,7 @@ public class ModEventHandler {
 
 		        ent.motionX += diffX * inertia; //god weeps
 		        ent.motionZ += diffZ * inertia;
-		        
+
 		        if (!isMoving) {
 		            ent.motionX *= (1.0 - 0.1);
 
@@ -1038,14 +1009,14 @@ public class ModEventHandler {
 		    }
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		
 		EntityPlayer player = event.player;
 		if(player.isPotionActive(HbmPotion.slippery.id) && !player.capabilities.isFlying) {
 		    if (player.onGround) {
-		        double slipperiness = 0.6; 
+		        double slipperiness = 0.6;
 		        double inertia = 0.1;
 		        boolean isMoving = player.moveForward != 0.0 || player.moveStrafing != 0.0;
 		        double playerMotion = Math.sqrt(player.motionX * player.motionX + player.motionZ * player.motionZ);
@@ -1060,7 +1031,7 @@ public class ModEventHandler {
 
 		        player.motionX += diffX * inertia; //god weeps
 		        player.motionZ += diffZ * inertia;
-		        
+
 		        if (!isMoving) {
 		            player.motionX *= (1.0 - 0.1);
 
@@ -1123,7 +1094,7 @@ public class ModEventHandler {
 
 			/// PU RADIATION START ///
 			
-			if(player.getUniqueID().toString().equals(Library.Pu_238)) {
+			if(player.getUniqueID().toString().equals(ShadyUtil.Pu_238)) {
 				
 				List<EntityLivingBase> entities = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.boundingBox.expand(3, 3, 3));
 				
@@ -1141,7 +1112,7 @@ public class ModEventHandler {
 				//if (!(Library.checkForHazmat((EntityPlayer)player) || Library.checkForRads((EntityPlayer)player)))
 				//{
 				Random rand = new Random();
-				
+
 				if (Library.checkInventory(player, Items.experience_bottle, slot))
 				{
 					((EntityPlayer)player).inventory.mainInventory[slot] = new ItemStack(Items.glass_bottle);
@@ -1184,7 +1155,7 @@ public class ModEventHandler {
 		//TODO: rewrite this so it doesn't look like shit
 		if(player.worldObj.isRemote && event.phase == event.phase.START && !player.isInvisible() && !player.isSneaking()) {
 			
-			if(player.getUniqueID().toString().equals(Library.HbMinecraft)) {
+			if(player.getUniqueID().toString().equals(ShadyUtil.HbMinecraft)) {
 				
 				int i = player.ticksExisted * 3;
 				
@@ -1199,7 +1170,7 @@ public class ModEventHandler {
 				}
 			}
 			
-			if(player.getUniqueID().toString().equals(Library.Pu_238)) {
+			if(player.getUniqueID().toString().equals(ShadyUtil.Pu_238)) {
 				
 				Vec3 vec = Vec3.createVectorHelper(3 * rand.nextDouble(), 0, 0);
 				
@@ -1209,12 +1180,12 @@ public class ModEventHandler {
 				player.worldObj.spawnParticle("townaura", player.posX + vec.xCoord, player.posY + 1 + vec.yCoord, player.posZ + vec.zCoord, 0.0, 0.0, 0.0);
 			}
 			if(player.getUniqueID().toString().equals(Library.DUODEC_)) {
-				
+
 				Vec3 vec = Vec3.createVectorHelper(3 * rand.nextDouble(), 0, 0);
-				
+
 				vec.rotateAroundZ((float) (rand.nextDouble() * Math.PI));
 				vec.rotateAroundY((float) (rand.nextDouble() * Math.PI * 2));
-				
+
 				//player.worldObj.spawnParticle("magicCrit", player.posX + vec.xCoord, player.posY + 1 + vec.yCoord, player.posZ + vec.zCoord, 0.0, 0.0, 0.0);
 				ParticleUtil.spawnTuneFlame(player.worldObj, player.posX + vec.xCoord, player.posY + 1 + vec.yCoord, player.posZ + vec.zCoord);
 				ParticleUtil.spawnJesusFlame(player.worldObj, player.posX + vec.xCoord, player.posY + 1 + vec.yCoord, player.posZ + vec.zCoord);
@@ -1230,6 +1201,7 @@ public class ModEventHandler {
 			RTTYSystem.updateBroadcastQueue();
 			RequestNetwork.updateEntries();
 			TileEntityMachineRadarNT.updateSystem();
+			Nodespace.updateNodespace();
 		}
 	}
 	
@@ -1334,7 +1306,7 @@ public class ModEventHandler {
 	}
 	
 	private static final String hash = "cce6b36fbaa6ec2327c1af5cbcadc4e2d340738ab9328c459365838e79d12e5e";
-	
+
 	private static final String lol = "popbobisgod";
 	
 	@SubscribeEvent
@@ -1349,8 +1321,7 @@ public class ModEventHandler {
 			
 			TileEntitySign sign = (TileEntitySign)world.getTileEntity(x, y, z);
 			
-			String result = smoosh(sign.signText[0], sign.signText[1], sign.signText[2], sign.signText[3]);
-			System.out.println(result);
+			String result = ShadyUtil.smoosh(sign.signText[0], sign.signText[1], sign.signText[2], sign.signText[3]);
 			
 			if(hash.contains(result)) {
 				world.func_147480_a(x, y, z, false);
@@ -1360,9 +1331,9 @@ public class ModEventHandler {
 				MainRegistry.logger.log(Level.FATAL, "THE HIDDENCAT HAS BEEN OBTAINED " + " x: " + x + " / "	+ " y: " + + y + " / "+ "z: " + + z + " by " + event.entityPlayer.getDisplayName() + "!");
 
 			}
-		}		
+		}
 	}
-	
+
     @SubscribeEvent
     public void onEntityHeal(LivingHealEvent event)
     {
@@ -1383,7 +1354,7 @@ public class ModEventHandler {
                 double rad = HbmLivingProps.getRadiation(entity);
                 if (rad > 100 && rad < 800) ///TODO get per entity
                 {
-                	amount *=1-(((rad-100)*(1-0))/(800-100))+0;                	
+                	amount *=1-(((rad-100)*(1-0))/(800-100))+0;
                 }
                 if (rad > 800) ///TODO get per entity
                 {
@@ -1394,29 +1365,29 @@ public class ModEventHandler {
         }
     }
 
-	
+
 	@SubscribeEvent
 	public void onPull(PlayerInteractEvent event) {
 		int x = event.x;
 		int y = event.y;
 		int z = event.z;
 		World world = event.world;
-		
+
 		if(!world.isRemote && event.action == Action.RIGHT_CLICK_BLOCK && world.getBlock(x, y, z) == Blocks.lever && GeneralConfig.enableExtendedLogging == true) {
-			
+
 			EntityPlayer player = event.entityPlayer;
 			BlockLever sign = (BlockLever)world.getBlock(x, y, z);
-			
+
 
 			MainRegistry.logger.log(Level.INFO, "[DET] pulled lever at " + x + " / " + y + " / " + z + " by " + player.getDisplayName() + "!");
-			
+
 			//System.out.println(result);
-		
+
 			}
 		}
-	
-	
-		
+
+
+
 	
 	private String smoosh(String s1, String s2, String s3, String s4) {
 		
@@ -1487,31 +1458,31 @@ public class ModEventHandler {
 		
 		//let's start from the back:
 		
-		//this part means that the message's first character has to equal a '!': --------------------------+
-		//                                                                                                 |
-		//this is a logical AND operator: --------------------------------------------------------------+  |
-		//                                                                                              |  |
-		//this is a reference to a field in                                                             |  |
-		//Library.java containing a reference UUID: ---------------------------------------+            |  |
-		//                                                                                 |            |  |
-		//this will compare said UUID with                                                 |            |  |
-		//the string representation of the                                                 |            |  |
-		//current player's UUID: -----------+                                              |            |  |
-		//                                  |                                              |            |  |
-		//another AND operator: ---------+  |                                              |            |  |
-		//                               |  |                                              |            |  |
-		//this is a reference to a       |  |                                              |            |  |
-		//boolean called                 |  |                                              |            |  |
-		//'enableDebugMode' which is     |  |                                              |            |  |
-		//only set once by the mod's     |  |                                              |            |  |
-		//config and is disabled by      |  |                                              |            |  |
-		//default. "debug" is not a      |  |                                              |            |  |
-		//substring of the message, nor  |  |                                              |            |  |
-		//something that can be toggled  |  |                                              |            |  |
-		//in any other way except for    |  |                                              |            |  |
-		//the config file: |             |  |                                              |            |  |
-		//                 V             V  V                                              V            V  V
-		if(GeneralConfig.enableDebugMode && player.getUniqueID().toString().equals(Library.HbMinecraft) && message.startsWith("!")) {
+		//this part means that the message's first character has to equal a '!': ----------------------------+
+		//                                                                                                   |
+		//this is a logical AND operator: ----------------------------------------------------------------+  |
+		//                                                                                                |  |
+		//this is a reference to a field in                                                               |  |
+		//Library.java containing a reference UUID: -----------------------------------------+            |  |
+		//                                                                                   |            |  |
+		//this will compare said UUID with                                                   |            |  |
+		//the string representation of the                                                   |            |  |
+		//current player's UUID: -----------+                                                |            |  |
+		//                                  |                                                |            |  |
+		//another AND operator: ---------+  |                                                |            |  |
+		//                               |  |                                                |            |  |
+		//this is a reference to a       |  |                                                |            |  |
+		//boolean called                 |  |                                                |            |  |
+		//'enableDebugMode' which is     |  |                                                |            |  |
+		//only set once by the mod's     |  |                                                |            |  |
+		//config and is disabled by      |  |                                                |            |  |
+		//default. "debug" is not a      |  |                                                |            |  |
+		//substring of the message, nor  |  |                                                |            |  |
+		//something that can be toggled  |  |                                                |            |  |
+		//in any other way except for    |  |                                                |            |  |
+		//the config file: |             |  |                                                |            |  |
+		//                 V             V  V                                                V            V  V
+		if(GeneralConfig.enableDebugMode && player.getUniqueID().toString().equals(ShadyUtil.HbMinecraft) && message.startsWith("!")) {
 			
 			String[] msg = message.split(" ");
 			
