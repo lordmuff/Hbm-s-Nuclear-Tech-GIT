@@ -383,7 +383,54 @@ public class HazardRegistry {
 		HazardSystem.register(nugget_americium_fuel, makeData(RADIATION, amf * nugget));
 		HazardSystem.register(billet_americium_fuel, makeData(RADIATION, amf * billet));
 		HazardSystem.register(ingot_americium_fuel, makeData(RADIATION, amf * ingot));
-		
+
+		HazardSystem.register(nugget_cm_fuel, makeData(RADIATION, cmf * nugget));
+		HazardSystem.register(billet_cm_fuel, makeData(RADIATION, cmf * billet));
+		HazardSystem.register(ingot_cm_fuel, makeData(RADIATION, cmf * ingot));
+
+		HazardSystem.register(nugget_cm242, makeData(RADIATION, cm242 * nugget));
+		HazardSystem.register(billet_cm242, makeData(RADIATION, cm242 * billet));
+		HazardSystem.register(ingot_cm242, makeData(RADIATION, cm242 * ingot));
+
+		HazardSystem.register(nugget_cm243, makeData(RADIATION, cm243 * nugget));
+		HazardSystem.register(billet_cm243, makeData(RADIATION, cm243 * billet));
+		HazardSystem.register(ingot_cm243, makeData(RADIATION, cm243 * ingot));
+
+		HazardSystem.register(nugget_cm245, makeData(RADIATION, cm245 * nugget));
+		HazardSystem.register(billet_cm245, makeData(RADIATION, cm245 * billet));
+		HazardSystem.register(ingot_cm245, makeData(RADIATION, cm245 * ingot));
+
+		HazardSystem.register(nugget_cm244, makeData(RADIATION, cm244 * nugget));
+		HazardSystem.register(billet_cm244, makeData(RADIATION, cm244 * billet));
+		HazardSystem.register(ingot_cm244, makeData(RADIATION, cm244 * ingot));
+
+		HazardSystem.register(nugget_cm246, makeData(RADIATION, cm246 * nugget));
+		HazardSystem.register(billet_cm246, makeData(RADIATION, cm246 * billet));
+		HazardSystem.register(ingot_cm246, makeData(RADIATION, cm246 * ingot));
+
+		HazardSystem.register(nugget_cm247, makeData(RADIATION, cm247 * nugget));
+		HazardSystem.register(billet_cm247, makeData(RADIATION, cm247 * billet));
+		HazardSystem.register(ingot_cm247, makeData(RADIATION, cm247 * ingot));
+
+		HazardSystem.register(nugget_bk247, makeData(RADIATION, bk247 * nugget));
+		HazardSystem.register(billet_bk247, makeData(RADIATION, bk247 * billet));
+		HazardSystem.register(ingot_bk247, makeData(RADIATION, bk247 * ingot));
+
+		HazardSystem.register(nugget_cf251, makeData(RADIATION, cf251 * nugget));
+		HazardSystem.register(billet_cf251, makeData(RADIATION, cf251 * billet));
+		HazardSystem.register(ingot_cf251, makeData(RADIATION, cf251 * ingot));
+
+		HazardSystem.register(nugget_cf252, makeData(RADIATION, cf252 * nugget));
+		HazardSystem.register(billet_cf252, makeData(RADIATION, cf252 * billet));
+		HazardSystem.register(ingot_cf252, makeData(RADIATION, cf252 * ingot));
+
+		HazardSystem.register(nugget_cf252, makeData(RADIATION, cf252 * nugget));
+		HazardSystem.register(billet_cf252, makeData(RADIATION, cf252 * billet));
+		HazardSystem.register(ingot_cf252, makeData(RADIATION, cf252 * ingot));
+
+		HazardSystem.register(nugget_es253, makeData(RADIATION, es253 * nugget));
+		HazardSystem.register(billet_es253, makeData(RADIATION, es253 * billet));
+		HazardSystem.register(ingot_es253, makeData(RADIATION, es253 * ingot));
 
 		HazardSystem.register(nugget_schrabidium_fuel, makeData().addEntry(RADIATION, saf * nugget).addEntry(BLINDING, 5F * nugget));
 		HazardSystem.register(billet_schrabidium_fuel, makeData().addEntry(RADIATION, saf * billet).addEntry(BLINDING, 5F * billet));
@@ -578,7 +625,7 @@ public class HazardRegistry {
 		for(String ore : U.ores()) HazardSystem.blacklist(ore);
 
 
-		
+
 
 		/*
 		 * ReC compat
