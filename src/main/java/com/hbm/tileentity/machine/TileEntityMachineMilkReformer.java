@@ -21,7 +21,7 @@ import com.hbm.tileentity.IPersistentNBT;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
-import api.hbm.energy.IEnergyUser;
+import api.hbm.energymk2.IEnergyHandlerMK2;
 import api.hbm.fluid.IFluidStandardTransceiver;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -34,7 +34,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 
-public class TileEntityMachineMilkReformer extends TileEntityMachineBase implements IPersistentNBT, IGUIProvider, IFluidStandardTransceiver, IEnergyUser {
+public class TileEntityMachineMilkReformer extends TileEntityMachineBase implements IPersistentNBT, IGUIProvider, IFluidStandardTransceiver, IEnergyHandlerMK2 {
 	public boolean isOn;
 
 	public FluidTank tanks[];
@@ -154,7 +154,6 @@ public class TileEntityMachineMilkReformer extends TileEntityMachineBase impleme
 	
 	private void updateConnections() {
 		for(DirPos pos : getConPos()) {
-			this.trySubscribe(worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 			this.trySubscribe(tanks[0].getTankType(), worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 		}
 	}

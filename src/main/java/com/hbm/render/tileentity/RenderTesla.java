@@ -2,12 +2,10 @@ package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.blocks.ModBlocks;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.util.BeamPronter;
 import com.hbm.render.util.BeamPronter.EnumBeamType;
 import com.hbm.render.util.BeamPronter.EnumWaveType;
-import com.hbm.tileentity.machine.TileEntityAABattery;
 import com.hbm.tileentity.machine.TileEntityTesla;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

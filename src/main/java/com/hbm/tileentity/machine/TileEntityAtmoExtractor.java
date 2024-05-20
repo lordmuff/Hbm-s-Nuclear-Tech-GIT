@@ -13,13 +13,13 @@ import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.TileEntityMachineBase;
 
-import api.hbm.energy.IEnergyUser;
+import api.hbm.energymk2.IEnergyHandlerMK2;
 import api.hbm.fluid.IFluidStandardSender;
 import api.hbm.fluid.IFluidStandardTransceiver;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IFluidSource, IEnergyUser, IFluidStandardSender {
+public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IFluidSource, IEnergyHandlerMK2, IFluidStandardSender {
 	float rotSpeed;
 	int consumption = 200;
 	public float rot;
@@ -40,34 +40,34 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IF
 
 	@Override
 	public void updateEntity() {
-		
+
 		if(!worldObj.isRemote) {
-			
+
 			this.updateConnections();
-			
+
 			if(hasPower() && !hasTooMuch() && tanks.getMaxFill() > tanks.getFill()) {
 				//int collect = Math.min(tanks.getMaxFill(), tanks.getFill()) / 50;
 				//collect = Math.min(collect, tanks.getMaxFill() - tanks.getFill());
-				
+
 				tanks.setFill(tanks.getFill() + 50);
 				power -= this.getMaxPower() / 100;
 				//tank.setFill(tank.getFill() - 1);
 				//this.power -= this.consumption;
-	
-		}
-		
-		this.sendFluidToAll(tanks, this);
-		fillFluidInit(tanks.getTankType());
 
-		NBTTagCompound data = new NBTTagCompound();
-		data.setLong("power", power);
-		tanks.writeToNBT(data, "water");
-		
-		this.networkPack(data, 50);
+			}
+
+			this.sendFluidToAll(tanks, this);
+			fillFluidInit(tanks.getTankType());
+
+			NBTTagCompound data = new NBTTagCompound();
+			data.setLong("power", power);
+			tanks.writeToNBT(data, "water");
+
+			this.networkPack(data, 50);
 		} else {
-			
+
 			float maxSpeed = 30F;
-			
+
 			if(hasPower()) {
 				rotSpeed += 0.1;
 				//ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
@@ -78,7 +78,7 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IF
 				//worldObj.spawnParticle("cloud", x + 0.0D + dir.offsetX - 0, yCoord + 5.5D, z + 0.0D + dir.offsetZ - 0, 0,-0.2, 0);
 				rotSpeed += 0.1;
 				// 1.20
-				//+ 0.70 
+				//+ 0.70
 				if(rotSpeed > maxSpeed)
 					rotSpeed = maxSpeed;
 
@@ -88,32 +88,32 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IF
 						rotSpeed = maxSpeed;
 				}
 			} else {
-				
+
 				rotSpeed -= 0.1;
-				
+
 				if(rotSpeed < 0)
 					rotSpeed = 0;
 			}
-			
+
 			prevRot = rot;
-			
+
 			rot += rotSpeed;
-			
+
 			if(rot >= 360) {
 				rot -= 360;
 				prevRot -= 360;
 			}
 		}
 	}
-	
+
 
 
 
 
 	protected void updateConnections() {
-		
+
 		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-			this.trySubscribe(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir);
+			this.trySubscribe(tanks.getTankType(), worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir);
 	}
 
 	public void networkUnpack(NBTTagCompound data) {
@@ -124,7 +124,7 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IF
 	public boolean hasPower() {
 		return power >= this.getMaxPower() / 100;
 	}
-	
+
 	public boolean hasTooMuch() {
 		return tanks.getFill() >= 50000;
 	}
@@ -155,12 +155,12 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IF
 	public void fillFluid(int x, int y, int z, boolean newTact, FluidType type) {
 		Library.transmitFluid(x, y, z, newTact, this, worldObj, type);
 	}
-	
+
 	@Override
 	public boolean getTact() {
 		return worldObj.getTotalWorldTime() % 20 < 10;
 	}
-	
+
 	@Override
 	public void setFluidFill(int i, FluidType type) {
 		if(type == tanks.getTankType())

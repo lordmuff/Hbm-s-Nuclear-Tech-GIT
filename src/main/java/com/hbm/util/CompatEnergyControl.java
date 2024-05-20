@@ -42,7 +42,7 @@ public class CompatEnergyControl {
 		return toDischarge;
 	}
 	
-	/** Returns the power and maxPower values for IEnergyUser */
+	/** Returns the power and maxPower values for IEnergyHandlerMK2 */
 	public static void getEnergyData(TileEntity tile, NBTTagCompound data) {
 		
 		data.setString(KEY_EUTYPE, "HE");

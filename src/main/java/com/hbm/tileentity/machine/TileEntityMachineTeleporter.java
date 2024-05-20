@@ -11,7 +11,7 @@ import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.tileentity.TileEntityLoadedBase;
 
-import api.hbm.energy.IEnergyUser;
+import api.hbm.energymk2.IEnergyHandlerMK2;
 import api.hbm.fluid.IFluidStandardReceiver;
 import api.hbm.energymk2.IEnergyReceiverMK2;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -263,13 +263,4 @@ public class TileEntityMachineTeleporter extends TileEntityLoadedBase implements
 		return maxPower;
 	}
 
-	@Override
-	public FluidTank[] getAllTanks() {
-		return new FluidTank[] {tank};
-	}
-
-	@Override
-	public FluidTank[] getReceivingTanks() {
-		return new FluidTank[] {tank};
-	}
 }

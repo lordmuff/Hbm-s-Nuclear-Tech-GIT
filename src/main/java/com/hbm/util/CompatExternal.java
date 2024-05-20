@@ -62,7 +62,7 @@ public class CompatExternal {
 	}
 	
 	/**
-	 * Returns the numeric value of the buffered energy held by that tile entity. Current implementation relies on IEnergyUser.
+	 * Returns the numeric value of the buffered energy held by that tile entity. Current implementation relies on IEnergyHandlerMK2.
 	 * @param tile
 	 * @return power
 	 */
@@ -76,7 +76,7 @@ public class CompatExternal {
 	}
 	
 	/**
-	 * Returns the numeric value of the energy capacity of this tile entity. Current implementation relies on IEnergyUser.
+	 * Returns the numeric value of the energy capacity of this tile entity. Current implementation relies on IEnergyHandlerMK2.
 	 * @param tile
 	 * @return max power
 	 */
