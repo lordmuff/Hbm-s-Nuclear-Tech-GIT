@@ -3,6 +3,7 @@ package com.hbm.crafting;
 import static com.hbm.inventory.OreDictManager.*;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBreedingRod.*;
+import com.hbm.items.machine.ItemCircuit.EnumCircuitType;
 import com.hbm.items.machine.ItemPWRFuel.EnumPWRFuel;
 import com.hbm.items.machine.ItemWatzPellet.EnumWatzType;
 import com.hbm.items.machine.ItemZirnoxRod.EnumZirnoxType;
@@ -121,8 +122,8 @@ public class RodRecipes {
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.pile_rod_source, 1), new Object[] { " U ", "PUP", " U ", 'P', IRON.plate(), 'U', ModItems.billet_ra226be });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.pile_rod_boron, 1), new Object[] { " B ", " W ", " B ", 'B', B.ingot(), 'W', KEY_PLANKS });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.pile_rod_lithium, 1), new Object[] { ModItems.cell_empty, LI.ingot() });
-		CraftingManager.addRecipeAuto(new ItemStack(ModItems.pile_rod_detector, 1), new Object[] { " B ", "CM ", " B ", 'B', B.ingot(), 'C', ModItems.circuit_aluminium, 'M', ModItems.motor });
-
+		CraftingManager.addRecipeAuto(new ItemStack(ModItems.pile_rod_detector, 1), new Object[] { " B ", "CM ", " B ", 'B', B.ingot(), 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.VACUUM_TUBE), 'M', ModItems.motor });
+		
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.rbmk_fuel_empty, 1), new Object[] { "ZRZ", "Z Z", "ZRZ", 'Z', ZR.ingot(), 'R', ModItems.rod_quad_empty });
 		addRBMKRod(U, ModItems.rbmk_fuel_ueu);
 		addRBMKRod(ModItems.billet_uranium_fuel, ModItems.rbmk_fuel_meu);
@@ -179,7 +180,7 @@ public class RodRecipes {
 		addPellet(CF252,							EnumWatzType.CF252);
 		addPellet(CF251,							EnumWatzType.CF251);
 		addPellet(ES253,							EnumWatzType.ES253);
-		
+
 		//PWR fuel
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.MEU), new Object[] { "F", "I", "F", 'F', ModItems.billet_uranium_fuel, 'I', ModItems.plate_polymer });
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.HEU233), new Object[] { "F", "I", "F", 'F', U233.billet(), 'I', ModItems.plate_polymer });
@@ -207,6 +208,8 @@ public class RodRecipes {
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.CF252), new Object[] { "F", "I", "F", 'F', ModItems.billet_cf252, 'I', ModItems.plate_polymer });
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.BK247), new Object[] { "F", "I", "F", 'F', ModItems.billet_bk247, 'I', ModItems.plate_polymer });
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.ES253), new Object[] { "F", "I", "F", 'F', ModItems.billet_es253, 'I', ModItems.plate_polymer });
+
+		CraftingManager.addRecipeAuto(new ItemStack(ModItems.icf_pellet_empty), new Object[] { "ZLZ", "L L", "ZLZ", 'Z', ZR.wireFine(), 'L', PB.wireFine() });
 	}
 
 	public static void registerInit() {

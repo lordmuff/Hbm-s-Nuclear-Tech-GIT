@@ -372,6 +372,7 @@ public class ModBlocks {
 	public static Block brick_compound_stairs;
 	public static Block brick_asbestos_stairs;
 	public static Block brick_fire_stairs;
+	public static Block asphalt_stairs;
 
 	public static Block cmb_brick;
 	public static Block cmb_brick_reinforced;
@@ -465,8 +466,6 @@ public class ModBlocks {
 	public static Block sand_uranium;
 	public static Block sand_polonium;
 	public static Block sand_quartz;
-	public static Block sand_gold;
-	public static Block sand_gold198;
 	public static Block ash_digamma;
 	public static Block glass_boron;
 	public static Block glass_lead;
@@ -1024,6 +1023,8 @@ public class ModBlocks {
 	public static Block machine_assembler;
 	public static Block machine_assemfac;
 	public static Block machine_arc_welder;
+	public static Block machine_soldering_station;
+	public static Block machine_arc_furnace;
 
 	public static Block machine_chemplant;
 	public static Block machine_chemfac;
@@ -1053,7 +1054,7 @@ public class ModBlocks {
 
 
 	public static Block machine_selenium;
-	
+
 	public static Block press_preheater;
 	public static Block machine_press;
 	public static Block machine_epress;
@@ -1581,8 +1582,8 @@ public class ModBlocks {
 		brick_ducrete = new BlockGeneric(Material.rock).setBlockName("brick_ducrete").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(750.0F).setBlockTextureName(RefStrings.MODID + ":brick_ducrete");
 		reinforced_ducrete = new BlockGeneric(Material.rock).setBlockName("reinforced_ducrete").setCreativeTab(MainRegistry.blockTab).setHardness(20.0F).setResistance(1000.0F).setBlockTextureName(RefStrings.MODID + ":reinforced_ducrete");
 
-		concrete_slab = new BlockMultiSlab(null, Material.rock, concrete_smooth, concrete, concrete_asbestos, ducrete_smooth, ducrete).setBlockName("concrete_slab").setCreativeTab(MainRegistry.blockTab);
-		concrete_double_slab = new BlockMultiSlab(concrete_slab, Material.rock, concrete_smooth, concrete, concrete_asbestos, ducrete_smooth, ducrete).setBlockName("concrete_double_slab").setCreativeTab(MainRegistry.blockTab);
+		concrete_slab = new BlockMultiSlab(null, Material.rock, concrete_smooth, concrete, concrete_asbestos, ducrete_smooth, ducrete, asphalt).setBlockName("concrete_slab").setCreativeTab(MainRegistry.blockTab);
+		concrete_double_slab = new BlockMultiSlab(concrete_slab, Material.rock, concrete_smooth, concrete, concrete_asbestos, ducrete_smooth, ducrete, asphalt).setBlockName("concrete_double_slab").setCreativeTab(MainRegistry.blockTab);
 		concrete_brick_slab = new BlockMultiSlab(null, Material.rock, brick_concrete, brick_concrete_mossy, brick_concrete_cracked, brick_concrete_broken, brick_ducrete).setBlockName("concrete_brick_slab").setCreativeTab(MainRegistry.blockTab);
 		concrete_brick_double_slab = new BlockMultiSlab(concrete_brick_slab, Material.rock, brick_concrete, brick_concrete_mossy, brick_concrete_cracked, brick_concrete_broken, brick_ducrete).setBlockName("concrete_brick_double_slab").setCreativeTab(MainRegistry.blockTab);
 		brick_slab = new BlockMultiSlab(null, Material.rock, reinforced_stone, reinforced_brick, brick_obsidian, brick_light, brick_compound, brick_asbestos, brick_fire).setBlockName("brick_slab").setCreativeTab(MainRegistry.blockTab);
@@ -1605,9 +1606,10 @@ public class ModBlocks {
 		brick_compound_stairs = new BlockGenericStairs(brick_compound, 0).setBlockName("brick_compound_stairs").setCreativeTab(MainRegistry.blockTab);
 		brick_asbestos_stairs = new BlockGenericStairs(brick_asbestos, 0).setBlockName("brick_asbestos_stairs").setCreativeTab(MainRegistry.blockTab);
 		brick_fire_stairs = new BlockGenericStairs(brick_fire, 0).setBlockName("brick_fire_stairs").setCreativeTab(MainRegistry.blockTab);
-		
+		asphalt_stairs = new BlockSpeedyStairs(asphalt, 0, 1.5).setBlockName("asphalt_stairs").setCreativeTab(MainRegistry.blockTab);
+
 		vinyl_tile = new BlockEnumMulti(Material.rock, TileType.class, true, true).setBlockName("vinyl_tile").setStepSound(Block.soundTypeGlass).setCreativeTab(MainRegistry.blockTab).setHardness(10.0F).setResistance(60.0F).setBlockTextureName(RefStrings.MODID + ":vinyl_tile");
-		
+
 		tile_lab = new BlockOutgas(Material.rock, false, 5, true).setBlockName("tile_lab").setStepSound(Block.soundTypeGlass).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(20.0F).setBlockTextureName(RefStrings.MODID + ":tile_lab");
 		tile_lab_cracked = new BlockOutgas(Material.rock, false, 5, true).setBlockName("tile_lab_cracked").setStepSound(Block.soundTypeGlass).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(20.0F).setBlockTextureName(RefStrings.MODID + ":tile_lab_cracked");
 		tile_lab_broken = new BlockOutgas(Material.rock, true, 5, true).setBlockName("tile_lab_broken").setStepSound(Block.soundTypeGlass).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(20.0F).setBlockTextureName(RefStrings.MODID + ":tile_lab_broken");
@@ -1694,8 +1696,6 @@ public class ModBlocks {
 		sand_uranium = new BlockFalling(Material.sand).setBlockName("sand_uranium").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.machineTab).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":sand_uranium");
 		sand_polonium = new BlockFalling(Material.sand).setBlockName("sand_polonium").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.machineTab).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":sand_polonium");
 		sand_quartz = new BlockFalling(Material.sand).setBlockName("sand_quartz").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.machineTab).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":sand_quartz");
-		sand_gold = new BlockGoldSand(Material.sand).setBlockName("sand_gold").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.machineTab).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":sand_gold");
-		sand_gold198 = new BlockGoldSand(Material.sand).setBlockName("sand_gold198").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.machineTab).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":sand_gold");
 		glass_boron = new BlockNTMGlassCT(0, RefStrings.MODID + ":glass_boron", Material.glass).setBlockName("glass_boron").setStepSound(Block.soundTypeGlass).setCreativeTab(MainRegistry.machineTab).setHardness(0.3F);
 		glass_lead = new BlockNTMGlassCT(0, RefStrings.MODID + ":glass_lead", Material.glass).setBlockName("glass_lead").setStepSound(Block.soundTypeGlass).setCreativeTab(MainRegistry.machineTab).setHardness(0.3F);
 		glass_uranium = new BlockNTMGlassCT(1, RefStrings.MODID + ":glass_uranium", Material.glass).setBlockName("glass_uranium").setLightLevel(5F/15F).setStepSound(Block.soundTypeGlass).setCreativeTab(MainRegistry.machineTab).setHardness(0.3F);
@@ -1899,9 +1899,9 @@ public class ModBlocks {
 		
 		machine_electric_furnace_off = new MachineElectricFurnace(false).setBlockName("machine_electric_furnace_off").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 		machine_electric_furnace_on = new MachineElectricFurnace(true).setBlockName("machine_electric_furnace_on").setHardness(5.0F).setLightLevel(1.0F).setResistance(10.0F);
-		machine_arc_furnace_off = new MachineArcFurnace(false).setBlockName("machine_arc_furnace_off").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+		machine_arc_furnace_off = new MachineArcFurnace(false).setBlockName("machine_arc_furnace_off").setHardness(5.0F).setResistance(10.0F);
 		machine_arc_furnace_on = new MachineArcFurnace(true).setBlockName("machine_arc_furnace_on").setHardness(5.0F).setLightLevel(1.0F).setResistance(10.0F);
-		machine_arc_furnace = new MachineArcFurnaceLarge().setBlockName("machine_arc_furnace").setHardness(5.0F).setLightLevel(1.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
+		machine_arc_furnace = new MachineArcFurnaceLarge().setBlockName("machine_arc_furnace").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		machine_microwave = new MachineMicrowave(Material.iron).setBlockName("machine_microwave").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":machine_microwave");
 
 		machine_battery_potato = new MachineBattery(Material.iron, 10_000).setBlockName("machine_battery_potato").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
@@ -2268,6 +2268,7 @@ public class ModBlocks {
 		machine_assembler = new MachineAssembler(Material.iron).setBlockName("machine_assembler").setHardness(5.0F).setResistance(30.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":machine_assembler");
 		machine_assemfac = new MachineAssemfac(Material.iron).setBlockName("machine_assemfac").setHardness(5.0F).setResistance(30.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		machine_arc_welder = new MachineArcWelder(Material.iron).setBlockName("machine_arc_welder").setHardness(5.0F).setResistance(30.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
+		machine_soldering_station = new MachineSolderingStation(Material.iron).setBlockName("machine_soldering_station").setHardness(5.0F).setResistance(30.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		machine_chemplant = new MachineChemplant(Material.iron).setBlockName("machine_chemplant").setHardness(5.0F).setResistance(30.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		machine_chemfac = new MachineChemfac(Material.iron).setBlockName("machine_chemfac").setHardness(5.0F).setResistance(30.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		machine_mixer = new MachineMixer(Material.iron).setBlockName("machine_mixer").setHardness(5.0F).setResistance(30.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
@@ -2289,7 +2290,7 @@ public class ModBlocks {
 
 		machine_boiler_off = new MachineBoiler(false).setBlockName("machine_boiler_off").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":machine_boiler_off");
 		machine_boiler_on = new MachineBoiler(true).setBlockName("machine_boiler_on").setHardness(5.0F).setResistance(10.0F).setLightLevel(1.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":machine_boiler_on");
-		machine_boiler_electric_off = new MachineBoiler(false).setBlockName("machine_boiler_electric_off").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":machine_boiler_electric_off");
+		machine_boiler_electric_off = new MachineBoiler(false).setBlockName("machine_boiler_electric_off").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":machine_boiler_electric_off");
 		machine_boiler_electric_on = new MachineBoiler(true).setBlockName("machine_boiler_electric_on").setHardness(5.0F).setResistance(10.0F).setLightLevel(1.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":machine_boiler_electric_on");
 		
 		machine_steam_engine = new MachineSteamEngine().setBlockName("machine_steam_engine").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
@@ -2796,7 +2797,8 @@ public class ModBlocks {
 		GameRegistry.registerBlock(brick_asbestos_stairs, brick_asbestos_stairs.getUnlocalizedName());
 		GameRegistry.registerBlock(brick_fire_stairs, brick_fire_stairs.getUnlocalizedName());
 		GameRegistry.registerBlock(ducrete_stairs, ducrete_stairs.getUnlocalizedName());
-		
+		GameRegistry.registerBlock(asphalt_stairs, asphalt_stairs.getUnlocalizedName());
+
 		//CMB Building Elements
 		GameRegistry.registerBlock(cmb_brick, ItemBlockBlastInfo.class, cmb_brick.getUnlocalizedName());
 		GameRegistry.registerBlock(cmb_brick_reinforced, ItemBlockBlastInfo.class, cmb_brick_reinforced.getUnlocalizedName());
@@ -3033,7 +3035,7 @@ public class ModBlocks {
 		GameRegistry.registerBlock(hev_battery, hev_battery.getUnlocalizedName());
 		
 		//Chainlink Fence
-		GameRegistry.registerBlock(fence_metal, fence_metal.getUnlocalizedName());
+		GameRegistry.registerBlock(fence_metal, ItemBlockBase.class, fence_metal.getUnlocalizedName());
 		
 		//Sands, Glass
 		GameRegistry.registerBlock(ash_digamma, ash_digamma.getUnlocalizedName());
@@ -3042,8 +3044,6 @@ public class ModBlocks {
 		GameRegistry.registerBlock(sand_uranium, sand_uranium.getUnlocalizedName());
 		GameRegistry.registerBlock(sand_polonium, sand_polonium.getUnlocalizedName());
 		GameRegistry.registerBlock(sand_quartz, sand_quartz.getUnlocalizedName());
-		GameRegistry.registerBlock(sand_gold, sand_gold.getUnlocalizedName());
-		GameRegistry.registerBlock(sand_gold198, sand_gold198.getUnlocalizedName());
 		GameRegistry.registerBlock(glass_boron, glass_boron.getUnlocalizedName());
 		GameRegistry.registerBlock(glass_lead, glass_lead.getUnlocalizedName());
 		GameRegistry.registerBlock(glass_uranium, glass_uranium.getUnlocalizedName());
@@ -3331,13 +3331,14 @@ public class ModBlocks {
 		GameRegistry.registerBlock(machine_electric_furnace_on, machine_electric_furnace_on.getUnlocalizedName());
 		GameRegistry.registerBlock(machine_arc_furnace_off, machine_arc_furnace_off.getUnlocalizedName());
 		GameRegistry.registerBlock(machine_arc_furnace_on, machine_arc_furnace_on.getUnlocalizedName());
-		register(machine_arc_furnace);
 		GameRegistry.registerBlock(machine_microwave, machine_microwave.getUnlocalizedName());
 		GameRegistry.registerBlock(machine_assembler, machine_assembler.getUnlocalizedName());
 		GameRegistry.registerBlock(machine_assemfac, machine_assemfac.getUnlocalizedName());
 		GameRegistry.registerBlock(machine_chemplant, machine_chemplant.getUnlocalizedName());
 		GameRegistry.registerBlock(machine_chemfac, machine_chemfac.getUnlocalizedName());
 		register(machine_arc_welder);
+		register(machine_soldering_station);
+		register(machine_arc_furnace);
 		register(machine_mixer);
 		register(machine_fluidtank);
 		register(machine_bat9000);

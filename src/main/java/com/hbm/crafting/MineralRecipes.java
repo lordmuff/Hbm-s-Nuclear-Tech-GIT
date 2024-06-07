@@ -67,6 +67,7 @@ public class MineralRecipes {
 			add1To9PairSameMeta(Item.getItemFromBlock(ModBlocks.block_coke), ModItems.coke, i);
 		}
 
+		addMineralSet(ModItems.nugget_niobium, ModItems.ingot_niobium, ModBlocks.block_niobium);
 		addMineralSet(ModItems.nugget_bismuth, ModItems.ingot_bismuth, ModBlocks.block_bismuth);
 		addMineralSet(ModItems.nugget_tantalium, ModItems.ingot_tantalium, ModBlocks.block_tantalium);
 		addMineralSet(ModItems.nugget_zirconium, ModItems.ingot_zirconium, ModBlocks.block_zirconium);
@@ -109,8 +110,8 @@ public class MineralRecipes {
 		add1To9Pair(ModItems.ingot_cm_fuel, ModItems.nugget_cm_fuel);
 		add1To9Pair(ModItems.ingot_cm_mix, ModItems.nugget_cm_mix);
 
-		
-		
+
+
 		add1To9Pair(ModItems.ingot_gh336, ModItems.nugget_gh336);
 
 		for(int i = 0; i < ItemWasteLong.WasteClass.values().length; i++) {
@@ -498,7 +499,7 @@ public class MineralRecipes {
 		add9To1(DictFrame.fromOne(ModItems.ore_byproduct, EnumByproduct.B_IRON), new ItemStack(ModItems.powder_iron));
 		add9To1(DictFrame.fromOne(ModItems.ore_byproduct, EnumByproduct.B_COPPER), new ItemStack(ModItems.powder_copper));
 		add9To1(DictFrame.fromOne(ModItems.ore_byproduct, EnumByproduct.B_LITHIUM), new ItemStack(ModItems.powder_lithium));
-		add9To1(DictFrame.fromOne(ModItems.ore_byproduct, EnumByproduct.B_SILICON), new ItemStack(ModItems.powder_quartz));
+		add9To1(DictFrame.fromOne(ModItems.ore_byproduct, EnumByproduct.B_SILICON), new ItemStack(ModItems.nugget_silicon, 3));
 		add9To1(DictFrame.fromOne(ModItems.ore_byproduct, EnumByproduct.B_LEAD), new ItemStack(ModItems.powder_lead));
 		add9To1(DictFrame.fromOne(ModItems.ore_byproduct, EnumByproduct.B_TITANIUM), new ItemStack(ModItems.powder_titanium));
 		add9To1(DictFrame.fromOne(ModItems.ore_byproduct, EnumByproduct.B_ALUMINIUM), new ItemStack(ModItems.powder_aluminium));

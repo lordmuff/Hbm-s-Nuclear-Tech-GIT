@@ -14,7 +14,7 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 
-import codechicken.lib.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
