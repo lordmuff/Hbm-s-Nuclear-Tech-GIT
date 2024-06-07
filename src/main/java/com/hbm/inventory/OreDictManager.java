@@ -583,6 +583,7 @@ public class OreDictManager {
 		OreDictionary.registerOre("briquetteWood", fromOne(briquette, EnumBriquetteType.WOOD));
 		
 		OreDictionary.registerOre(getReflector(), neutron_reflector);
+		OreDictionary.registerOre("oreRawRareEarth", chunk_ore);
 		OreDictionary.registerOre("oreRareEarth", ore_rare);
 		OreDictionary.registerOre("oreRareEarth", ore_gneiss_rare);
 

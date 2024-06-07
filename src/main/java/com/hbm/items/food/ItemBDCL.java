@@ -42,13 +42,9 @@ public class ItemBDCL extends Item {
 		if(count == 1) {
 			this.onEaten(stack, player.worldObj, player);
 			player.clearItemInUse();
-			player.itemInUseCount = 10;
 			player.playSound("hbm:player.groan", 1F, 1F);
 			return;
 		}
-		
-		if(count <= 24 && count % 4 == 0) {
-			player.itemInUseCount--;
-		}
+
 	}
 }
