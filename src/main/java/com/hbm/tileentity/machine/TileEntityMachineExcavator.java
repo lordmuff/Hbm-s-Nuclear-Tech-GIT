@@ -342,88 +342,104 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 	
 	protected void collectBedrock(BlockPos pos) {
 		TileEntity oreTile = Compat.getTileStandard(worldObj, pos.getX(), pos.getY(), pos.getZ());
-		
-		if(oreTile instanceof TileEntityBedrockOre) {
-			TileEntityBedrockOre ore = (TileEntityBedrockOre) oreTile;
+		TileEntityBedrockOre oreNTM = (TileEntityBedrockOre) oreTile;
 
-			if(ore.resource == null) return;
-			if(ore.matstack == null) return;
-			if(ore.tier > this.getInstalledDrill().tier) return;
-			if(ore.acidRequirement != null) {
-				
-				if(ore.acidRequirement.type != tank.getTankType() || ore.acidRequirement.fill > tank.getFill()) return;
-				
-				tank.setFill(tank.getFill() - ore.acidRequirement.fill);
-			}
+		List<ItemStack> stacks = new ArrayList();
+		OreDictMaterial matstack = null;
 
-			if (oreTile == CS.BlocksGT.oreBedrock) {
-				OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
-				ore.matstack = (tMaterial.mMaterial);
-			} if (oreTile == CS.BlocksGT.oreSmallBedrock) {
-				OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
-				ore.matstack = (tMaterial.mMaterial);
-			}
+		if (rng(1000) == 0) {
+			// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
+			stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+		}
 
-			ItemStack stack = ore.resource.copy();
-			ItemStack matitemstack = ST.make((Block) CS.BlocksGT.oreBroken, 1, ore.matstack.mID);
-			List<ItemStack> stacks = new ArrayList();
-			stacks.add(stack);
+		if (oreTile == CS.BlocksGT.oreBedrock) {
+
+			OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
+			matstack = (tMaterial.mMaterial);
+
+			ItemStack matitemstack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+
 			stacks.add(matitemstack);
 
-			if (rng(1000) == 0) {
-				// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
-				stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+
+		}
+		if (oreTile == CS.BlocksGT.oreSmallBedrock) {
+			OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
+			matstack = (tMaterial.mMaterial);
+
+			ItemStack matitemstack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+
+			stacks.add(matitemstack);
+
+		}
+
+		if(oreTile instanceof TileEntityBedrockOre) {
+
+
+			if(oreNTM.resource == null) return;
+
+			if(oreNTM.tier > this.getInstalledDrill().tier) return;
+			if(oreNTM.acidRequirement != null) {
+				
+				if(oreNTM.acidRequirement.type != tank.getTankType() || oreNTM.acidRequirement.fill > tank.getFill()) return;
+				
+				tank.setFill(tank.getFill() - oreNTM.acidRequirement.fill);
 			}
+		}
+
+			ItemStack stack = oreNTM.resource.copy();
+
+			stacks.add(stack);
 
 			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10);
 
 			int x = xCoord + dir.offsetX * 4;
 			int y = yCoord - 3;
 			int z = zCoord + dir.offsetZ * 4;
-			
+
 			/* try to insert into a valid container */
 			TileEntity tile = worldObj.getTileEntity(x, y, z);
 			if(tile instanceof IInventory) {
 				supplyContainer((IInventory) tile, stacks, dir.getOpposite());
 			}
-			
+
 			if(stack.stackSize <= 0) return;
-			
+
 			/* try to place on conveyor belt */
 			Block b = worldObj.getBlock(x, y, z);
 			if(b instanceof IConveyorBelt) {
 				supplyConveyor((IConveyorBelt) b, stacks, x, y, z);
 			}
-			
+
 			if(stack.stackSize <= 0) return;
-			
+
 			for(int i = 5; i < 14; i++) {
-				
+
 				if(slots[i] != null && slots[i].stackSize < slots[i].getMaxStackSize() && stack.isItemEqual(slots[i]) && ItemStack.areItemStackTagsEqual(stack, slots[i])) {
 					int toAdd = Math.min(slots[i].getMaxStackSize() - slots[i].stackSize, stack.stackSize);
 					slots[i].stackSize += toAdd;
 					stack.stackSize -= toAdd;
-					
+
 					chuteTimer = 40;
-					
+
 					if(stack.stackSize <= 0) {
 						return;
 					}
 				}
 			}
-			
+
 			/* add leftovers to empty slots */
 			for(int i = 5; i < 14; i++) {
-				
+
 				if(slots[i] == null) {
-					
+
 					chuteTimer = 40;
-					
+
 					slots[i] = stack.copy();
 					return;
 				}
 			}
-		}
+
 	}
 	
 	/** breaks and drops all blocks in the specified ring */
