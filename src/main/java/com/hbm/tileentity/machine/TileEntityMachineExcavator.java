@@ -42,8 +42,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregapi.code.ArrayListNoNulls;
 import gregapi.data.CS;
+import gregapi.data.MT;
+import gregapi.data.OP;
 import gregapi.oredict.OreDictMaterial;
 import gregapi.oredict.OreDictMaterialStack;
+import gregapi.util.ST;
+import gregapi.util.UT;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
@@ -63,11 +67,14 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import static gregapi.data.CS.RNGSUS;
 import static gregapi.data.CS.SIDE_TOP;
 
 public class TileEntityMachineExcavator extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidStandardReceiver, IControlReceiver, IGUIProvider, IUpgradeInfoProvider {
 
+	public int rng(int aRange) {return RNGSUS.nextInt(aRange);}
 	public final List<OreDictMaterial> mList = new ArrayListNoNulls<>();
+
 	public static final long maxPower = 1_000_000;
 	public long power;
 	public boolean operational = false;
@@ -276,7 +283,25 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 							ignoreAll = false;
 							break;
 						}
-						
+
+						if(b == CS.BlocksGT.oreBedrock) {
+							combinedHardness = 60 * 20;
+							bedrockOre = new BlockPos(x, y, z);
+							bedrockDrilling = true;
+							enableCrusher = false;
+							ignoreAll = false;
+							break;
+						}
+
+						if(b == CS.BlocksGT.oreSmallBedrock) {
+							combinedHardness = 60 * 20;
+							bedrockOre = new BlockPos(x, y, z);
+							bedrockDrilling = true;
+							enableCrusher = false;
+							ignoreAll = false;
+							break;
+						}
+
 						if(shouldIgnoreBlock(b, x, y ,z)) continue;
 						
 						ignoreAll = false;
@@ -321,15 +346,8 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		if(oreTile instanceof TileEntityBedrockOre) {
 			TileEntityBedrockOre ore = (TileEntityBedrockOre) oreTile;
 
-			if (oreTile == CS.BlocksGT.oreBedrock) {
-				OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
-				mList.add(tMaterial.mMaterial); mList.add(tMaterial.mMaterial);
-			} else if (oreTile == CS.BlocksGT.oreSmallBedrock) {
-				OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
-				mList.add(tMaterial.mMaterial);
-			}
-
 			if(ore.resource == null) return;
+			if(ore.matstack == null) return;
 			if(ore.tier > this.getInstalledDrill().tier) return;
 			if(ore.acidRequirement != null) {
 				
@@ -337,10 +355,25 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 				
 				tank.setFill(tank.getFill() - ore.acidRequirement.fill);
 			}
-			
+
+			if (oreTile == CS.BlocksGT.oreBedrock) {
+				OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
+				ore.matstack = (tMaterial.mMaterial);
+			} if (oreTile == CS.BlocksGT.oreSmallBedrock) {
+				OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
+				ore.matstack = (tMaterial.mMaterial);
+			}
+
 			ItemStack stack = ore.resource.copy();
+			ItemStack matitemstack = ST.make((Block) CS.BlocksGT.oreBroken, 1, ore.matstack.mID);
 			List<ItemStack> stacks = new ArrayList();
 			stacks.add(stack);
+			stacks.add(matitemstack);
+
+			if (rng(1000) == 0) {
+				// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
+				stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+			}
 
 			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10);
 

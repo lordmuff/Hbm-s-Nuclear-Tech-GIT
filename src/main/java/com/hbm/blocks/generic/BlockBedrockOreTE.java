@@ -21,6 +21,7 @@ import com.hbm.util.I18nUtil;
 import api.hbm.fluid.IFillableItem;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregapi.oredict.OreDictMaterial;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -198,6 +199,7 @@ public class BlockBedrockOreTE extends BlockContainer implements ILookOverlay, I
 	public static class TileEntityBedrockOre extends TileEntity {
 		
 		public ItemStack resource;
+		public OreDictMaterial matstack;
 		public FluidStack acidRequirement;
 		public int tier;
 		public int color;
