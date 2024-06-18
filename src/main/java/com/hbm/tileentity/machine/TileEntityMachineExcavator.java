@@ -338,8 +338,10 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 	}
 	
 	protected void collectBedrock(BlockPos pos) {
-		TileEntity oreTile = Compat.getTileStandard(worldObj, pos.getX(), pos.getY(), pos.getZ());
-		TileEntityBedrockOre oreNTM = (TileEntityBedrockOre) oreTile;
+		TileEntity oreTileGT6 = Compat.getTileStandard(worldObj, pos.getX(), pos.getY(), pos.getZ());
+		TileEntity oreTileNTM = Compat.getTileStandard(worldObj, pos.getX(), pos.getY(), pos.getZ());
+
+		TileEntityBedrockOre oreNTM = (TileEntityBedrockOre) oreTileNTM;
 
 		List<ItemStack> stacks = new ArrayList();
 		OreDictMaterial matstack = null;
@@ -349,7 +351,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 			stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
 		}
 
-		if (oreTile == CS.BlocksGT.oreBedrock) {
+		if (oreTileGT6 == CS.BlocksGT.oreBedrock) {
 
 			OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
 			matstack = (tMaterial.mMaterial);
@@ -360,7 +362,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 
 
 		}
-		if (oreTile == CS.BlocksGT.oreSmallBedrock) {
+		if (oreTileGT6 == CS.BlocksGT.oreSmallBedrock) {
 			OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
 			matstack = (tMaterial.mMaterial);
 
@@ -370,7 +372,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 
 		}
 
-		if(oreTile instanceof TileEntityBedrockOre) {
+		if(oreTileNTM instanceof TileEntityBedrockOre) {
 
 
 			if(oreNTM.resource == null) return;
