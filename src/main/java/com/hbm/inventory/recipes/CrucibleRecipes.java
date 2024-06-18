@@ -112,7 +112,7 @@ public class CrucibleRecipes extends SerializableRecipe {
 				.inputs(new MaterialStack(Mats.MAT_MAGTUNG, n * 6), new MaterialStack(Mats.MAT_MUD, n * 3))
 				.outputs(new MaterialStack(Mats.MAT_CMB, i)));
 		
-		recipes.add(new CrucibleRecipe(16, "crucible.magtung", 3, new ItemStack(ModItems.ingot_magnetized_tungsten))
+		recipes.add(new CrucibleRecipe(17, "crucible.magtung", 3, new ItemStack(ModItems.ingot_magnetized_tungsten))
 				.inputs(new MaterialStack(Mats.MAT_TUNGSTEN, i), new MaterialStack(Mats.MAT_SCHRABIDIUM, n * 1))
 				.outputs(new MaterialStack(Mats.MAT_MAGTUNG, i)));
 		

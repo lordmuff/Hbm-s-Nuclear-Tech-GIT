@@ -40,6 +40,10 @@ import api.hbm.fluid.IFluidStandardReceiver;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregapi.code.ArrayListNoNulls;
+import gregapi.data.CS;
+import gregapi.oredict.OreDictMaterial;
+import gregapi.oredict.OreDictMaterialStack;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
@@ -59,8 +63,11 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import static gregapi.data.CS.SIDE_TOP;
+
 public class TileEntityMachineExcavator extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidStandardReceiver, IControlReceiver, IGUIProvider, IUpgradeInfoProvider {
 
+	public final List<OreDictMaterial> mList = new ArrayListNoNulls<>();
 	public static final long maxPower = 1_000_000;
 	public long power;
 	public boolean operational = false;
@@ -313,7 +320,15 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		
 		if(oreTile instanceof TileEntityBedrockOre) {
 			TileEntityBedrockOre ore = (TileEntityBedrockOre) oreTile;
-			
+
+			if (oreTile == CS.BlocksGT.oreBedrock) {
+				OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
+				mList.add(tMaterial.mMaterial); mList.add(tMaterial.mMaterial);
+			} else if (oreTile == CS.BlocksGT.oreSmallBedrock) {
+				OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
+				mList.add(tMaterial.mMaterial);
+			}
+
 			if(ore.resource == null) return;
 			if(ore.tier > this.getInstalledDrill().tier) return;
 			if(ore.acidRequirement != null) {
