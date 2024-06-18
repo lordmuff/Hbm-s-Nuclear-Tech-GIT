@@ -1,10 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
@@ -387,7 +384,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 			}
 		}
 
-			ItemStack stack = oreNTM.resource.copy();
+			ItemStack stack = Objects.requireNonNull(oreNTM).resource.copy();
 
 			stacks.add(stack);
 
