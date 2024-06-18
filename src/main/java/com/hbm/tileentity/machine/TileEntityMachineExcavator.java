@@ -37,6 +37,7 @@ import api.hbm.fluid.IFluidStandardReceiver;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregapi.block.prefixblock.PrefixBlockTileEntity;
 import gregapi.code.ArrayListNoNulls;
 import gregapi.data.CS;
 import gregapi.data.MT;
@@ -71,6 +72,9 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 
 	public int rng(int aRange) {return RNGSUS.nextInt(aRange);}
 	public final List<OreDictMaterial> mList = new ArrayListNoNulls<>();
+	int tSelector = rng(128);
+	OreDictMaterial tMaterial = (rng(32) == 0 ? UT.Code.select(mList.get(tSelector), mList.get(tSelector).mByProducts) : mList.get(tSelector));
+
 
 	public static final long maxPower = 1_000_000;
 	public long power;
@@ -338,38 +342,39 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 	}
 	
 	protected void collectBedrock(BlockPos pos) {
-		TileEntity oreTileGT6 = Compat.getTileStandard(worldObj, pos.getX(), pos.getY(), pos.getZ());
+		Block oreBlock = worldObj.getBlock(pos.getX(), pos.getY(), pos.getZ());
 		TileEntity oreTileNTM = Compat.getTileStandard(worldObj, pos.getX(), pos.getY(), pos.getZ());
+		TileEntity oreTileGT6 = worldObj.getTileEntity(pos.getX(), pos.getY(), pos.getZ());
 
 		TileEntityBedrockOre oreNTM = (TileEntityBedrockOre) oreTileNTM;
+		PrefixBlockTileEntity oreGT6 = (PrefixBlockTileEntity) oreTileGT6;
 
 		List<ItemStack> stacks = new ArrayList();
 		OreDictMaterial matstack = null;
 
+		if(oreTileGT6 instanceof PrefixBlockTileEntity) {
+
+			if (oreBlock == CS.BlocksGT.oreBedrock) {
+
+				OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
+				matstack = (tMaterial.mMaterial);
+
+			}
+
+			if (oreBlock == CS.BlocksGT.oreSmallBedrock) {
+
+				OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
+				matstack = (tMaterial.mMaterial);
+
+			}
+
+		}
+
+		ItemStack matitemstack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+
 		if (rng(1000) == 0) {
 			// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
 			stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
-		}
-
-		if (oreTileGT6 == CS.BlocksGT.oreBedrock) {
-
-			OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
-			matstack = (tMaterial.mMaterial);
-
-			ItemStack matitemstack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
-
-			stacks.add(matitemstack);
-
-
-		}
-		if (oreTileGT6 == CS.BlocksGT.oreSmallBedrock) {
-			OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
-			matstack = (tMaterial.mMaterial);
-
-			ItemStack matitemstack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
-
-			stacks.add(matitemstack);
-
 		}
 
 		if(oreTileNTM instanceof TileEntityBedrockOre) {
@@ -383,12 +388,14 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 				if(oreNTM.acidRequirement.type != tank.getTankType() || oreNTM.acidRequirement.fill > tank.getFill()) return;
 				
 				tank.setFill(tank.getFill() - oreNTM.acidRequirement.fill);
+
 			}
+
 		}
 
-			ItemStack stack = Objects.requireNonNull(oreNTM).resource.copy();
-
+			ItemStack stack = (oreNTM).resource.copy();
 			stacks.add(stack);
+			stacks.add(matitemstack);
 
 			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10);
 
