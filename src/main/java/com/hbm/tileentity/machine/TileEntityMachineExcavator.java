@@ -73,8 +73,6 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 	public int rng(int aRange) {return RNGSUS.nextInt(aRange);}
 	public final List<OreDictMaterial> mList = new ArrayListNoNulls<>();
 	int tSelector = rng(128);
-	OreDictMaterial tMaterial = (rng(32) == 0 ? UT.Code.select(mList.get(tSelector), mList.get(tSelector).mByProducts) : mList.get(tSelector));
-
 
 	public static final long maxPower = 1_000_000;
 	public long power;
@@ -342,79 +340,38 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 	}
 	
 	protected void collectBedrock(BlockPos pos) {
+
+		//credit to gammawave from the NTM discord for helping me figure this out!
+
 		Block oreBlock = worldObj.getBlock(pos.getX(), pos.getY(), pos.getZ());
-		TileEntity oreTileNTM = Compat.getTileStandard(worldObj, pos.getX(), pos.getY(), pos.getZ());
-		TileEntity oreTileGT6 = worldObj.getTileEntity(pos.getX(), pos.getY(), pos.getZ());
-
-		TileEntityBedrockOre oreNTM = (TileEntityBedrockOre) oreTileNTM;
-		PrefixBlockTileEntity oreGT6 = (PrefixBlockTileEntity) oreTileGT6;
-
+		TileEntity ore = worldObj.getTileEntity(pos.getX(), pos.getY(), pos.getZ());
+		Object oreTileGT6 = null;
+		Object oreTileNTM = null;
 		List<ItemStack> stacks = new ArrayList();
-		OreDictMaterial matstack = null;
 
-		if(oreTileGT6 instanceof PrefixBlockTileEntity) {
-
-			if (oreBlock == CS.BlocksGT.oreBedrock) {
-
-				OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
-				matstack = (tMaterial.mMaterial);
-
-			}
-
-			if (oreBlock == CS.BlocksGT.oreSmallBedrock) {
-
-				OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, xCoord, yCoord, zCoord, SIDE_TOP);
-				matstack = (tMaterial.mMaterial);
-
-			}
-
-		}
-
-		ItemStack matitemstack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
-
-		if (rng(1000) == 0) {
-			// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
-			stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
-		}
-
-		if(oreTileNTM instanceof TileEntityBedrockOre) {
-
+		if(ore instanceof TileEntityBedrockOre) {
+			TileEntityBedrockOre oreNTM = (TileEntityBedrockOre) oreTileNTM;
 
 			if(oreNTM.resource == null) return;
 
 			if(oreNTM.tier > this.getInstalledDrill().tier) return;
 			if(oreNTM.acidRequirement != null) {
-				
+
 				if(oreNTM.acidRequirement.type != tank.getTankType() || oreNTM.acidRequirement.fill > tank.getFill()) return;
-				
+
 				tank.setFill(tank.getFill() - oreNTM.acidRequirement.fill);
 
 			}
 
-		}
-
 			ItemStack stack = (oreNTM).resource.copy();
 			stacks.add(stack);
-			stacks.add(matitemstack);
-
-			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10);
-
-			int x = xCoord + dir.offsetX * 4;
-			int y = yCoord - 3;
-			int z = zCoord + dir.offsetZ * 4;
-
-			/* try to insert into a valid container */
-			TileEntity tile = worldObj.getTileEntity(x, y, z);
-			if(tile instanceof IInventory) {
-				supplyContainer((IInventory) tile, stacks, dir.getOpposite());
-			}
 
 			if(stack.stackSize <= 0) return;
 
 			/* try to place on conveyor belt */
-			Block b = worldObj.getBlock(x, y, z);
+			Block b = worldObj.getBlock(pos.getX(), pos.getY(), pos.getZ());
 			if(b instanceof IConveyorBelt) {
-				supplyConveyor((IConveyorBelt) b, stacks, x, y, z);
+				supplyConveyor((IConveyorBelt) b, stacks, pos.getX(), pos.getY(), pos.getZ());
 			}
 
 			if(stack.stackSize <= 0) return;
@@ -445,6 +402,53 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 					return;
 				}
 			}
+
+		} else if(ore instanceof PrefixBlockTileEntity) {
+			PrefixBlockTileEntity oreGT6 = (PrefixBlockTileEntity) oreTileGT6;
+
+			OreDictMaterial matstack;
+
+			if (oreBlock == CS.BlocksGT.oreBedrock) {
+
+				OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, xCoord+7, yCoord-7, zCoord+7, SIDE_TOP);
+				matstack = (tMaterial.mMaterial);
+				ItemStack matitemstack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+				stacks.add(matitemstack);
+
+			}
+
+			if (oreBlock == CS.BlocksGT.oreSmallBedrock) {
+
+				OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, xCoord+7, yCoord-7, zCoord+7, SIDE_TOP);
+				matstack = (tMaterial.mMaterial);
+				ItemStack matitemstack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+				stacks.add(matitemstack);
+
+			}
+
+		}
+
+		if (rng(1000) == 0) {
+			// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
+			stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+		}
+
+
+
+
+			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10);
+
+			int x = xCoord + dir.offsetX * 4;
+			int y = yCoord - 3;
+			int z = zCoord + dir.offsetZ * 4;
+
+			/* try to insert into a valid container */
+			TileEntity tile = worldObj.getTileEntity(x, y, z);
+			if(tile instanceof IInventory) {
+				supplyContainer((IInventory) tile, stacks, dir.getOpposite());
+			}
+
+
 
 	}
 	
