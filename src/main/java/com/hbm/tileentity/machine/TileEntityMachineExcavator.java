@@ -40,6 +40,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import gregapi.block.prefixblock.PrefixBlockTileEntity;
 import gregapi.code.ArrayListNoNulls;
 import gregapi.data.CS;
+import gregapi.data.IL;
 import gregapi.data.MT;
 import gregapi.data.OP;
 import gregapi.oredict.OreDictMaterial;
@@ -358,6 +359,13 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 				OreDictMaterial matstack = (tMaterial.mMaterial);
 				stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
 			}
+		}
+
+		else if (oreBlock == IL.HBM_Bedrock_Oil.getBlock()) {
+
+				OreDictMaterial matstack = (MT.Oilshale);
+				stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+
 		}
 
 		if(stack != null) {
