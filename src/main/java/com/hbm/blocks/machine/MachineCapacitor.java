@@ -121,7 +121,6 @@ public class MachineCapacitor extends BlockContainer implements ILookOverlay, IP
 			list.add(EnumChatFormatting.DARK_GRAY + "" + EnumChatFormatting.ITALIC +"Hold <" +
 					EnumChatFormatting.YELLOW + "" + EnumChatFormatting.ITALIC + "LSHIFT" +
 					EnumChatFormatting.DARK_GRAY + "" + EnumChatFormatting.ITALIC + "> to display more info");
-			
 		}
 		if(this == ModBlocks.capacitor_complex) {
 			list.add("TaCdSa236-7 N-Boosted Anti Mass core surrounded by");

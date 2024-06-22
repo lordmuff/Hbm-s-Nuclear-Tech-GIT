@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
+import com.hbm.dim.CelestialBody;
+import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityAtmoVent;
 import com.hbm.util.BobMathUtil;
@@ -39,6 +41,7 @@ public class AtmoVent extends BlockDummyable implements ILookOverlay {
 	public int[] getDimensions() {
 		return new int[] { 3, 0, 1, 0, 0, 1 };
 	}
+	
 
 	@Override
 	public int getOffset() {
@@ -73,10 +76,14 @@ public class AtmoVent extends BlockDummyable implements ILookOverlay {
 
 		TileEntityAtmoVent tower = (TileEntityAtmoVent) te;
 
-		List<String> text = new ArrayList();
-		text.add((tower.power < tower.getMaxPower() / 20 ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + "Power: " + BobMathUtil.getShortNumber(tower.power) + "HE");
-		text.add(((EnumChatFormatting.RED + "<- ")) + EnumChatFormatting.RESET + I18nUtil.resolveKey("hbmfluid." + tower.tanks.getTankType().getName().toLowerCase()) + ": " + tower.tanks.getFill() + "/" + tower.tanks.getMaxFill() + "mB");
-
+		List<String> text = new ArrayList<String>();
+		if(!CelestialBody.hasTrait(world, CBT_Atmosphere.class)) {
+			text.add(((EnumChatFormatting.RED + "ERROR: ")) + EnumChatFormatting.RESET + I18nUtil.resolveKey("CANNOT COLLECT IN VACUUM"));
+		} else {
+			text.add((tower.power < tower.getMaxPower() / 20 ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + "Power: " + BobMathUtil.getShortNumber(tower.power) + "HE");
+			text.add(((EnumChatFormatting.RED + "<- ")) + EnumChatFormatting.RESET + I18nUtil.resolveKey("hbmfluid." + tower.tank.getTankType().getName().toLowerCase()) + ": " + tower.tank.getFill() + "/" + tower.tank.getMaxFill() + "mB");
+		}
+		
 		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
 	}
 }

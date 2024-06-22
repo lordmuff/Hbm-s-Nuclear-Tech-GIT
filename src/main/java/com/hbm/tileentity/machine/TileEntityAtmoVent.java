@@ -1,15 +1,21 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.config.WorldConfig;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
+import com.hbm.inventory.fluid.trait.FT_Combustible;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -20,7 +26,7 @@ public class TileEntityAtmoVent extends TileEntityAtmoExtractor {
 
 	public TileEntityAtmoVent() {
 		super();
-		tanks = new FluidTank(Fluids.AIR, 50000, 0);
+		tank = new FluidTank(Fluids.AIR, 50000, 0);
 	}
 
 	public void fillFluidInit(FluidType type) {
@@ -37,6 +43,8 @@ public class TileEntityAtmoVent extends TileEntityAtmoExtractor {
 			offsetX = rot.offsetX;
 			offsetZ = dir.offsetZ;
 		}
+
+
 
         /*fillFluid(this.xCoord + rot.offsetX * 2, this.yCoord, this.zCoord - dir.offsetZ * 1, getTact(), type);
         fillFluid(this.xCoord + rot.offsetX * 2, this.yCoord, this.zCoord - dir.offsetZ * 0, getTact(), type);

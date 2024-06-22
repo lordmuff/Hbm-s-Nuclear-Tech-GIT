@@ -383,6 +383,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 				continue;
 			}
 			
+			
 			ItemStack stack = InventoryUtil.tryAddItemToInventory(slots, 9, 29, item.getEntityItem().copy());
 			
 			if(stack == null)

@@ -1,16 +1,19 @@
 package com.hbm.main;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
+import com.hbm.config.WorldConfig;
 import com.hbm.entity.mob.EntityDuck;
 import com.hbm.entity.projectile.EntityTom;
+import com.hbm.handler.BossSpawnHandler;
 import com.hbm.handler.ImpactWorldHandler;
 import com.hbm.saveddata.TomSaveData;
-import com.hbm.world.WorldProviderNTM;
+import com.hbm.world.WorldProviderTom;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -21,16 +24,20 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -39,6 +46,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent.CheckSpawn;
 import net.minecraftforge.event.terraingen.BiomeEvent;
+import net.minecraftforge.event.terraingen.ChunkProviderEvent;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate;
@@ -95,6 +103,18 @@ public class ModEventHandlerImpact {
 			
 			if(data.time > 0) {
 				data.time--;
+				if(data.time<=2400)
+				{
+					List<EntityPlayer> entities = event.world.playerEntities;
+					for(Iterator<EntityPlayer> en = new ArrayList<>(entities).iterator() ; en.hasNext();) {
+						EntityPlayer e = en.next();
+						Random rand = new Random();
+						if(rand.nextInt(100)==0)
+						{
+							BossSpawnHandler.spawnMeteorAtPlayer(e, false, true);
+						}	
+					}
+				}
 				if(data.time==data.dtime)
 				{
 					EntityTom tom = new EntityTom(event.world);
@@ -160,28 +180,7 @@ public class ModEventHandlerImpact {
 						event.entityLiving.setDead();
 					}
 				}
-			}
-		}
-		if(!(event.entity instanceof EntityPlayer) && event.entity instanceof EntityDuck) {
-			double range = 2D;
-				
-			List<EntityLivingBase> entities = event.world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(event.entity.posX, event.entity.posY, event.entity.posZ, event.entity.posX, event.entity.posY, event.entity.posZ).expand(range, range, range));
-			if(data.impact)
-			{
-				event.setCanceled(false);
-				return;
-			}
-			for(EntityLivingBase e : entities) {
-				if(e instanceof EntityPlayer || e instanceof EntityDuck || data.impact)
-				{
-					event.setCanceled(false);
-					return;
-				}
-			}
-			//if(entities.size()==0 && !data.impact)
-			//{
-			//	event.setCanceled(true);	
-			//}
+			}		
 		}		
 	}
 
@@ -192,7 +191,7 @@ public class ModEventHandlerImpact {
 			
 			TomSaveData data = TomSaveData.forWorld(event.world);
 			
-			if(data.impact) {
+			if(data.impact) { // OHHH THIS IS WHAT I WAS FUCKING MISSING. WHY FORGE WHY???? WHY THE FUCK DID YOU ADVERTISE THE CANCELSPAWN EVENTHANDLER WHEN THIS EXISTS???
 				event.setResult(Result.DENY);
 			}
 		}
@@ -205,7 +204,7 @@ public class ModEventHandlerImpact {
 		
 		if(GeneralConfig.enableImpactWorldProvider) {
 			DimensionManager.unregisterProviderType(0);
-			DimensionManager.registerProviderType(0, WorldProviderNTM.class, true);
+			DimensionManager.registerProviderType(0, WorldProviderTom.class, true);
 		}
 	}
 
@@ -297,10 +296,6 @@ public class ModEventHandlerImpact {
 		}
 	}
 
-	@SubscribeEvent
-	public void populateChunkPre(PopulateChunkEvent.Pre event) {
-		TomSaveData.forWorld(event.world); /* forces the data to be cached so it is accurate by the time ModEventHandlerImpact#modifyVillageGen is called. */
-	}
 
 	@SubscribeEvent
 	public void populateChunkPost(PopulateChunkEvent.Post event) {

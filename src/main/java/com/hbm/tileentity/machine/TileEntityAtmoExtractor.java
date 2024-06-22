@@ -2,35 +2,36 @@ package com.hbm.tileentity.machine;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import com.hbm.blocks.BlockDummyable;
+import com.hbm.dim.CelestialBody;
+import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.interfaces.IFluidAcceptor;
 import com.hbm.interfaces.IFluidSource;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
+import com.hbm.inventory.fluid.trait.FT_Gaseous;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energymk2.IEnergyHandlerMK2;
 import api.hbm.fluid.IFluidStandardSender;
-import api.hbm.fluid.IFluidStandardTransceiver;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IFluidSource, IEnergyHandlerMK2, IFluidStandardSender {
-	float rotSpeed;
+public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IFluidSource, IEnergyReceiverMK2, IFluidStandardSender {
+
 	int consumption = 200;
 	public float rot;
 	public float prevRot;
 	public long power = 0;
-	public FluidTank tanks;
+	public FluidTank tank;
 	public List<IFluidAcceptor> list = new ArrayList();
 
 	public TileEntityAtmoExtractor() {
 		super(0);
-		tanks = new FluidTank(Fluids.AIR, 50000, 0);
+		tank = new FluidTank(Fluids.AIR, 50000, 0);
 	}
 
 	@Override
@@ -44,65 +45,35 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IF
 		if(!worldObj.isRemote) {
 
 			this.updateConnections();
+			
+			// Extractors will not work indoors
+			CBT_Atmosphere atmosphere = !ChunkAtmosphereManager.proxy.hasAtmosphere(worldObj, xCoord, yCoord, zCoord)
+				? CelestialBody.getTrait(worldObj, CBT_Atmosphere.class)
+				: null;
 
-			if(hasPower() && !hasTooMuch() && tanks.getMaxFill() > tanks.getFill()) {
-				//int collect = Math.min(tanks.getMaxFill(), tanks.getFill()) / 50;
-				//collect = Math.min(collect, tanks.getMaxFill() - tanks.getFill());
-
-				tanks.setFill(tanks.getFill() + 50);
-				power -= this.getMaxPower() / 100;
-				//tank.setFill(tank.getFill() - 1);
-				//this.power -= this.consumption;
-
+			if(atmosphere != null) {
+				tank.setTankType(atmosphere.getMainFluid());
+			} else {
+				tank.setTankType(Fluids.NONE);
 			}
 
-			this.sendFluidToAll(tanks, this);
-			fillFluidInit(tanks.getTankType());
+			if(hasPower() && tank.getFill() + 100 <= tank.getMaxFill()) {
+				tank.setFill(tank.getFill() + 100);
+				power -= this.getMaxPower() / 100;
+
+				FT_Gaseous.capture(worldObj, tank.getTankType(), 100);
+			}
+
+			markDirty();
+
+			this.sendFluidToAll(tank, this);
+			fillFluidInit(tank.getTankType());
 
 			NBTTagCompound data = new NBTTagCompound();
 			data.setLong("power", power);
-			tanks.writeToNBT(data, "water");
+			tank.writeToNBT(data, "water");
 
 			this.networkPack(data, 50);
-		} else {
-
-			float maxSpeed = 30F;
-
-			if(hasPower()) {
-				rotSpeed += 0.1;
-				//ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
-				//ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
-				//Random rand = worldObj.rand;
-				//double x = zCoord + 0.5D - dir.offsetX * 0.5D - rot.offsetZ * 0.5D;
-				//double z = zCoord + 0.5D - dir.offsetZ * 0.5D - rot.offsetZ * 0.5D;
-				//worldObj.spawnParticle("cloud", x + 0.0D + dir.offsetX - 0, yCoord + 5.5D, z + 0.0D + dir.offsetZ - 0, 0,-0.2, 0);
-				rotSpeed += 0.1;
-				// 1.20
-				//+ 0.70
-				if(rotSpeed > maxSpeed)
-					rotSpeed = maxSpeed;
-
-				if(rotSpeed == maxSpeed && this.worldObj.getTotalWorldTime() % 5 == 0) {
-
-					if(rotSpeed > maxSpeed)
-						rotSpeed = maxSpeed;
-				}
-			} else {
-
-				rotSpeed -= 0.1;
-
-				if(rotSpeed < 0)
-					rotSpeed = 0;
-			}
-
-			prevRot = rot;
-
-			rot += rotSpeed;
-
-			if(rot >= 360) {
-				rot -= 360;
-				prevRot -= 360;
-			}
 		}
 	}
 
@@ -118,29 +89,25 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IF
 
 	public void networkUnpack(NBTTagCompound data) {
 		this.power = data.getLong("power");
-		tanks.readFromNBT(data, "water");
+		tank.readFromNBT(data, "water");
 	}
 
 	public boolean hasPower() {
 		return power >= this.getMaxPower() / 100;
 	}
 
-	public boolean hasTooMuch() {
-		return tanks.getFill() >= 50000;
-	}
-
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		this.power = nbt.getLong("power");
-		tanks.readFromNBT(nbt, "water");
+		tank.readFromNBT(nbt, "water");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setLong("power", power);
-		tanks.writeToNBT(nbt, "water");
+		tank.writeToNBT(nbt, "water");
 	}
 
 
@@ -163,14 +130,14 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IF
 
 	@Override
 	public void setFluidFill(int i, FluidType type) {
-		if(type == tanks.getTankType())
-			tanks.setFill(i);
+		if(type == tank.getTankType())
+			tank.setFill(i);
 	}
 
 	@Override
 	public int getFluidFill(FluidType type) {
-		if(type == tanks.getTankType())
-			return tanks.getFill();
+		if(type == tank.getTankType())
+			return tank.getFill();
 
 		return 0;
 	}
@@ -211,12 +178,12 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IF
 
 	@Override
 	public long getMaxPower() {
-		return 100000;
+		return 10000;
 	}
 
 	@Override
 	public FluidTank[] getSendingTanks() {
-		return new FluidTank[] { tanks };
+		return new FluidTank[] { tank };
 	}
 
 	//@Override
@@ -226,6 +193,6 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IF
 
 	@Override
 	public FluidTank[] getAllTanks() {
-		return new FluidTank[] { tanks };
+		return new FluidTank[] { tank };
 	}
 }

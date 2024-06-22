@@ -32,6 +32,8 @@ public class ItemCircuit extends ItemEnumMulti {
 		list.add(new ItemStack(item, 1, EnumCircuitType.ADVANCED.ordinal()));
 		list.add(new ItemStack(item, 1, EnumCircuitType.CAPACITOR_BOARD.ordinal()));
 		list.add(new ItemStack(item, 1, EnumCircuitType.BISMOID.ordinal()));
+		list.add(new ItemStack(item, 1, EnumCircuitType.AVIONICS.ordinal()));
+		list.add(new ItemStack(item, 1, EnumCircuitType.AREO.ordinal()));
 		list.add(new ItemStack(item, 1, EnumCircuitType.CONTROLLER_CHASSIS.ordinal()));
 		list.add(new ItemStack(item, 1, EnumCircuitType.CONTROLLER.ordinal()));
 		list.add(new ItemStack(item, 1, EnumCircuitType.CONTROLLER_ADVANCED.ordinal()));
@@ -50,6 +52,8 @@ public class ItemCircuit extends ItemEnumMulti {
 		ADVANCED,
 		CAPACITOR_BOARD,
 		BISMOID,
+		AVIONICS,
+		AREO,
 		CONTROLLER_CHASSIS,
 		CONTROLLER,
 		CONTROLLER_ADVANCED,

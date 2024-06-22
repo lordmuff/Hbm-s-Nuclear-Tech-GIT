@@ -50,6 +50,7 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 	private int oil;
 	private float activation;
 	private int temperature;
+	private int oxygen;
 	private boolean frozen = false;
 	private boolean burning = false;
 	private List<ContaminationEffect> contamination = new ArrayList();
@@ -229,6 +230,23 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 		}
 	}
 	
+	//ATMOSPHERE//
+	public static int getOxy(EntityLivingBase entity) {
+		return getData(entity).oxygen;
+	}
+	
+	public static void setOxy(EntityLivingBase entity, int oxygen) {
+		if(oxygen <= 0) {
+			oxygen = 0;
+
+			// Only damage every 4 ticks, giving the player more time to react
+			if(entity.ticksExisted % 4 == 0) {
+				entity.attackEntityFrom(ModDamageSource.oxyprime, 1);
+			}
+		}
+
+		getData(entity).oxygen = oxygen;
+	}
 	
 	/// BLACK LUNG DISEASE ///
 	public static int getBlackLung(EntityLivingBase entity) {
@@ -315,6 +333,7 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 		props.setInteger("hfr_contagion", contagion);
 		props.setInteger("hfr_blacklung", blacklung);
 		props.setInteger("hfr_oil", oil);
+		props.setInteger("hfr_oxygen", oxygen);
 		props.setFloat("hfr_activation", activation);
 		
 		props.setInteger("hfr_cont_count", this.contamination.size());
@@ -340,6 +359,7 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 			blacklung = props.getInteger("hfr_blacklung");
 			oil = props.getInteger("hfr_oil");
 			activation = props.getFloat("hfr_activation");
+			oxygen = props.getInteger("hfr_oxygen");
 			
 			int cont = props.getInteger("hfr_cont_count");
 			

@@ -6,7 +6,10 @@ import java.util.Locale;
 
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.handler.HazmatRegistry;
+import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.items.ModItems;
+import com.hbm.items.armor.ArmorFSB;
+import com.hbm.items.armor.ItemModOxy;
 import com.hbm.lib.Library;
 import com.hbm.potion.HbmPotion;
 import com.hbm.util.ArmorRegistry.HazardClass;
@@ -64,7 +67,7 @@ public class ArmorUtil {
 		ArmorRegistry.registerHazard(ModItems.rpa_helmet, HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_LUNG, HazardClass.BACTERIA, HazardClass.GAS_BLISTERING, HazardClass.GAS_MONOXIDE, HazardClass.LIGHT, HazardClass.SAND);
 		ArmorRegistry.registerHazard(ModItems.envsuit_helmet, HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_LUNG, HazardClass.BACTERIA, HazardClass.GAS_BLISTERING, HazardClass.GAS_MONOXIDE, HazardClass.LIGHT, HazardClass.SAND);
 		ArmorRegistry.registerHazard(ModItems.trenchmaster_helmet, HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_LUNG, HazardClass.BACTERIA, HazardClass.GAS_BLISTERING, HazardClass.GAS_MONOXIDE, HazardClass.LIGHT, HazardClass.SAND);
-		
+
 		//Ob ihr wirklich richtig steht, seht ihr wenn das Licht angeht!
 		registerIfExists(Compat.MOD_GT6, "gt.armor.hazmat.universal.head", HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_LUNG, HazardClass.BACTERIA, HazardClass.GAS_BLISTERING, HazardClass.GAS_MONOXIDE, HazardClass.LIGHT, HazardClass.SAND);
 		registerIfExists(Compat.MOD_GT6, "gt.armor.hazmat.biochemgas.head", HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_LUNG, HazardClass.BACTERIA, HazardClass.GAS_BLISTERING, HazardClass.GAS_MONOXIDE, HazardClass.LIGHT, HazardClass.SAND);
@@ -158,7 +161,41 @@ public class ArmorUtil {
 
 		return false;
 	}
-	
+
+	public static boolean checkForOxy(EntityLivingBase entity) {
+		if(!(entity instanceof EntityPlayer)) return ChunkAtmosphereManager.proxy.canBreathe(entity);
+
+		ItemStack tank = getOxygenTank((EntityPlayer)entity);
+		if(tank == null) return ChunkAtmosphereManager.proxy.canBreathe(entity);
+
+		// If we have an oxygen tank, block drowning
+		entity.setAir(300);
+
+		return ((ItemModOxy)tank.getItem()).attemptBreathing(entity, tank);
+	}
+
+	public static ItemStack getOxygenTank(EntityPlayer player) {
+		// TODO: only require pressure suits in near vacuums, and use regular oxygen tanks otherwise
+
+		// Check that all the armor pieces are sealed
+		for(int i = 0; i < 4; i++) {
+			ItemStack stack = player.getCurrentArmor(i);
+			if(stack == null || !(stack.getItem() instanceof ArmorFSB)) return null;
+			if(!((ArmorFSB)stack.getItem()).canSeal) return null;
+		}
+
+		// Check for a non-empty oxygen tank
+		ItemStack helmet = player.getCurrentArmor(3);
+		if(ArmorModHandler.hasMods(helmet)) {
+			ItemStack tankMod = ArmorModHandler.pryMods(helmet)[ArmorModHandler.plate_only];
+			if(tankMod == null || !(tankMod.getItem() instanceof ItemModOxy)) return null;
+
+			return tankMod;
+		}
+
+		return null;
+	}
+
 	public static boolean checkForDigamma(EntityPlayer player) {
 		
 		if(checkArmor(player, ModItems.fau_helmet, ModItems.fau_plate, ModItems.fau_legs, ModItems.fau_boots))

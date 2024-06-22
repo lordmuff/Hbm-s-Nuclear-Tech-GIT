@@ -11,6 +11,7 @@ import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.gui.GUIMachineCompactLauncher;
+import com.hbm.items.ItemVOTVdrive;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCustomMissile;
 import com.hbm.items.weapon.ItemCustomMissilePart;
@@ -50,7 +51,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityCompactLauncher extends TileEntityLoadedBase implements ISidedInventory, IFluidContainer, IFluidAcceptor, IEnergyReceiverMK2, IFluidStandardReceiver, IGUIProvider, IRadarCommandReceiver {
 
-	private ItemStack slots[];
+	public ItemStack slots[];
 
 	public long power;
 	public static final long maxPower = 100000;
@@ -294,9 +295,17 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 				
 				this.launchTo(tX, tZ);
 			}
+		
+		EntityMissileCustom missile = new EntityMissileCustom(worldObj, xCoord + 0.5F, yCoord + 2.5F, zCoord + 0.5F, 0, 0, getStruct(slots[0]));
+
+
+		worldObj.spawnEntityInWorld(missile);
+		subtractFuel();
+		missile.setPayload(slots[1]);
+		
+		slots[0] = null;
 		}
 	}
-	
 	public void launchTo(int tX, int tZ) {
 
 		worldObj.playSoundEffect(xCoord, yCoord, zCoord, "hbm:weapon.missileTakeOff", 10.0F, 1.0F);
@@ -323,6 +332,7 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 		
 		slots[0] = null;
 	}
+	
 	
 	private boolean hasFuel() {
 
@@ -386,6 +396,11 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 		
 		if(slots[1] != null && slots[1].getItem() instanceof IDesignatorItem && ((IDesignatorItem)slots[1].getItem()).isReady(worldObj, slots[1], xCoord, yCoord, zCoord)) {
 			return true;
+		}
+		else {
+			if (slots[1] != null && slots[1].getItem() == ModItems.full_drive) {
+				return true;
+			}
 		}
 		
 		return false;

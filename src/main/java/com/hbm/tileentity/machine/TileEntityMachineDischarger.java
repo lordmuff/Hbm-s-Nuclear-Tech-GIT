@@ -22,7 +22,7 @@ import com.hbm.tileentity.IPersistentNBT;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energymk2.IBatteryItem;
-import api.hbm.energymk2.*;
+import api.hbm.energymk2.IEnergyProviderMK2;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -34,7 +34,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityMachineDischarger extends TileEntityMachineBase implements IEnergyHandlerMK2, IGUIProvider, IPersistentNBT, IEnergyReceiverMK2, IEnergyConductorMK2, IEnergyProviderMK2 {
+public class TileEntityMachineDischarger extends TileEntityMachineBase implements IEnergyProviderMK2, IGUIProvider, IPersistentNBT {
 
 	public long power = 0;
 	public int process = 0;
@@ -215,9 +215,6 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 
 		if (!worldObj.isRemote) {
 
-			this.updateConnections();
-			//for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-			//	this.sendPower(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir.getOpposite());
 			power = Library.chargeItemsFromTE(slots, 1, power, maxPower);
 
 			if(canProcess()) {
@@ -282,12 +279,8 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 	public AudioWrapper createAudioLoop() {
 		return MainRegistry.proxy.getLoopedSound("hbm:weapon.tauChargeLoop", xCoord, yCoord, zCoord, 1.0F, 10F, 1.0F);
 	}
+	
 
-	private void updateConnections() {
-
-		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-			this.trySubscribe(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir);
-	}
 
 	public void onChunkUnload() {
 

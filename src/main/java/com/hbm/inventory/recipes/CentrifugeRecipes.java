@@ -326,6 +326,8 @@ public class CentrifugeRecipes extends SerializableRecipe {
 				new ItemStack(ModItems.nugget_cf252, 3),
 				new ItemStack(ModItems.nuclear_waste, 24) });
 
+		if(OreDictionary.doesOreNameExist("nuggetNaquadria")) {
+			ItemStack nuggetNQR = OreDictionary.getOres("nuggetNaquadria").get(0);
 
 		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.MEU)), new ItemStack[] {
 				new ItemStack(ModItems.nugget_u238, 3),
@@ -651,7 +653,7 @@ public class CentrifugeRecipes extends SerializableRecipe {
 				new ItemStack(ModItems.powder_fire, 1),
 				new ItemStack(ModItems.powder_calcium),
 				new ItemStack(ModItems.dust) });
-
+		//nitric acid needs air chem to use, something that c
 		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 0), new ItemStack[] { //peroxide, easy to use and get
 				new ItemStack(ModItems.powder_iron, 6),
 				new ItemStack(ModItems.powder_aluminium, 6),
@@ -659,18 +661,18 @@ public class CentrifugeRecipes extends SerializableRecipe {
 				new ItemStack(ModItems.nugget_beryllium, 1) });
 
 		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 1), new ItemStack[] { //nitric acid, harder and energy expensive
-				new ItemStack(ModItems.powder_asbestos, 1),
-				new ItemStack(ModItems.nugget_beryllium, 2),
-				new ItemStack(ModItems.powder_aluminium, 6), //temp
-				new ItemStack(ModItems.nugget_mercury, 2) });
-
+				new ItemStack(ModItems.powder_asbestos, 2),
+				new ItemStack(ModItems.powder_beryllium, 2),
+				new ItemStack(ModItems.nugget_mercury, 3), //temp
+				new ItemStack(ModItems.nugget_hafnium, 2) });
+		
 		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 2), new ItemStack[] { //sulfuric acid, less harder
 				new ItemStack(ModItems.powder_beryllium, 2),
-				new ItemStack(ModItems.nugget_platnium, 1),
+				new ItemStack(ModItems.powder_aluminium, 3),
 				new ItemStack(ModItems.powder_nickel, 3), //temp
 				new ItemStack(ModItems.powder_calcium, 1) });
-
-		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 3), new ItemStack[] { // hard to get
+		
+		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 3), new ItemStack[] {// solvent uses *oil* something that sulfuric doesnt
 				new ItemStack(ModItems.nugget_gallium, 1),
 				new ItemStack(ModItems.powder_iron, 6),
 				new ItemStack(ModItems.powder_cobalt, 3), //temp
@@ -678,11 +680,11 @@ public class CentrifugeRecipes extends SerializableRecipe {
 
 		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 4), new ItemStack[] { // similar to sulfuric
 				new ItemStack(ModItems.powder_neodymium, 1),
-				new ItemStack(ModItems.powder_nickel, 3),
+				new ItemStack(ModItems.powder_niobium, 2),
 				new ItemStack(ModItems.powder_gallium_tiny, 2), //temp
 				new ItemStack(ModItems.powder_lithium, 1) });
-
-		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 5), new ItemStack[] {
+		
+		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 5), new ItemStack[] { // shchrab acid can go fuck itself
 				new ItemStack(ModItems.powder_co60, 1),
 				new ItemStack(ModItems.nugget_bismuth, 1),
 				new ItemStack(ModItems.powder_asbestos, 6), //temp
@@ -692,6 +694,12 @@ public class CentrifugeRecipes extends SerializableRecipe {
 				new ItemStack(ModItems.powder_coal_tiny, 2),
 				new ItemStack(ModItems.powder_boron_tiny, 1),
 				new ItemStack(ModItems.dust_tiny, 6)});
+		
+		recipes.put(new ComparableStack(ModBlocks.ferric_clay, 1), new ItemStack[] {
+				new ItemStack(Items.clay_ball, 1),
+				new ItemStack(Items.clay_ball, 1),
+				new ItemStack(ModItems.powder_iron, 1), //temp
+				new ItemStack(ModItems.powder_iron, 1)});
 		
 		for(EnumBedrockOre ore : EnumBedrockOre.values()) {
 			int i = ore.ordinal();
@@ -962,4 +970,5 @@ public class CentrifugeRecipes extends SerializableRecipe {
 	public String getComment() {
 		return "Outputs have to be an array of up to four item stacks. Fewer aren't used by default recipes, but should work anyway.";
 	}
+}
 }

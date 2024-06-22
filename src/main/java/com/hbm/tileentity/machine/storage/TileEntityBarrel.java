@@ -4,6 +4,7 @@ import api.hbm.fluid.*;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.effect.EntityCloudFleija;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.explosion.vanillant.ExplosionVNT;
@@ -15,9 +16,9 @@ import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.fluid.trait.FT_Corrosive;
+import com.hbm.inventory.fluid.trait.FT_Flammable;
 import com.hbm.inventory.fluid.trait.FT_Polluting;
 import com.hbm.inventory.fluid.trait.FluidTrait.FluidReleaseType;
-import com.hbm.inventory.fluid.trait.FT_Flammable;
 import com.hbm.inventory.gui.GUIBarrel;
 import com.hbm.lib.Library;
 import com.hbm.saveddata.TomSaveData;
@@ -456,9 +457,9 @@ public class TileEntityBarrel extends TileEntityMachineBase implements IFluidAcc
 	    				bf.antimatter();
 	    	    		bf.setPosition(xCoord, yCoord, zCoord);
 	    				bf.destructionRange = (int) amat;
-						worldObj.spawnEntityInWorld(bf);
-						EntityNukeTorex.statFacAnti(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, amat * 1.5F);
-						return;
+	    				worldObj.spawnEntityInWorld(bf);
+	    				EntityNukeTorex.startFacAnti(worldObj, xCoord, yCoord, zCoord, amat * 1.5F);
+	    				return;
 	    			}
 	    			else
 	    			{

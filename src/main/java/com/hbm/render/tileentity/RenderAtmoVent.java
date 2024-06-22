@@ -23,7 +23,7 @@ public class RenderAtmoVent extends TileEntitySpecialRenderer {
 		switch(tileEntity.getBlockMetadata() - 10) {
 		case 2:
 			GL11.glRotatef(0F, 0F, 1F, 0F);
-			GL11.glTranslatef(0F, 0F, -1F); 
+			GL11.glTranslatef(0F, 0F, -1F);
 			break;
 		case 3:
 			GL11.glRotatef(180F, 0F, 1F, 0F);
@@ -44,15 +44,12 @@ public class RenderAtmoVent extends TileEntitySpecialRenderer {
 		//ResourceManager.atmo_vent.renderAll();
 		
 		float rot = atmo.prevRot + (atmo.rot - atmo.prevRot) * f;
-		GL11.glPushMatrix();
 		//this somehow fucking works
 		GL11.glTranslated(-0.19, 0, 0.19);
 		GL11.glRotated(rot, 0, -0.5, 0);
 		GL11.glTranslated(0.19, 0, -0.19);
 		ResourceManager.atmo_vent.renderPart("Fan_Cylinder.001");
-		GL11.glPopMatrix();
-		GL11.glShadeModel(GL11.GL_FLAT);
-		GL11.glEnable(GL11.GL_CULL_FACE);
+
 		GL11.glPopMatrix();
 	}
 }

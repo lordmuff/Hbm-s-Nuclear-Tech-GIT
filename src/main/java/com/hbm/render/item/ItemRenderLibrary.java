@@ -561,6 +561,16 @@ public class ItemRenderLibrary {
 		        bindTexture(ResourceManager.missile_pad_tex); ResourceManager.missile_pad.renderAll();
 			}});
 		
+		renderers.put(Item.getItemFromBlock(ModBlocks.launch_pad_passenger), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -1, 0);
+				GL11.glScaled(3, 3, 3);
+			}
+			
+			public void renderCommon() {
+		        bindTexture(ResourceManager.missile_pad_tex); ResourceManager.missile_pad.renderAll();
+			}});
+		
 		renderers.put(Item.getItemFromBlock(ModBlocks.compact_launcher), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -4, 0);
@@ -646,6 +656,15 @@ public class ItemRenderLibrary {
 			public void renderCommon() {
 				GL11.glRotated(90, 0, -1, 0);
 		        bindTexture(ResourceManager.satdock_tex); ResourceManager.satDock.renderAll();
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.transporter_rocket), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glScaled(3, 3, 3);
+			}
+			public void renderCommon() {
+				GL11.glRotated(90, 0, -1, 0);
+				bindTexture(ResourceManager.satdock_tex); ResourceManager.satDock.renderAll();
 			}});
 		
 		renderers.put(Item.getItemFromBlock(ModBlocks.vault_door), new ItemRenderBase() {

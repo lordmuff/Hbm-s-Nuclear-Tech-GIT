@@ -258,8 +258,8 @@ public class HazmatRegistry {
 		
 		float res = 0.0F;
 		
-		if(player.getUniqueID().toString().equals(Library.Pu_238)) {
-			res += 0.8F;
+		if(player.getUniqueID().toString().equals(ShadyUtil.Pu_238)) {
+			res += 0.4F;
 		}
 		
 		for(int i = 0; i < 4; i++) {

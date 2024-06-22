@@ -171,15 +171,29 @@ public class Library {
 		
 		return false;
 	}
-
+	
 	public static boolean checkInventory(EntityPlayer player, Item item, int slot)
 	{
 		if(player.inventory.mainInventory[slot] != null &&
-				player.inventory.mainInventory[slot].getItem() == item)
+				player.inventory.mainInventory[slot].getItem() == item) 
 		{
 			return true;
 		}
+		
+		return false;
+	}
 
+	
+	public static boolean checkUnionListForFluids(List<UnionOfTileEntitiesAndBooleansForFluids> list, IFluidSource that) {
+		
+		for(UnionOfTileEntitiesAndBooleansForFluids union : list)
+		{
+			if(union.source == that)
+			{
+				return true;
+			}
+		}
+		
 		return false;
 	}
 

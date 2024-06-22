@@ -254,12 +254,7 @@ public class EntityChemical extends EntityThrowableNT {
 				}
 			}
 		}
-		if(type.hasTrait(FT_ULTRAKILL.class)) {
-			FT_ULTRAKILL trait = type.getTrait(FT_ULTRAKILL.class);
-			if(living != null && living.isEntityAlive()) {
-				living.heal(10F * (float) intensity); //blood is simply better lole
-			}
-		}
+
 		if(type.hasTrait(FT_VentRadiation.class)) {
 			FT_VentRadiation trait = type.getTrait(FT_VentRadiation.class);
 			if(living != null) {
@@ -449,7 +444,7 @@ public class EntityChemical extends EntityThrowableNT {
 						}
 					}
 				}
-				
+
 				if(this.isExtinguishing()) {
 					
 					for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
@@ -481,12 +476,6 @@ public class EntityChemical extends EntityThrowableNT {
 				}
 				
 				Block block = worldObj.getBlock(x, y, z);
-				if(type.hasTrait(FT_EXPLOSIVE.class)) {
-					int eX = mop.blockX;
-					int eY = mop.blockY;
-					int eZ = mop.blockZ;
-					worldObj.createExplosion(thrower, eX, eY, eZ, 1, addedToChunk);
-				}
 				if(type == Fluids.SEEDSLURRY) {
 					if(block == Blocks.dirt || block == ModBlocks.waste_earth || block == ModBlocks.dirt_dead || block == ModBlocks.dirt_oily) {
 						

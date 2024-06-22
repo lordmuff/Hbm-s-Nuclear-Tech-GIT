@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
+import com.hbm.dim.DebugTeleporter;
+import com.hbm.dim.SolarSystem;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
@@ -21,7 +23,9 @@ import com.hbm.items.weapon.ItemCustomMissilePart.PartSize;
 import com.hbm.items.weapon.ItemCustomMissilePart.WarheadType;
 import com.hbm.main.MainRegistry;
 
+import api.hbm.entity.IRadarDetectable;
 import api.hbm.entity.IRadarDetectableNT;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,7 +33,11 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class EntityMissileCustom extends EntityMissileBaseNT implements IChunkLoader {
+	private ItemStack payload;
 
+	public void setPayload(ItemStack stack) {
+		this.payload = stack.copy();
+	}
 	protected float fuel;
 	protected float consumption;
 
@@ -81,12 +89,52 @@ public class EntityMissileCustom extends EntityMissileBaseNT implements IChunkLo
 
 	@Override
 	public void onUpdate() {
+		EntityPlayer riding = (EntityPlayer) this.riddenByEntity;
+		ItemCustomMissilePart part = (ItemCustomMissilePart) Item.getItemById(this.dataWatcher.getWatchableObjectInt(9));
 
-		if(!worldObj.isRemote) {
-			if(this.hasPropulsion()) this.fuel -= this.consumption;
+		WarheadType type = (WarheadType) part.attributes[0];
+
+		// We need to lock movement on both the client and the server
+		boolean lockMovement = false;
+		if(payload != null) {
+			if(payload.getTagCompound().getBoolean("Processed") == true && type == WarheadType.APOLLO) {
+				if(velocity < 0.1 && riding == null) {
+					lockMovement = true;
+				}
+			}
 		}
 
-		super.onUpdate();
+		if(!worldObj.isRemote) {
+			if(!lockMovement) {
+				if(this.hasPropulsion()) this.fuel -= this.consumption;
+
+				motionX = 0;
+				motionY = 1;
+				motionZ = 0;
+			}
+
+			if(payload != null) {
+				if(posY > 600) {
+					if(riding != null) {
+						SolarSystem.Body destination = SolarSystem.Body.values()[payload.getItemDamage()];
+
+						if(destination.getBody() != null) {
+							DebugTeleporter.teleport(riding, destination.getBody().dimensionId, riding.posX, 300, riding.posZ, false);
+						}
+
+						riding.dismountEntity(riding);
+					}
+
+				}
+
+				if(this.posY > 610) {
+					this.setDead();
+				}
+			}
+		}
+
+		if(!lockMovement)
+			super.onUpdate();
 	}
 
 	@Override
@@ -140,9 +188,19 @@ public class EntityMissileCustom extends EntityMissileBaseNT implements IChunkLo
 		case KEROSENE: smoke = "exKerosene"; break;
 		case SOLID: smoke = "exSolid"; break;
 		case XENON: break;
-		}
+		case HYDRAZINE: smoke = "exKerosene"; break;
+		case METHALOX:
+			break;
 
-		if(!smoke.isEmpty()) for(int i = 0; i < velocity; i++) MainRegistry.proxy.spawnParticle(posX - v.xCoord * i, posY - v.yCoord * i, posZ - v.zCoord * i, smoke, null);
+
+		}
+		EntityPlayer riding = (EntityPlayer) this.riddenByEntity;
+
+			if(!smoke.isEmpty()) {
+				if(this.posY > 10) {
+				for(int i = 0; i < velocity; i++) MainRegistry.proxy.spawnParticle(posX - v.xCoord * i, posY - v.yCoord * i, posZ - v.zCoord * i, smoke, null);
+			}
+		}
 	}
 
 	@Override
@@ -218,6 +276,17 @@ public class EntityMissileCustom extends EntityMissileBaseNT implements IChunkLo
 		default:
 			break;
 
+		}
+	}
+	@Override
+	public boolean interactFirst(EntityPlayer player) {
+		if(super.interactFirst(player)) {
+			return true;
+		} else if(!this.worldObj.isRemote && (this.riddenByEntity == null || this.riddenByEntity == player)) {
+			player.mountEntity(this);
+			return true;
+		} else {
+			return false;
 		}
 	}
 

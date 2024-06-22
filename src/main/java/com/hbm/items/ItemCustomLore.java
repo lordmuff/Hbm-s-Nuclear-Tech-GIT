@@ -18,10 +18,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
 public class ItemCustomLore extends Item {
-	
+
 	EnumRarity rarity;
 	private ItemStack stack;
 	protected boolean hasEffect = false;
+
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean bool) {
@@ -75,7 +76,7 @@ public class ItemCustomLore extends Item {
 		}
 	}
 	
-
+	
 	static int setSize = 0;
 
 	@Override
@@ -98,7 +99,7 @@ public class ItemCustomLore extends Item {
 		this.hasEffect = true;
 		return this;
 	}
-
+	
 	@Override
 	public Item setUnlocalizedName(String uloc) {
 		setTextureName(RefStrings.MODID + ':' + uloc);

@@ -110,6 +110,7 @@ public class MagicRecipes {
 				new ComparableStack(ModItems.ingot_gwenium), 
 				new ComparableStack(ModItems.ingot_dineutronium), 
 				new ComparableStack(ModItems.ingot_dineutronium)));
+				new ComparableStack(ModItems.circuit, 1, EnumCircuitType.CHIP);
 	}
 	
 	public static List<MagicRecipe> getRecipes() {

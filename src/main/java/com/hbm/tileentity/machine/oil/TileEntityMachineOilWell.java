@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.dim.SolarSystem;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.inventory.container.ContainerMachineOilWell;
 import com.hbm.inventory.fluid.FluidType;
@@ -36,9 +37,11 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 	protected static int consumption = 100;
 	protected static int delay = 50;
 	protected static int oilPerDepsoit = 500;
+	protected static int oilPerDunaDepsoit = 100;
 	protected static int gasPerDepositMin = 100;
 	protected static int gasPerDepositMax = 500;
 	protected static double drainChance = 0.05D;
+	protected static double DunadrainChance = 0.1D;
 
 	@Override
 	public String getName() {
@@ -91,20 +94,37 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 	}
 
 	@Override
-	public void onSuck(int x, int y, int z) {
+    public void onSuck(int x, int y, int z) {
+        ExplosionLarge.spawnOilSpills(worldObj, xCoord + 0.5F, yCoord + 5.5F, zCoord + 0.5F, 3);
+        worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "game.neutral.swim.splash", 2.0F, 0.5F);
 
-		ExplosionLarge.spawnOilSpills(worldObj, xCoord + 0.5F, yCoord + 5.5F, zCoord + 0.5F, 3);
-		worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "game.neutral.swim.splash", 2.0F, 0.5F);
-		
-		this.tanks[0].setFill(this.tanks[0].getFill() + oilPerDepsoit);
-		if(this.tanks[0].getFill() > this.tanks[0].getMaxFill()) this.tanks[0].setFill(tanks[0].getMaxFill());
-		this.tanks[1].setFill(this.tanks[1].getFill() + (gasPerDepositMin + worldObj.rand.nextInt((gasPerDepositMax - gasPerDepositMin + 1))));
-		if(this.tanks[1].getFill() > this.tanks[1].getMaxFill()) this.tanks[1].setFill(tanks[1].getMaxFill());
-		
-		if(worldObj.rand.nextDouble() < drainChance) {
-			worldObj.setBlock(x, y, z, ModBlocks.ore_oil_empty);
-		}
+		int meta = worldObj.getBlockMetadata(x, y, z);
+
+        if(worldObj.getBlock(x, y, z) == ModBlocks.ore_oil) {
+			if(meta == SolarSystem.Body.DUNA.ordinal()) {
+				this.tanks[0].setFill(this.tanks[0].getFill() + oilPerDunaDepsoit);
+				if(this.tanks[0].getFill() > this.tanks[0].getMaxFill()) this.tanks[0].setFill(tanks[0].getMaxFill());
+			} else {
+				this.tanks[0].setFill(this.tanks[0].getFill() + oilPerDepsoit);
+				if(this.tanks[0].getFill() > this.tanks[0].getMaxFill()) this.tanks[0].setFill(tanks[0].getMaxFill());
+				this.tanks[1].setFill(this.tanks[1].getFill() + (gasPerDepositMin + worldObj.rand.nextInt((gasPerDepositMax - gasPerDepositMin + 1))));
+				if(this.tanks[1].getFill() > this.tanks[1].getMaxFill()) this.tanks[1].setFill(tanks[1].getMaxFill());
+			}
+        }
+        if(worldObj.getBlock(x, y, z)== ModBlocks.ore_oil) {
+			if(meta == SolarSystem.Body.DUNA.ordinal()) {
+				if(worldObj.rand.nextDouble() < DunadrainChance) {
+					worldObj.setBlock(x, y, z, ModBlocks.ore_oil_empty, meta, 3);
+				}
+			} else {
+				if(worldObj.rand.nextDouble() < drainChance) {
+					worldObj.setBlock(x, y, z, ModBlocks.ore_oil_empty, meta, 3);
+				}
+			}
+        }
 	}
+	
+	
 
 	@Override
 	public void fillFluidInit(FluidType type) {

@@ -36,7 +36,9 @@ public class WorldConfig {
 	public static int bedrockOilSpawn = 200;
 	public static int meteoriteSpawn = 500;
 
-	public static int bedrockIronSpawn = 100;
+	public static int dunaoilSpawn = 100;
+
+	public static int bedrockIronSpawn = 200;
 	public static int bedrockCopperSpawn = 200;
 	public static int bedrockBoraxSpawn = 50;
 	public static int bedrockChlorocalciteSpawn = 35;
@@ -52,6 +54,8 @@ public class WorldConfig {
 	public static int bedrockNiterSpawn = 50;
 	public static int bedrockFluoriteSpawn = 50;
 	public static int bedrockRedstoneSpawn = 50;
+	public static int bedrockBismuthSpawn = 400;
+	public static int bedrockCadmiumSpawn = 300;
 	public static int bedrockRareEarthSpawn = 50;
 	public static int bedrockBauxiteSpawn = 100;
 	public static int bedrockBismuthSpawn = 400;
@@ -159,8 +163,9 @@ public class WorldConfig {
 		bedrockOilSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.22_bedrockOilSpawnRate", "Spawns a bedrock oil node every nTH chunk", 200);
 		meteoriteSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.23_meteoriteSpawnRate", "Spawns a fallen meteorite every nTH chunk", 200);
 		nickelSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.24_nickelSpawnrate", "Amount of nickel ore veins per chunk", 12);
-		zincSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.24_zincSpawnrate", "Amount of zinc ore veins per chunk", 8);
-		mineralSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.24_mineralSpawnrate", "Amount of mineral ore veins per chunk", 4);
+		zincSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.25_zincSpawnrate", "Amount of zinc ore veins per chunk", 8);
+		mineralSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.26_mineralSpawnrate", "Amount of mineral ore veins per chunk", 4);
+		dunaoilSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.27S_oilSpawnRate", "Spawns an oil bubble every nTH chunk (on duna)", 100);
 
 		bedrockIronSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.B00_bedrockIronWeight", "Spawn weight for iron bedrock ore", 100);
 		bedrockCopperSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.B01_bedrockCopperWeight", "Spawn weight for copper bedrock ore", 200);
@@ -278,6 +283,8 @@ public class WorldConfig {
 		capsuleStructure = CommonConfig.setDefZero(capsuleStructure, 100);
 		arcticStructure = CommonConfig.setDefZero(arcticStructure, 500);
 		
+
+
 		meteorStrikeChance = CommonConfig.setDef(meteorStrikeChance, 1000);
 		meteorShowerChance = CommonConfig.setDef(meteorShowerChance, 1000);
 	}

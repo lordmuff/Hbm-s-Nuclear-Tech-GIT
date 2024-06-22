@@ -1,30 +1,21 @@
 package com.hbm.entity.logic;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.apache.logging.log4j.Level;
 
 import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
-import com.hbm.config.RadiationConfig;
 import com.hbm.entity.effect.EntityFalloutRain;
-import com.hbm.entity.logic.EntityNukeExplosionMK3.ATEntry;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.explosion.ExplosionNukeRayBatched;
 import com.hbm.main.MainRegistry;
-import com.hbm.packet.AuxParticlePacketNT;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
 
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
@@ -38,8 +29,11 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 	public int speed;
 	public int length;
 
+
+
 	public boolean fallout = true;
 	public boolean salted = false;
+
 	private int falloutAdd = 0;
 	
 	ExplosionNukeRayBatched explosion;
@@ -93,11 +87,8 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 			fallout.posX = this.posX;
 			fallout.posY = this.posY;
 			fallout.posZ = this.posZ;
-			fallout.setScale((int)(this.length * 5 + falloutAdd) * BombConfig.falloutRange / 100);
-			if(salted)
-			{
-				fallout.setSalted(true);
-			}
+			fallout.setScale((int)(this.length * 2.5 + falloutAdd) * BombConfig.falloutRange / 100);
+
 			this.worldObj.spawnEntityInWorld(fallout);
 
 			this.clearChunkLoader();
@@ -135,7 +126,7 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 			float eRads = rads;
 			eRads /= (float)res;
 			eRads /= (float)(len * len);
-			
+
 			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.RAD_BYPASS, eRads);
 		}
 	}

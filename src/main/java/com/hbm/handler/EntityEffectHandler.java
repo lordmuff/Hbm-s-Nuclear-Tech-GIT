@@ -8,15 +8,20 @@ import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.config.WorldConfig;
+import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
+import com.hbm.entity.mob.glyphid.EntityGlyphid;
 import com.hbm.explosion.ExplosionNukeSmall;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.extprop.HbmPlayerProps;
 import com.hbm.extprop.HbmLivingProps.ContaminationEffect;
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
+import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.handler.pollution.PollutionHandler;
 import com.hbm.handler.pollution.PollutionHandler.PollutionType;
 import com.hbm.handler.radiation.ChunkRadiationManager;
 import com.hbm.interfaces.IArmorModDash;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.armor.ArmorFSB;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
@@ -125,7 +130,7 @@ public class EntityEffectHandler {
 		handleOil(entity);
 		handlePollution(entity);
 		handleTemperature(entity);
-
+		handleOxy(entity);
 		handleDashing(entity);
 		handlePlinking(entity);
 		
@@ -181,7 +186,7 @@ public class EntityEffectHandler {
 			return;
 		
 		List<ContaminationEffect> contamination = HbmLivingProps.getCont(entity);
-		List<ContaminationEffect> rem = new ArrayList();
+		List<ContaminationEffect> rem = new ArrayList<ContaminationEffect>();
 		
 		for(ContaminationEffect con : contamination) {
 			ContaminationUtil.contaminate(entity, HazardType.RADIATION, con.ignoreArmor ? ContaminationType.RAD_BYPASS : ContaminationType.CREATIVE, con.getRad());
@@ -284,7 +289,18 @@ public class EntityEffectHandler {
 			}
 		}
 	}
-	
+
+	private static void handleOxy(EntityLivingBase entity) {
+		if(entity.worldObj.isRemote) return;
+		if(entity instanceof EntityGlyphid) return; // can't suffocate the bastards
+
+		if (!ArmorUtil.checkForOxy(entity)) {
+			HbmLivingProps.setOxy(entity, HbmLivingProps.getOxy(entity) - 1);
+		} else {
+			HbmLivingProps.setOxy(entity, 100); // 5 seconds until vacuum damage
+		}
+	}
+
 	private static void handleDigamma(EntityLivingBase entity) {
 		
 		if(!entity.worldObj.isRemote) {
@@ -671,14 +687,13 @@ public class EntityEffectHandler {
 						player.addVelocity(lookingIn.xCoord * forward + strafeVec.xCoord * strafe, 0, lookingIn.zCoord * forward + strafeVec.zCoord * strafe);
 						player.motionY = 0;
 						player.fallDistance = 0F;
-						player.playSound("hbm:weapon.rocketFlame", 1.0F, 1.0F);
+						player.playSound("hbm:player.dash", 1.0F, 1.0F);
 						
 						props.setDashCooldown(HbmPlayerProps.dashCooldownLength);
 						stamina -= perDash;
 					}
 				} else {	
 					props.setDashCooldown(props.getDashCooldown() - 1);
-					props.setKeyPressed(EnumKeybind.DASH, false);
 				}
 						
 				if(stamina < props.getDashCount() * perDash) {
@@ -686,7 +701,7 @@ public class EntityEffectHandler {
 					
 					if(stamina % perDash == perDash-1) {
 						
-						player.playSound("hbm:item.techBoop", 1.0F, (1.0F + ((1F/12F)*(stamina/perDash))));
+						player.playSound("hbm:player.dashRecharge", 1.0F, (1.0F + ((1F/12F)*(stamina/perDash))));
 						stamina++;
 					}
 				}

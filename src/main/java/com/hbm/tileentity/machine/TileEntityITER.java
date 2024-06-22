@@ -738,6 +738,14 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 	}
 
 	@Override
+	public void provideExtraInfo(NBTTagCompound data) {
+		data.setBoolean(CompatEnergyControl.B_ACTIVE, this.isOn && plasma.getFill() > 0);
+		int output = FusionRecipes.getSteamProduction(plasma.getTankType());
+		data.setDouble("consumption", output * 10);
+		data.setDouble("outputmb", output);
+	}
+
+	@Override
 	public void setFluidFill(int fill, FluidType type) {
 		// TODO Auto-generated method stub
 
@@ -783,13 +791,5 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 	public int getMaxFluidFill(FluidType type) {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	public void provideExtraInfo(NBTTagCompound data) {
-		data.setBoolean(CompatEnergyControl.B_ACTIVE, this.isOn && plasma.getFill() > 0);
-		int output = FusionRecipes.getSteamProduction(plasma.getTankType());
-		data.setDouble("consumption", output * 10);
-		data.setDouble("outputmb", output);
 	}
 }

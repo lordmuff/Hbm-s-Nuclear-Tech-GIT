@@ -109,8 +109,8 @@ public class TileEntityMachineOrbus extends TileEntityBarrel implements IOverpre
 	    		bf.setPosition(xCoord, yCoord, zCoord);
 				bf.destructionRange = (int) amat;
 				worldObj.spawnEntityInWorld(bf);
-				EntityNukeTorex.statFacAnti(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, amat * 1.5F);
-
+				EntityNukeTorex.startFacAnti(worldObj, xCoord, yCoord, zCoord, amat * 1.5F);
+				return;
 			}
 			else
 			{

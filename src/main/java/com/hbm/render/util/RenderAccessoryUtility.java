@@ -128,9 +128,6 @@ public class RenderAccessoryUtility {
 		if(uuid.equals(ShadyUtil.Adam29Adam29)) {
 			return adam;
 		}
-		if(uuid.equals(Library.DUODEC_)) {
-			return gwen;
-		}
 		if(uuid.equals(ShadyUtil.Alcater)) {
 			return alcater;
 		}
@@ -140,7 +137,7 @@ public class RenderAccessoryUtility {
 		if(ShadyUtil.contributors.contains(uuid)) {
 			return wiki;
 		}
-		if(name.startsWith("Player")) {
+		if(uuid.equals(ShadyUtil.DUODEC_)) {
 			return gwen;
 		}
 		

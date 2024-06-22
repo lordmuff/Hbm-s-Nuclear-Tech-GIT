@@ -2,8 +2,6 @@ package com.hbm.blocks.bomb;
 
 import java.util.Random;
 
-import org.apache.logging.log4j.Level;
-
 import com.hbm.blocks.machine.BlockPillar;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.item.EntityTNTPrimedBase;
@@ -11,15 +9,12 @@ import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionNT;
 import com.hbm.explosion.ExplosionNT.ExAttrib;
 import com.hbm.interfaces.IBomb;
-import com.hbm.main.MainRegistry;
 
 import api.hbm.block.IFuckingExplode;
 import net.minecraft.util.MathHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 

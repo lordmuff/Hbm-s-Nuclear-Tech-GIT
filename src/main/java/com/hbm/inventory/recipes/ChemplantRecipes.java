@@ -82,7 +82,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.outputFluids(new FluidStack(Fluids.SOLVENT, 1000)));
 		recipes.add(new ChemRecipe(43, "POLYMER", 100)
 				.inputItems(
-						new OreDictStack(COAL.dust(), 2),
+						new OreDictStack(ANY_COAL_COKE.dust(), 2),
 						new OreDictStack(F.dust()))
 				.inputFluids(new FluidStack(Fluids.PETROLEUM, 500, GeneralConfig.enable528 ? 1 : 0))
 				.outputItems(new ItemStack(ModItems.ingot_polymer)));
@@ -230,7 +230,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.inputItems(
 						new OreDictStack(DURA.dust(), 2),
 						new OreDictStack(CU.dust(), 1),
-						new OreDictStack(COAL.dust(), 1))
+						new OreDictStack(ANY_COAL_COKE.dust(), 1))
 				.inputFluids(new FluidStack(Fluids.SULFURIC_ACID, 100))
 				.outputItems(new ItemStack(ModItems.ingot_saturnite, 4)));
 		recipes.add(new ChemRecipe(62, "BALEFIRE", 100)
@@ -251,7 +251,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 		recipes.add(new ChemRecipe(65, "COLTAN_CLEANING", 60)
 				.inputItems(
 						new OreDictStack(COLTAN.dust(), 2),
-						new OreDictStack(COAL.dust()))
+						new OreDictStack(ANY_COAL_COKE.dust()))
 				.inputFluids(
 						new FluidStack(Fluids.PEROXIDE, 250),
 						new FluidStack(Fluids.HYDROGEN, 500))
@@ -476,7 +476,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.outputItems(
 						new ItemStack(ModItems.nugget_u233, 1),
 						new ItemStack(ModItems.nuclear_waste_tiny, 1)));
-
+		
 		recipes.add(new ChemRecipe(120, "MASS_CAKE", 30)
 				.inputFluids(new FluidStack(Fluids.CMILK, 4000), new FluidStack(Fluids.CREAM, 1000)) // why not regular milk? well its because the refined products allow for higher mass cakes while still needing less milk
 				.inputItems(
@@ -507,16 +507,24 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.outputItems(
 						new ItemStack(ModItems.ingot_rubber, 2)));
 
-		recipes.add(new ChemRecipe(125, "POLYVULC", 400)
-				.inputItems(
-						new OreDictStack(KNO.dust(), 2),
-						new OreDictStack(S.dust(), 4),
-						new OreDictStack(LATEX.ingot(), 2))
-				.inputFluids(new FluidStack(Fluids.ACID, 500))
-				.outputItems(
-						new ItemStack(ModItems.ingot_polymer, 4)));
+        recipes.add(new ChemRecipe(125, "POLYVULC", 400)
+                .inputItems(
+                        new OreDictStack(KNO.dust(), 2),
+                        new OreDictStack(S.dust(), 4),
+                        new OreDictStack(LATEX.ingot(), 2))
+                .inputFluids(new FluidStack(Fluids.ACID, 500))
+                .outputItems(
+                        new ItemStack(ModItems.ingot_polymer, 4)));
 
-		//mayo zone END!!!
+        //mayo zone END
+
+        recipes.add(new ChemRecipe(103, "MEAT_PROCESSING", 200)
+				.inputItems(new OreDictStack(KEY_GLYPHID_MEAT, 3))
+				.inputFluids(new FluidStack(Fluids.SULFURIC_ACID, 1000))
+				.outputItems(new ItemStack(ModItems.sulfur, 4),
+						new ItemStack(ModItems.niter, 3))
+				.outputFluids(new FluidStack(Fluids.SALIENT, 250)));
+        
 	}
 
 	public static void registerOtherOil() {
@@ -534,7 +542,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.outputItems(new ItemStack(Blocks.sand, 4), new ItemStack(Blocks.sand, 4), new ItemStack(Blocks.sand, 4), new ItemStack(Blocks.sand, 4))
 				.outputFluids(new FluidStack(1000, Fluids.BITUMEN)));
 		recipes.add(new ChemRecipe(35, "ASPHALT", 100)
-				.inputItems(new ComparableStack(Blocks.gravel, 2), new ComparableStack(Blocks.sand, 6))
+				.inputItems(new ComparableStack(Blocks.gravel, 2), new OreDictStack(KEY_SAND, 6))
 				.inputFluids(new FluidStack(1000, Fluids.BITUMEN))
 				.outputItems(new ItemStack(ModBlocks.asphalt, 16)));
 	}

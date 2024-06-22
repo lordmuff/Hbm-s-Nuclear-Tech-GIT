@@ -90,6 +90,26 @@ public class SolderingRecipes extends SerializableRecipe {
 				new AStack[] {
 						new OreDictStack(PB.wireFine(), 12)}
 		));
+
+		recipes.add(new SolderingRecipe(new ItemStack(ModItems.circuit, 1, EnumCircuitType.AVIONICS.ordinal()), 300, 1_000,
+				new AStack[] {
+						new ComparableStack(ModItems.circuit, 3, EnumCircuitType.CHIP)},
+				new AStack[] {
+						new ComparableStack(ModItems.circuit, 1, EnumCircuitType.ADVANCED),
+						new OreDictStack(RUBBER.ingot(), 4)},
+				new AStack[] {
+						new OreDictStack(PB.wireFine(), 4)}
+		));
+		recipes.add(new SolderingRecipe(new ItemStack(ModItems.circuit, 1, EnumCircuitType.AREO.ordinal()), 300, 1_000,
+				new AStack[] {
+						new ComparableStack(ModItems.circuit, 3, EnumCircuitType.CHIP)},
+				new AStack[] {
+						new ComparableStack(ModItems.circuit, 1, EnumCircuitType.BASIC),
+						new ComparableStack(ModItems.nugget_hafnium, 1)},
+				new AStack[] {
+						new OreDictStack(PB.wireFine(), 4)} // temp 
+		));
+		
 		
 		/*
 		 * COMPUTERS
