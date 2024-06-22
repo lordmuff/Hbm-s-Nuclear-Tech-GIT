@@ -126,9 +126,6 @@ public class EntityMappings {
 		addEntity(EntityMissileMicro.class, "entity_missile_micronuclear", 1000);
 		addEntity(EntityCloudSolinium.class, "entity_cloud_rainbow", 1000);
 		addEntity(EntityRagingVortex.class, "entity_raging_vortex", 250);
-		addEntity(EntityCarrier.class, "entity_missile_carrier", 1000);
-		addEntity(EntityRidableCarrier.class, "entity_rocket_carrier", 1000);
-		addEntity(EntityBooster.class, "entity_missile_booster", 1000);
 		addEntity(EntityModBeam.class, "entity_beam_bang", 1000);
 		addEntity(EntityMissileBHole.class, "entity_missile_blackhole", 1000);
 		addEntity(EntityMissileSchrabidium.class, "entity_missile_schrabidium", 1000);
@@ -287,7 +284,7 @@ public class EntityMappings {
 		EntityRegistry.addSpawn(EntityDuck.class, 10, 4, 4, EnumCreatureType.creature, BiomeGenBase.swampland);
 		EntityRegistry.addSpawn(EntityDuck.class, 10, 4, 4, EnumCreatureType.creature, BiomeGenBase.river);
 		EntityRegistry.addSpawn(EntityDuck.class, 10, 4, 4, EnumCreatureType.creature, BiomeGenBase.forest);
-		
+
 	}
 	
 	private static void addEntity(Class<? extends Entity> clazz, String name, int trackingRange) {
