@@ -197,49 +197,40 @@ public class BlockOre extends Block implements IBlockMultiPass, IBlockMulti {
             if (!world.isRemote)
                 world.setBlock(x, y, z, ModBlocks.block_meteor_cobble);
             world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-            return;
-        }
-
-        if (this.rad > 0) {
-            ChunkRadiationManager.proxy.incrementRad(world, x, y, z, rad);
-            world.scheduleBlockUpdate(x, y, z, this, this.tickRate(world));
-        }
-
-        if (this == ModBlocks.frozen_planks || this == ModBlocks.frozen_dirt) {
-
-        }
-
-        @SideOnly(Side.CLIENT)
-        public void getSubBlocks (Item item, CreativeTabs tab, List list){
-            for (int i = 0; i < getSubCount(); i++)
-                list.add(new ItemStack(item, 1, i));
-        }
-
-        @Override
-        public void onBlockPlacedBy (World world,int x, int y, int z, EntityLivingBase player, ItemStack stack){
-            int meta = stack.getItemDamage();
-            world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-        }
-
-        @Override
-        public int getPasses () {
-            return 2;
-        }
-
-        @Override
-        public boolean shouldRenderItemMulti () {
-            return true;
-        }
-
-        @Override
-        public int getRenderType () {
-            return IBlockMultiPass.getRenderType();
-        }
-
-        @Override
-        public int getSubCount () {
-            return SolarSystem.Body.values().length;
         }
 
     }
+
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks (Item item, CreativeTabs tab, List list){
+        for (int i = 0; i < getSubCount(); i++)
+            list.add(new ItemStack(item, 1, i));
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world,int x, int y, int z, EntityLivingBase player, ItemStack stack){
+        int meta = stack.getItemDamage();
+        world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+    }
+
+    @Override
+    public int getPasses() {
+        return 2;
+    }
+
+    @Override
+    public boolean shouldRenderItemMulti () {
+        return true;
+    }
+
+    @Override
+    public int getRenderType () {
+        return IBlockMultiPass.getRenderType();
+    }
+
+    @Override
+    public int getSubCount () {
+        return SolarSystem.Body.values().length;
+    }
+
 }

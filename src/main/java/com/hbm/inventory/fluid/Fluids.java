@@ -132,9 +132,7 @@ public class Fluids {
 	public static FluidType SOLVENT; //oranic solvent in fact
 	public static FluidType HCL;
     public static FluidType NITRIC_ACID;
-	public static FluidType SOLVENT;			//oranic solvent in fact
 	public static FluidType BLOOD;				//BLOOD ORB! BLOOD ORB! BLOOD ORB!
-	public static FluidType BLOOD_HOT;
 	public static FluidType PHEROMONE;
 	public static FluidType PHEROMONE_M;
 	public static FluidType SYNGAS;
@@ -215,27 +213,11 @@ public class Fluids {
 	public static FluidType CREAM;
 	public static FluidType DICYANOACETYLENE;//DICYANOACETYLENE
 	public static FluidType FULLERENE;
-	public static FluidType HCL;
-	public static FluidType HTcO4;
-	public static FluidType AMMONIA;
-	public static FluidType HYDRAZINE;
+
 	public static FluidType NITROGEN;
-	public static FluidType BLOODGAS;
-	public static FluidType OLIVEOIL;
-	public static FluidType ELBOWGREASE;
-	public static FluidType NMASSTETRANOL;
-	public static FluidType NMASS;
+
 	public static FluidType AIR;
 	public static FluidType MINSOL;
-	public static FluidType MILK;
-	public static FluidType SMILK;
-	public static FluidType COFFEE;
-	public static FluidType TEA;
-	public static FluidType HONEY;
-	public static FluidType RIZZ;
-	public static FluidType NEON;
-	public static FluidType ARGON;
-	public static FluidType KRYPTON;
 	//mayo zone!!!
 
 	//Lead Bismuth Eutectic Coolant (Cool)
@@ -251,6 +233,7 @@ public class Fluids {
     public static FluidType MSLURRY; // Morkite slurry, similar to MINSOL
 
     public static FluidType STELLAR_FLUX;
+	public static FluidType FLUORINE; //why not
 
 	/* Lagacy names for compatibility purposes */
 	@Deprecated public static FluidType ACID;	//JAOPCA uses this, apparently
@@ -682,7 +665,6 @@ public class Fluids {
 		metaOrder.add(NITRIC_ACID);
 		metaOrder.add(SOLVENT);
 		metaOrder.add(RADIOSOLVENT);
-		metaOrder.add(HTCO4);
 		metaOrder.add(SCHRABIDIC);
 		metaOrder.add(UF6);
 		metaOrder.add(PUF6);

@@ -40,6 +40,92 @@ public class CentrifugeRecipes extends SerializableRecipe {
 
     private static HashMap<AStack, ItemStack[]> recipes = new HashMap();
 
+
+    @Override
+    public void registerPost() {
+
+        if (!IMCCentrifuge.buffer.isEmpty()) {
+            recipes.putAll(IMCCentrifuge.buffer);
+            MainRegistry.logger.info("Fetched " + IMCCentrifuge.buffer.size() + " IMC centrifuge recipes!");
+            IMCCentrifuge.buffer.clear();
+        }
+    }
+
+    public static ItemStack[] getOutput (ItemStack stack){
+
+        if (stack == null || stack.getItem() == null)
+            return null;
+
+        ComparableStack comp = new ComparableStack(stack).makeSingular();
+
+        if (recipes.containsKey(comp))
+            return RecipesCommon.copyStackArray(recipes.get(comp));
+
+        for (Entry<AStack, ItemStack[]> entry : recipes.entrySet()) {
+            if (entry.getKey().isApplicable(stack)) {
+                return RecipesCommon.copyStackArray(entry.getValue());
+            }
+        }
+
+        return null;
+    }
+
+    public static HashMap getRecipes () {
+
+        HashMap<Object, Object[]> recipes = new HashMap<Object, Object[]>();
+
+        for (Entry<AStack, ItemStack[]> entry : CentrifugeRecipes.recipes.entrySet()) {
+            recipes.put(entry.getKey(), entry.getValue());
+        }
+
+        return recipes;
+    }
+
+    @Override
+    public String getFileName () {
+        return "hbmCentrifuge.json";
+    }
+
+    @Override
+    public Object getRecipeObject () {
+        return recipes;
+    }
+
+    @Override
+    public void readRecipe (JsonElement recipe){
+        JsonObject obj = (JsonObject) recipe;
+        AStack in = this.readAStack(obj.get("input").getAsJsonArray());
+        ItemStack[] out = this.readItemStackArray((JsonArray) obj.get("output"));
+        this.recipes.put(in, out);
+    }
+
+    @Override
+    public void writeRecipe (Object recipe, JsonWriter writer) throws IOException {
+        try {
+            Entry<AStack, ItemStack[]> entry = (Entry<AStack, ItemStack[]>) recipe;
+            writer.name("input");
+            this.writeAStack(entry.getKey(), writer);
+            writer.name("output").beginArray();
+            for (ItemStack stack : entry.getValue()) {
+                this.writeItemStack(stack, writer);
+            }
+            writer.endArray();
+        } catch (Exception ex) {
+            MainRegistry.logger.error(ex);
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteRecipes () {
+        recipes.clear();
+    }
+
+    @Override
+    public String getComment () {
+        return "Outputs have to be an array of up to four item stacks. Fewer aren't used by default recipes, but should work anyway.";
+    }
+
     @Override
     public void registerDefaults() {
 
@@ -470,7 +556,6 @@ public class CentrifugeRecipes extends SerializableRecipe {
 
             ArrayList<ItemStack> naquadriaNuggets = OreDictionary.getOres("nuggetNaquadria");
             if (naquadriaNuggets.size() != 0) {
-                ItemStack nuggetNQR = naquadriaNuggets.get(0);
                 ItemStack copy = nuggetNQR.copy();
                 copy.stackSize = 12;
                 recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.watz_pellet_depleted, EnumWatzType.NQD)), new ItemStack[]{
@@ -885,89 +970,6 @@ public class CentrifugeRecipes extends SerializableRecipe {
         }
 
 
-        @Override
-        public void registerPost () {
 
-            if (!IMCCentrifuge.buffer.isEmpty()) {
-                recipes.putAll(IMCCentrifuge.buffer);
-                MainRegistry.logger.info("Fetched " + IMCCentrifuge.buffer.size() + " IMC centrifuge recipes!");
-                IMCCentrifuge.buffer.clear();
-            }
-        }
-
-        public static ItemStack[] getOutput (ItemStack stack){
-
-            if (stack == null || stack.getItem() == null)
-                return null;
-
-            ComparableStack comp = new ComparableStack(stack).makeSingular();
-
-            if (recipes.containsKey(comp))
-                return RecipesCommon.copyStackArray(recipes.get(comp));
-
-            for (Entry<AStack, ItemStack[]> entry : recipes.entrySet()) {
-                if (entry.getKey().isApplicable(stack)) {
-                    return RecipesCommon.copyStackArray(entry.getValue());
-                }
-            }
-
-            return null;
-        }
-
-        public static HashMap getRecipes () {
-
-            HashMap<Object, Object[]> recipes = new HashMap<Object, Object[]>();
-
-            for (Entry<AStack, ItemStack[]> entry : CentrifugeRecipes.recipes.entrySet()) {
-                recipes.put(entry.getKey(), entry.getValue());
-            }
-
-            return recipes;
-        }
-
-        @Override
-        public String getFileName () {
-            return "hbmCentrifuge.json";
-        }
-
-        @Override
-        public Object getRecipeObject () {
-            return recipes;
-        }
-
-        @Override
-        public void readRecipe (JsonElement recipe){
-            JsonObject obj = (JsonObject) recipe;
-            AStack in = this.readAStack(obj.get("input").getAsJsonArray());
-            ItemStack[] out = this.readItemStackArray((JsonArray) obj.get("output"));
-            this.recipes.put(in, out);
-        }
-
-        @Override
-        public void writeRecipe (Object recipe, JsonWriter writer) throws IOException {
-            try {
-                Entry<AStack, ItemStack[]> entry = (Entry<AStack, ItemStack[]>) recipe;
-                writer.name("input");
-                this.writeAStack(entry.getKey(), writer);
-                writer.name("output").beginArray();
-                for (ItemStack stack : entry.getValue()) {
-                    this.writeItemStack(stack, writer);
-                }
-                writer.endArray();
-            } catch (Exception ex) {
-                MainRegistry.logger.error(ex);
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void deleteRecipes () {
-            recipes.clear();
-        }
-
-        @Override
-        public String getComment () {
-            return "Outputs have to be an array of up to four item stacks. Fewer aren't used by default recipes, but should work anyway.";
-        }
     }
 }

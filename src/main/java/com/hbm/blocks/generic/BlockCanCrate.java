@@ -96,4 +96,3 @@ public class BlockCanCrate extends Block {
 	}
 }
 
-}

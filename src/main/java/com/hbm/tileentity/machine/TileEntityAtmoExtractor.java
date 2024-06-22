@@ -15,7 +15,7 @@ import com.hbm.inventory.fluid.trait.FT_Gaseous;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.TileEntityMachineBase;
 
-import api.hbm.energymk2.IEnergyHandlerMK2;
+import api.hbm.energymk2.IEnergyReceiverMK2;
 import api.hbm.fluid.IFluidStandardSender;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -45,11 +45,11 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IF
 		if(!worldObj.isRemote) {
 
 			this.updateConnections();
-			
+
 			// Extractors will not work indoors
 			CBT_Atmosphere atmosphere = !ChunkAtmosphereManager.proxy.hasAtmosphere(worldObj, xCoord, yCoord, zCoord)
-				? CelestialBody.getTrait(worldObj, CBT_Atmosphere.class)
-				: null;
+					? CelestialBody.getTrait(worldObj, CBT_Atmosphere.class)
+					: null;
 
 			if(atmosphere != null) {
 				tank.setTankType(atmosphere.getMainFluid());
@@ -84,7 +84,7 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IF
 	protected void updateConnections() {
 
 		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-			this.trySubscribe(tanks.getTankType(), worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir);
+			this.trySubscribe(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir);
 	}
 
 	public void networkUnpack(NBTTagCompound data) {

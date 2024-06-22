@@ -11,12 +11,16 @@ import com.hbm.explosion.ExplosionNT.ExAttrib;
 import com.hbm.interfaces.IBomb;
 
 import api.hbm.block.IFuckingExplode;
+import com.hbm.main.MainRegistry;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.Level;
 
 public class DetMiner extends BlockPillar implements IBomb, IFuckingExplode {
 
@@ -68,8 +72,8 @@ public class DetMiner extends BlockPillar implements IBomb, IFuckingExplode {
 		if(!world.isRemote) {
 			if(GeneralConfig.enableExtendedLogging) {
 				MainRegistry.logger.log(Level.INFO, "[BOMBPL]" + this.getLocalizedName() + " placed at " + x + " / " + y + " / " + z + "! " + "by "+ player.getCommandSenderName());
+			}
 		}
-	}
 	}
 
 	@Override

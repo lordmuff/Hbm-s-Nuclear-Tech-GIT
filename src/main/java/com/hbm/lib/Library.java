@@ -183,20 +183,6 @@ public class Library {
 		return false;
 	}
 
-	
-	public static boolean checkUnionListForFluids(List<UnionOfTileEntitiesAndBooleansForFluids> list, IFluidSource that) {
-		
-		for(UnionOfTileEntitiesAndBooleansForFluids union : list)
-		{
-			if(union.source == that)
-			{
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
 	public static EntityLivingBase getClosestEntityForChopper(World world, double x, double y, double z, double radius) {
 		double d4 = -1.0D;
 		EntityLivingBase entityplayer = null;
