@@ -7,6 +7,7 @@ import static com.hbm.items.special.ItemByproduct.EnumByproduct.*;
 import java.util.Locale;
 
 import com.hbm.lib.RefStrings;
+import com.hbm.util.Compat;
 import com.hbm.util.EnumUtil;
 
 import cpw.mods.fml.relauncher.Side;
