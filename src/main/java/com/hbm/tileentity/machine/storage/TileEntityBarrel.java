@@ -458,7 +458,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements IFluidAcc
 	    	    		bf.setPosition(xCoord, yCoord, zCoord);
 	    				bf.destructionRange = (int) amat;
 	    				worldObj.spawnEntityInWorld(bf);
-	    				EntityNukeTorex.startFacAnti(worldObj, xCoord, yCoord, zCoord, amat * 1.5F);
+	    				EntityNukeTorex.statFacAnti(worldObj, xCoord, yCoord, zCoord, amat * 1.5F);
 	    				return;
 	    			}
 	    			else

@@ -30,15 +30,15 @@ public class TileEntityAtmoVent extends TileEntityAtmoExtractor {
 	}
 
 	public void fillFluidInit(FluidType type) {
-		
+
 		int offsetX = 0;
 		int offsetZ = 0;
-		
+
 		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
 		offsetX = -dir.offsetX;
 		offsetZ = -rot.offsetZ;
-		
+
 		if(dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH) {
 			offsetX = rot.offsetX;
 			offsetZ = dir.offsetZ;
@@ -64,11 +64,11 @@ public class TileEntityAtmoVent extends TileEntityAtmoExtractor {
         worldObj.setBlock(this.xCoord - rot.offsetX * 1, this.yCoord, this.zCoord + dir.offsetZ * 0, Blocks.dirt);
         worldObj.setBlock(this.xCoord - rot.offsetX * 1, this.yCoord, this.zCoord - dir.offsetZ * 1, Blocks.dirt);*/
 
-        /*    I'm never doing an even sided fluid machine ever again
-         * 
-         *    this was pain
-         *    
-         *   - pheo                     */
+		/*    I'm never doing an even sided fluid machine ever again
+		 *
+		 *    this was pain
+		 *
+		 *   - pheo                     */
 
 
 		fillFluid(this.xCoord + offsetX * 2, this.yCoord, this.zCoord - offsetZ * 1, getTact(), type);
@@ -80,43 +80,43 @@ public class TileEntityAtmoVent extends TileEntityAtmoExtractor {
 		fillFluid(this.xCoord - offsetX * 1, this.yCoord, this.zCoord + offsetZ * 0, getTact(), type);
 		fillFluid(this.xCoord - offsetX * 1, this.yCoord, this.zCoord - offsetZ * 1, getTact(), type);
 	}
-	
+
 	protected void updateConnections() {
 
 		for(DirPos pos : getConPos()) {
-			this.trySubscribe(tanks.getTankType(), worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
+			this.trySubscribe(worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 		}
 	}
-	
+
 	public void subscribeToAllAround(FluidType type, World world, int x, int y, int z) {
 
 		for(DirPos pos : getConPos()) {
 			this.trySubscribe(type, world, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 		}
 	}
-	
+
 	public void sendFluidToAll(FluidTank type, TileEntity te) {
 
 		for(DirPos pos : getConPos()) {
 			this.sendFluid(type, worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 		}
 	}
-	
+
 	private DirPos[] getConPos() {
-		
+
 		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
 
 		return new DirPos[] {
 				new DirPos(this.xCoord - dir.offsetX * 2, this.yCoord, this.zCoord - dir.offsetZ * 2, dir.getOpposite()),
 				new DirPos(this.xCoord - dir.offsetX * 2 + rot.offsetX, this.yCoord, this.zCoord - dir.offsetZ * 2 + rot.offsetZ, dir.getOpposite()),
-				
+
 				new DirPos(this.xCoord + dir.offsetX, this.yCoord, this.zCoord + dir.offsetZ, dir),
 				new DirPos(this.xCoord + dir.offsetX + rot.offsetX, this.yCoord, this.zCoord + dir.offsetZ  + rot.offsetZ, dir),
-				
+
 				new DirPos(this.xCoord - rot.offsetX, this.yCoord, this.zCoord - rot.offsetZ, rot.getOpposite()),
 				new DirPos(this.xCoord - dir.offsetX - rot.offsetX, this.yCoord, this.zCoord - dir.offsetZ - rot.offsetZ, rot.getOpposite()),
-				
+
 				new DirPos(this.xCoord + rot.offsetX * 2, this.yCoord, this.zCoord + rot.offsetZ * 2, rot),
 				new DirPos(this.xCoord - dir.offsetX + rot.offsetX * 2, this.yCoord, this.zCoord - dir.offsetZ + rot.offsetZ * 2, rot),
 		};
@@ -135,7 +135,7 @@ public class TileEntityAtmoVent extends TileEntityAtmoExtractor {
 					xCoord + 2,
 					yCoord + 10,
 					zCoord + 2
-					);
+			);
 		}
 
 		return bb;

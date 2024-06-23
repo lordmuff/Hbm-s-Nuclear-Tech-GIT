@@ -45,7 +45,6 @@ public class WorldGeneratorDuna implements IWorldGenerator {
 			int z = 0;
 			int y = world.getHeightValue(x, z) - 1;
 
-			ResourceManager.martian.build(world, x, y, z);
 		}
 	}
 	

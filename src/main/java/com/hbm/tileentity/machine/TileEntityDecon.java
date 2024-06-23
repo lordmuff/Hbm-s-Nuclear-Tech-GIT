@@ -29,13 +29,9 @@ public class TileEntityDecon extends TileEntity {
 					HbmLivingProps.incrementRadiation(e, -0.5F);
 					e.removePotionEffect(HbmPotion.radiation.id);
 					HbmLivingProps.getCont(e).clear();
-					
-					if(GeneralConfig.enableLBSM && GeneralConfig.enableLBSMNeutronDecon) {
-					this.deconNeutron();	
-					}
 				}
 
-				deconNeutron(entities);
+				//deconNeutron(entities);
 			}
 		} else {
 			Random rand = worldObj.rand;
@@ -53,7 +49,7 @@ public class TileEntityDecon extends TileEntity {
 		}
 	}
 
-	private void deconNeutron(List<EntityLivingBase> entities) {
+	/*private void deconNeutron(List<EntityLivingBase> entities) {
 		for(EntityLivingBase e : entities) {
 			float neut = HbmLivingProps.getNeutronActivation(e);
 
@@ -96,5 +92,5 @@ public class TileEntityDecon extends TileEntity {
 				}
 			}
 		}
-	}
+	}*/
 }

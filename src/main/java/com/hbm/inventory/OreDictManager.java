@@ -11,6 +11,7 @@ import static com.hbm.blocks.ModBlocks.*;
 import static com.hbm.inventory.OreDictManager.DictFrame.*;
 import static com.hbm.inventory.OreNames.*;
 
+import com.hbm.blocks.BlockEnums;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockOreBasalt.EnumBasaltOreType;
 import com.hbm.blocks.BlockEnums.EnumStoneType;
@@ -348,7 +349,7 @@ public class OreDictManager {
 		 * VANILLA
 		 */
 		COAL.gem(Items.coal).dustSmall(powder_coal_tiny).dust(powder_coal);
-		IRON.plate(plate_iron).dust(powder_iron).ore(ore_gneiss_iron).oreAll(ore_iron);
+		IRON.plate(plate_iron).dust(powder_iron).ore(ore_gneiss_iron, DictFrame.fromOne(ore_meteor, BlockEnums.EnumMeteorType.IRON)).oreAll(ore_iron);
 		GOLD.plate(plate_gold).dust(powder_gold).ore(ore_gneiss_gold).oreAll(ore_gold);
 		LAPIS.dust(powder_lapis).oreAll(ore_lapis);
 		REDSTONE.oreAll(ore_redstone);
@@ -406,15 +407,14 @@ public class OreDictManager {
 		/*
 		 * STABLE
 		 */
-		TI																	.ingot(ingot_titanium)												.dust(powder_titanium)			.plate(plate_titanium)			.block(block_titanium)		.ore(ore_titanium, ore_meteor_titanium);
-		NI																	.ingot(ingot_nickel)												.dust(powder_nickel)            .plate(plate_nickel) 			.block(block_nickel)		.ore(ore_nickel) 												.nugget(nugget_nickel);
-		CU																	.ingot(ingot_copper)												.dust(powder_copper)			.plate(plate_copper)			.block(block_copper)		.ore(ore_copper, ore_gneiss_copper, ore_meteor_copper);
 		TI																	.ingot(ingot_titanium)												.dust(powder_titanium)			.plate(plate_titanium)			.block(block_titanium)		.ore(ore_titanium);
-		CU																	.ingot(ingot_copper)												.dust(powder_copper)			.plate(plate_copper)			.block(block_copper)		.ore(ore_copper, ore_gneiss_copper);
+		NI																	.ingot(ingot_nickel)												.dust(powder_nickel)            .plate(plate_nickel) 			.block(block_nickel)		.ore(ore_nickel) 												.nugget(nugget_nickel);
+		CU																	.ingot(ingot_copper)												.dust(powder_copper)			.plate(plate_copper)			.block(block_copper)		.ore(ore_copper, ore_gneiss_copper, DictFrame.fromOne(ore_meteor, BlockEnums.EnumMeteorType.COPPER));
+		TI																	.ingot(ingot_titanium)												.dust(powder_titanium)			.plate(plate_titanium)			.block(block_titanium)		.ore(ore_titanium);
 		MINGRADE															.ingot(ingot_red_copper)											.dust(powder_red_copper)										.block(block_red_copper);
 		ALLOY																.ingot(ingot_advanced_alloy)										.dust(powder_advanced_alloy)	.plate(plate_advanced_alloy)	.block(block_advanced_alloy);
 		W																	.ingot(ingot_tungsten)												.dust(powder_tungsten)											.block(block_tungsten)		.ore(ore_nether_tungsten)	.oreNether(ore_nether_tungsten) .oreAll(ore_tungsten);
-		AL																	.ingot(ingot_aluminium)												.dust(powder_aluminium)			.plate(plate_aluminium)			.block(block_aluminium)		.oreAll(ore_aluminium);
+		AL																	.ingot(ingot_aluminium)												.dust(powder_aluminium)			.plate(plate_aluminium)			.block(block_aluminium)		.ore(DictFrame.fromOne(ore_meteor, BlockEnums.EnumMeteorType.ALUMINIUM)) .oreAll(ore_aluminium);
 		STEEL																.ingot(ingot_steel)				.dustSmall(powder_steel_tiny)		.dust(powder_steel)				.plate(plate_steel)				.block(block_steel);
 		STAINLESS															.ingot(ingot_stainless)			 																	.plate(plate_stainless);
 		TCALLOY																.ingot(ingot_tcalloy)												.dust(powder_tcalloy)											.block(block_tcalloy);
@@ -430,7 +430,7 @@ public class OreDictManager {
 		COLTAN																.ingot(fragment_coltan)												.dust(powder_coltan_ore)										.block(block_coltan)		.oreAll(ore_coltan);
 		NB			.nugget(nugget_niobium, fragment_niobium)				.ingot(ingot_niobium)			.dustSmall(powder_niobium_tiny)		.dust(powder_niobium)											.block(block_niobium);
 		BE			.nugget(nugget_beryllium)	.billet(billet_beryllium)	.ingot(ingot_beryllium)												.dust(powder_beryllium)											.block(block_beryllium)		.oreAll(ore_beryllium);
-		CO			.nugget(fragment_cobalt)	.nugget(nugget_cobalt)		.billet(billet_cobalt)			.ingot(ingot_cobalt)				.dust(powder_cobalt)			.dustSmall(powder_cobalt_tiny)	.block(block_cobalt)		.ore(ore_nether_cobalt)	.oreAll(ore_cobalt);
+		CO			.nugget(fragment_cobalt)	.nugget(nugget_cobalt)		.billet(billet_cobalt)			.ingot(ingot_cobalt)				.dust(powder_cobalt)			.dustSmall(powder_cobalt_tiny)	.block(block_cobalt)		.ore(ore_nether_cobalt, DictFrame.fromOne(ore_meteor, BlockEnums.EnumMeteorType.COBALT))	.oreAll(ore_cobalt);
 		B			.nugget(fragment_boron)									.ingot(ingot_boron)				.dustSmall(powder_boron_tiny)		.dust(powder_boron)												.block(block_boron);
 		SI			.nugget(nugget_silicon)		.billet(billet_silicon)		.ingot(ingot_silicon);
 		GRAPHITE															.ingot(ingot_graphite)																												.block(block_graphite);
@@ -440,7 +440,7 @@ public class OreDictManager {
 		BAKELITE															.ingot(ingot_bakelite)												.dust(powder_bakelite)											.block(block_bakelite);
 		LATEX									.gem(ball_resin)			.ingot(ingot_biorubber);
 		RUBBER																.ingot(ingot_rubber)																												.block(block_rubber);
-		//PET																	.ingot(ingot_pet);
+		PET																	.ingot(ingot_pet);
 		PC																	.ingot(ingot_pc);
 		PVC																	.ingot(ingot_pvc);
 		MAGTUNG																.ingot(ingot_magnetized_tungsten)									.dust(powder_magnetized_tungsten)								.block(block_magnetized_tungsten);
@@ -452,7 +452,7 @@ public class OreDictManager {
 		EUPH		.nugget(nugget_euphemium)								.ingot(ingot_euphemium)												.dust(powder_euphemium)											.block(block_euphemium);
 		DNT			.nugget(nugget_dineutronium)							.ingot(ingot_dineutronium)											.dust(powder_dineutronium)										.block(block_dineutronium);
 		FIBER																.ingot(ingot_fiberglass)																											.block(block_fiberglass);
-		ASBESTOS	.asbestos(1F)											.ingot(ingot_asbestos)												.dust(powder_asbestos)											.block(block_asbestos)		.ore(ore_asbestos, ore_gneiss_asbestos, basalt_asbestos, DictFrame.fromOne(stone_resource, EnumStoneType.ASBESTOS));
+		ASBESTOS	.asbestos(1F)											.ingot(ingot_asbestos)												.dust(powder_asbestos)											.block(block_asbestos)		.ore(ore_asbestos, ore_gneiss_asbestos, DictFrame.fromOne(ore_basalt, EnumBasaltOreType.ASBESTOS), DictFrame.fromOne(stone_resource, EnumStoneType.ASBESTOS));
 		OSMIRIDIUM	.nugget(nugget_osmiridium)								.ingot(ingot_osmiridium)											.block(block_osmiridium);
 		ZI			.nugget(nugget_zinc)									.ingot(ingot_zinc)													.dust(powder_zinc)		.ore(ore_zinc);
 		GALLIUM		.nugget(nugget_gallium)									.ingot(ingot_gallium)												.dust(powder_gallium)		.dustSmall(powder_gallium_tiny);

@@ -10,7 +10,6 @@ import com.hbm.render.anim.AnimationLoader;
 import com.hbm.render.anim.BusAnimation;
 import com.hbm.render.loader.HFRWavefrontObject;
 import com.hbm.render.loader.IModelCustomNamed;
-import com.hbm.world.gen.NBTStructure;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
@@ -1098,6 +1097,9 @@ public class ResourceManager {
 	public static final IModelCustom missileNuclear = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/missile_atlas.obj")).asVBO();
 	public static final IModelCustom missileMicro = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/missile_micro.obj")).asVBO();
 	public static final IModelCustom missileShuttle = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/missileShuttle.obj"));
+	public static final IModelCustom missileCarrier = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/missileCarrier.obj"));
+	public static final IModelCustom missileBooster = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/missileBooster.obj"));
+
 	public static final IModelCustom minerRocket = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/minerRocket.obj"));
 	public static final IModelCustom soyuz = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/soyuz.obj")).asVBO();
 	public static final IModelCustom soyuz_lander = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/soyuz_lander.obj")).asVBO();
@@ -1562,7 +1564,5 @@ public class ResourceManager {
 	public static final IModelCustom deb_zirnox_element = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/zirnox/deb_element.obj"));
 	public static final IModelCustom deb_zirnox_exchanger = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/zirnox/deb_exchanger.obj"));
 	public static final IModelCustom deb_zirnox_shrapnel = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/zirnox/deb_shrapnel.obj"));
-
-	public static final NBTStructure martian = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/martian-base.nbt"));
 
 }

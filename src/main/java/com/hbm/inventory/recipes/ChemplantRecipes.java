@@ -518,7 +518,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 
         //mayo zone END
 
-        recipes.add(new ChemRecipe(103, "MEAT_PROCESSING", 200)
+        recipes.add(new ChemRecipe(126, "MEAT_PROCESSING", 200)
 				.inputItems(new OreDictStack(KEY_GLYPHID_MEAT, 3))
 				.inputFluids(new FluidStack(Fluids.SULFURIC_ACID, 1000))
 				.outputItems(new ItemStack(ModItems.sulfur, 4),

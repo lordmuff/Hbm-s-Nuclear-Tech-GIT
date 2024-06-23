@@ -74,6 +74,11 @@ public class ModBlocks {
 	public static Block ore_schrabidium;
 	public static Block ore_beryllium;
 	public static Block ore_australium;
+	public static Block ore_weidanium;
+	public static Block ore_reiium;
+	public static Block ore_unobtainium;
+	public static Block ore_daffergon;
+	public static Block ore_verticium;
 	public static Block ore_rare;
 	public static Block ore_cobalt;
 	public static Block ore_cinnebar;

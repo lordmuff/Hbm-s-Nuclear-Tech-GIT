@@ -1,5 +1,6 @@
 package com.hbm.blocks.bomb;
 
+import net.minecraft.entity.EntityLivingBase;
 import org.apache.logging.log4j.Level;
 
 import com.hbm.config.GeneralConfig;
