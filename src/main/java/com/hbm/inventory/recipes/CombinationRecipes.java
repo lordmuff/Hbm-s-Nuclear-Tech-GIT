@@ -61,6 +61,30 @@ public class CombinationRecipes extends SerializableRecipe {
 		for(ItemStack GT6bauxitedust : OreDictionary.getOres("dustBauxite")) {
 			recipes.put(new ComparableStack(GT6bauxitedust), new Pair(new ItemStack(ModItems.ingot_aluminium, 1), new FluidStack(Fluids.REDMUD, 75)));
 		}
+		for(ItemStack GT6bauxiteblockdust : OreDictionary.getOres("blockDustBauxite")) {
+			recipes.put(new ComparableStack(GT6bauxiteblockdust), new Pair(new ItemStack(ModItems.ingot_aluminium, 9), new FluidStack(Fluids.REDMUD, 675)));
+		}
+
+		for(ItemStack GT6raw : OreDictionary.getOres("oreRawIlmenite")) {
+			recipes.put(new ComparableStack(GT6raw), new Pair(new ItemStack(ModItems.ingot_titanium, 2), new FluidStack(Fluids.REDMUD, 500)));
+		}
+		for(ItemStack GT6dust : OreDictionary.getOres("dustIlmenite")) {
+			recipes.put(new ComparableStack(GT6dust), new Pair(new ItemStack(ModItems.ingot_titanium, 1), new FluidStack(Fluids.REDMUD, 150)));
+		}
+		for(ItemStack GT6blockdust : OreDictionary.getOres("blockDustIlmenite")) {
+			recipes.put(new ComparableStack(GT6blockdust), new Pair(new ItemStack(ModItems.ingot_titanium, 9), new FluidStack(Fluids.REDMUD, 2250)));
+		}
+
+		for(ItemStack GT6raw : OreDictionary.getOres("oreRawRutile")) {
+			recipes.put(new ComparableStack(GT6raw), new Pair(new ItemStack(ModItems.ingot_titanium, 4), new FluidStack(Fluids.REDMUD, 1000)));
+		}
+		for(ItemStack GT6dust : OreDictionary.getOres("dustRutile")) {
+			recipes.put(new ComparableStack(GT6dust), new Pair(new ItemStack(ModItems.ingot_titanium, 2), new FluidStack(Fluids.REDMUD, 300)));
+		}
+		for(ItemStack GT6blockdust : OreDictionary.getOres("blockDustRutile")) {
+			recipes.put(new ComparableStack(GT6blockdust), new Pair(new ItemStack(ModItems.ingot_titanium, 18), new FluidStack(Fluids.REDMUD, 4500)));
+		}
+
 		recipes.put(NA.dust(),									new Pair(null, new FluidStack(Fluids.SODIUM, 100)));
 
 		recipes.put(KEY_LOG,		new Pair(new ItemStack(Items.coal, 1 ,1),							new FluidStack(Fluids.WOODOIL, 250)));

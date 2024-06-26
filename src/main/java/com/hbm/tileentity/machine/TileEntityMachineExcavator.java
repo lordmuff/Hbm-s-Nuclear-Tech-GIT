@@ -47,6 +47,7 @@ import gregapi.oredict.OreDictMaterial;
 import gregapi.oredict.OreDictMaterialStack;
 import gregapi.util.ST;
 import gregapi.util.UT;
+import gregapi.util.WD;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
@@ -343,6 +344,11 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 				tank.setFill(tank.getFill() - ore.acidRequirement.fill);
 			}
 
+			if (rng(1000) == 0) {
+				// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
+				stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+			}
+
 			stack = ore.resource.copy();
 		}
 		else if(oreTile instanceof PrefixBlockTileEntity) {
@@ -352,13 +358,22 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 				OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, oreTile.xCoord, oreTile.yCoord, oreTile.zCoord, SIDE_TOP);
 				OreDictMaterial matstack = (tMaterial.mMaterial);
 				stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+				if (rng(500) == 0) {
+					// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
+					stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+				}
 			}
 
 			if (oreBlock == CS.BlocksGT.oreSmallBedrock) {
 				OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj,  oreTile.xCoord, oreTile.yCoord, oreTile.zCoord, SIDE_TOP);
 				OreDictMaterial matstack = (tMaterial.mMaterial);
 				stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+				if (rng(750) == 0) {
+					// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
+					stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+				}
 			}
+
 		}
 
 		else if (oreBlock == IL.HBM_Bedrock_Oil.getBlock()) {
