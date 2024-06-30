@@ -6,6 +6,7 @@ import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.entity.missile.EntityMissileCustom;
+import com.hbm.handler.CompatHandler;
 import com.hbm.handler.MissileStruct;
 import com.hbm.interfaces.IFluidAcceptor;
 import com.hbm.interfaces.IFluidContainer;
@@ -60,7 +61,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
-public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISidedInventory, IEnergyReceiverMK2, IFluidContainer, IFluidAcceptor, IFluidStandardReceiver, IGUIProvider, SimpleComponent, IRadarCommandReceiver, INBTPacketReceiver {
+public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISidedInventory, IEnergyReceiverMK2, IFluidContainer, IFluidAcceptor, IFluidStandardReceiver, IGUIProvider, SimpleComponent, IRadarCommandReceiver, CompatHandler.OCComponent {
 
 	public ItemStack slots[];
 	public ItemStack syncStack;
@@ -314,7 +315,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 			//null because fuck you
 			int tX = slots[1].stackTagCompound.getInteger("xCoord");
 			int tZ = slots[1].stackTagCompound.getInteger("zCoord");
-			
+
 			this.launchTo(tX, tZ);
 		}
 	}
@@ -342,7 +343,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 		worldObj.spawnEntityInWorld(missile);
 		worldObj.playSoundEffect(xCoord, yCoord, zCoord, "hbm:weapon.missileTakeOff", 10.0F, 1.0F);
 
-		
+
 		if(slots[1].stackTagCompound.getBoolean("Processed")) {
 			missile.setPayload(slots[1]);
 		}
@@ -420,7 +421,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 	
@@ -445,18 +446,18 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 	}
 	
 	public boolean sizeUp() {
-		
+
 		MissileStruct multipart = getStruct(slots[0]);
-		
+
 		if(multipart == null || multipart.fuselage == null)
 			return false;
-		
+
 		ItemCustomMissilePart fuselage = (ItemCustomMissilePart)multipart.fuselage;
-		
+
 		if(fuselage.top == ItemCustomMissilePart.PartSize.SIZE_20) {
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -471,9 +472,9 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 
 		int fuelCost = calfuelV2(destination.getBody());
 		tanks[0].changeTankSize(fuelCost);
-		tanks[1].changeTankSize(fuelCost);	
+		tanks[1].changeTankSize(fuelCost);
 	}
-	
+
 	public int liquidState() {
 		
 		MissileStruct multipart = getStruct(slots[0]);
@@ -557,12 +558,12 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 
 	public int calfuelV2(CelestialBody targetBody) {
 		MissileStruct multipart = getStruct(slots[0]);
-		
+
 		if(multipart == null || multipart.thruster == null)
 			return -1;
-		
+
 		CelestialBody localBody = CelestialBody.getBody(worldObj);
-		
+
 		ItemCustomMissilePart thruster = (ItemCustomMissilePart)multipart.thruster;
 		int rocketMass = (Integer)thruster.attributes[3];
 		FT_Rocket trait = tanks[0].getTankType().getTrait(FT_Rocket.class);
@@ -594,7 +595,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 		NBTTagList list = nbt.getTagList("items", 10);
 
 		slots = new ItemStack[getSizeInventory()];
-		
+
 		for (int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound nbt1 = list.getCompoundTagAt(i);
 			byte b0 = nbt1.getByte("slot");
@@ -614,7 +615,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 		solid = nbt.getInteger("solidfuel");
 		power = nbt.getLong("power");
 		padSize = PartSize.values()[nbt.getInteger("padSize")];
-		
+
 		slots = new ItemStack[getSizeInventory()];
 
 		for (int i = 0; i < list.tagCount(); i++) {
@@ -624,7 +625,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 				slots[b0] = ItemStack.loadItemStackFromNBT(nbt1);
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -638,7 +639,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 		nbt.setInteger("solidfuel", solid);
 		nbt.setLong("power", power);
 		nbt.setInteger("padSize", padSize.ordinal());
-		
+
 		for (int i = 0; i < slots.length; i++) {
 			if (slots[i] != null) {
 				NBTTagCompound nbt1 = new NBTTagCompound();
@@ -648,7 +649,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 			}
 		}
 		nbt.setTag("items", list);
-		
+
 	}
 
 	@Override
@@ -771,7 +772,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 	// do some opencomputer stuff
 	@Override
 	public String getComponentName() {
-		return "large_launch_pad";
+		return "ntm_custom_launch_pad";
 	}
 
 	@Callback
@@ -783,7 +784,11 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 	@Callback
 	@Optional.Method(modid = "OpenComputers")
 	public Object[] getContents(Context context, Arguments args) {
-		return new Object[] {tanks[0].getFill(), tanks[0].getMaxFill(), tanks[0].getTankType().getName(), tanks[1].getFill(), tanks[1].getMaxFill(), tanks[1].getTankType().getName(), solid, maxSolid};
+		return new Object[] {
+				tanks[0].getFill(), tanks[0].getMaxFill(), tanks[0].getTankType().getUnlocalizedName(),
+				tanks[1].getFill(), tanks[1].getMaxFill(), tanks[1].getTankType().getUnlocalizedName(),
+				solid, maxSolid
+		};
 	}
 
 	@Callback
@@ -803,13 +808,6 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 				zCoord2 = slots[1].stackTagCompound.getInteger("zCoord");
 			} else
 				return new Object[] {false};
-
-			// Not sure if i should have this
-			/*
-			if(xCoord2 == xCoord && zCoord2 == zCoord) {
-				xCoord2 += 1;
-			}
-			*/
 
 			return new Object[] {xCoord2, zCoord2};
 		}
@@ -837,6 +835,35 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 		}
 		return new Object[] {false};
 	}
+
+	public String[] methods() {
+		return new String[] {
+				"getEnergyInfo",
+				"getContents",
+				"getLaunchInfo",
+				"getCoords",
+				"setCoords",
+				"launch"
+		};
+	}
+
+	public Object[] invoke(String method, Context context, Arguments args) throws Exception {
+		switch(method) {
+			case ("getEnergyInfo"):
+				return getEnergyInfo(context, args);
+			case ("getContents"):
+				return getContents(context, args);
+			case ("getLaunchInfo"):
+				return getLaunchInfo(context, args);
+			case ("getCoords"):
+				return getCoords(context, args);
+			case ("setCoords"):
+				return setCoords(context, args);
+			case ("launch"):
+				return launch(context, args);
+	}
+	throw new NoSuchMethodException();
+}
 
 	@Override
 	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {

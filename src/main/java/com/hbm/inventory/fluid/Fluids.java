@@ -213,22 +213,16 @@ public class Fluids {
 	public static FluidType CREAM;
 	public static FluidType DICYANOACETYLENE;//DICYANOACETYLENE
 	public static FluidType FULLERENE;
-
+	public static FluidType STELLAR_FLUX;
+	public static FluidType VITRIOL;
+	public static FluidType SLOP;
 	public static FluidType NITROGEN;
-
 	public static FluidType AIR;
 	public static FluidType MINSOL;
-	//mayo zone!!!
-
-
-
-	//mayo zone END!!!
-
     public static FluidType MORKITE;
     public static FluidType MORKINE; //gaseous morkite
     public static FluidType MSLURRY; // Morkite slurry, similar to MINSOL
 
-    public static FluidType STELLAR_FLUX;
 	public static FluidType FLUORINE; //why not
 
 	/* Lagacy names for compatibility purposes */
@@ -478,7 +472,9 @@ public class Fluids {
 		MORKITE =				new FluidType("MORKITE",			0x333C42, 3, 3, 3, EnumSymbol.NONE).addTraits(new FT_Flammable(60), LIQUID, VISCOUS);
 		MORKINE =				new FluidType("MORKINE",			0x796089, 3, 3, 3, EnumSymbol.NONE).addTraits(new FT_Flammable(200), LIQUID, VISCOUS);
 		DICYANOACETYLENE =		new FluidType("DICYANOACETYLENE",	0x675A9F, 1, 2, 1, EnumSymbol.NONE).addTraits(new FT_Flammable(4_000_000), GASEOUS);
-		// ^ ^ ^ ^ ^ ^ ^ ^
+        VITRIOL =				new FluidType("VITRIOL",			0x6E5222, 2, 0, 1, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
+        SLOP =					new FluidType(141, "SLOP",			0x929D45, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
+        // ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
 		
 		File folder = MainRegistry.configHbmDir;
@@ -591,6 +587,8 @@ public class Fluids {
 		metaOrder.add(SALIENT);
 		metaOrder.add(SEEDSLURRY);
 		metaOrder.add(COLLOID);
+		metaOrder.add(VITRIOL);
+		metaOrder.add(SLOP);
 		metaOrder.add(IONGEL);
 		metaOrder.add(PEROXIDE);
 		metaOrder.add(SULFURIC_ACID);
@@ -687,6 +685,8 @@ public class Fluids {
 		metaOrder.add(FLUORINE);
 		metaOrder.add(TEKTOAIR);
 		metaOrder.add(DICYANOACETYLENE);
+        metaOrder.add(SLOP);
+        metaOrder.add(VITRIOL);
 
 		//ANY INTERNAL RENAMING MUST BE REFLECTED HERE - DON'T FORGET TO CHANGE: LANG FILES + TYPE'S STRING ID + NAME OF TANK/GUI TEXTURE FILES!
 		// V

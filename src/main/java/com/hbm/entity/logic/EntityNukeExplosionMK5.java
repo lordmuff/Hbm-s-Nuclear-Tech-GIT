@@ -62,8 +62,8 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 		for(Object player : this.worldObj.playerEntities) {
 			((EntityPlayer)player).triggerAchievement(MainRegistry.achManhattan);
 		}
-
-		if(!worldObj.isRemote && fallout && explosion != null && this.ticksExisted < 10) {
+		
+		if(!worldObj.isRemote && fallout && explosion != null && this.ticksExisted < 10 && strength >= 75) {
 			radiate(2_500_000F / (this.ticksExisted * 5 + 1), this.length * 2);
 		}
 
