@@ -582,7 +582,6 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 		return Math.sqrt(fuelPower) / 24;
 	}
 
-	@Override
 	public void networkUnpack(NBTTagCompound nbt) {
 
 		tanks[0].readFromNBT(nbt, "fuel");
@@ -591,7 +590,6 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 		power = nbt.getLong("power");
 		padSize = PartSize.values()[nbt.getInteger("padSize")];
 
-		/*
 		NBTTagList list = nbt.getTagList("items", 10);
 
 		slots = new ItemStack[getSizeInventory()];
@@ -603,7 +601,6 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 				slots[b0] = ItemStack.loadItemStackFromNBT(nbt1);
 			}
 		}
-		*/
 	}
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {

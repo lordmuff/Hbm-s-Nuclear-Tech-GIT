@@ -444,7 +444,6 @@ public class TileEntityBarrel extends TileEntityMachineBase implements IFluidAcc
 		return new Object[]{tank.getFill(), tank.getMaxFill(), tank.getTankType().getName()};
 	}
 
-	@Override
 	public void explode(World world, int x, int y, int z) {
 		//if(this.hasExploded) return;
 	    	float amat = Math.min(this.getFluidFill(Fluids.AMAT)/100,90);

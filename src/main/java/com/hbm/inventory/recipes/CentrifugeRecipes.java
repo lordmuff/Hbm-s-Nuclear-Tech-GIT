@@ -559,8 +559,7 @@ public class CentrifugeRecipes extends SerializableRecipe {
 		
 		ArrayList<ItemStack> naquadriaNuggets = OreDictionary.getOres("nuggetNaquadria");
 		if(naquadriaNuggets.size() != 0) {
-			ItemStack nuggetNQR = naquadriaNuggets.get(0);
-			ItemStack copy = nuggetNQR.copy();
+            ItemStack copy = nuggetNQR.copy();
 			copy.stackSize = 12;
 			recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.watz_pellet_depleted, EnumWatzType.NQD)), new ItemStack[] {
 					new ItemStack(ModItems.ingot_mud, 1),

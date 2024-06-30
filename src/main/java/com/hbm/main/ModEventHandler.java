@@ -1411,7 +1411,7 @@ public class ModEventHandler {
 		}
 
         // PRISMDBG
-		if(!event.player.worldObj.isRemote) {
+		/*if(!event.player.worldObj.isRemote) {
 			ChunkRadiationHandlerPRISM prism = (ChunkRadiationHandlerPRISM) ChunkRadiationManager.proxy;
 
 			RadPerWorld perWorld = prism.perWorld.get(player.worldObj);
@@ -1447,7 +1447,7 @@ public class ModEventHandler {
 			} else {
 				PacketDispatcher.wrapper.sendTo(new PlayerInformPacket(EnumChatFormatting.RED + "PERWORLD IS NULL", 1), (EntityPlayerMP) player);
 			}
-		}
+		}*/
 
 	}
 	
