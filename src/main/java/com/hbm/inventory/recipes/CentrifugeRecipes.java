@@ -419,8 +419,8 @@ public class CentrifugeRecipes extends SerializableRecipe {
             ItemStack nuggetNQR = OreDictionary.getOres("nuggetNaquadria").get(0);
 
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.MEU)), new ItemStack[]{
-                    new ItemStack(ModItems.nugget_u238, 3),
-                    new ItemStack(ModItems.nugget_plutonium, 4),
+                    new ItemStack(ModItems.nugget_bismuth, 1),
+                    new ItemStack(ModItems.nugget_plutonium, 6),
                     new ItemStack(ModItems.nugget_technetium, 2),
                     new ItemStack(ModItems.nuclear_waste_tiny, 3)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.HEU233)), new ItemStack[]{
@@ -429,8 +429,8 @@ public class CentrifugeRecipes extends SerializableRecipe {
                     new ItemStack(ModItems.nugget_technetium, 1),
                     new ItemStack(ModItems.nuclear_waste_tiny, 5)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.HEU235)), new ItemStack[]{
-                    new ItemStack(ModItems.nugget_neptunium, 3),
-                    new ItemStack(ModItems.nugget_pu238, 3),
+                    new ItemStack(ModItems.nugget_neptunium, 5),
+                    new ItemStack(ModItems.nugget_bismuth, 3),
                     new ItemStack(ModItems.nugget_technetium, 1),
                     new ItemStack(ModItems.nuclear_waste_tiny, 5)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.MEN)), new ItemStack[]{
@@ -444,33 +444,33 @@ public class CentrifugeRecipes extends SerializableRecipe {
                     new ItemStack(ModItems.nugget_technetium, 1),
                     new ItemStack(ModItems.nuclear_waste_tiny, 5)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.MOX)), new ItemStack[]{
-                    new ItemStack(ModItems.nugget_u238, 3),
+                    new ItemStack(ModItems.nugget_pu239, 2),
                     new ItemStack(ModItems.nugget_pu240, 4),
                     new ItemStack(ModItems.nugget_technetium, 2),
-                    new ItemStack(ModItems.nuclear_waste_tiny, 3)});
+                    new ItemStack(ModItems.nugget_uranium, 2)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.MEP)), new ItemStack[]{
-                    new ItemStack(ModItems.nugget_lead, 2),
-                    new ItemStack(ModItems.nugget_pu_mix, 4),
-                    new ItemStack(ModItems.nugget_technetium, 2),
+                    new ItemStack(ModItems.nugget_pu241, 1),
+                    new ItemStack(ModItems.nugget_pu_mix, 2),
+                    new ItemStack(ModItems.nugget_cm_mix, 2),
                     new ItemStack(ModItems.nuclear_waste_tiny, 3)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.HEP239)), new ItemStack[]{
-                    new ItemStack(ModItems.nugget_pu_mix, 2),
-                    new ItemStack(ModItems.nugget_pu240, 4),
-                    new ItemStack(ModItems.nugget_technetium, 1),
+                    new ItemStack(ModItems.nugget_pu_mix, 6),
+                    new ItemStack(ModItems.nugget_pu241, 3),
+                    new ItemStack(ModItems.nugget_cm_mix, 2),
                     new ItemStack(ModItems.nuclear_waste_tiny, 5)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.HEP241)), new ItemStack[]{
                     new ItemStack(ModItems.nugget_neptunium, 3),
-                    new ItemStack(ModItems.nugget_am242, 6),
-                    new ItemStack(ModItems.nugget_am241, 4),
+                    new ItemStack(ModItems.nugget_am242, 4),
+                    new ItemStack(ModItems.nugget_am241, 2),
                     new ItemStack(ModItems.nuclear_waste_tiny, 6)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.MEA)), new ItemStack[]{
-                    new ItemStack(ModItems.nugget_lead, 3),
-                    new ItemStack(ModItems.nugget_zirconium, 2),
+                    new ItemStack(ModItems.nugget_am_mix, 3),
+                    new ItemStack(ModItems.nugget_bk247, 2),
                     new ItemStack(ModItems.nugget_technetium, 1),
                     new ItemStack(ModItems.nuclear_waste_tiny, 6)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.HEA242)), new ItemStack[]{
-                    new ItemStack(ModItems.nugget_lead, 3),
-                    new ItemStack(ModItems.nugget_zirconium, 2),
+                    new ItemStack(ModItems.nugget_am242, 3),
+                    new ItemStack(ModItems.nugget_bk247, 2),
                     new ItemStack(ModItems.nugget_technetium, 1),
                     new ItemStack(ModItems.nuclear_waste_tiny, 6)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.HES326)), new ItemStack[]{
@@ -494,24 +494,24 @@ public class CentrifugeRecipes extends SerializableRecipe {
                     new ItemStack(ModItems.nugget_bismuth, 6),
                     new ItemStack(ModItems.nuclear_waste_tiny, 1)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.AM_RG)), new ItemStack[]{
-                    new ItemStack(ModItems.nugget_am_mix, 3),
-                    new ItemStack(ModItems.nugget_cm_mix, 12),
+                    new ItemStack(ModItems.nugget_am_mix, 5),
+                    new ItemStack(ModItems.nugget_cm_mix, 3),
                     new ItemStack(ModItems.nugget_bk247, 2),
                     new ItemStack(ModItems.nuclear_waste_tiny, 1)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.AM_FUEL)), new ItemStack[]{
-                    new ItemStack(ModItems.nugget_am_mix, 6),
+                    new ItemStack(ModItems.nugget_am_mix, 5),
                     new ItemStack(ModItems.nugget_cm_mix, 3),
-                    new ItemStack(ModItems.nugget_bk247, 1),
+                    new ItemStack(ModItems.nugget_bk247, 2),
                     new ItemStack(ModItems.nuclear_waste_tiny, 1)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.CM_RG)), new ItemStack[]{
-                    new ItemStack(ModItems.nugget_am_mix, 4),
-                    new ItemStack(ModItems.nugget_cm_mix, 6),
+                    new ItemStack(ModItems.nugget_am_mix, 3),
+                    new ItemStack(ModItems.nugget_cm_mix, 5),
                     new ItemStack(ModItems.nugget_es253, 3),
                     new ItemStack(ModItems.nuclear_waste_tiny, 1)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.CM_FUEL)), new ItemStack[]{
-                    new ItemStack(ModItems.nugget_americium_fuel, 5),
-                    new ItemStack(ModItems.nugget_cm_fuel, 8),
-                    new ItemStack(ModItems.nugget_cf252, 5),
+                    new ItemStack(ModItems.nugget_americium_fuel, 3),
+                    new ItemStack(ModItems.nugget_cm_fuel, 5),
+                    new ItemStack(ModItems.nugget_cf252, 3),
                     new ItemStack(ModItems.nuclear_waste_tiny, 1)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.HECM245)), new ItemStack[]{
                     new ItemStack(ModItems.nugget_cm247, 4),
@@ -529,8 +529,8 @@ public class CentrifugeRecipes extends SerializableRecipe {
                     new ItemStack(ModItems.nugget_cf251, 4),
                     new ItemStack(ModItems.nuclear_waste_tiny, 1)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.CF252)), new ItemStack[]{
-                    new ItemStack(ModItems.nugget_cf251, 3),
-                    new ItemStack(ModItems.nugget_cf252, 4),
+                    new ItemStack(ModItems.nugget_cf251, 4),
+                    new ItemStack(ModItems.nugget_cf252, 3),
                     new ItemStack(ModItems.nugget_cm_mix, 3),
                     new ItemStack(ModItems.nuclear_waste_tiny, 1)});
             recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.BK247)), new ItemStack[]{
