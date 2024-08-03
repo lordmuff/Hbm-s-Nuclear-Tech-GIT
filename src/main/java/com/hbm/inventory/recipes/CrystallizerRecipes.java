@@ -90,6 +90,7 @@ public class CrystallizerRecipes extends SerializableRecipe {
 		registerRecipe("oreCinnabar",	new CrystallizerRecipe(ModItems.crystal_cinnebar, baseTime));
 		
 		registerRecipe(new ComparableStack(ModBlocks.ore_nether_fire),	new CrystallizerRecipe(ModItems.crystal_phosphorus, baseTime));
+		registerRecipe(new ComparableStack(ModBlocks.ore_fire),			new CrystallizerRecipe(ModItems.crystal_phosphorus, baseTime));
 		registerRecipe(new ComparableStack(ModBlocks.ore_tikite),		new CrystallizerRecipe(ModItems.crystal_trixite, baseTime), sulfur);
 		registerRecipe(new ComparableStack(ModBlocks.gravel_diamond),	new CrystallizerRecipe(ModItems.crystal_diamond, baseTime));
 		registerRecipe(new ComparableStack(ModItems.crystal_mineral),	new CrystallizerRecipe(ModItems.crystal_diamond, baseTime));
@@ -226,6 +227,7 @@ public class CrystallizerRecipes extends SerializableRecipe {
 
 			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.CRUMBS, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.BASE, type), bedrock).setReq(64), new FluidStack(Fluids.NITRIC_ACID, 1000));
 		}
+
 
 		FluidStack[] dyes = new FluidStack[] {new FluidStack(Fluids.WOODOIL, 100), new FluidStack(Fluids.FISHOIL, 100)};
 		for(FluidStack dye : dyes) {

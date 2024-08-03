@@ -75,7 +75,6 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 	public static final int duration = 100;
 	EntityPlayer player;
 	public long totalRuntime;
-
 	@SideOnly(Side.CLIENT)
 	public int blanket;
 	
@@ -875,4 +874,5 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 }

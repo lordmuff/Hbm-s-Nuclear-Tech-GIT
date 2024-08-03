@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine;
 import java.util.List;
 
 import com.hbm.config.RadiationConfig;
+import com.hbm.hazard.type.HazardTypeNeutron;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
@@ -61,7 +62,17 @@ public class TileEntityDemonLamp extends TileEntity {
 			eRads /= (float)res;
 			eRads /= (float)(len * len);
 			
-			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);			
+			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
+			ContaminationUtil.contaminate(e, HazardType.NEUTRON, ContaminationType.CREATIVE, eRads);
+			if(e instanceof EntityPlayer && !RadiationConfig.disableNeutron) {
+				EntityPlayer player = (EntityPlayer) e;
+				for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+					HazardTypeNeutron.apply(player.inventory.getStackInSlot(i), eRads);
+				}
+				for(int i = 0; i < player.inventory.armorInventory.length; i++) {
+					HazardTypeNeutron.apply(player.inventory.armorItemInSlot(i), eRads);
+				}
+			}
 			
 			if(len < 2) {
 				e.attackEntityFrom(DamageSource.inFire, 100);

@@ -110,7 +110,7 @@ public class ImpactWorldHandler {
 	public static float dust = 0F;
 	public static long time = 0;
 	public static boolean impact = false;
-	
+
 	public static float flash = 0F;
 	//public static float size = 0F;
 	public static boolean divinity = false;
@@ -138,6 +138,15 @@ public class ImpactWorldHandler {
 		if(world != lastSyncWorld) return 0;
 		return time;
 	}
+	public static int ctime = 0;
+
+	@SideOnly(Side.CLIENT)
+	public static int getCTimeForClient(World world) {
+		if(world != lastSyncWorld) return 0;
+		return ctime;
+	}
+
+
 
 
 	@SideOnly(Side.CLIENT)

@@ -6,29 +6,25 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
-public class GenLayerDunaBiomes extends GenLayer
-{
-    private static final BiomeGenBase[] biomes = new BiomeGenBase[] { BiomeGenBaseDuna.dunaPlains, BiomeGenBaseDuna.dunaLowlands, BiomeGenBaseDuna.dunaPolar, BiomeGenBaseDuna.dunaHills, BiomeGenBaseDuna.dunaPolarHills};
+public class GenLayerDunaBiomes extends GenLayer {
 
-    public GenLayerDunaBiomes(long l)
-    {
-        super(l);
-    }
+	private static final BiomeGenBase[] biomes = new BiomeGenBase[] { BiomeGenBaseDuna.dunaPlains, BiomeGenBaseDuna.dunaLowlands, BiomeGenBaseDuna.dunaPolar, BiomeGenBaseDuna.dunaHills, BiomeGenBaseDuna.dunaPolarHills };
 
-    @Override
-    public int[] getInts(int x, int z, int width, int depth)
-    {
-        int[] dest = IntCache.getIntCache(width * depth);
+	public GenLayerDunaBiomes(long l) {
+		super(l);
+	}
 
-        for (int k = 0; k < depth; ++k)
-        {
-            for (int i = 0; i < width; ++i)
-            {
-                initChunkSeed(x + i, z + k);
-                dest[i + k * width] = biomes[nextInt(biomes.length)].biomeID;
-            }
-        }
+	@Override
+	public int[] getInts(int x, int z, int width, int depth) {
+		int[] dest = IntCache.getIntCache(width * depth);
 
-        return dest;
-    }
+		for(int k = 0; k < depth; ++k) {
+			for(int i = 0; i < width; ++i) {
+				initChunkSeed(x + i, z + k);
+				dest[i + k * width] = biomes[nextInt(biomes.length)].biomeID;
+			}
+		}
+
+		return dest;
+	}
 }

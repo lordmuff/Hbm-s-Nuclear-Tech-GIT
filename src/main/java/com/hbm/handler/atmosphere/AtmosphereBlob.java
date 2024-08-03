@@ -2,7 +2,6 @@ package com.hbm.handler.atmosphere;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -11,7 +10,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.dim.CelestialBody;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.handler.ThreeInts;
 import com.hbm.inventory.fluid.FluidType;
@@ -19,28 +17,30 @@ import com.hbm.main.MainRegistry;
 import com.hbm.util.AdjacencyGraph;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class AtmosphereBlob implements Runnable {
-    
-    /**
-     * Somewhat based on the Advanced-Rocketry implementation, but extended to
-     * define the gases and gas pressure inside the enclosed volume
-     */
+	
+	/**
+	 * Somewhat based on the Advanced-Rocketry implementation, but extended to
+	 * define the gases and gas pressure inside the enclosed volume
+	 */
 
-    // Graph containing the enclosed area
+	// Graph containing the enclosed area
 	protected final AdjacencyGraph<ThreeInts> graph;
 
 	// Handler, provides atmosphere information and receives callbacks
 	protected IAtmosphereProvider handler;
 
 
-    private static ThreadPoolExecutor pool = new ThreadPoolExecutor(2, 16, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>(32));
+	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(2, 16, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>(32));
 
-    
+	
 	private boolean executing;
 	private ThreeInts blockPos;
 
@@ -51,38 +51,47 @@ public class AtmosphereBlob implements Runnable {
 	}
 	
 	public boolean isPositionAllowed(World world, ThreeInts pos) {
-        return !isBlockSealed(world, pos);
+		return !isBlockSealed(world, pos);
 	}
 
-    public static boolean isBlockSealed(World world, ThreeInts pos) {
-        if(pos.y < 0 || pos.y > 256) return false;
+	public static boolean isBlockSealed(World world, ThreeInts pos) {
+		return isBlockSealed(world, pos.x, pos.y, pos.z);
+	}
 
-        Block block = world.getBlock(pos.x, pos.y, pos.z);
+	public static boolean isBlockSealed(World world, int x, int y, int z) {
+		if(y < 0 || y > 256) return false;
 
-        if(block.isAir(world, pos.x, pos.y, pos.z)) return false; // Air obviously doesn't seal
-        if(block instanceof IBlockSealable) { // Custom semi-sealables, like doors
-            return ((IBlockSealable)block).isSealed(world, pos.x, pos.y, pos.z);
-        }
-        if(block instanceof BlockDummyable) return false; // Machines can't seal, almost all have gaps
+		// Prevent loading new chunks, or we violate thread safety!
+		if(world instanceof WorldServer && !((WorldServer) world).getChunkProvider().chunkExists(x >> 4, z >> 4))
+			return true;
 
-        Material material = block.getMaterial();
-        if(material.isLiquid() || !material.isSolid()) return false; // Liquids need to know what pressurized atmosphere they're in to determine evaporation
+		Block block = world.getBlock(x, y, z);
+
+		if(block.isAir(world, x, y, z)) return false; // Air obviously doesn't seal
+		if(block instanceof BlockFarmland) return false;
+		if(block instanceof IBlockSealable) { // Custom semi-sealables, like doors
+			return ((IBlockSealable)block).isSealed(world, x, y, z);
+		}
+		if(block instanceof BlockDummyable) return false; // Machines can't seal, almost all have gaps
+
+		Material material = block.getMaterial();
+		if(material.isLiquid() || !material.isSolid()) return false; // Liquids need to know what pressurized atmosphere they're in to determine evaporation
 		if(material == Material.leaves) return false; // Leaves never block air
 
-        AxisAlignedBB bb = block.getCollisionBoundingBoxFromPool(world, pos.x, pos.y, pos.z);
+		AxisAlignedBB bb = block.getCollisionBoundingBoxFromPool(world, x, y, z);
 
-        if(bb == null) return false; // No collision, can't seal (like lamps)
+		if(bb == null) return false; // No collision, can't seal (like lamps)
 
-        // size * 100 to correct rounding errors
-        int minX = (int) ((bb.minX - pos.x) * 100);
-        int minY = (int) ((bb.minY - pos.y) * 100);
-        int minZ = (int) ((bb.minZ - pos.z) * 100);
-        int maxX = (int) ((bb.maxX - pos.x) * 100);
-        int maxY = (int) ((bb.maxY - pos.y) * 100);
-        int maxZ = (int) ((bb.maxZ - pos.z) * 100);
+		// size * 100 to correct rounding errors
+		int minX = (int) ((bb.minX - x) * 100);
+		int minY = (int) ((bb.minY - y) * 100);
+		int minZ = (int) ((bb.minZ - z) * 100);
+		int maxX = (int) ((bb.maxX - x) * 100);
+		int maxY = (int) ((bb.maxY - y) * 100);
+		int maxZ = (int) ((bb.maxZ - z) * 100);
 
-        return minX == 0 && minY == 0 && minZ == 0 && maxX == 100 && maxY == 100 && maxZ == 100;
-    }
+		return minX == 0 && minY == 0 && minZ == 0 && maxX == 100 && maxY == 100 && maxZ == 100;
+	}
 	
 	public int getBlobMaxRadius() {
 		return handler.getMaxBlobRadius();
@@ -130,7 +139,7 @@ public class AtmosphereBlob implements Runnable {
 	}
 
 	private void addSingleBlock(ThreeInts blockPos) {
-        if(!graph.contains(blockPos)) {
+		if(!graph.contains(blockPos)) {
 			graph.add(blockPos, getPositionsToAdd(blockPos));
 		}
 	}
@@ -190,7 +199,7 @@ public class AtmosphereBlob implements Runnable {
 	 * @param blockPos
 	 */
 	public void removeBlock(ThreeInts blockPos) {
-        synchronized (graph) {
+		synchronized (graph) {
 			graph.remove(blockPos);
 
 			for(ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
@@ -206,10 +215,10 @@ public class AtmosphereBlob implements Runnable {
 	 * Removes all nodes from the blob
 	 */
 	public void clearBlob() {
-        World world = handler.getWorld();
+		World world = handler.getWorld();
 
 		runEffectOnWorldBlocks(world, getLocations());
-        
+		
 		graph.clear();
 	}
 	
@@ -227,12 +236,12 @@ public class AtmosphereBlob implements Runnable {
 		return graph.size();
 	}
 
-    @Override
-    public void run() {
+	@Override
+	public void run() {
 		Stack<ThreeInts> stack = new Stack<>();
 		stack.push(blockPos);
 
-        final int maxSize = this.getBlobMaxRadius();
+		final int maxSize = this.getBlobMaxRadius();
 		final HashSet<ThreeInts> addableBlocks = new HashSet<>();
 
 		// Breadth first search; non recursive
@@ -282,25 +291,20 @@ public class AtmosphereBlob implements Runnable {
 		}
 
 		executing = false;
-    }
+	}
 
 
-    /**
+	/**
 	 * @param world
 	 * @param blocks Collection containing affected locations
 	 */
 	protected void runEffectOnWorldBlocks(World world, Collection<ThreeInts> blocks) {
-		CBT_Atmosphere globalAtmosphere = CelestialBody.getTrait(world, CBT_Atmosphere.class);
-
-		List<AtmosphereBlob> nearbyBlobs = ChunkAtmosphereManager.proxy.getBlobsWithinRadius(world, getRootPosition(), getBlobMaxRadius());
+		ThreeInts root = handler.getRootPosition();
+		CBT_Atmosphere newAtmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(world, root.x, root.y, root.z, this);
 
 		for(ThreeInts pos : blocks) {
-			for(AtmosphereBlob blob : nearbyBlobs) {
-				if(blob != this && blob.contains(pos)) continue;
-			}
-
 			final Block block = world.getBlock(pos.x, pos.y, pos.z);
-			ChunkAtmosphereManager.proxy.runEffectsOnBlock(globalAtmosphere, world, block, pos.x, pos.y, pos.z);
+			ChunkAtmosphereManager.proxy.runEffectsOnBlock(newAtmosphere, world, block, pos.x, pos.y, pos.z);
 		}
 	}
 

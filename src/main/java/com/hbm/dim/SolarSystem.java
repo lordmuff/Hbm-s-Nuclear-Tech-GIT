@@ -8,6 +8,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.dim.trait.CBT_Temperature;
 import com.hbm.dim.trait.CelestialBodyTrait;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.lib.RefStrings;
@@ -15,6 +16,7 @@ import com.hbm.main.MainRegistry;
 import com.hbm.util.AstronomyUtil;
 
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
@@ -33,6 +35,7 @@ public class SolarSystem {
 			.withMassRadius(1.757e28F, 261_600)
 			.withRotationalPeriod(432_000)
 			.withTexture("textures/environment/sun.png")
+			.withShader(new ResourceLocation(RefStrings.MODID, "shaders/blackhole.frag"), 3) // Only shows when CBT_Destroyed
 			.withSatellites(
 
 				new CelestialBody("moho", SpaceConfig.mohoDimension, Body.MOHO)
@@ -43,7 +46,7 @@ public class SolarSystem {
 					.withBlockTextures(RefStrings.MODID + ":moho_stone", "", "", "")
 					.withAxialTilt(30F)
 					.withProcessingLevel(2)
-					.withTraits(CelestialBodyTrait.HOT),
+					.withTraits(new CBT_Temperature(200)),
 
 				new CelestialBody("eve", SpaceConfig.eveDimension, Body.EVE)
 					.withMassRadius(1.224e23F, 700)
@@ -52,7 +55,7 @@ public class SolarSystem {
 					.withColor(0.408F, 0.298F, 0.553F)
 					.withBlockTextures(RefStrings.MODID + ":eve_stone_2", "", "", "")
 					.withProcessingLevel(1)
-					.withTraits(new CBT_Atmosphere(Fluids.EVEAIR, 5D), CelestialBodyTrait.HOT)
+					.withTraits(new CBT_Atmosphere(Fluids.EVEAIR, 5D), new CBT_Temperature(400))
 					.withSatellites(
 						
 						new CelestialBody("gilly")
@@ -94,6 +97,7 @@ public class SolarSystem {
 					.withBlockTextures(RefStrings.MODID + ":duna_rock", "", "", "")
 					.withProcessingLevel(1)
 					.withTraits(new CBT_Atmosphere(Fluids.DUNAAIR, 0.1D))
+					.withProcessingLevel(1)
 					.withSatellites(
 
 						new CelestialBody("ike", SpaceConfig.ikeDimension, Body.IKE)
@@ -103,6 +107,7 @@ public class SolarSystem {
 							.withProcessingLevel(1)
 							.withRotationalPeriod(65_518)
 							.withTidalLockingTo("duna")
+							.withProcessingLevel(1)
 
 					),
 
@@ -110,7 +115,9 @@ public class SolarSystem {
 					.withMassRadius(3.219e20F, 138)
 					.withSemiMajorAxis(40_839_348)
 					.withRotationalPeriod(34_800)
-					.withBlockTextures(RefStrings.MODID + ":dresbase", "", "", ""),
+					.withBlockTextures(RefStrings.MODID + ":dresbase", "", "", "")
+					.withProcessingLevel(2),
+					
 
 				new CelestialBody("jool")
 					.withMassRadius(4.233e24F, 6_000)
@@ -125,7 +132,7 @@ public class SolarSystem {
 							.withRotationalPeriod(52_981)
 							.withTidalLockingTo("jool")
 							.withProcessingLevel(3)
-							.withTraits(new CBT_Atmosphere(Fluids.AIR, 0.6D), CelestialBodyTrait.HAS_WATER),
+							.withTraits(new CBT_Atmosphere(Fluids.AIR, 0.45D).and(Fluids.XENON, 0.15D), CelestialBodyTrait.HAS_WATER),
 
 						new CelestialBody("vall")
 							.withMassRadius(3.109e21F, 300)
@@ -186,11 +193,18 @@ public class SolarSystem {
 		}
 
 		public int getProcessingLevel() {
+			if(this == BLANK) return 0;
 			return getBody().processingLevel;
 		}
 
 		public String getStoneTexture() {
+			if(this == BLANK) return null;
 			return getBody().stoneTexture;
+		}
+
+		public int getDimensionId() {
+			if(this == BLANK) return -1;
+			return getBody().dimensionId;
 		}
 	}
 

@@ -54,7 +54,7 @@ import java.util.List;
 import java.util.Set;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "opencomputers")})
-public class TileEntityBarrel extends TileEntityMachineBase implements IFluidAcceptor, IFluidSource, SimpleComponent, IFluidStandardTransceiver, IPersistentNBT, IGUIProvider, CompatHandler.OCComponent {
+public class TileEntityBarrel extends TileEntityMachineBase implements IFluidAcceptor, IFluidSource, SimpleComponent, IFluidStandardTransceiver, IPersistentNBT, IGUIProvider, IOverpressurable, CompatHandler.OCComponent {
 	
 	public boolean hasExploded = false;
 	public FluidTank tank;
@@ -445,6 +445,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements IFluidAcc
 		return new Object[]{tank.getFill(), tank.getMaxFill(), tank.getTankType().getName()};
 	}
 
+	@Override
 	public void explode(World world, int x, int y, int z) {
 		//if(this.hasExploded) return;
 	    	float amat = Math.min(this.getFluidFill(Fluids.AMAT)/100,90);

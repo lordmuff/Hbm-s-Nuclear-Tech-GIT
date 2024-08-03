@@ -19,6 +19,8 @@ import com.hbm.blocks.generic.BlockAshes;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.SkyProviderCelestial;
+import com.hbm.dim.WorldProviderCelestial;
+import com.hbm.dim.eve.WorldProviderEve;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
 import com.hbm.entity.train.EntityRailCarRidable;
@@ -31,6 +33,7 @@ import com.hbm.handler.HazmatRegistry;
 import com.hbm.handler.ImpactWorldHandler;
 import com.hbm.hazard.HazardRegistry;
 import com.hbm.hazard.HazardSystem;
+import com.hbm.hazard.type.HazardTypeNeutron;
 import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.interfaces.IItemHUD;
 import com.hbm.interfaces.Spaghetti;
@@ -140,6 +143,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
+import net.minecraft.world.WorldProviderEnd;
 import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
@@ -691,6 +696,20 @@ public class ModEventHandlerClient  {
 		}
 	}
 
+	private static final ResourceLocation MUSIC_LOCATION = new ResourceLocation("hbm:music.game.space");
+
+	@SubscribeEvent
+	public void onPlayMusic(PlaySoundEvent17 event) {
+		ResourceLocation r = event.sound.getPositionedSoundLocation();
+		if(!r.toString().equals("minecraft:music.game.creative") && !r.toString().equals("minecraft:music.game")) return;
+
+		// Replace the sound if we're not on Earth
+		WorldProvider provider = Minecraft.getMinecraft().theWorld.provider;
+		if(provider instanceof WorldProviderCelestial && provider.dimensionId != 0) {
+			event.result = PositionedSoundRecord.func_147673_a(MUSIC_LOCATION);
+		}
+	}
+
 	@Spaghetti("please get this shit out of my face")
 	@SubscribeEvent
 	public void onPlaySound(PlaySoundEvent17 e) {
@@ -848,8 +867,8 @@ public class ModEventHandlerClient  {
 		float level = 0;
 		float rads = HazardSystem.getHazardLevelFromStack(stack, HazardRegistry.RADIATION);
 		if(rads == 0) {
-			if(stack.hasTagCompound() && stack.stackTagCompound.hasKey("ntmNeutron")) {
-				level += stack.stackTagCompound.getFloat("ntmNeutron");
+			if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(HazardTypeNeutron.NEUTRON_KEY)) {
+				level += stack.stackTagCompound.getFloat(HazardTypeNeutron.NEUTRON_KEY);
 			}
 
 			if(level < 1e-5)
@@ -1108,6 +1127,21 @@ public class ModEventHandlerClient  {
 				for(int i = 1; i < 4; i++) if(player.stepHeight == i + discriminator) player.stepHeight = defaultStepSize;
 			}
 		}
+		if(event.phase == Phase.START) {
+			int chargetime = ImpactWorldHandler.getCTimeForClient(mc.theWorld);
+			if(mc.theWorld.provider instanceof WorldProviderEve) {
+		        if (chargetime >= 800) {
+		            flashd = 0;
+		        } else if (chargetime >= 100) {
+		            if (flashd <= 1) {
+		                mc.thePlayer.playSound("hbm:misc.rumble", 10F, 1F);
+		            }
+		            flashd += 0.1f;
+		            flashd = Math.min(100.0f, flashd + 0.1f * (100.0f - flashd) * 0.15f);
+		        }
+
+			}
+		}
 	}
 	
 	public static ItemStack getMouseOverStack() {
@@ -1348,34 +1382,6 @@ public class ModEventHandlerClient  {
 		}
 	}
 
-	@SubscribeEvent
-	public void tintFog(FogColors event) {
-		if (event.entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) event.entity;
-
-			// Get the biome at the player's current location
-			int biomeID = player.worldObj.getBiomeGenForCoords((int) player.posX, (int) player.posZ).biomeID;
-
-			// Check if the current biome matches the one you're interested in
-			if (biomeID == SpaceConfig.dunaPolarBiome || biomeID == SpaceConfig.dunaPolarHillsBiome ) {
-				long time = player.worldObj.getWorldTime();
-
-				// Adjust fog color based on day/night cycle
-				if (time >= 12000 && time < 24000) {
-					// Nighttime
-					event.red = 0.1F;
-					event.green = 0.1F;
-					event.blue = 0.2F;
-				} else {
-					// Daytime
-					event.red = 0.2F;
-					event.green = 0.18F;
-					event.blue = 0.22F;
-				}
-			}
-		}
-	}
-
 
 	public static IIcon particleBase;
 	public static IIcon particleLeaf;
@@ -1445,7 +1451,8 @@ public class ModEventHandlerClient  {
 			GL11.glEnable(GL11.GL_LIGHTING);
 		}
 	}
-	
+	//public int chargetime;
+	public static float flashd;
 	@SubscribeEvent
 	public void worldTick(WorldTickEvent event) {
 		
@@ -1461,6 +1468,27 @@ public class ModEventHandlerClient  {
 				client.sendQueue.addToSendQueue(new C0CPacketInput(client.moveStrafing, client.moveForward, client.movementInput.jump, client.movementInput.sneak));
 			}
 		}
+		
+		if(event.phase == event.phase.START) {
+			
+			while(soundLock);
+			soundLock = true;
+			Iterator<DelayedSound> it = delayedSounds.iterator();
+			
+			while(it.hasNext()) {
+				DelayedSound sound = it.next();
+				if(sound.delay == 0) {
+					MainRegistry.proxy.playSoundClient(sound.x, sound.y, sound.z, sound.sound, sound.volume, sound.pitch);
+					it.remove();
+				}
+				sound.delay--;
+			}
+			soundLock = false;
+
+		}
+
+
+
 	}
 	
 	@SubscribeEvent

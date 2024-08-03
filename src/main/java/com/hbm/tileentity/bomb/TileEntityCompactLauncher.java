@@ -11,7 +11,6 @@ import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.gui.GUIMachineCompactLauncher;
-import com.hbm.items.ItemVOTVdrive;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCustomMissile;
 import com.hbm.items.weapon.ItemCustomMissilePart;
@@ -296,14 +295,13 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 				this.launchTo(tX, tZ);
 			}
 		
-		EntityMissileCustom missile = new EntityMissileCustom(worldObj, xCoord + 0.5F, yCoord + 2.5F, zCoord + 0.5F, 0, 0, getStruct(slots[0]));
+			EntityMissileCustom missile = new EntityMissileCustom(worldObj, xCoord + 0.5F, yCoord + 2.5F, zCoord + 0.5F, 0, 0, getStruct(slots[0]));
 
 
-		worldObj.spawnEntityInWorld(missile);
-		subtractFuel();
-		missile.setPayload(slots[1]);
-		
-		slots[0] = null;
+			worldObj.spawnEntityInWorld(missile);
+			subtractFuel();
+			
+			slots[0] = null;
 		}
 	}
 	public void launchTo(int tX, int tZ) {
@@ -348,8 +346,7 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 		
 		ItemCustomMissilePart fuselage = (ItemCustomMissilePart)multipart.fuselage;
 		
-		float f = (Float)fuselage.attributes[1];
-		int fuel = (int)f;
+		int fuel = fuselage.getTankSize();
 		
 		switch((FuelType)fuselage.attributes[0]) {
 			case KEROSENE:
@@ -417,7 +414,7 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 		
 		if((FuelType)fuselage.attributes[0] == FuelType.SOLID) {
 			
-			if(solid >= (Float)fuselage.attributes[1])
+			if(solid >= fuselage.getTankSize())
 				return 1;
 			else
 				return 0;
@@ -441,7 +438,7 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 			case XENON:
 			case BALEFIRE:
 				
-				if(tanks[0].getFill() >= (Float)fuselage.attributes[1])
+				if(tanks[0].getFill() >= fuselage.getTankSize())
 					return 1;
 				else
 					return 0;
@@ -465,7 +462,7 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 			case HYDROGEN:
 			case BALEFIRE:
 				
-				if(tanks[1].getFill() >= (Float)fuselage.attributes[1])
+				if(tanks[1].getFill() >= fuselage.getTankSize())
 					return 1;
 				else
 					return 0;

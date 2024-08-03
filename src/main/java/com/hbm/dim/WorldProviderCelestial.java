@@ -1,13 +1,15 @@
 package com.hbm.dim;
 
 import com.hbm.dim.trait.CBT_Atmosphere;
-import com.hbm.dim.trait.CelestialBodyTrait.CBT_SUNEXPLODED;
+import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
+import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.inventory.fluid.Fluids;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -30,6 +32,14 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		return Blocks.stone;
 	}
 
+	public boolean hasLife() {
+		return false;
+	}
+
+	public int getWaterOpacity() {
+		return 3;
+	}
+
 	@Override
 	public void updateWeather() {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
@@ -45,12 +55,35 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		this.worldObj.rainingStrength = 0.0F;
 		this.worldObj.thunderingStrength = 0.0F;
 	}
+
+	/**
+	 * Override to modify the lightmap, return true if the lightmap is actually modified
+	 * @param lightmap a 16x16 lightmap stored in a 256 value buffer
+	 * @return whether or not the dynamic lightmap texture needs to be updated
+	 */
+	public boolean updateLightmap(int[] lightmap) {
+		return false;
+	}
+
+	protected final int packColor(final int[] colors) {
+		return packColor(colors[0], colors[1], colors[2]);
+	}
+
+	protected final int packColor(final int r, final int g, final int b) {
+		return 255 << 24 | r << 16 | g << 8 | b;
+	}
+
+	protected final int[] unpackColor(final int color) {
+		final int[] colors = new int[3];
+		colors[0] = color >> 16 & 255;
+		colors[1] = color >> 8 & 255;
+		colors[2] = color & 255;
+		return colors;
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Vec3 getFogColor(float x, float y) {
-		if(CelestialBody.hasTrait(worldObj, CBT_SUNEXPLODED.class)) return Vec3.createVectorHelper(0, 0, 0);
-
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 
 		// The cold hard vacuum of space
@@ -60,7 +93,8 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		float totalPressure = (float)atmosphere.getPressure();
 		Vec3 color = Vec3.createVectorHelper(0, 0, 0);
 
-		for(CBT_Atmosphere.FluidEntry entry : atmosphere.fluids) {
+		for(int i = 0; i < atmosphere.fluids.size(); i++) {
+			FluidEntry entry = atmosphere.fluids.get(i);
 			Vec3 fluidColor;
 
 			if(entry.fluid == Fluids.EVEAIR) {
@@ -91,15 +125,18 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		color.xCoord *= pressureFactor;
 		color.yCoord *= pressureFactor;
 		color.zCoord *= pressureFactor;
-
+		if(Minecraft.getMinecraft().renderViewEntity.posY > 300) {
+			double curvature = MathHelper.clamp_float((800.0F - (float)Minecraft.getMinecraft().renderViewEntity.posY) / 500.0F, 0.0F, 1.0F);
+			color.xCoord *= curvature;
+			color.zCoord *= curvature;
+			color.yCoord *= curvature;
+		}
 		return color;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Vec3 getSkyColor(Entity camera, float partialTicks) {
-		if(CelestialBody.hasTrait(worldObj, CBT_SUNEXPLODED.class)) return Vec3.createVectorHelper(0, 0, 0);
-
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 		
 		// The cold hard vacuum of space
@@ -109,7 +146,8 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		float totalPressure = (float)atmosphere.getPressure();
 		Vec3 color = Vec3.createVectorHelper(0, 0, 0);
 
-		for(CBT_Atmosphere.FluidEntry entry : atmosphere.fluids) {
+		for(int i = 0; i < atmosphere.fluids.size(); i++) {
+			FluidEntry entry = atmosphere.fluids.get(i);
 			Vec3 fluidColor;
 
 			if(entry.fluid == Fluids.EVEAIR) {
@@ -154,7 +192,6 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	@SideOnly(Side.CLIENT)
 	public float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks) {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
-		if(CelestialBody.hasTrait(worldObj, CBT_SUNEXPLODED.class)) return null;
 		if(atmosphere == null || atmosphere.getPressure() < 0.05F) return null;
 
 		float[] colors = super.calcSunriseSunsetColors(celestialAngle, partialTicks);
@@ -231,9 +268,8 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public float getSunBrightness(float par1) {
-		if(CelestialBody.hasTrait(worldObj, CBT_SUNEXPLODED.class)) {
+		if(CelestialBody.getStar(worldObj).hasTrait(CBT_Destroyed.class))
 			return 0;
-		}
 
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 		float sunBrightness = super.getSunBrightness(par1);
@@ -282,6 +318,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	public void resetRainAndThunder() {
 		super.resetRainAndThunder();
 
+		if(dimensionId == 0) return;
 		if(!worldObj.getGameRules().getGameRuleBooleanValue("doDaylightCycle")) return;
 
 		long dayLength = (long)getDayLength();
@@ -291,6 +328,10 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 	@Override
 	public long getWorldTime() {
+		if(dimensionId == 0) {
+			return super.getWorldTime();
+		}
+
 		if(!worldObj.isRemote) {
 			localTime = CelestialBodyWorldSavedData.get(worldObj).getLocalTime();
 		}
@@ -300,6 +341,11 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 	@Override
 	public void setWorldTime(long time) {
+		if(dimensionId == 0) {
+			super.setWorldTime(time);
+			return;
+		}
+
 		if(!worldObj.isRemote) {
 			CelestialBodyWorldSavedData.get(worldObj).setLocalTime(time);
 		}
@@ -312,7 +358,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	public float getCloudHeight() {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 
-		if(atmosphere == null || atmosphere.getPressure() < 0.5F) return -100;
+		if(atmosphere == null || atmosphere.getPressure() < 0.5F) return -99999;
 		
 		return super.getCloudHeight();
 	}

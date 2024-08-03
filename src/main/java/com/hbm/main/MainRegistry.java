@@ -60,7 +60,6 @@ import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.BlockDispenser;
@@ -125,8 +124,7 @@ public class MainRegistry {
 
 	@Metadata
 	public static ModMetadata meta;
-	
-	public static SimpleNetworkWrapper network;
+
 	public static Logger logger = LogManager.getLogger("HBM");
 
 	// Tool Materials
@@ -253,7 +251,6 @@ public class MainRegistry {
 	public static Achievement achBreeding;
 	public static Achievement achFusion;
 	public static Achievement achMeltdown;
-	public static Achievement achRotConsum;
 	
 	public static int generalOverride = 0;
 	public static int polaroidID = 1;
@@ -395,8 +392,6 @@ public class MainRegistry {
 				}
 			}
 		});
-		network = NetworkRegistry.INSTANCE.newSimpleChannel("YourModChannel");
-		network.registerMessage(FogColorMessageHandler.class, FogMessage.class, 0, Side.CLIENT);
 
 		BlockDispenser.dispenseBehaviorRegistry.putObject(ModItems.grenade_generic, new BehaviorProjectileDispense() {
 
@@ -841,7 +836,6 @@ public class MainRegistry {
 				achMeltdown,
 				achRedBalloons,
 				achManhattan,
-				achRotConsum
 		}));
 
 		// MUST be initialized AFTER achievements!!
@@ -950,6 +944,7 @@ public class MainRegistry {
 		// Laythe caves + layers
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.SULFUR.ordinal()).setDimension(SpaceConfig.laytheDimension).setThreshold(1.5D).setRangeMult(20).setYLevel(30).setMaxRange(20).withFluid(ModBlocks.sulfuric_acid_block);
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.ASBESTOS.ordinal()).setDimension(SpaceConfig.laytheDimension).setThreshold(1.75D).setRangeMult(20).setYLevel(25).setMaxRange(20);
+		new OreCave(ModBlocks.tumor).setDimension(SpaceConfig.laytheDimension).setThreshold(0.3D).setRangeMult(20).setYLevel(25).setMaxRange(70);
 
 
 		BedrockOre.init();
@@ -991,10 +986,6 @@ public class MainRegistry {
 		ChunkAtmosphereManager atmosphere = new ChunkAtmosphereManager();
 		MinecraftForge.EVENT_BUS.register(atmosphere);
 		FMLCommonHandler.instance().bus().register(atmosphere);
-		
-		MainThreadQueue queue = new MainThreadQueue();
-		MinecraftForge.EVENT_BUS.register(queue);
-		FMLCommonHandler.instance().bus().register(queue);
 		
 		if(event.getSide() == Side.CLIENT) {
 			HbmKeybinds.register();
@@ -1039,6 +1030,7 @@ public class MainRegistry {
 		WeaponConfig.loadFromConfig(config);
 		MobConfig.loadFromConfig(config);
 		StructureConfig.loadFromConfig(config);
+		SpaceConfig.loadFromConfig(config);
 
 		config.save();
 		

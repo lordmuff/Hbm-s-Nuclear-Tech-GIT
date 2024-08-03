@@ -14,9 +14,7 @@ import com.hbm.inventory.fluid.Fluids;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockCactus;
-import net.minecraft.block.BlockReed;
+import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,6 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -41,10 +40,14 @@ public class ChunkAtmosphereHandler {
 	 * Methods to get information about the current atmosphere
 	 */
 	public CBT_Atmosphere getAtmosphere(Entity entity) {
-		return getAtmosphere(entity.worldObj, MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY), MathHelper.floor_double(entity.posZ));
+		return getAtmosphere(entity.worldObj, MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY), MathHelper.floor_double(entity.posZ), null);
 	}
 
 	public CBT_Atmosphere getAtmosphere(World world, int x, int y, int z) {
+		return getAtmosphere(world, x, y, z, null);
+	}
+
+	public CBT_Atmosphere getAtmosphere(World world, int x, int y, int z, AtmosphereBlob excludeBlob) {
 		ThreeInts pos = new ThreeInts(x, y, z);
 		HashMap<IAtmosphereProvider, AtmosphereBlob> blobs = worldBlobs.get(world.provider.dimensionId);
 
@@ -57,6 +60,8 @@ public class ChunkAtmosphereHandler {
 		}
 
 		for(AtmosphereBlob blob : blobs.values()) {
+			if(blob == excludeBlob) continue;
+
 			if(blob.contains(pos)) {
 				double pressure = blob.handler.getFluidPressure();
 				if(pressure < 0) {
@@ -136,20 +141,18 @@ public class ChunkAtmosphereHandler {
 
 	// Is the air pressure high enough to support liquids
 	public boolean hasLiquidPressure(CBT_Atmosphere atmosphere) {
-		return atmosphere != null && atmosphere.getPressure() >= 0.2;
+		return atmosphere != null && atmosphere.getPressure() >= 0.19D;
 	}
 
 	/**
 	 * Actions to rectify world status based on atmosphere
 	 */
-	private void runEffectsOnBlock(CBT_Atmosphere atmosphere, World world, Block block, int x, int y, int z, boolean fetchAtmosphere) {
+	private boolean runEffectsOnBlock(CBT_Atmosphere atmosphere, World world, Block block, int x, int y, int z, boolean fetchAtmosphere) {
 		boolean requiresPressure = block == Blocks.water || block == Blocks.flowing_water;
-		boolean requiresO2 = block instanceof BlockTorch;
-		boolean requiresCO2 = block instanceof BlockBush || block instanceof BlockReed || block instanceof BlockCactus;
+		boolean requiresO2 = block instanceof BlockTorch || block instanceof BlockFire;
+		boolean requiresCO2 = block instanceof IPlantable;
 
-		boolean dropsNothing = block == Blocks.water || block == Blocks.flowing_water;
-
-		if(!requiresO2 && !requiresCO2 && !requiresPressure) return;
+		if(!requiresO2 && !requiresCO2 && !requiresPressure) return false;
 
 		if(fetchAtmosphere) {
 			atmosphere = getAtmosphere(world, x, y, z);
@@ -167,21 +170,20 @@ public class ChunkAtmosphereHandler {
 			canExist = !(atmosphere == null || (!atmosphere.hasFluid(Fluids.OXYGEN, 0.01) && !atmosphere.hasFluid(Fluids.AIR, 0.1)));
 		}
 
-		if(canExist) return;
+		if(canExist) return false;
 		
-		if(!dropsNothing) {
-			block.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-		}
-			
+		block.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
 		world.setBlockToAir(x, y, z);
+
+		return true;
 	}
 
-	public void runEffectsOnBlock(CBT_Atmosphere atmosphere, World world, Block block, int x, int y, int z) {
-		runEffectsOnBlock(atmosphere, world, block, x, y, z, false);
+	public boolean runEffectsOnBlock(CBT_Atmosphere atmosphere, World world, Block block, int x, int y, int z) {
+		return runEffectsOnBlock(atmosphere, world, block, x, y, z, false);
 	}
 
-	public void runEffectsOnBlock(World world, Block block, int x, int y, int z) {
-		runEffectsOnBlock(null, world, block, x, y, z, true);
+	public boolean runEffectsOnBlock(World world, Block block, int x, int y, int z) {
+		return runEffectsOnBlock(null, world, block, x, y, z, true);
 	}
 
 

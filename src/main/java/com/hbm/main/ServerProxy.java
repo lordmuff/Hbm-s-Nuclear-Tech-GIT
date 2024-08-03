@@ -85,7 +85,11 @@ public class ServerProxy {
 	public boolean getImpact(World world) {
 		return TomSaveData.forWorld(world).impact;
 	}
-	
+	public int getCTime(World world) {
+		return ModEventHandler.chargetime;
+	}
+
+
 
 	public float getFlash(World world) {
 		return TomSaveData.forWorld(world).flash;

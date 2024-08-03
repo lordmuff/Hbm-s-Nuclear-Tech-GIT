@@ -38,96 +38,105 @@ public class BlockOre extends Block implements IBlockMultiPass, IBlockMulti {
         super(mat);
     }
 
-    @Override
-    public Item getItemDropped(int i, Random rand, int j) {
-        if (this == ModBlocks.ore_fluorite) {
-            return ModItems.fluorite;
-        }
-        if (this == ModBlocks.ore_niter) {
-            return ModItems.niter;
-        }
-        if (this == ModBlocks.ore_sulfur) {
-            return ModItems.sulfur;
-        }
-        if (this == ModBlocks.ore_rare) {
-            return ModItems.chunk_ore;
-        }
-        if (this == ModBlocks.ore_asbestos) {
-            return ModItems.ingot_asbestos;
-        }
-        if (this == ModBlocks.ore_lignite) {
-            return ModItems.lignite;
-        }
-        if (this == ModBlocks.ore_cinnebar) {
-            return ModItems.cinnebar;
-        }
-        if (this == ModBlocks.ore_coltan) {
-            return ModItems.fragment_coltan;
-        }
-        if (this == ModBlocks.ore_cobalt) {
-            return ModItems.fragment_cobalt;
-        }
+	@Override
+	public Item getItemDropped(int i, Random rand, int j) {
+		if(this == ModBlocks.ore_fluorite) {
+			return ModItems.fluorite;
+		}
+		if(this == ModBlocks.ore_niter) {
+			return ModItems.niter;
+		}
+		if(this == ModBlocks.ore_sulfur) {
+			return ModItems.sulfur;
+		}
+		if(this == ModBlocks.ore_glowstone) {
+			return Items.glowstone_dust;
+		}
+		if(this == ModBlocks.ore_fire) {
+			return rand != null && rand.nextInt(10) == 0 ? ModItems.ingot_phosphorus : ModItems.powder_fire;
+		}
+		if(this == ModBlocks.ore_rare) {
+			return ModItems.chunk_ore;
+		}
+		if(this == ModBlocks.ore_asbestos) {
+			return ModItems.ingot_asbestos;
+		}
+		if(this == ModBlocks.ore_lignite) {
+			return ModItems.lignite;
+		}
+		if(this == ModBlocks.ore_cinnebar) {
+			return ModItems.cinnebar;
+		}
+		if(this == ModBlocks.ore_coltan) {
+			return ModItems.fragment_coltan;
+		}
+		if(this == ModBlocks.ore_cobalt) {
+			return ModItems.fragment_cobalt;
+		}
         if (this == ModBlocks.ferric_clay) {
             return ModItems.ball_ferric_clay;
         }
-        // Vanilla reproduction
-        if (this == ModBlocks.ore_redstone) {
-            return Items.redstone;
-        }
-        if (this == ModBlocks.ore_lapis) {
-            return Items.dye;
-        }
-        if (this == ModBlocks.ore_emerald) {
-            return Items.emerald;
-        }
-        if (this == ModBlocks.ore_quartz) {
-            return Items.quartz;
-        }
-        if (this == ModBlocks.ore_diamond) {
-            return Items.diamond;
-        }
+		// Vanilla reproduction
+		if(this == ModBlocks.ore_redstone) {
+			return Items.redstone;
+		}
+		if(this == ModBlocks.ore_lapis) {
+			return Items.dye;
+		}
+		if(this == ModBlocks.ore_emerald) {
+			return Items.emerald;
+		}
+		if(this == ModBlocks.ore_quartz) {
+			return Items.quartz;
+		}
+		if(this == ModBlocks.ore_diamond) {
+			return Items.diamond;
+		}
 
         return Item.getItemFromBlock(this);
     }
 
-    @Override
-    public int quantityDropped(Random rand) {
-        if (this == ModBlocks.ore_fluorite) {
-            return 2 + rand.nextInt(3);
-        }
-        if (this == ModBlocks.ore_niter) {
-            return 2 + rand.nextInt(3);
-        }
-        if (this == ModBlocks.ore_sulfur) {
-            return 2 + rand.nextInt(3);
-        }
-        if (this == ModBlocks.ore_cobalt) {
-            return 4 + rand.nextInt(6);
-        }
-        if (this == ModBlocks.ore_redstone) {
-            return 4 + rand.nextInt(2);
-        }
-        if (this == ModBlocks.ore_lapis) {
-            return 4 + rand.nextInt(5);
-        }
+	@Override
+	public int quantityDropped(Random rand) {
+		if(this == ModBlocks.ore_fluorite) {
+			return 2 + rand.nextInt(3);
+		}
+		if(this == ModBlocks.ore_niter) {
+			return 2 + rand.nextInt(3);
+		}
+		if(this == ModBlocks.ore_sulfur) {
+			return 2 + rand.nextInt(3);
+		}
+		if(this == ModBlocks.ore_glowstone) {
+			return 1 + rand.nextInt(3);
+		}
+		if(this == ModBlocks.ore_cobalt) {
+			return 4 + rand.nextInt(6);
+		}
+		if(this == ModBlocks.ore_redstone) {
+			return 4 + rand.nextInt(2);
+		}
+		if(this == ModBlocks.ore_lapis) {
+			return 4 + rand.nextInt(5);
+		}
         if (this == ModBlocks.ferric_clay) {
             return 4 + rand.nextInt(4);
         }
-        return 1;
-    }
-
-    public boolean allowFortune = true;
-
-    public BlockOre noFortune() {
-        this.allowFortune = false;
-        return this;
-    }
-
-    @Override
-    public int quantityDroppedWithBonus(int fortune, Random rand) {
-
-        if (fortune > 0 && Item.getItemFromBlock(this) != this.getItemDropped(0, rand, fortune) && allowFortune) {
-            int mult = rand.nextInt(fortune + 2) - 1;
+		return 1;
+	}
+	
+	public boolean allowFortune = true;
+	
+	public BlockOre noFortune() {
+		this.allowFortune = false;
+		return this;
+	}
+	
+	@Override
+	public int quantityDroppedWithBonus(int fortune, Random rand) {
+		
+		if(fortune > 0 && Item.getItemFromBlock(this) != this.getItemDropped(0, rand, fortune) && allowFortune) {
+			int mult = rand.nextInt(fortune + 2) - 1;
 
             if (mult < 0) {
                 mult = 0;
@@ -183,13 +192,19 @@ public class BlockOre extends Block implements IBlockMultiPass, IBlockMulti {
         return rectify(meta);
     }
 
-    @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-        if (world.getBlock(x, y - 1, z) == ModBlocks.ore_oil_empty) {
-            world.setBlock(x, y, z, ModBlocks.ore_oil_empty);
-            world.setBlock(x, y - 1, z, ModBlocks.ore_oil);
-        }
-    }
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		int meta = world.getBlockMetadata(x, y, z);
+
+		if(world.getBlock(x, y - 1, z) == ModBlocks.ore_oil_empty) {
+			world.setBlock(x, y, z, ModBlocks.ore_oil_empty, meta, 3);
+			world.setBlock(x, y - 1, z, ModBlocks.ore_oil, meta, 3);
+		}
+		if(world.getBlock(x, y - 1, z) == ModBlocks.ore_gas_empty) {
+			world.setBlock(x, y, z, ModBlocks.ore_gas_empty, meta, 3);
+			world.setBlock(x, y - 1, z, ModBlocks.ore_gas, meta, 3);
+		}
+	}
 
     @Override
     public void updateTick(World world, int x, int y, int z, Random rand) {
