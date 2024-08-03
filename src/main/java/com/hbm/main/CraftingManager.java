@@ -124,7 +124,10 @@ public class CraftingManager {
 		addRecipeAuto(DictFrame.fromOne(ModItems.circuit, EnumCircuitType.CHIP), new Object[] { "I", "S", "W", 'I', ModItems.plate_polymer, 'S', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.SILICON), 'W', GOLD.wireFine() });
 		addRecipeAuto(DictFrame.fromOne(ModItems.circuit, EnumCircuitType.CHIP_BISMOID), new Object[] { "III", "SNS", "WWW", 'I', ModItems.plate_polymer, 'S', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.SILICON), 'N', ANY_BISMOID.nugget(), 'W', CU.wireFine() });
 		addRecipeAuto(DictFrame.fromOne(ModItems.circuit, EnumCircuitType.CHIP_BISMOID), new Object[] { "III", "SNS", "WWW", 'I', ModItems.plate_polymer, 'S', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.SILICON), 'N', ANY_BISMOID.nugget(), 'W', GOLD.wireFine() });
+		addRecipeAuto(DictFrame.fromOne(ModItems.circuit, EnumCircuitType.CHIP_QUANTUM), new Object[] { "HHH", "SIS", "WWW", 'H', ANY_HARDPLASTIC.ingot(), 'S', BSCCO.wireDense(), 'I', ModItems.pellet_charged, 'W', CU.wireFine() });
+		addRecipeAuto(DictFrame.fromOne(ModItems.circuit, EnumCircuitType.CHIP_QUANTUM), new Object[] { "HHH", "SIS", "WWW", 'H', ANY_HARDPLASTIC.ingot(), 'S', BSCCO.wireDense(), 'I', ModItems.pellet_charged, 'W', GOLD.wireFine() });
 		addRecipeAuto(DictFrame.fromOne(ModItems.circuit, EnumCircuitType.CONTROLLER_CHASSIS), new Object[] { "PPP", "CBB", "PPP", 'P', ANY_PLASTIC.ingot(), 'C', ModItems.crt_display, 'B', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.PCB) });
+		addRecipeAuto(DictFrame.fromOne(ModItems.circuit, EnumCircuitType.ATOMIC_CLOCK), new Object[] { "ICI", "CSC", "ICI", 'I', ModItems.plate_polymer, 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.CHIP), 'S', SR.dust() });
 
 		addRecipeAuto(new ItemStack(ModItems.crt_display, 4), new Object[] { " A ", "SGS", " T ", 'A', AL.dust(), 'S', STEEL.plate(), 'G', KEY_ANYPANE, 'T', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.VACUUM_TUBE) });
 
@@ -454,7 +457,8 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(ModBlocks.spotlight_incandescent, 8), new Object[] { " G ", " T ", " I ", 'G', KEY_ANYPANE, 'T', W.wireFine(), 'I', IRON.ingot() });
 		addRecipeAuto(new ItemStack(ModBlocks.spotlight_fluoro, 8), new Object[] { " G ", " M ", " A ", 'G', KEY_ANYPANE, 'M', ModItems.ingot_mercury, 'A', ModItems.plate_aluminium });
 		addRecipeAuto(new ItemStack(ModBlocks.spotlight_halogen, 8), new Object[] { " G ", " B ", " S ", 'G', KEY_ANYPANE, 'B', ModItems.powder_bromine, 'S', STEEL.plate() });
-		
+		addRecipeAuto(new ItemStack(ModBlocks.floodlight, 2), new Object[] { "CSC", "TST", "G G", 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.CAPACITOR), 'S', STEEL.plate(), 'T', ModItems.coil_tungsten, 'G', KEY_ANYPANE });
+
 		addRecipeAuto(new ItemStack(ModBlocks.barbed_wire, 16), new Object[] { "AIA", "I I", "AIA", 'A', STEEL.wireFine(), 'I', IRON.ingot() });
 		addRecipeAuto(new ItemStack(ModBlocks.barbed_wire_fire, 8), new Object[] { "BBB", "BIB", "BBB", 'B', ModBlocks.barbed_wire, 'I', P_RED.dust() });
 		addRecipeAuto(new ItemStack(ModBlocks.barbed_wire_poison, 8), new Object[] { "BBB", "BIB", "BBB", 'B', ModBlocks.barbed_wire, 'I', ModItems.powder_poison });
@@ -998,6 +1002,7 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(ModBlocks.crane_unboxer), new Object[] { "WWW", "WPW", "CCC", 'W', KEY_STICK, 'P', Items.shears, 'C', ModBlocks.conveyor });
 		addRecipeAuto(new ItemStack(ModBlocks.crane_router), new Object[] { "PIP", "ICI", "PIP", 'P', DictFrame.fromOne(ModItems.part_generic, EnumPartType.PISTON_PNEUMATIC), 'I', ModItems.plate_polymer, 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.BASIC) });
 		addRecipeAuto(new ItemStack(ModBlocks.crane_splitter), new Object[] { "III", "PCP", "III", 'P', DictFrame.fromOne(ModItems.part_generic, EnumPartType.PISTON_PNEUMATIC), 'I', STEEL.ingot(), 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.VACUUM_TUBE) });
+		addRecipeAuto(new ItemStack(ModBlocks.crane_partitioner), new Object[] { " M ", "BCB", 'M', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.CHIP), 'B', ModBlocks.conveyor, 'C', ModBlocks.crate_steel });
 
 		addRecipeAuto(new ItemStack(ModBlocks.machine_conveyor_press), new Object[] { "CPC", "CBC", "CCC", 'C', CU.plate(), 'P', ModBlocks.machine_epress, 'B', ModBlocks.conveyor });
 		addRecipeAuto(new ItemStack(ModBlocks.radar_screen), new Object[] { "PCP", "SRS", "PCP", 'P', ANY_PLASTIC.ingot(), 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.BASIC), 'S', STEEL.plate(), 'R', ModItems.crt_display });
@@ -1010,7 +1015,7 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(ModItems.drone, 1, EnumDroneType.PATROL_EXPRESS_CHUNKLOADING.ordinal()), new Object[] { " P ", "KDK", " P ", 'P', TI.plateWelded(), 'K', Fluids.KEROSENE.getDict(1_000), 'D', new ItemStack(ModItems.drone, 1, EnumDroneType.PATROL_CHUNKLOADING.ordinal()) });
 		addShapelessAuto(new ItemStack(ModItems.drone, 1, EnumDroneType.PATROL.ordinal()), new Object[] { new ItemStack(ModItems.drone, 1, EnumDroneType.PATROL_CHUNKLOADING.ordinal()) });
 		addShapelessAuto(new ItemStack(ModItems.drone, 1, EnumDroneType.PATROL_EXPRESS.ordinal()), new Object[] { new ItemStack(ModItems.drone, 1, EnumDroneType.PATROL_EXPRESS_CHUNKLOADING.ordinal()) });
-		addRecipeAuto(new ItemStack(ModItems.drone, 1, EnumDroneType.REQUEST.ordinal()), new Object[] { "E", "D", 'E', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.CHIP), 'D', new ItemStack(ModItems.drone, 1, EnumDroneType.PATROL_EXPRESS.ordinal()) });
+		addRecipeAuto(new ItemStack(ModItems.drone, 1, EnumDroneType.REQUEST.ordinal()), new Object[] { "E", "D", 'E', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.CHIP), 'D', new ItemStack(ModItems.drone, 1, EnumDroneType.PATROL.ordinal()) });
 
 		addRecipeAuto(new ItemStack(ModItems.drone_linker), new Object[] { "T", "C", 'T', ModBlocks.drone_waypoint, 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.BASIC) });
 		addRecipeAuto(new ItemStack(ModBlocks.drone_waypoint, 4), new Object[] { "G", "T", "C", 'G', KEY_GREEN, 'T', Blocks.redstone_torch, 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.BASIC) });

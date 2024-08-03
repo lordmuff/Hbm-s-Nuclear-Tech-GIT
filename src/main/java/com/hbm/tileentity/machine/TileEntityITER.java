@@ -74,6 +74,8 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 	public int progress;
 	public static final int duration = 100;
 	EntityPlayer player;
+	public long totalRuntime;
+
 	@SideOnly(Side.CLIENT)
 	public int blanket;
 	
@@ -142,11 +144,9 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 				power -= powerReq;
 				
 				if(plasma.getFill() > 0) {
-					
-					int chance = FusionRecipes.getByproductChance(plasma.getTankType());
-					
-					if(chance > 0 && worldObj.rand.nextInt(chance) == 0)
-						produceByproduct();
+					this.totalRuntime++;
+					int delay = FusionRecipes.getByproductDelay(plasma.getTankType());
+					if(delay > 0 && totalRuntime % delay == 0) produceByproduct();
 				}
 				
 				if(plasma.getFill() > 0 && this.getShield() != 0) {
@@ -461,34 +461,14 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 
 	@Override
 	public void handleButtonPacket(int value, int meta) {
-		
-		if(meta == 0) {
-			this.isOn = !this.isOn;
-		}
+		if(meta == 0) this.isOn = !this.isOn;
 	}
 
-	public long getPowerScaled(long i) {
-		return (power * i) / maxPower;
-	}
-
-	public long getProgressScaled(long i) {
-		return (progress * i) / duration;
-	}
-
-	@Override
-	public void setPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public long getPower() {
-		return power;
-	}
-
-	@Override
-	public long getMaxPower() {
-		return maxPower;
-	}
+	public long getPowerScaled(long i) { return (power * i) / maxPower; }
+	public long getProgressScaled(long i) { return (progress * i) / duration; }
+	@Override public void setPower(long i) { this.power = i; }
+	@Override public long getPower() { return power; }
+	@Override public long getMaxPower() { return maxPower; }
 
 	public void setFillForSync(int fill, int index) {
 		if (index < 2 && tanks[index] != null)
@@ -619,6 +599,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 		
 		this.power = nbt.getLong("power");
 		this.isOn = nbt.getBoolean("isOn");
+		this.totalRuntime = nbt.getLong("totalRuntime");
 
 		tanks[0].readFromNBT(nbt, "water");
 		tanks[1].readFromNBT(nbt, "steam");
@@ -634,6 +615,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 		
 		nbt.setLong("power", this.power);
 		nbt.setBoolean("isOn", isOn);
+		nbt.setLong("totalRuntime", this.totalRuntime);
 
 		tanks[0].writeToNBT(nbt, "water");
 		tanks[1].writeToNBT(nbt, "steam");
@@ -754,6 +736,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 
 
 	@Override
+	@Optional.Method(modid = "OpenComputers")
 	public String getComponentName() {
 		return "ntm_fusion";
 	}
@@ -809,6 +792,8 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 		return new Object[] {"N/A", "N/A"};
 	}
 
+	@Override
+	@Optional.Method(modid = "OpenComputers")
 	public String[] methods() {
 		return new String[] {
 				"getEnergyInfo",
@@ -821,6 +806,8 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 		};
 	}
 
+	@Override
+	@Optional.Method(modid = "OpenComputers")
 	public Object[] invoke(String method, Context context, Arguments args) throws Exception {
 		switch (method) {
 			case ("getEnergyInfo"):

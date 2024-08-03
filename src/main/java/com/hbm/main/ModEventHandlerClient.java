@@ -987,7 +987,7 @@ public class ModEventHandlerClient  {
 	static boolean isRenderingItems = false;
 
 	@SubscribeEvent
-	public void clentTick(ClientTickEvent event) {
+	public void clientTick(ClientTickEvent event) {
 		
 		Minecraft mc = Minecraft.getMinecraft();
 		ArmorNo9.updateWorldHook(mc.theWorld);

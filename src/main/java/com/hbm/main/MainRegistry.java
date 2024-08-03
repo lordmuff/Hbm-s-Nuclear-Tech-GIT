@@ -88,6 +88,7 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.EnumHelper;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -283,7 +284,7 @@ public class MainRegistry {
 				polaroidID = rand.nextInt(18) + 1;
 		}
 
-		ShadyUtil.test();
+		//ShadyUtil.test();
 		loadConfig(PreEvent);
 		HbmPotion.init();
 		
@@ -375,6 +376,7 @@ public class MainRegistry {
 		ChestGenHooks.addItem(ChestGenHooks.BONUS_CHEST, new WeightedRandomChestContent(new ItemStack(ModItems.no9), 1, 1, 7));
 
 		EntityMappings.writeMappings();
+		//CompatNER.init();
 		
 
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new LoadingCallback() {
@@ -1409,6 +1411,11 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:tile.ore_verticium");
 		ignoreMappings.add("hbm:item.warhead_mirvlet");
 		ignoreMappings.add("hbm:item.generator_front");
+		ignoreMappings.add("hbm:tile.rbmk_heatex");
+		ignoreMappings.add("hbm:tile.machine_boiler_on");
+		ignoreMappings.add("hbm:tile.machine_boiler_electric_off");
+		ignoreMappings.add("hbm:tile.machine_boiler_electric_on");
+		ignoreMappings.add("hbm:tile.watz_control");
 		
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);

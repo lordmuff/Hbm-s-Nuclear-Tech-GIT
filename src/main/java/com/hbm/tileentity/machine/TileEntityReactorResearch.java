@@ -404,6 +404,7 @@ public class TileEntityReactorResearch extends TileEntityMachineBase implements 
 	
 	// do some opencomputer stuff
 	@Override
+	@Optional.Method(modid = "OpenComputers")
 	public String getComponentName() {
 		return "research_reactor";
 	}
@@ -438,6 +439,8 @@ public class TileEntityReactorResearch extends TileEntityMachineBase implements 
 		return new Object[] {heat, level, targetLevel, totalFlux};
 	}
 
+	@Override
+	@Optional.Method(modid = "OpenComputers")
 	public String[] methods() {
 		return new String[] {
 				"getTemp",
@@ -448,6 +451,8 @@ public class TileEntityReactorResearch extends TileEntityMachineBase implements 
 		};
 	}
 
+	@Override
+	@Optional.Method(modid = "OpenComputers")
 	public Object[] invoke(String method, Context context, Arguments args) throws Exception {
 		switch(method) {
 			case ("getTemp"):
