@@ -6,23 +6,15 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
-import com.hbm.inventory.UpgradeManager;
 import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.inventory.container.ContainerMachineSolderingStation;
+import com.hbm.inventory.UpgradeManager;
 import com.hbm.inventory.container.ContainerVacuumCircuit;
-import com.hbm.inventory.fluid.Fluids;
-import com.hbm.inventory.fluid.tank.FluidTank;
-import com.hbm.inventory.gui.GUIMachineSolderingStation;
 import com.hbm.inventory.gui.GUIVacuumCircuit;
-import com.hbm.inventory.recipes.SolderingRecipes;
-import com.hbm.inventory.recipes.SolderingRecipes.SolderingRecipe;
 import com.hbm.inventory.recipes.VacuumCircuitRecipes;
 import com.hbm.inventory.recipes.VacuumCircuitRecipes.VacuumCircuitRecipe;
 import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
 import com.hbm.lib.Library;
-import com.hbm.packet.AuxParticlePacketNT;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.IUpgradeInfoProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -30,7 +22,6 @@ import com.hbm.util.I18nUtil;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
 import api.hbm.energymk2.IEnergyReceiverMK2;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiScreen;
@@ -39,14 +30,12 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implements IEnergyReceiverMK2, IGUIProvider, IUpgradeInfoProvider
-{
+public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implements IEnergyReceiverMK2, IGUIProvider, IUpgradeInfoProvider {
+
 	public long power;
 	public long maxPower = 2_000;
 	public long consumption;
@@ -55,6 +44,8 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 	public int processTime = 1;
 	
 	public ItemStack display;
+
+	public boolean canOperate = true;
 	
 	public TileEntityMachineVacuumCircuit() {
 		super(8);
@@ -82,11 +73,9 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 				? CelestialBody.getTrait(worldObj, CBT_Atmosphere.class)
 				: null;
 
-			if(atmosphere != null && atmosphere.getPressure() > 0.001) return;			
-			
-			this.power = Library.chargeTEFromItems(slots, 5, this.getPower(), this.getMaxPower());
-			
+			canOperate = atmosphere == null || atmosphere.getPressure() <= 0.001;
 
+			this.power = Library.chargeTEFromItems(slots, 5, this.getPower(), this.getMaxPower());
 			
 			VacuumCircuitRecipe recipe = VacuumCircuitRecipes.getRecipe(new ItemStack[] {slots[0], slots[1], slots[2], slots[3]});
 			long intendedMaxPower;
@@ -136,6 +125,7 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 			data.setLong("consumption", consumption);
 			data.setInteger("progress", progress);
 			data.setInteger("processTime", processTime);
+			data.setBoolean("canOperate", canOperate);
 			if(recipe != null) {
 				data.setInteger("display", Item.getIdFromItem(recipe.output.getItem()));
 				data.setInteger("displayMeta", recipe.output.getItemDamage());
@@ -145,6 +135,7 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 	}
 	
 	public boolean canProcess(VacuumCircuitRecipe recipe) {
+		if(!canOperate) return false;
 		
 		if(this.power < this.consumption) return false;
 
@@ -220,6 +211,7 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 		this.consumption = nbt.getLong("consumption");
 		this.progress = nbt.getInteger("progress");
 		this.processTime = nbt.getInteger("processTime");
+		this.canOperate = nbt.getBoolean("canOperate");
 		
 		if(nbt.hasKey("display")) {
 			this.display = new ItemStack(Item.getItemById(nbt.getInteger("display")), 1, nbt.getInteger("displayMeta"));

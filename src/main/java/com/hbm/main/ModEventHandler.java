@@ -648,7 +648,6 @@ public class ModEventHandler {
 	
 	public static boolean didSit = false;
 	public static Field reference = null;
-	public static int chargetime;
 
 	@SubscribeEvent
 	public void worldTick(WorldTickEvent event) {
@@ -843,16 +842,6 @@ public class ModEventHandler {
 			}
 
 		}
-		if(event.phase == Phase.START && event.world.provider instanceof WorldProviderEve) {
-
-			if (chargetime <= 0 || chargetime <= 800) {
-				chargetime += 1;
-			} else if (chargetime >= 800) {
-				chargetime = 0;
-
-        	}
-		}
-
 
 		if(event.phase == Phase.START) {
 			BossSpawnHandler.rollTheDice(event.world);

@@ -138,26 +138,5 @@ public class ImpactWorldHandler {
 		if(world != lastSyncWorld) return 0;
 		return time;
 	}
-	public static int ctime = 0;
 
-	@SideOnly(Side.CLIENT)
-	public static int getCTimeForClient(World world) {
-		if(world != lastSyncWorld) return 0;
-		return ctime;
-	}
-
-
-
-
-	@SideOnly(Side.CLIENT)
-	public static float getFlashForClient(World world) {
-		if(world != lastSyncWorld) return 0F;
-		return flash;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static boolean getDivinityForClient(World world) {
-		if(world != lastSyncWorld) return false;
-		return divinity;
-	}
 }

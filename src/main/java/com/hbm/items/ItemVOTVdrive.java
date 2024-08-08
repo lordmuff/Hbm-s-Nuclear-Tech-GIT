@@ -7,6 +7,7 @@ import com.hbm.dim.SolarSystem;
 import com.hbm.entity.missile.EntityRideableRocket;
 import com.hbm.entity.missile.EntityRideableRocket.RocketState;
 import com.hbm.lib.RefStrings;
+import com.hbm.util.I18nUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -26,7 +27,7 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 	private IIcon baseIcon;
 	
 	public ItemVOTVdrive() {
-		super(SolarSystem.Body.class, true, true);
+		super(SolarSystem.Body.class, false, true);
 		this.setMaxStackSize(1);
 		this.canRepair = false;
 	}
@@ -45,12 +46,15 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 
 		int processingLevel = destination.body.getProcessingLevel();
 
-		list.add("Destination: " + destination.body.name);
+		list.add("Destination: " + EnumChatFormatting.AQUA + I18nUtil.resolveKey("body." + destination.body.name));
 
-		if (!getProcessed(stack)) {
+		if(destination.x == 0 && destination.z == 0) {
+			list.add(EnumChatFormatting.GOLD + "Needs destination coordinates!");
+		} else if(!getProcessed(stack)) {
 			// Display processing level info if not processed
 			list.add("Process requirement: Level " + processingLevel);
 			list.add(EnumChatFormatting.GOLD + "Needs processing!");
+			list.add("Target coordinates: " + destination.x + ", " + destination.z);
 		} else {
 			// Display destination info if processed
 			list.add(EnumChatFormatting.GREEN + "Processed!");
@@ -103,6 +107,11 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 
 		stack.stackTagCompound.setInteger("x", x);
 		stack.stackTagCompound.setInteger("z", z);
+	}
+
+	public static int getProcessingTier(ItemStack stack) {
+		SolarSystem.Body body = SolarSystem.Body.values()[stack.getItemDamage()];
+		return body.getProcessingLevel();
 	}
 
 	public static boolean getProcessed(ItemStack stack) {
@@ -186,6 +195,7 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 			return false;
 
 		setCoordinates(stack, x, z);
+		setProcessed(stack, true);
 
 		if(!world.isRemote)
 			player.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.ITALIC + "Set landing coordinates to: " + x + ", " + z));

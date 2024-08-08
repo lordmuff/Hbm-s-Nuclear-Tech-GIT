@@ -23,6 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.obj.Face;
 
 public class TileEntityTransporterRocket extends TileEntityTransporterBase {
 
@@ -52,6 +53,7 @@ public class TileEntityTransporterRocket extends TileEntityTransporterBase {
 				ExplosionLarge.spawnShock(worldObj, xCoord + 0.5, yCoord, zCoord + 0.5, 1 + worldObj.rand.nextInt(3), 1 + worldObj.rand.nextGaussian());
 			}
 		}
+
 	}
 
 	public int getThreshold() {

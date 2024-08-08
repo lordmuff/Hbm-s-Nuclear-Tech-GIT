@@ -2,6 +2,7 @@
 
 package com.hbm.dim.minmus.biome;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.BiomeDecoratorCelestial;
 import com.hbm.dim.BiomeGenBaseCelestial;
@@ -18,10 +19,10 @@ public abstract class BiomeGenBaseMinmus extends BiomeGenBaseCelestial {
         super(id);
 		this.setDisableRain();
         
-        this.theBiomeDecorator = new BiomeDecoratorCelestial(Blocks.snow);
+        this.theBiomeDecorator = new BiomeDecoratorCelestial(ModBlocks.minmus_regolith);
         this.theBiomeDecorator.generateLakes = false;
         
-        this.topBlock = Blocks.snow;
-        this.fillerBlock = Blocks.snow;
+        this.topBlock = ModBlocks.minmus_regolith; //remind me to send roadhog his daily modmail
+        this.fillerBlock = ModBlocks.minmus_regolith;
     }
 }

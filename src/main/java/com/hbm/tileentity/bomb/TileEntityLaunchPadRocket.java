@@ -286,6 +286,11 @@ public class TileEntityLaunchPadRocket extends TileEntityMachineBase implements 
 		CelestialBody localBody = CelestialBody.getBody(worldObj);
 		CelestialBody destination = ItemVOTVdrive.getDestination(slots[1]).body.getBody();
 
+		// Check that the drive is processed
+		if(!ItemVOTVdrive.getProcessed(slots[1])) {
+			return false;
+		}
+
 		// Check if the stage can make the journey
 		if(destination != null && destination != localBody) {
 			RocketStruct rocket = ItemCustomRocket.get(slots[0]);
@@ -379,6 +384,11 @@ public class TileEntityLaunchPadRocket extends TileEntityMachineBase implements 
 
 		if(!hasDrive()) {
 			issues.add(EnumChatFormatting.YELLOW + "No destination drive installed");
+			return issues;
+		}
+
+		if(!ItemVOTVdrive.getProcessed(slots[1])) {
+			issues.add(EnumChatFormatting.RED + "Destination drive needs processing");
 			return issues;
 		}
 
@@ -484,6 +494,7 @@ public class TileEntityLaunchPadRocket extends TileEntityMachineBase implements 
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return new GUILaunchPadRocket(player.inventory, this);
 	}
@@ -491,6 +502,15 @@ public class TileEntityLaunchPadRocket extends TileEntityMachineBase implements 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return INFINITE_EXTENT_AABB; // hi martin ;)
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		if(worldObj.getTileEntity(xCoord, yCoord, zCoord) != this) {
+			return false;
+		} else {
+			return player.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 1024;
+		}
 	}
 	
 	@Override

@@ -17,6 +17,7 @@ import com.hbm.items.weapon.ItemCustomRocket;
 import com.hbm.main.MainRegistry;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.util.BobMathUtil;
+import com.hbm.util.I18nUtil;
 import com.hbm.util.ParticleUtil;
 
 import cpw.mods.fml.relauncher.Side;
@@ -56,7 +57,6 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 
 	private AudioWrapper audio;
 
-	@SideOnly(Side.CLIENT)
 	private RocketState lastState = RocketState.AWAITING;
 
 	private boolean willExplode = false;
@@ -195,7 +195,7 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 			}
 
 			if(height > 8) {
-				double offset = height - 8;
+				double offset = height - 4;
 				if(capDummy == null || capDummy.isDead) {
 					capDummy = new EntityRideableRocketDummy(worldObj, this);
 					capDummy.parent = this;
@@ -466,6 +466,10 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 		} else {
 			navDrive = null;
 		}
+
+		// weird wacky position offset load fix
+		posX += 0.875;
+		posZ += 0.875;
 	}
 
 	@Override
@@ -488,6 +492,7 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void printHook(Pre event, World world, int x, int y, int z) {
 		RocketState state = getState();
 		if(state == RocketState.LAUNCHING || state == RocketState.LANDING || state == RocketState.TIPPING)
@@ -518,7 +523,7 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 		} else if(riddenByEntity != player) {
 			text.add("OCCUPIED");
 		} else {
-			text.add("Destination: " + destination.name);
+			text.add("Destination: " + I18nUtil.resolveKey("body." + destination.name));
 
 			if(canLaunch) {
 				text.add("JUMP TO LAUNCH");
@@ -565,7 +570,7 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 
 		public EntityRideableRocketDummy(World world) {
 			super(world);
-			setSize(4, 8);
+			setSize(4, 4);
 		}
 
 		public EntityRideableRocketDummy(World world, EntityRideableRocket parent) {

@@ -120,10 +120,13 @@
 	"music.recordGoop": {"category": "record", "sounds": [{"name": "music/recordGoop", "stream": true}]},
 	"music.recordEthereal": {"category": "record", "sounds": [{"name": "music/recordEthereal", "stream": true}]},
 
-	"music.game.space": {"category": "record", "sounds": [
-		{"name": "music/recordEthereal", "stream": true},
-		{"name": "music/recordGoop", "stream": true},
-		{"name": "music/recordGodSpeed", "stream": true}
+	"music.game.space": {"category": "music", "sounds": [
+		{"name": "music/spaceBreak", "stream": true},
+		{"name": "music/spaceTrill", "stream": true},
+		{"name": "music/spaceBeat", "stream": true},
+		{"name": "music/spaceTranscend", "stream": true},
+		{"name": "music/spaceCalm", "stream": true},
+		{"name": "music/spaceKoyaanis", "stream": true}
 	]},
 
 	"weapon.tauShoot": {"category": "player", "sounds": [{"name": "weapon/tauShoot", "stream": false}]},
