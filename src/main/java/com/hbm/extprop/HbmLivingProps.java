@@ -58,7 +58,33 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 	public HbmLivingProps(EntityLivingBase entity) {
 		this.entity = entity;
 	}
-	
+
+	/// NEUTRON ACTIVATION ///
+	public static float getNeutronActivation(EntityLivingBase entity) {
+		if(RadiationConfig.disableNeutron)
+			return 0;
+
+		return getData(entity).activation;
+	}
+
+	public static void setNeutronActivation(EntityLivingBase entity, float rad) {
+		if(!RadiationConfig.disableNeutron)
+			getData(entity).activation = rad;
+	}
+
+	public static void incrementNeutronActivation(EntityLivingBase entity, float rad) {
+		if(RadiationConfig.disableNeutron)
+			return;
+
+		HbmLivingProps data = getData(entity);
+		float neutrons = getData(entity).activation + rad;
+
+		if(neutrons < 0)
+			neutrons = 0;
+
+		data.setNeutronActivation(entity, neutrons);
+	}
+
 	/// DATA ///
 	public static HbmLivingProps registerData(EntityLivingBase entity) {
 		

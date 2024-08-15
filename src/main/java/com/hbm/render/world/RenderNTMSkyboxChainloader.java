@@ -47,8 +47,6 @@ public class RenderNTMSkyboxChainloader extends IRenderHandler { //why an abstra
 	
 	@Override
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
-		boolean test = ImpactWorldHandler.getDivinityForClient(world);
-		float flash = ImpactWorldHandler.getFlashForClient(world);
 
 		if(parent != null) {
 			
@@ -100,100 +98,7 @@ public class RenderNTMSkyboxChainloader extends IRenderHandler { //why an abstra
 		tessellator.addVertexWithUV(var12, dist, var12, 1.0D, 1.0D);
 		tessellator.addVertexWithUV(-var12, dist, var12, 1.0D, 0.0D);
 		tessellator.draw();
-		GL11.glPopMatrix();
-			if(test) {
-			brightness *= brightness;
-			
-			GL11.glColor4f(brightness, brightness, brightness, 1.0F);
-			
-			GL11.glPushMatrix();
-			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(140.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(-39.7F, 0.0F, 0.0F, 1.0F);
-			
-			mc.renderEngine.bindTexture(nova);
-			float var13 = flash / 2;
-			tessellator.startDrawingQuads();
-			tessellator.addVertexWithUV(-var13, 100.0D, -var13, 0.0D, 0.0D);
-			tessellator.addVertexWithUV(var13, 100.0D, -var13, 1.0D, 0.0D);
-			tessellator.addVertexWithUV(var13, 100.0D, var13, 1.0D, 1.0D);
-			tessellator.addVertexWithUV(-var13, 100.0D, var13, 0.0D, 1.0D);
-			tessellator.draw();
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glPopMatrix();
 
-			{
-				brightness *= brightness;
-				float var14 = flash;
-				float alpha = 1.0F - Math.min(1.0F, var14 / 100);
-				GL11.glColor4f(brightness, brightness, brightness, alpha);
-				
-				GL11.glPushMatrix();
-				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-				GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(140.0F, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(-39.7F, 0.0F, 0.0F, 1.0F);
-				
-				mc.renderEngine.bindTexture(texture);
-				// flashMaxValue is the maximum value flash can reach
-
-				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV(-var14, 100.0D, -var14, 0.0D, 0.0D);
-				tessellator.addVertexWithUV(var14, 100.0D, -var14, 1.0D, 0.0D);
-				tessellator.addVertexWithUV(var14, 100.0D, var14, 1.0D, 1.0D);
-				tessellator.addVertexWithUV(-var14, 100.0D, var14, 0.0D, 1.0D);
-				tessellator.draw();
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glPopMatrix();
-			}
-			{
-				float var14 = flash;
-				float var15 = Math.min(70, flash * 2 );
-				float alpha = 1.0F - Math.min(1.0F, var14 / 100);
-				GL11.glColor4f(brightness, brightness, brightness, alpha);
-				
-				GL11.glPushMatrix();
-				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-				GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(140.0F, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(-39.7F, 0.0F, 0.0F, 1.0F);
-				
-				mc.renderEngine.bindTexture(RenderNTMSkyboxChainloader.flash);
-				// flashMaxValue is the maximum value flash can reach
-
-				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV(-var15, 100.0D, -var15, 0.0D, 0.0D);
-				tessellator.addVertexWithUV(var15, 100.0D, -var15, 1.0D, 0.0D);
-				tessellator.addVertexWithUV(var15, 100.0D, var15, 1.0D, 1.0D);
-				tessellator.addVertexWithUV(-var15, 100.0D, var15, 0.0D, 1.0D);
-				tessellator.draw();
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glPopMatrix();
-			}
-			{
-				float var19 = flash;
-				float var16 = Math.max(0, flash);
-				float alpha = 1.0F - Math.min(1.0F, var19 / 100);
-				GL11.glColor4f(brightness, brightness, brightness, alpha);
-				
-				GL11.glPushMatrix();
-				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-				GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(140.0F, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(-39.7F, 0.0F, 0.0F, 1.0F);
-				
-				mc.renderEngine.bindTexture(nova2);
-				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV(-var16, 100.0D, -var16, 0.0D, 0.0D);
-				tessellator.addVertexWithUV(var16, 100.0D, -var16, 1.0D, 0.0D);
-				tessellator.addVertexWithUV(var16, 100.0D, var16, 1.0D, 1.0D);
-				tessellator.addVertexWithUV(-var16, 100.0D, var16, 0.0D, 1.0D);
-				tessellator.draw();
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glPopMatrix();
-			}
-			}
 		GL11.glPushMatrix();
 		GL11.glRotatef(-40.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glRotatef((System.currentTimeMillis() % (360 * 1000) / 1000F), 0.0F, 1.0F, 0.0F);

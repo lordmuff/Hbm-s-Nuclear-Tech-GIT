@@ -75,8 +75,8 @@ public class RenderBlockMultipass implements ISimpleBlockRenderingHandler {
 			renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
 			tessellator.draw();
 		}
-		
-		/** terrible hack to make this shit work */
+
+		/* terrible hack to make this shit work
 		if(block == ModBlocks.ore_random) {
 
 			currentPass = 1;
@@ -134,6 +134,7 @@ public class RenderBlockMultipass implements ISimpleBlockRenderingHandler {
 			renderer.clearOverrideBlockTexture();
 			GL11.glColor3f(1F, 1F, 1F);
 		}
+		 */
 		
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 	}

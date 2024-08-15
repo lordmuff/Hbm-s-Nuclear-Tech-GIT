@@ -219,12 +219,15 @@ public class HbmWorldGen implements IWorldGenerator {
 
 			// }
 
+			/*
 			for(int k = 0; k < WorldConfig.randomSpawn; k++) {
 				BlockMotherOfAllOres.shuffleOverride(rand);
 				DungeonToolbox.generateOre(world, rand, i, j, 1, 10, 4, 30, ModBlocks.ore_random);
 			}
+
 			BlockMotherOfAllOres.resetOverride();
-			
+			*/
+
 			if(GeneralConfig.enable528ColtanSpawn) {
 				DungeonToolbox.generateOre(world, rand, i, j, GeneralConfig.coltanRate, 4, 15, 40, ModBlocks.ore_coltan);
 			}

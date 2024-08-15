@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.Tuple.Pair;
-import com.hbm.world.gen.NBTStructure;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -91,8 +90,6 @@ public class ItemWandS extends Item {
                 blocks.add(new Pair<Block, Integer>(Blocks.air, 0));
 
                 String filename = "structure_" + dateFormat.format(new Date()).toString() + ".nbt";
-
-                NBTStructure.saveArea(filename, world, x, y, z, px, py, pz, blocks);
 
 				if(world.isRemote) player.addChatMessage(new ChatComponentText("Structure saved to: .minecraft/structures/" + filename));
 			}

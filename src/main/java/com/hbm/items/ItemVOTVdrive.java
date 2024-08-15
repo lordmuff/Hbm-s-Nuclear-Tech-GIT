@@ -25,7 +25,7 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 
 	private IIcon[] IIcons;
 	private IIcon baseIcon;
-	
+
 	public ItemVOTVdrive() {
 		super(SolarSystem.Body.class, false, true);
 		this.setMaxStackSize(1);
@@ -36,7 +36,7 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
 		super.addInformation(stack, player, list, bool);
-		
+
 		Destination destination = getDestination(stack);
 
 		if(destination.body == SolarSystem.Body.BLANK) {
@@ -117,14 +117,14 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 	public static boolean getProcessed(ItemStack stack) {
 		if(!stack.hasTagCompound())
 			stack.stackTagCompound = new NBTTagCompound();
-		
+
 		return stack.stackTagCompound.getBoolean("Processed");
 	}
 
 	public static void setProcessed(ItemStack stack, boolean processed) {
 		if(!stack.hasTagCompound())
 			stack.stackTagCompound = new NBTTagCompound();
-		
+
 		stack.stackTagCompound.setBoolean("Processed", processed);
 	}
 
@@ -169,9 +169,9 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 				} else {
 					newStack.stackSize = 0;
 				}
-	
+
 				rocket.navDrive = stack;
-	
+
 				if(!world.isRemote) {
 					if(onDestination) {
 						rocket.setState(RocketState.LANDED);
@@ -183,11 +183,11 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 				world.playSoundEffect(player.posX, player.posY, player.posZ, "hbm:item.upgradePlug", 1.0F, 1.0F);
 			}
 		}
-	
+
 		return newStack;
 	}
 
-	
+
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float fx, float fy, float fz) {
 		boolean onDestination = world.provider.dimensionId == getDestination(stack).body.getDimensionId();
@@ -214,7 +214,7 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 			this.x = x;
 			this.z = z;
 		}
-		
+
 		public ChunkCoordIntPair getChunk() {
 			return new ChunkCoordIntPair(x >> 4, z >> 4);
 		}

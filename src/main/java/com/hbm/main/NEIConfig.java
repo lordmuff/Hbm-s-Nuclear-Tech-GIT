@@ -87,6 +87,7 @@ public class NEIConfig implements IConfigureNEI {
 		API.hideItem(new ItemStack(ModItems.ore_density_scanner));
 		API.hideItem(new ItemStack(ModBlocks.machine_ore_slopper));
 		
+		/*
 		API.registerHighlightIdentifier(ModBlocks.ore_random, new IHighlightHandler() {
 
 			@Override
@@ -111,6 +112,8 @@ public class NEIConfig implements IConfigureNEI {
 			}
 			
 		});
+
+		 */
 	}
 	
 	public static void registerHandler(Object o) {

@@ -3,11 +3,7 @@ package com.hbm.main;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
+import java.util.*;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -169,6 +165,8 @@ public class ModEventHandlerClient  {
 	public static final int shakeDuration = 1_500;
 	public static long shakeTimestamp;
 	private static final ResourceLocation customBackground = new ResourceLocation(RefStrings.MODID, "textures/misc/fl.png");
+	public static List<DelayedSound> delayedSounds = new ArrayList();
+	public static boolean soundLock = false; // for thread safety or some bullshit
 
     @SubscribeEvent
 	public void onOverlayRender(RenderGameOverlayEvent.Pre event) {
@@ -377,11 +375,6 @@ public class ModEventHandlerClient  {
 		/// HANDLE FLASHBANG OVERLAY///
 		if(player.isPotionActive(HbmPotion.flashbang)) {
 			RenderScreenOverlay.renderFlashbangOverlay(event.resolution);
-		}
-		float size = ImpactWorldHandler.getFlashForClient(player.worldObj);
-		boolean impact = ImpactWorldHandler.getDivinityForClient(player.worldObj);
-		if(size <= 90 && size > 0 && impact) {
-			this.flashTimestamp = System.currentTimeMillis();
 		}
 		/// HANDLE FSB HUD ///
 		ItemStack helmet = player.inventory.armorInventory[3];
@@ -1442,7 +1435,7 @@ public class ModEventHandlerClient  {
 			GL11.glEnable(GL11.GL_LIGHTING);
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void worldTick(WorldTickEvent event) {
 		
@@ -1458,7 +1451,7 @@ public class ModEventHandlerClient  {
 				client.sendQueue.addToSendQueue(new C0CPacketInput(client.moveStrafing, client.moveForward, client.movementInput.jump, client.movementInput.sneak));
 			}
 		}
-		
+
 		if(event.phase == event.phase.START) {
 			
 			while(soundLock);
@@ -1509,4 +1502,22 @@ public class ModEventHandlerClient  {
 			else if(d < 0.2) main.splashText = "Can someone tell me what corrosive fumes the people on Reddit are huffing so I can avoid those more effectively?";
 		}
 	}
+
+	public static class DelayedSound {
+		public String sound;
+		public int delay;
+		public double x, y, z;
+		public float volume, pitch;
+
+		public DelayedSound(String sound, int delay, double x, double y, double z, float volume, float pitch) {
+			this.sound = sound;
+			this.delay = delay;
+			this.x = x;
+			this.y = y;
+			this.z = z;
+			this.volume = volume;
+			this.pitch = pitch;
+		}
+	}
+
 }
