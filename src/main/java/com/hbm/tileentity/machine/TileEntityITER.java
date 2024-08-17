@@ -9,8 +9,6 @@ import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionNT;
 import com.hbm.explosion.ExplosionNT.ExAttrib;
 import com.hbm.handler.CompatHandler;
-import com.hbm.interfaces.IFluidAcceptor;
-import com.hbm.interfaces.IFluidSource;
 import com.hbm.inventory.container.ContainerITER;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
@@ -60,13 +58,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
-public class TileEntityITER extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidAcceptor, IFluidSource, IFluidStandardTransceiver, IGUIProvider, IInfoProviderEC, SimpleComponent, CompatHandler.OCComponent {
+public class TileEntityITER extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidStandardTransceiver, IGUIProvider, IInfoProviderEC, SimpleComponent, CompatHandler.OCComponent {
 	
 	public long power;
 	public static final long maxPower = 10000000;
 	public static final int powerReq = 100000;
-	public int age = 0;
-	public List<IFluidAcceptor> list = new ArrayList();
 	public FluidTank[] tanks;
 	public FluidTank plasma;
 	public static final int CoolReq = 1;
@@ -202,9 +198,6 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 			/// END Processing part ///
 
 			/// START Notif packets ///
-			for(int i = 0; i < tanks.length; i++)
-				tanks[i].updateTank(xCoord, yCoord, zCoord, worldObj.provider.dimensionId);
-			plasma.updateTank(xCoord, yCoord, zCoord, worldObj.provider.dimensionId);
 			
 			for(DirPos pos : getConPos()) {
 				if(tanks[1].getFill() > 0) {
@@ -472,7 +465,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 	public void setFillForSync(int fill, int index) {
 		if (index < 2 && tanks[index] != null)
 			tanks[index].setFill(fill);
-		
+
 		if(index == 2)
 			plasma.setFill(fill);
 		tanks[0].setFill(fill);
@@ -500,7 +493,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 	public void setTypeForSync(FluidType type, int index) {
 		if (index < 2 && tanks[index] != null)
 			tanks[index].setTankType(type);
-		
+
 		if(index == 2)
 			plasma.setTankType(type);
 		tanks[0].setTankType(type);

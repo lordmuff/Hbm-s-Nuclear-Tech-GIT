@@ -26,6 +26,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -47,6 +48,11 @@ public class BlockBedrockOreTE extends BlockContainer implements ILookOverlay, I
 		this.setBlockTextureName("bedrock");
 		this.setBlockUnbreakable();
 		this.setResistance(1_000_000);
+	}
+
+	@Override
+	public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
+		return false;
 	}
 
 	@Override

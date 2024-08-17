@@ -1,2 +1,12 @@
-## Added
-* fucki- space man, it's space, that's what was added
+## Changed
+* To address certain balancing concerns, the RF to HE conversion rate is now 2:5. The HE to RF rate however is still 5:1
+  * Because of this, using chains of converters as batteries becomes exponentially lossy with size, therefore the input decay has been removed
+  * Input decay can still be configured if desired
+  * No input decay also means that converters are no longer infinite energy sinks
+* Power converter recipes have been updated
+* Soldering stations will no longer work if the recipe requires no input fluid while fluid is present
+  * While this does complicate using the soldering station manually, as switching from milgrade to standard ICs requires emptying the solderer with a siphon, it does make automating easier, since soldering stations will no longer treat incomplete milgrade circuits as ICs
+* Cement is now edible
+
+## Fixed
+* Fixed some machines not sending fluid gauge syncs properly

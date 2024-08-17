@@ -129,7 +129,7 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 				if(this.tanks[0].getFill() > this.tanks[0].getMaxFill()) this.tanks[0].setFill(tanks[0].getMaxFill());
 				this.tanks[1].setFill(this.tanks[1].getFill() + (gasPerDepositMin + worldObj.rand.nextInt((gasPerDepositMax - gasPerDepositMin + 1))));
 				if(this.tanks[1].getFill() > this.tanks[1].getMaxFill()) this.tanks[1].setFill(tanks[1].getMaxFill());
-				
+
 				if(worldObj.rand.nextDouble() < drainChance) {
 					worldObj.setBlock(x, y, z, ModBlocks.ore_oil_empty, meta, 3);
 				}
@@ -150,8 +150,8 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 			}
 		}
 	}
-	
-	
+
+
 
 	@Override
 	public void fillFluidInit(FluidType type) {

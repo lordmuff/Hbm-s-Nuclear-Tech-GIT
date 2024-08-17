@@ -1,6 +1,5 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,7 +10,6 @@ import com.hbm.interfaces.IFluidAcceptor;
 import com.hbm.interfaces.IFluidSource;
 import com.hbm.inventory.UpgradeManager;
 import com.hbm.inventory.container.ContainerMiningLaser;
-import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.gui.GUIMiningLaser;
@@ -55,14 +53,13 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityMachineMiningLaser extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidSource, IMiningDrill, IFluidStandardSender, IGUIProvider, IUpgradeInfoProvider {
+public class TileEntityMachineMiningLaser extends TileEntityMachineBase implements IEnergyReceiverMK2, IMiningDrill, IFluidStandardSender, IGUIProvider, IUpgradeInfoProvider {
 	
 	public long power;
 	public int age = 0;
 	public static final long maxPower = 100000000;
 	public static final int consumption = 10000;
 	public FluidTank tank;
-	public List<IFluidAcceptor> list = new ArrayList();
 
 	public boolean isOn;
 	public int targetX;
@@ -81,7 +78,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 		//slots 1 - 8: upgrades
 		//slots 9 - 29: output
 		super(30);
-		tank = new FluidTank(Fluids.OIL, 64000, 0);
+		tank = new FluidTank(Fluids.OIL, 64_000);
 	}
 
 	@Override
@@ -96,21 +93,12 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 			
 			this.updateConnections();
 
-			age++;
-			if (age >= 20) {
-				age = 0;
-			}
-
-			if (age == 9 || age == 19)
-				fillFluidInit(tank.getTankType());
-
 			this.sendFluid(tank, worldObj, xCoord + 2, yCoord, zCoord, Library.POS_X);
 			this.sendFluid(tank, worldObj, xCoord - 2, yCoord, zCoord, Library.NEG_X);
 			this.sendFluid(tank, worldObj, xCoord, yCoord + 2, zCoord, Library.POS_Z);
 			this.sendFluid(tank, worldObj, xCoord, yCoord - 2, zCoord, Library.NEG_Z);
 			
 			power = Library.chargeTEFromItems(slots, 0, power, maxPower);
-			tank.updateTank(xCoord, yCoord, zCoord, this.worldObj.provider.dimensionId);
 			
 			//reset progress if the position changes
 			if(lastTargetX != targetX ||
@@ -193,7 +181,8 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 			data.setBoolean("beam", beam);
 			data.setBoolean("isOn", isOn);
 			data.setDouble("progress", clientBreakProgress);
-			
+			tank.writeToNBT(data, "t");
+
 			this.networkPack(data, 250);
 		}
 	}
@@ -215,18 +204,15 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 		this.beam = data.getBoolean("beam");
 		this.isOn = data.getBoolean("isOn");
 		this.breakProgress = data.getDouble("progress");
+		tank.readFromNBT(data, "t");
 	}
 	
 	private void buildDam() {
 
-		if(worldObj.getBlock(targetX + 1, targetY, targetZ).getMaterial().isLiquid())
-			worldObj.setBlock(targetX + 1, targetY, targetZ, ModBlocks.barricade);
-		if(worldObj.getBlock(targetX - 1, targetY, targetZ).getMaterial().isLiquid())
-			worldObj.setBlock(targetX - 1, targetY, targetZ, ModBlocks.barricade);
-		if(worldObj.getBlock(targetX, targetY, targetZ + 1).getMaterial().isLiquid())
-			worldObj.setBlock(targetX, targetY, targetZ + 1, ModBlocks.barricade);
-		if(worldObj.getBlock(targetX, targetY, targetZ - 1).getMaterial().isLiquid())
-			worldObj.setBlock(targetX, targetY, targetZ - 1, ModBlocks.barricade);
+		if(worldObj.getBlock(targetX + 1, targetY, targetZ).getMaterial().isLiquid()) worldObj.setBlock(targetX + 1, targetY, targetZ, ModBlocks.barricade);
+		if(worldObj.getBlock(targetX - 1, targetY, targetZ).getMaterial().isLiquid()) worldObj.setBlock(targetX - 1, targetY, targetZ, ModBlocks.barricade);
+		if(worldObj.getBlock(targetX, targetY, targetZ + 1).getMaterial().isLiquid()) worldObj.setBlock(targetX, targetY, targetZ + 1, ModBlocks.barricade);
+		if(worldObj.getBlock(targetX, targetY, targetZ - 1).getMaterial().isLiquid()) worldObj.setBlock(targetX, targetY, targetZ - 1, ModBlocks.barricade);
 	}
 	
 	private void tryFillContainer(int x, int y, int z) {
@@ -377,17 +363,17 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 				} else {
 					tank.setTankType(Fluids.OIL); // now it seems we must be sure
 				}
-				
+
 				tank.setFill(tank.getFill() + 500);
 				if(tank.getFill() > tank.getMaxFill())
 					tank.setFill(tank.getMaxFill());
-				
+
 				item.setDead();
 				continue;
 			}
-			
+
 			if(item.getEntityItem().getItem() == Item.getItemFromBlock(ModBlocks.ore_gas)) {
-				
+
 				tank.setTankType(Fluids.GAS); // because the tank can change forever more
 				
 				tank.setFill(tank.getFill() + 500);
@@ -398,7 +384,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 				continue;
 			}
 			
-			
+
 			ItemStack stack = InventoryUtil.tryAddItemToInventory(slots, 9, 29, item.getEntityItem().copy());
 			
 			if(stack == null)
@@ -633,62 +619,6 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 	@Override
 	public long getMaxPower() {
 		return maxPower;
-	}
-
-	@Override
-	public void setFillForSync(int fill, int index) {
-		tank.setFill(fill);
-	}
-
-	@Override
-	public void setFluidFill(int fill, FluidType type) {
-		if(type == Fluids.OIL)
-			tank.setFill(fill);
-	}
-
-	@Override
-	public void setTypeForSync(FluidType type, int index) {
-		tank.setTankType(type);
-	}
-
-	@Override
-	public int getFluidFill(FluidType type) {
-		if(type == Fluids.OIL)
-			return tank.getFill();
-		return 0;
-	}
-
-	@Override
-	public void fillFluidInit(FluidType type) {
-
-		fillFluid(xCoord + 2, yCoord, zCoord, this.getTact(), type);
-		fillFluid(xCoord - 2, yCoord, zCoord, this.getTact(), type);
-		fillFluid(xCoord, yCoord, zCoord + 2, this.getTact(), type);
-		fillFluid(xCoord, yCoord, zCoord - 2, this.getTact(), type);
-	}
-
-	@Override
-	public void fillFluid(int x, int y, int z, boolean newTact, FluidType type) {
-		Library.transmitFluid(x, y, z, newTact, this, worldObj, type);
-	}
-
-	@Override
-	public boolean getTact() {
-		if (age >= 0 && age < 10) {
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
-	public List<IFluidAcceptor> getFluidList(FluidType type) {
-		return list;
-	}
-
-	@Override
-	public void clearFluidList(FluidType type) {
-		list.clear();
 	}
 
 	@Override

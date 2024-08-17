@@ -31,20 +31,6 @@ public class TileEntityMachineOrbus extends TileEntityBarrel implements IOverpre
 	@Override
 	public void checkFluidInteraction() { } //NO!
 
-	@Override
-	public void fillFluidInit(FluidType type) {
-		
-		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
-		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
-
-		for(int i = -1; i < 6; i += 6) {
-			this.fillFluid(xCoord, yCoord + i, zCoord, this.getTact(), this.tank.getTankType());
-			this.fillFluid(xCoord + dir.offsetX, yCoord + i, zCoord + dir.offsetZ, this.getTact(), this.tank.getTankType());
-			this.fillFluid(xCoord + rot.offsetX, yCoord + i, zCoord + rot.offsetZ, this.getTact(), this.tank.getTankType());
-			this.fillFluid(xCoord + dir.offsetX + rot.offsetX, yCoord + i, zCoord + dir.offsetZ + rot.offsetZ, this.getTact(), this.tank.getTankType());
-		}
-	}
-	
 	protected DirPos[] conPos;
 	
 	@Override
@@ -122,15 +108,15 @@ public class TileEntityMachineOrbus extends TileEntityBarrel implements IOverpre
 			EntityNukeExplosionMK3 ex = EntityNukeExplosionMK3.statFacFleija(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, (int) aschrab);
 			if(!ex.isDead) {
 				worldObj.spawnEntityInWorld(ex);
-	
+
 				EntityCloudFleija cloud = new EntityCloudFleija(worldObj, (int) aschrab);
 				cloud.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
 				worldObj.spawnEntityInWorld(cloud);
 			}
-			return;			
+			return;
 		}
 		this.markChanged();
     }
-		
+
 	}
 }

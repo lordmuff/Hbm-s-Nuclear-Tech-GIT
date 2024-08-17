@@ -49,7 +49,7 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 	protected static int gasPerDeposit = 750;
 	protected static int petgasPerDepositMin = 10;
 	protected static int petgasPerDepositMax = 50;
-	
+
 	public float rot = 0;
 	public float prevRot = 0;
 	public float speed = 0;
@@ -141,7 +141,7 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 	public void onSuck(int x, int y, int z) {
 		int meta = worldObj.getBlockMetadata(x, y, z);
 		Block block = worldObj.getBlock(x, y, z);
-		
+
         if(block == ModBlocks.ore_oil) {
 			if(meta == SolarSystem.Body.LAYTHE.ordinal()) {
 				tanks[0].setTankType(Fluids.OIL_DS);
@@ -155,7 +155,7 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 				if(this.tanks[0].getFill() > this.tanks[0].getMaxFill()) this.tanks[0].setFill(tanks[0].getMaxFill());
 				this.tanks[1].setFill(this.tanks[1].getFill() + (gasPerDepositMin + worldObj.rand.nextInt((gasPerDepositMax - gasPerDepositMin + 1)))); // ditto, lotsa gas
 				if(this.tanks[1].getFill() > this.tanks[1].getMaxFill()) this.tanks[1].setFill(tanks[1].getMaxFill());
-				
+
 				if(worldObj.rand.nextDouble() < drainChanceDuna) {
 					worldObj.setBlock(x, y, z, ModBlocks.ore_oil_empty, meta, 3);
 				}
@@ -185,27 +185,8 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 			}
 		}
 	}
-        
 
-	@Override
-	public void fillFluidInit(FluidType type) {
-		
-		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
-		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
 
-		int pX2 = xCoord + rot.offsetX * 2;
-		int pZ2 = zCoord + rot.offsetZ * 2;
-		int pX4 = xCoord + rot.offsetX * 4;
-		int pZ4 = zCoord + rot.offsetZ * 4;
-		int oX = Math.abs(dir.offsetX) * 2;
-		int oZ = Math.abs(dir.offsetZ) * 2;
-		
-		fillFluid(pX2 + oX, this.yCoord, pZ2 + oZ, getTact(), type);
-		fillFluid(pX2 - oX, this.yCoord, pZ2 - oZ, getTact(), type);
-		fillFluid(pX4 + oX, this.yCoord, pZ4 + oZ, getTact(), type);
-		fillFluid(pX4 - oX, this.yCoord, pZ4 - oZ, getTact(), type);
-	}
-	
 	AxisAlignedBB bb = null;
 	
 	@Override

@@ -9,13 +9,9 @@ import com.google.common.collect.Sets;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
-import com.hbm.interfaces.IFluidAcceptor;
-import com.hbm.interfaces.IFluidDuct;
-import com.hbm.interfaces.IFluidSource;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.items.ModItems;
-import com.hbm.tileentity.TileEntityProxyInventory;
 
 import api.hbm.energymk2.IBatteryItem;
 import api.hbm.energymk2.IEnergyConnectorBlock;
@@ -82,10 +78,7 @@ public class Library {
 			});
 
 	public static boolean checkForHeld(EntityPlayer player, Item item) {
-		
-		if(player.getHeldItem() == null)
-			return false;
-		
+		if(player.getHeldItem() == null) return false;
 		return player.getHeldItem().getItem() == item;
 	}
 
@@ -171,15 +164,15 @@ public class Library {
 		
 		return false;
 	}
-	
+
 	public static boolean checkInventory(EntityPlayer player, Item item, int slot)
 	{
 		if(player.inventory.mainInventory[slot] != null &&
-				player.inventory.mainInventory[slot].getItem() == item) 
+				player.inventory.mainInventory[slot].getItem() == item)
 		{
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -371,24 +364,6 @@ public class Library {
 		 * You won't be missed.
 		 */
 	}
-	
-	public static void transmitFluid(int x, int y, int z, boolean newTact, IFluidSource that, World worldObj, FluidType type) { }
-	
-	public static boolean isArrayEmpty(Object[] array) {
-		if(array == null)
-			return true;
-		if(array.length == 0)
-			return true;
-		
-		boolean flag = true;
-		
-		for(int i = 0; i < array.length; i++) {
-			if(array[i] != null)
-				flag = false;
-		}
-		
-		return flag;
-	}
 
 	// Added for sake of doors
 	// Original: Drillgon200: https://thebookofshaders.com/glossary/?search=smoothstep
@@ -410,25 +385,12 @@ public class Library {
 		MovingObjectPosition pos = world.func_147447_a(Vec3.createVectorHelper(x, y, z), Vec3.createVectorHelper(a, b, c), false, true, false);
 		return pos != null;
 	}
-	
-	public static int getFirstNullIndex(int start, Object[] array) {
-		for(int i = start; i < array.length; i++) {
-			if(array[i] == null)
-				return i;
-		}
-		return -1;
-	}
-	
+
 	public static Block getRandomConcrete() {
 		int i = rand.nextInt(20);
-
-		if(i <= 1)
-			return ModBlocks.brick_concrete_broken;
-		if(i <= 4)
-			return ModBlocks.brick_concrete_cracked;
-		if(i <= 10)
-			return ModBlocks.brick_concrete_mossy;
-		
+		if(i <= 1) return ModBlocks.brick_concrete_broken;
+		if(i <= 4) return ModBlocks.brick_concrete_cracked;
+		if(i <= 10) return ModBlocks.brick_concrete_mossy;
 		return ModBlocks.brick_concrete;
 	}
 }
