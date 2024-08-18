@@ -1,6 +1,5 @@
 package com.hbm.entity.missile;
 
-import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.explosion.ExplosionLarge;
 
 import cpw.mods.fml.relauncher.Side;
@@ -42,18 +41,6 @@ public class EntityBooster extends EntityThrowable {
                 ExplosionLarge.explodeFire(worldObj, posX, posY, posZ, 10F, true, false, true);
             }
             this.setDead();
-        }
-
-        if(!worldObj.isRemote) {
-            for(int i = 0; i < 2; i++) {
-                EntityTSmokeFX fx1 = new EntityTSmokeFX(worldObj);
-                fx1.posY = posY - 0.25D;
-                fx1.posX = posX + rand.nextGaussian() * 0.25D;
-                fx1.posZ = posZ + rand.nextGaussian() * 0.25D;
-                fx1.motionY = -0.2D;
-
-                worldObj.spawnEntityInWorld(fx1);
-            }
         }
 
         this.motionX *= 0.995;

@@ -45,7 +45,9 @@ public class Mats {
 	/* Alloy Space, up to 70 materials. Use >20_000 as an extension.*/
 	public static final int _AS = 30;
 	/* make that >24_000 */
+	public static final int _ES = 20_000;
 	public static final int _EX = 24_000;
+
 	
 	//Vanilla and vanilla-like
 	public static final NTMMaterial MAT_STONE			= makeSmeltable(_VS + 00,	df("Stone"), 0x7F7F7F, 0x353535, 0x4D2F23).n();
@@ -149,8 +151,20 @@ public class Mats {
 	public static final NTMMaterial MAT_PLATNIUM	= makeSmeltable(_EX + 3,	PLATNIUM,	0xE6E8F3, 0xE6E8F3, 0xE6E8F3).setShapes(NUGGET, INGOT, DUST).m();
 	public static final NTMMaterial MAT_ZINC		= makeSmeltable(_EX + 4,	ZI,			0xA79DA8, 0xA79DA8, 0xA79DA8).setShapes(NUGGET, INGOT, DUST, WIRE).m(); //TODO: give this shit colors
 	public static final NTMMaterial MAT_NICKEL		= makeSmeltable(_EX + 5,	NI,			0xAE9572, 0xAE9572, 0xAE9572).setShapes(NUGGET, INGOT, DUST, BLOCK).m();
+	public static final NTMMaterial MAT_RAREEARTH	= makeNonSmeltable(_ES + 00, 		RAREEARTH,		0xC1BDBD, 0x384646, 0x7B7F7F).setShapes(FRAGMENT, INGOT).n();
+	public static final NTMMaterial MAT_SULFUR			= makeNonSmeltable(1600,	S,				0xFCEE80, 0xBDA022, 0xF1DF68).setShapes(FRAGMENT, DUST, BLOCK).n();
+	public static final NTMMaterial MAT_KNO				= makeNonSmeltable(700,		KNO,			0xD4D4D4, 0x969696, 0xC9C9C9).setShapes(FRAGMENT, DUST, BLOCK).n();
+	public static final NTMMaterial MAT_FLUORITE		= makeNonSmeltable(900,		F,				0xFFFFFF, 0xB0A192, 0xE1DBD4).setShapes(FRAGMENT, DUST, BLOCK).n();
+	public static final NTMMaterial MAT_PHOSPHORUS		= makeNonSmeltable(1500,	P_RED,			0xCB0213, 0x600006, 0xBA0615).setShapes(FRAGMENT, DUST, BLOCK).n();
+	public static final NTMMaterial MAT_CHLOROCALCITE	= makeNonSmeltable(1701, 	CHLOROCALCITE,	0xF7E761, 0x475B46, 0xB8B963).setShapes(FRAGMENT, DUST).n();
+	public static final NTMMaterial MAT_MOLYSITE		= makeNonSmeltable(1702, 	MOLYSITE, 		0xF9E97B, 0x216E00, 0xD0D264).setShapes(FRAGMENT, DUST).n();
+	public static final NTMMaterial MAT_CINNABAR		= makeNonSmeltable(8001,	CINNABAR,		0xD87070, 0x993030, 0xBF4E4E).setShapes(FRAGMENT, GEM).n();
+	public static final NTMMaterial MAT_SODALITE		= makeNonSmeltable(1101,	SODALITE,		0xDCE5F6, 0x4927B4, 0x96A7E6).setShapes(FRAGMENT, GEM).n();
+	public static final NTMMaterial MAT_ASBESTOS		= makeSmeltable(1401,		ASBESTOS,		0xD8D9CF, 0x616258, 0xB0B3A8).setShapes(FRAGMENT, INGOT, BLOCK).n();
+	public static final NTMMaterial MAT_LANTHANIUM		= makeSmeltable(5700,		LA,				0xC8E0E0, 0x3B5353, 0xA1B9B9).setShapes(FRAGMENT, INGOT, BLOCK).m();
+	public static final NTMMaterial MAT_TECHNETIUM	= makeSmeltable(4399,		TC99,		0xFAFFFF, 0x576C6C, 0xCADFDF).setShapes(FRAGMENT, NUGGET, BILLET, INGOT, BLOCK).m();
+	public static final NTMMaterial MAT_BORAX			= makeSmeltable(501,		BORAX,			0xFFFFFF, 0x946E23, 0xFFECC6).setShapes(FRAGMENT, DUST).n();
 
-	
 	@Deprecated public static NTMMaterial makeSmeltable(int id, DictFrame dict, int color) { return makeSmeltable(id, dict, color, color, color); }
 	@Deprecated public static NTMMaterial makeAdditive(int id, DictFrame dict, int color) { return makeAdditive(id, dict, color, color, color); }
 
@@ -164,6 +178,10 @@ public class Mats {
 	
 	public static NTMMaterial makeAdditive(int id, DictFrame dict, int solidColorLight, int solidColorDark, int moltenColor) {
 		return new NTMMaterial(id, dict).smeltable(SmeltingBehavior.ADDITIVE).setSolidColor(solidColorLight, solidColorDark).setMoltenColor(moltenColor);
+	}
+
+	public static NTMMaterial makeNonSmeltable(int id, DictFrame dict, int solidColorLight, int solidColorDark, int moltenColor) {
+		return new NTMMaterial(id, dict).smeltable(SmeltingBehavior.NOT_SMELTABLE).setSolidColor(solidColorLight, solidColorDark).setMoltenColor(moltenColor);
 	}
 	
 	public static DictFrame df(String string) {

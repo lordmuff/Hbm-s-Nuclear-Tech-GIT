@@ -271,13 +271,14 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 			
 			for(int x = xCoord - ring; x <= xCoord + ring; x++) {
 				for(int z = zCoord - ring; z <= zCoord + ring; z++) {
-					
+
 					/* Process blocks either if we are in the inner ring (1 = 3x3) or if the target block is on the outer edge */
-					if(ring == 1 || (x == xCoord - ring || x == xCoord + ring || z == zCoord - ring || z == zCoord + ring)) {
-						
+					if (ring == 1 || (x == xCoord - ring || x == xCoord + ring || z == zCoord - ring || z == zCoord + ring)) {
+
 						Block b = worldObj.getBlock(x, y, z);
-						
-						if(b == ModBlocks.ore_bedrock) {
+
+
+						if (b == ModBlocks.ore_bedrock || b == CS.BlocksGT.oreBedrock || b == CS.BlocksGT.oreSmallBedrock || b == IL.HBM_Bedrock_Oil.getBlock()) {
 							combinedHardness = 5 * 60 * 20;
 							bedrockOre = new BlockPos(x, y, z);
 							bedrockDrilling = true;
@@ -286,11 +287,13 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 							break;
 						}
 
-						if(shouldIgnoreBlock(b, x, y ,z)) continue;
-						
+
+						if (shouldIgnoreBlock(b, x, y, z)) continue;
+
 						ignoreAll = false;
-						
+
 						combinedHardness += b.getBlockHardness(worldObj, x, y, z);
+
 					}
 				}
 			}

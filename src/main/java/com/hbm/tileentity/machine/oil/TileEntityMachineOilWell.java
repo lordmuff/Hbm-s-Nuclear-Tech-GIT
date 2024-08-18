@@ -76,7 +76,7 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 		int[] ids = OreDictionary.getOreIDs(stack);
 		for(Integer i : ids) {
 			String name = OreDictionary.getOreName(i);
-			
+
 			if("oreUranium".equals(name)) {
 				for(int j = -1; j <= 1; j++) {
 					for(int k = -1; k <= 1; k++) {
@@ -86,7 +86,7 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 					}
 				}
 			}
-			
+
 			if("oreAsbestos".equals(name)) {
 				for(int j = -1; j <= 1; j++) {
 					for(int k = -1; k <= 1; k++) {
@@ -100,14 +100,14 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 	}
 
 	@Override
-    public void onSuck(int x, int y, int z) {
-        ExplosionLarge.spawnOilSpills(worldObj, xCoord + 0.5F, yCoord + 5.5F, zCoord + 0.5F, 3);
-        worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "game.neutral.swim.splash", 2.0F, 0.5F);
+	public void onSuck(int x, int y, int z) {
+		ExplosionLarge.spawnOilSpills(worldObj, xCoord + 0.5F, yCoord + 5.5F, zCoord + 0.5F, 3);
+		worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "game.neutral.swim.splash", 2.0F, 0.5F);
 
 		int meta = worldObj.getBlockMetadata(x, y, z);
 		Block block = worldObj.getBlock(x, y, z);
 
-        if(block == ModBlocks.ore_oil) {
+		if(block == ModBlocks.ore_oil) {
 			if(meta == SolarSystem.Body.LAYTHE.ordinal()) {
 				tanks[0].setTankType(Fluids.OIL_DS);
 			} else {
@@ -134,7 +134,7 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 					worldObj.setBlock(x, y, z, ModBlocks.ore_oil_empty, meta, 3);
 				}
 			}
-        }
+		}
 
 		if(block == ModBlocks.ore_gas) {
 			tanks[0].setTankType(Fluids.GAS);
@@ -151,21 +151,11 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 		}
 	}
 
-
-
-	@Override
-	public void fillFluidInit(FluidType type) {
-		fillFluid(this.xCoord - 2, this.yCoord, this.zCoord, getTact(), type);
-		fillFluid(this.xCoord + 2, this.yCoord, this.zCoord, getTact(), type);
-		fillFluid(this.xCoord, this.yCoord, this.zCoord - 2, getTact(), type);
-		fillFluid(this.xCoord, this.yCoord, this.zCoord + 2, getTact(), type);
-	}
-	
 	AxisAlignedBB bb = null;
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		
+
 		if(bb == null) {
 			bb = AxisAlignedBB.getBoundingBox(
 					xCoord - 1,
@@ -174,9 +164,9 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 					xCoord + 2,
 					yCoord + 7,
 					zCoord + 2
-					);
+			);
 		}
-		
+
 		return bb;
 	}
 
@@ -216,7 +206,7 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 		writer.name("I:gasPerDepositMax").value(gasPerDepositMax);
 		writer.name("D:drainChance").value(drainChance);
 	}
-	
+
 	@Override
 	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return new ContainerMachineOilWell(player.inventory, this);

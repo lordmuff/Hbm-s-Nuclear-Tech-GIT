@@ -200,15 +200,6 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 			}
 			
 			PacketDispatcher.wrapper.sendToAllAround(new BufPacket(xCoord, yCoord, zCoord, this), new TargetPoint(this.worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 50));
-			
-			MissileStruct multipart = getStruct(slots[0]);
-			
-			if(multipart != null)
-				PacketDispatcher.wrapper.sendToAllAround(new TEMissileMultipartPacket(xCoord, yCoord, zCoord, multipart), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 250));
-			else
-				PacketDispatcher.wrapper.sendToAllAround(new TEMissileMultipartPacket(xCoord, yCoord, zCoord, new MissileStruct()), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 250));
-
-			PacketDispatcher.wrapper.sendToAllAround(new BufPacket(xCoord, yCoord, zCoord, this), new TargetPoint(this.worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 250));
 
 			outer:
 			for(int x = -4; x <= 4; x++) {
@@ -234,22 +225,6 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ISide
 				}
 			}
 		}
-	}
-
-	@Override public void serialize(ByteBuf buf) {
-		buf.writeLong(power);
-		buf.writeInt(solid);
-		buf.writeByte((byte) padSize.ordinal());
-		tanks[0].serialize(buf);
-		tanks[1].serialize(buf);
-	}
-	
-	@Override public void deserialize(ByteBuf buf) {
-		this.power = buf.readLong();
-		this.solid = buf.readInt();
-		this.padSize = PartSize.values()[buf.readByte()];
-		tanks[0].deserialize(buf);
-		tanks[1].deserialize(buf);
 	}
 	
 	private void updateConnections() {

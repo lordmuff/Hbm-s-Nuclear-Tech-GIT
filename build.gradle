@@ -106,6 +106,8 @@ dependencies {
 	implementation 'com.gregoriust.gregtech:gregtech_1.7.10:6-SNAPSHOT:dev'
 	compileOnly 'com.gregoriust.gregtech:gregtech_1.7.10:6-SNAPSHOT:dev'
 
+	compileOnly "inventorytweaks:InventoryTweaks:1.59-dev:deobf"
+
 	//compileOnly 'inventory-tweaks:InventoryTweaks:1.62+beta.84:api'
 	implementation "li.cil.oc:OpenComputers:MC1.7.10-1.5.+:api"
 }
