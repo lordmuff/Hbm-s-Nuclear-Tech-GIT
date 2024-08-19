@@ -2,6 +2,7 @@ package com.hbm.tileentity.machine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.pollution.PollutionHandler;
@@ -39,6 +40,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -46,6 +48,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import static com.hbm.items.machine.ItemArcElectrode.EnumElectrodeType.SATURNITE;
 
 public class TileEntityMachineArcFurnaceLarge extends TileEntityMachineBase implements IEnergyReceiverMK2, IControlReceiver, IGUIProvider, IUpgradeInfoProvider {
 	
@@ -280,27 +284,27 @@ public class TileEntityMachineArcFurnaceLarge extends TileEntityMachineBase impl
 	}
 	
 	public void process() {
-		
-		for(int i = 5; i < 25; i++) {
-			if(slots[i] == null) continue;
+
+		for (int i = 5; i < 25; i++) {
+			if (slots[i] == null) continue;
 			ArcFurnaceRecipe recipe = ArcFurnaceRecipes.getOutput(slots[i], this.liquidMode);
-			if(recipe == null) continue;
-			
-			if(!liquidMode && recipe.solidOutput != null) {
+			if (recipe == null) continue;
+
+			if (!liquidMode && recipe.solidOutput != null) {
 				int amount = slots[i].stackSize;
 				slots[i] = recipe.solidOutput.copy();
 				slots[i].stackSize *= amount;
 			}
-			
-			if(liquidMode && recipe.fluidOutput != null) {
-				
-				while(slots[i] != null && slots[i].stackSize > 0) {
+
+			if (liquidMode && recipe.fluidOutput != null) {
+
+				while (slots[i] != null && slots[i].stackSize > 0) {
 					int liquid = this.getStackAmount(liquids);
 					int toAdd = this.getStackAmount(recipe.fluidOutput);
-					
-					if(liquid + toAdd <= this.maxLiquid) {
+
+					if (liquid + toAdd <= this.maxLiquid) {
 						this.decrStackSize(i, 1);
-						for(MaterialStack stack : recipe.fluidOutput) {
+						for (MaterialStack stack : recipe.fluidOutput) {
 							this.addToStack(stack);
 						}
 					} else {
@@ -309,12 +313,18 @@ public class TileEntityMachineArcFurnaceLarge extends TileEntityMachineBase impl
 				}
 			}
 		}
-		
-		for(int i = 0; i < 3; i++) {
-			if(ItemArcElectrode.damage(slots[i])) {
-				slots[i] = new ItemStack(ModItems.arc_electrode_burnt, 1, slots[i].getItemDamage());
-			}
+
+		for (int i = 0; i < 3; i++) {
+
+				if(ItemArcElectrode.getMaxDurability(slots[i]) == SATURNITE.durability) {
+					continue;
+				}
+				if (ItemArcElectrode.damage(slots[i])) {
+					slots[i] = new ItemStack(ModItems.arc_electrode_burnt, 1, slots[i].getItemDamage());
+				}
+
 		}
+
 	}
 	
 	public boolean hasIngredients() {

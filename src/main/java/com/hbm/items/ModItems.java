@@ -74,6 +74,11 @@ public class ModItems {
 
 	//mayo zone!!!
 
+	public static Item crystal_mineral;
+	public static Item crystal_cleaned;
+	public static Item mineral_dust;
+	public static Item mineral_fragment;
+
 	public static Item waste_pu_mix;
 	public static Item waste_pu241;
 	public static Item waste_amrg;
@@ -102,6 +107,8 @@ public class ModItems {
 	public static Item rod_zirnox_meaus_depleted;
 	public static Item rod_zirnox_heaus_depleted;
 	public static Item rod_zirnox_gravel_enriched;
+	public static Item pellet_coal;
+
 
 	public static ItemRBMKRod rbmk_fuel_henq528;
 	public static ItemRBMKRod rbmk_fuel_henq522;
@@ -307,11 +314,6 @@ public class ModItems {
 	public static Item bedrock_ore_base;
 	public static Item bedrock_ore;
 	public static Item bedrock_ore_fragment;
-
-	public static Item crystal_mineral;
-	public static Item crystal_cleaned;
-	public static Item mineral_dust;
-	public static Item mineral_fragment;
 
 	public static Item billet_uranium;
 	public static Item billet_u233;
@@ -816,7 +818,6 @@ public class ModItems {
 	public static Item blade_tungsten;
 	public static Item turbine_tungsten;
 	public static Item turbine_syngas;
-	public static Item pellet_coal;
 	public static Item ring_starmetal;
 	public static Item flywheel_beryllium;
 
@@ -2673,6 +2674,13 @@ public class ModItems {
 	{
 		//mayo zone!!!
 
+		crystal_mineral = new ItemCustomLore().setUnlocalizedName("crystal_mineral").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":crystal_mineral");
+		crystal_cleaned = new ItemCustomLore().setUnlocalizedName("crystal_cleaned").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":crystal_mineralcf");
+		mineral_dust = new ItemCustomLore().setUnlocalizedName("mineral_dust").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_mineral");
+		mineral_fragment = new ItemMineralOre().setUnlocalizedName("mineral_fragment").setCreativeTab(MainRegistry.partsTab);
+
+		pellet_coal = new Item().setUnlocalizedName("pellet_coal").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":pellet_coal");
+
 		waste_pu_mix = new ItemDepletedFuel().setUnlocalizedName("waste_pu_mix").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
 		waste_pu241 = new ItemDepletedFuel().setUnlocalizedName("waste_pu241").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
 		waste_amrg = new ItemDepletedFuel().setUnlocalizedName("waste_amrg").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_zfb_mox");
@@ -2741,8 +2749,12 @@ public class ModItems {
 		GameRegistry.registerItem(nugget_francium, nugget_francium.getUnlocalizedName());
 		GameRegistry.registerItem(ingot_francium, ingot_francium.getUnlocalizedName());
 
+		GameRegistry.registerItem(pellet_coal, pellet_coal.getUnlocalizedName());
 
-
+		GameRegistry.registerItem(crystal_mineral, crystal_mineral.getUnlocalizedName());
+		GameRegistry.registerItem(crystal_cleaned, crystal_cleaned.getUnlocalizedName());
+		GameRegistry.registerItem(mineral_dust, mineral_dust.getUnlocalizedName());
+		GameRegistry.registerItem(mineral_fragment, mineral_fragment.getUnlocalizedName());
 
 		//mayo zone end
 
@@ -2990,14 +3002,7 @@ public class ModItems {
 
 		ore_byproduct = new ItemByproduct().setUnlocalizedName("ore_byproduct").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":byproduct");
 		
-		//mineral_product = new ItemProduct().setUnlocalizedName("mineral_product").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":clump_base");
-
-		crystal_mineral = new ItemCustomLore().setUnlocalizedName("crystal_mineral").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":crystal_mineral");
-		crystal_cleaned = new ItemCustomLore().setUnlocalizedName("crystal_cleaned").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":crystal_mineralcf");
-		mineral_dust = new ItemCustomLore().setUnlocalizedName("mineral_dust").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_mineral");
-		mineral_fragment = new ItemMineralOre().setUnlocalizedName("mineral_fragment").setCreativeTab(MainRegistry.partsTab);
-
-
+		//mineral_product = new ItemProduct().setUnlocalizedName("mineral_product").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":clump_base")
 
 		ore_bedrock = new ItemBedrockOre().setUnlocalizedName("ore_bedrock").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":ore_bedrock");
 		ore_centrifuged = new ItemBedrockOre().setUnlocalizedName("ore_centrifuged").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":ore_centrifuged");
