@@ -1,19 +1,29 @@
 package com.hbm.tileentity.machine;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
+import com.hbm.dim.SolarSystemWorldSavedData;
+import com.hbm.dim.orbit.OrbitalStation;
+import com.hbm.handler.CompatHandler;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.inventory.container.ContainerStardar;
 import com.hbm.inventory.gui.GUIMachineStardar;
 import com.hbm.items.ItemVOTVdrive;
-import com.hbm.items.ModItems;
 import com.hbm.items.ItemVOTVdrive.Destination;
+import com.hbm.items.ModItems;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.gui.GuiScreen;
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
@@ -24,10 +34,11 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 
-public class TileEntityMachineStardar extends TileEntityMachineBase implements IGUIProvider, IControlReceiver {
+@Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
+public class TileEntityMachineStardar extends TileEntityMachineBase implements IGUIProvider, IControlReceiver, CompatHandler.OCComponent {
 
 	private int timeUntilPoint = 0;
-	
+
 	// Used to point the dish on the client
 	public float dishYaw = 0;
 	public float dishPitch = 0;
@@ -76,7 +87,7 @@ public class TileEntityMachineStardar extends TileEntityMachineBase implements I
 								int[] map = body.getHeightmap(chunk.chunkXPos + cx - 8, chunk.chunkZPos + cz - 8);
 								int ox = cx * 16;
 								int oz = cz * 16;
-	
+
 								for(int x = 0; x < 16; x++) {
 									for(int z = 0; z < 16; z++) {
 										heightmap[(z + oz) * 256 + (x + ox)] = map[z * 16 + x];
@@ -113,7 +124,7 @@ public class TileEntityMachineStardar extends TileEntityMachineBase implements I
 	public AxisAlignedBB getRenderBoundingBox() {
 		return TileEntity.INFINITE_EXTENT_AABB;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared() {
@@ -128,7 +139,7 @@ public class TileEntityMachineStardar extends TileEntityMachineBase implements I
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+	public Object provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return new GUIMachineStardar(player.inventory, this);
 	}
 
@@ -136,7 +147,7 @@ public class TileEntityMachineStardar extends TileEntityMachineBase implements I
 	public String getName() {
 		return "container.machineStardar";
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
@@ -145,7 +156,7 @@ public class TileEntityMachineStardar extends TileEntityMachineBase implements I
 		nbt.setFloat("yaw", targetYaw);
 		nbt.setFloat("pitch", targetPitch);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
@@ -197,16 +208,31 @@ public class TileEntityMachineStardar extends TileEntityMachineBase implements I
 
 	private void processDrive(int targetDimensionId, int ix, int iz) {
 		CelestialBody body = CelestialBody.getBodyOrNull(targetDimensionId);
-		if(body == null) return;
+		if(body == null && targetDimensionId != SpaceConfig.orbitDimension) return;
 
 		if(slots[0] == null || slots[0].getItem() != ModItems.hard_drive) return;
+		int meta = body != null ? body.getEnum().ordinal() : 0;
 
-		slots[0] = new ItemStack(ModItems.full_drive, 1, body.getEnum().ordinal());
+		slots[0] = new ItemStack(ModItems.full_drive, 1, meta);
 
-		if(ix != 0 || iz != 0) {
+		if((ix != 0 || iz != 0) && worldObj.provider.dimensionId != SpaceConfig.orbitDimension) {
 			slots[0].stackTagCompound = new NBTTagCompound();
 			slots[0].stackTagCompound.setInteger("ax", ix);
 			slots[0].stackTagCompound.setInteger("az", iz);
+			slots[0].stackTagCompound.setBoolean("Processed", true);
+		} else if(targetDimensionId == SpaceConfig.orbitDimension) {
+			ChunkCoordIntPair pos;
+
+			// if we're on a station, return our current station as a drive
+			if(worldObj.provider.dimensionId == SpaceConfig.orbitDimension) {
+				pos = new ChunkCoordIntPair(MathHelper.floor_float((float)xCoord / OrbitalStation.STATION_SIZE), MathHelper.floor_float((float)zCoord / OrbitalStation.STATION_SIZE));
+			} else {
+				pos = SolarSystemWorldSavedData.get(worldObj).findFreeSpace();
+			}
+	
+			slots[0].stackTagCompound = new NBTTagCompound();
+			slots[0].stackTagCompound.setInteger("x", pos.chunkXPos);
+			slots[0].stackTagCompound.setInteger("z", pos.chunkZPos);
 			slots[0].stackTagCompound.setBoolean("Processed", true);
 		}
 
@@ -226,7 +252,66 @@ public class TileEntityMachineStardar extends TileEntityMachineBase implements I
 
 		this.markDirty();
 	}
-	
+
+	// This one is COOL
+	@Override
+	@Optional.Method(modid = "OpenComputers")
+	public String getComponentName() {
+		return "ntm_stardar";
+	}
+
+	@Callback(direct = true)
+	@Optional.Method(modid = "OpenComputers")
+	public Object[] getPlanetStats(Context context, Arguments args) {
+		CelestialBody body = CelestialBody.getBody(args.checkString(0));
+		if (body != null) {
+			return new Object[]{
+					// wow, that's a lot (basically give a bunch of info about the planet/body specified)
+					body.name,
+					body.parent.name,
+					body.getStar().name,
+					body.tidallyLockedTo,
+					body.axialTilt,
+					body.canLand,
+					body.massKg,
+					body.processingLevel,
+					body.radiusKm,
+					body.semiMajorAxisKm,
+					body.getSunPower(),
+					body.getSurfaceGravity(),
+					body.getRotationalPeriod(),
+					body.getOrbitalPeriod()
+			};
+		}
+		return new Object[] {null, "No body with that name found."};
+	}
+
+	@Callback(direct = true)
+	@Optional.Method(modid = "OpenComputers")
+	public Object[] getCurrentPlanet(Context context, Arguments args) {
+		CelestialBody body = CelestialBody.getBody(worldObj);
+		// realistically if this is null
+		// we have bigger problems lmao
+		return new Object[] {body.name};
+	}
+
+	@Callback(direct = true)
+	@Optional.Method(modid = "OpenComputers")
+	public Object[] getSatellites(Context context, Arguments args) {
+		CelestialBody body = CelestialBody.getBody(args.checkString(0));
+		if (body != null) {
+			List<String> returnValues = new ArrayList<>();
+			for (CelestialBody planet : body.satellites) {
+				returnValues.add(planet.name);
+				return returnValues.toArray();
+			}
+		}
+		return new Object[]{null, "No body with that name found."};
+	}
+
+	// no `method()` or `invoke()` functions here because... this machine doesn't have any proxy blocks??
+	// amazing
+
 	@Override
 	public void receiveControl(NBTTagCompound data) {
 		if(data.hasKey("pid")) {

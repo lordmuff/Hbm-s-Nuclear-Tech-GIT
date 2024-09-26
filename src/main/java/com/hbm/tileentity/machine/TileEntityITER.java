@@ -13,6 +13,8 @@ import com.hbm.inventory.container.ContainerITER;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
+import com.hbm.inventory.fluid.trait.FT_Heatable;
+import com.hbm.inventory.fluid.trait.FT_Heatable.HeatingStep;
 import com.hbm.inventory.gui.GUIITER;
 import com.hbm.inventory.recipes.BreederRecipes;
 import com.hbm.inventory.recipes.BreederRecipes.BreederRecipe;
@@ -21,9 +23,10 @@ import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemFusionShield;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.sound.AudioWrapper;
+import com.hbm.tileentity.IFluidCopiable;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.CompatEnergyControl;
@@ -40,7 +43,6 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
@@ -51,8 +53,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
-public class TileEntityITER extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidStandardTransceiver, IGUIProvider, IInfoProviderEC, SimpleComponent, CompatHandler.OCComponent {
-
+public class TileEntityITER extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidStandardTransceiver, IGUIProvider, IInfoProviderEC, SimpleComponent, CompatHandler.OCComponent, IFluidCopiable {
+	
 	public long power;
 	public static final long maxPower = 10000000;
 	public static final int powerReq = 100000;
@@ -75,11 +77,14 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 	private AudioWrapper audio;
 
 	public TileEntityITER() {
-		super(5);
-		tanks = new FluidTank[2];
+		super(6);
+		tanks = new FluidTank[4];
 		tanks[0] = new FluidTank(Fluids.WATER, 1280000);
 		tanks[1] = new FluidTank(Fluids.ULTRAHOTSTEAM, 128000);
+		tanks[2] = new FluidTank(Fluids.COOLANT, 16_000);
+		tanks[3] = new FluidTank(Fluids.COOLANT_HOT, 16_000);
 		plasma = new FluidTank(Fluids.PLASMA_DT, 16000);
+
 	}
 
 	@Override
@@ -128,6 +133,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 				}
 
 				int prod = FusionRecipes.getSteamProduction(plasma.getTankType());
+				int lod = FusionRecipes.getCoolant(plasma.getTankType());
 
 				for(int i = 0; i < 20; i++) {
 
@@ -162,10 +168,12 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 			data.setBoolean("isOn", isOn);
 			data.setLong("power", power);
 			data.setInteger("progress", progress);
-			tanks[0].writeToNBT(data, "t0");
-			tanks[1].writeToNBT(data, "t1");
-			plasma.writeToNBT(data, "t2");
-
+			tanks[0].writeToNBT(data, "water");
+			tanks[1].writeToNBT(data, "steam");
+			tanks[2].writeToNBT(data, "coolant");
+			tanks[3].writeToNBT(data, "hotlant");
+			plasma.writeToNBT(data, "plasma");
+			
 			if(slots[3] == null) {
 				data.setInteger("blanket", 0);
 			} else if(slots[3].getItem() == ModItems.fusion_shield_tungsten) {
@@ -385,9 +393,11 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 		this.power = data.getLong("power");
 		this.blanket = data.getInteger("blanket");
 		this.progress = data.getInteger("progress"); //
-		tanks[0].readFromNBT(data, "t0");
-		tanks[1].readFromNBT(data, "t1");
-		plasma.readFromNBT(data, "t2");
+		tanks[0].readFromNBT(data, "water");
+		tanks[1].readFromNBT(data, "steam");
+		tanks[2].readFromNBT(data, "coolant");
+		tanks[3].readFromNBT(data, "hotlant");
+		plasma.readFromNBT(data, "plasma");
 	}
 
 	@Override
@@ -545,7 +555,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+	public Object provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return new GUIITER(player.inventory, this);
 	}
 
@@ -649,5 +659,10 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 				return getBlanketDamage(context, args);
 		}
 		throw new NoSuchMethodException();
+	}
+
+	@Override
+	public FluidTank getTankToPaste() {
+		return null;
 	}
 }

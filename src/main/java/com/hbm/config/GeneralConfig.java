@@ -50,6 +50,7 @@ public class GeneralConfig {
 	public static boolean enable528BedrockSpawn = false;
 	public static boolean enable528BosniaSimulator = true;
 	public static boolean enable528BedrockReplacement = true;
+	public static boolean enable528NetherBurn = true;
 	public static int coltanRate = 2;
 	public static int bedrockRate = 50;
 
@@ -68,6 +69,9 @@ public class GeneralConfig {
 	public static boolean enableLBSMSafeMEDrives = true;
 	public static boolean enableLBSMIGen = true;
 	public static int schrabRate = 20;
+
+	public static boolean enableThreadedAtmospheres = true;
+	public static boolean enableSacrilege = false;
 	
 	public static void loadFromConfig(Configuration config) {
 
@@ -111,6 +115,8 @@ public class GeneralConfig {
 		normalSoundChannels = CommonConfig.createConfigInt(config, CATEGORY_GENERAL, "1.41_normalSoundChannels",
 				"The amount of channels to create while 1.39_enableSoundExtension is enabled.\n" +
 				"Note that a value below 28 or above 200 can cause buggy sounds and issues with other mods running out of sound memory.", 100);
+		enableThreadedAtmospheres = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.42_threadedAtmospheres", "If enabled, will run atmosphere blobbing in a separate thread for performance", true);
+		enableSacrilege = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.43_serverSafety", "Allows for automated entity culling to function properly.", false);
 
 		enableExpensiveMode = config.get(CATEGORY_GENERAL, "1.99_enableExpensiveMode", false, "It does what the name implies.").getBoolean(false);
 		
@@ -129,6 +135,7 @@ public class GeneralConfig {
 		enable528BedrockSpawn = CommonConfig.createConfigBool(config, CATEGORY_528, "X528_enableBedrockSpawning", "Enables the bedrock coltan ores as a rare spawn. These will be rarely found anywhere in the world.", false);
 		enable528BosniaSimulator = CommonConfig.createConfigBool(config, CATEGORY_528, "X528_enableBosniaSimulator", "Enables anti tank mines spawning all over the world.", true);
 		enable528BedrockReplacement = CommonConfig.createConfigBool(config, CATEGORY_528, "X528_enable528BedrockReplacement", "Replaces certain bedrock ores with ones that require additional processing.", true);
+		enable528NetherBurn = CommonConfig.createConfigBool(config, CATEGORY_528, "X528_enable528NetherBurn", "Whether players burn in the nether", true);
 		coltanRate = CommonConfig.createConfigInt(config, CATEGORY_528, "X528_oreColtanFrequency", "Determines how many coltan ore veins are to be expected in a chunk. These values do not affect the frequency in deposits, and only apply if random coltan spanwing is enabled.", 2);
 		bedrockRate = CommonConfig.createConfigInt(config, CATEGORY_528, "X528_bedrockColtanFrequency", "Determines how often (1 in X) bedrock coltan ores spawn. Applies for both the bedrock ores in the coltan deposit (if applicable) and the random bedrock ores (if applicable)", 50);
 		

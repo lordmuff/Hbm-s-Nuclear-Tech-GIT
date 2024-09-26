@@ -46,6 +46,7 @@ public class NEIRegistry {
 		handlers.add(new CrucibleCastingHandler());
 		handlers.add(new ToolingHandler());
 		handlers.add(new ConstructionHandler());
+		handlers.add(new DairyHandler());
 
 		//universal boyes
 		handlers.add(new ZirnoxRecipeHandler());
@@ -53,6 +54,7 @@ public class NEIRegistry {
 		handlers.add(new LiquefactionHandler());
 		handlers.add(new SolidificationHandler());
 		handlers.add(new CokingHandler());
+		handlers.add(new PyroHandler());
 		handlers.add(new FractioningHandler());
 		handlers.add(new BoilingHandler());
 		handlers.add(new CombinationHandler());

@@ -3,7 +3,6 @@ package com.hbm.tileentity.machine;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.dim.CelestialBody;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.inventory.RecipesCommon.AStack;
@@ -24,7 +23,7 @@ import com.hbm.util.fauxpointtwelve.DirPos;
 import api.hbm.energymk2.IEnergyReceiverMK2;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.gui.GuiScreen;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
@@ -43,6 +42,7 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 	public int progress;
 	public int processTime = 1;
 	
+	private VacuumCircuitRecipe recipe;
 	public ItemStack display;
 
 	public boolean canOperate = true;
@@ -69,15 +69,12 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 	public void updateEntity() {
 		
 		if(!worldObj.isRemote) {
-			CBT_Atmosphere atmosphere = !ChunkAtmosphereManager.proxy.hasAtmosphere(worldObj, xCoord, yCoord, zCoord)
-				? CelestialBody.getTrait(worldObj, CBT_Atmosphere.class)
-				: null;
-
+			CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(worldObj, xCoord, yCoord, zCoord);
 			canOperate = atmosphere == null || atmosphere.getPressure() <= 0.001;
 
 			this.power = Library.chargeTEFromItems(slots, 5, this.getPower(), this.getMaxPower());
 			
-			VacuumCircuitRecipe recipe = VacuumCircuitRecipes.getRecipe(new ItemStack[] {slots[0], slots[1], slots[2], slots[3]});
+			recipe = VacuumCircuitRecipes.getRecipe(new ItemStack[] {slots[0], slots[1], slots[2], slots[3]});
 			long intendedMaxPower;
 			
 			UpgradeManager.eval(slots, 6, 7);
@@ -119,18 +116,7 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 			
 			this.maxPower = Math.max(intendedMaxPower, power);
 			
-			NBTTagCompound data = new NBTTagCompound();
-			data.setLong("power", power);
-			data.setLong("maxPower", maxPower);
-			data.setLong("consumption", consumption);
-			data.setInteger("progress", progress);
-			data.setInteger("processTime", processTime);
-			data.setBoolean("canOperate", canOperate);
-			if(recipe != null) {
-				data.setInteger("display", Item.getIdFromItem(recipe.output.getItem()));
-				data.setInteger("displayMeta", recipe.output.getItemDamage());
-			}
-			this.networkPack(data, 25);
+			this.networkPackNT(25);
 		}
 	}
 	
@@ -139,10 +125,10 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 		
 		if(this.power < this.consumption) return false;
 
-		if(slots[6] != null) {
-			if(slots[6].getItem() != recipe.output.getItem()) return false;
-			if(slots[6].getItemDamage() != recipe.output.getItemDamage()) return false;
-			if(slots[6].stackSize + recipe.output.stackSize > slots[6].getMaxStackSize()) return false;
+		if(slots[4] != null) {
+			if(slots[4].getItem() != recipe.output.getItem()) return false;
+			if(slots[4].getItemDamage() != recipe.output.getItemDamage()) return false;
+			if(slots[4].stackSize + recipe.output.stackSize > slots[4].getMaxStackSize()) return false;
 		}
 		
 		return true;
@@ -151,29 +137,28 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 	public void consumeItems(VacuumCircuitRecipe recipe) {
 		
 		for(AStack aStack : recipe.wafer) {
-			for(int i = 0; i < 3; i++) {
+			for(int i = 0; i < 2; i++) {
 				ItemStack stack = slots[i];
 				if(aStack.matchesRecipe(stack, true) && stack.stackSize >= aStack.stacksize) { this.decrStackSize(i, aStack.stacksize); break; }
 			}
 		}
 		
 		for(AStack aStack : recipe.pcb) {
-			for(int i = 3; i < 5; i++) {
+			for(int i = 2; i < 4; i++) {
 				ItemStack stack = slots[i];
 				if(aStack.matchesRecipe(stack, true) && stack.stackSize >= aStack.stacksize) { this.decrStackSize(i, aStack.stacksize); break; }
 			}
 		}
 		
-		
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if(slot < 3) {
-			for(int i = 0; i < 3; i++) if(i != slot && slots[i] != null && slots[i].isItemEqual(stack)) return false;
+		if(slot < 2) {
+			for(int i = 0; i < 2; i++) if(i != slot && slots[i] != null && slots[i].isItemEqual(stack)) return false;
 			for(AStack t : VacuumCircuitRecipes.wafer) if(t.matchesRecipe(stack, true)) return true;
-		} else if(slot < 5) {
-			for(int i = 3; i < 5; i++) if(i != slot && slots[i] != null && slots[i].isItemEqual(stack)) return false;
+		} else if(slot < 4) {
+			for(int i = 2; i < 4; i++) if(i != slot && slots[i] != null && slots[i].isItemEqual(stack)) return false;
 			for(AStack t : VacuumCircuitRecipes.pcb) if(t.matchesRecipe(stack, true)) return true;
 		}
 		return false;
@@ -181,12 +166,12 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
-		return i == 6;
+		return i == 4;
 	}
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		return new int[] { 0, 1, 2, 3, 4, 5, 6 };
+		return new int[] { 0, 1, 2, 3, 4 };
 	}
 	
 	public DirPos[] getConPos() {
@@ -203,22 +188,43 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 	}
 
 	@Override
-	public void networkUnpack(NBTTagCompound nbt) {
-		super.networkUnpack(nbt);
-		
-		this.power = nbt.getLong("power");
-		this.maxPower = nbt.getLong("maxPower");
-		this.consumption = nbt.getLong("consumption");
-		this.progress = nbt.getInteger("progress");
-		this.processTime = nbt.getInteger("processTime");
-		this.canOperate = nbt.getBoolean("canOperate");
-		
-		if(nbt.hasKey("display")) {
-			this.display = new ItemStack(Item.getItemById(nbt.getInteger("display")), 1, nbt.getInteger("displayMeta"));
+	public void serialize(ByteBuf buf) {
+		super.serialize(buf);
+
+		buf.writeLong(power);
+		buf.writeLong(maxPower);
+		buf.writeLong(consumption);
+		buf.writeInt(progress);
+		buf.writeInt(processTime);
+		buf.writeBoolean(canOperate);
+
+		if(recipe != null) {
+			buf.writeBoolean(true);
+			buf.writeInt(Item.getIdFromItem(recipe.output.getItem()));
+			buf.writeInt(recipe.output.getItemDamage());
 		} else {
-			this.display = null;
+			buf.writeBoolean(false);
 		}
-		
+	}
+
+	@Override
+	public void deserialize(ByteBuf buf) {
+		super.deserialize(buf);
+
+		power = buf.readLong();
+		maxPower = buf.readLong();
+		consumption = buf.readLong();
+		progress = buf.readInt();
+		processTime = buf.readInt();
+		canOperate = buf.readBoolean();
+
+		if(buf.readBoolean()) {
+			int id = buf.readInt();
+			int meta = buf.readInt();
+			display = new ItemStack(Item.getItemById(id), 1, meta);
+		} else {
+			display = null;
+		}
 	}
 	
 	@Override
@@ -264,7 +270,7 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+	public Object provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return new GUIVacuumCircuit(player.inventory, this);
 	}
 	
@@ -302,12 +308,12 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 	public void provideInfo(UpgradeType type, int level, List<String> info, boolean extendedInfo) {
 		info.add(IUpgradeInfoProvider.getStandardLabel(ModBlocks.machine_vacuum_circuit));
 		if(type == UpgradeType.SPEED) {
-			info.add(EnumChatFormatting.GREEN + I18nUtil.resolveKey(this.KEY_DELAY, "-" + (level * 100 / 6) + "%"));
-			info.add(EnumChatFormatting.RED + I18nUtil.resolveKey(this.KEY_CONSUMPTION, "+" + (level * 100) + "%"));
+			info.add(EnumChatFormatting.GREEN + I18nUtil.resolveKey(KEY_DELAY, "-" + (level * 100 / 6) + "%"));
+			info.add(EnumChatFormatting.RED + I18nUtil.resolveKey(KEY_CONSUMPTION, "+" + (level * 100) + "%"));
 		}
 		if(type == UpgradeType.POWER) {
-			info.add(EnumChatFormatting.GREEN + I18nUtil.resolveKey(this.KEY_CONSUMPTION, "-" + (level * 100 / 6) + "%"));
-			info.add(EnumChatFormatting.RED + I18nUtil.resolveKey(this.KEY_DELAY, "+" + (level * 100 / 3) + "%"));
+			info.add(EnumChatFormatting.GREEN + I18nUtil.resolveKey(KEY_CONSUMPTION, "-" + (level * 100 / 6) + "%"));
+			info.add(EnumChatFormatting.RED + I18nUtil.resolveKey(KEY_DELAY, "+" + (level * 100 / 3) + "%"));
 		}
 	}
 

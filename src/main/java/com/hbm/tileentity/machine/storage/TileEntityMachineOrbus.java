@@ -84,42 +84,42 @@ public class TileEntityMachineOrbus extends TileEntityBarrel implements IOverpre
 	@Override
 	public void explode(World world, int x, int y, int z) {
 		if(tank.getTankType() == Fluids.AMAT || tank.getTankType() == Fluids.ASCHRAB) {
-			//if(this.hasExploded) return;
-			float amat = Math.min(tank.getFill()/100,90);
-			float aschrab = Math.min(tank.getFill()/100,90);
-			if(this.hasExploded && !worldObj.isRemote) {
-				if(amat>0)
-				{
-					if(amat >= 25)
-					{
-						EntityBalefire bf = new EntityBalefire(worldObj);
-						bf.antimatter();
-						bf.setPosition(xCoord, yCoord, zCoord);
-						bf.destructionRange = (int) amat;
-						worldObj.spawnEntityInWorld(bf);
-						EntityNukeTorex.statFacAnti(worldObj, xCoord, yCoord, zCoord, amat * 1.5F);
-						return;
-					}
-					else
-					{
-						new ExplosionVNT(worldObj, xCoord, yCoord, zCoord, amat).makeAmat().explode();
-					}
-				}
-				if(aschrab>0)
-				{
-					EntityNukeExplosionMK3 ex = EntityNukeExplosionMK3.statFacFleija(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, (int) aschrab);
-					if(!ex.isDead) {
-						worldObj.spawnEntityInWorld(ex);
+		//if(this.hasExploded) return;
+	    	float amat = Math.min(tank.getFill()/100,90);
+	    	float aschrab = Math.min(tank.getFill()/100,90);
+	    	if(this.hasExploded && !worldObj.isRemote) {
+	    		if(amat>0)
+	    		{
+	    			if(amat >= 25)
+	    			{
+	    				EntityBalefire bf = new EntityBalefire(worldObj);
+	    				bf.antimatter();
+	    	    		bf.setPosition(xCoord, yCoord, zCoord);
+	    				bf.destructionRange = (int) amat;
+	    				worldObj.spawnEntityInWorld(bf);
+	    				EntityNukeTorex.startFacAnti(worldObj, xCoord, yCoord, zCoord, amat * 1.5F);
+	    				return;
+	    			}
+	    			else
+	    			{
+	    				new ExplosionVNT(worldObj, xCoord, yCoord, zCoord, amat).makeAmat().explode();
+	    			}
+	    		}
+	    		if(aschrab>0)
+	    		{
+	    			EntityNukeExplosionMK3 ex = EntityNukeExplosionMK3.statFacFleija(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, (int) aschrab);
+	    			if(!ex.isDead) {
+	    				worldObj.spawnEntityInWorld(ex);
 
-						EntityCloudFleija cloud = new EntityCloudFleija(worldObj, (int) aschrab);
-						cloud.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
-						worldObj.spawnEntityInWorld(cloud);
-					}
-					return;
-				}
-			}
+	    				EntityCloudFleija cloud = new EntityCloudFleija(worldObj, (int) aschrab);
+	    				cloud.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
+	    				worldObj.spawnEntityInWorld(cloud);
+	    			}
+	    			return;
+	    		}
+	    	}
 		}
-		this.markChanged();
+	    	this.markChanged();
 
 	}
 }

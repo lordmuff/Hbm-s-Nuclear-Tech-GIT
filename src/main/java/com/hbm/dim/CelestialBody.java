@@ -7,10 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hbm.config.SpaceConfig;
+import com.hbm.dim.orbit.OrbitalStation;
 import com.hbm.dim.trait.CBT_Atmosphere;
-import com.hbm.dim.trait.CelestialBodyTrait;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
+import com.hbm.dim.trait.CelestialBodyTrait;
 import com.hbm.inventory.fluid.FluidType;
+import com.hbm.items.ItemVOTVdrive.Target;
 import com.hbm.render.shader.Shader;
 import com.hbm.util.AstronomyUtil;
 
@@ -354,12 +357,25 @@ public class CelestialBody {
 		return getBody(world.provider.dimensionId);
 	}
 
+	public static Target getTarget(World world, int x, int z) {
+		if(world.provider.dimensionId == SpaceConfig.orbitDimension) {
+			OrbitalStation station = !world.isRemote ? OrbitalStation.getStationFromPosition(x, z) : OrbitalStation.clientStation;
+			return new Target(station.orbiting, true, station.hasStation);
+		}
+
+		return new Target(getBody(world), false, true);
+	}
+
 	public static CelestialBody getStar(World world) {
 		return getBody(world).getStar();
 	}
 	
 	public static CelestialBody getPlanet(World world) {
 		return getBody(world).getPlanet();
+	}
+
+	public static boolean inOrbit(World world) {
+		return world.provider.dimensionId == SpaceConfig.orbitDimension;
 	}
 
 	public static SolarSystem.Body getEnum(World world) {
@@ -372,10 +388,6 @@ public class CelestialBody {
 
 	public static double getRotationalPeriod(World world) {
 		return getBody(world).getRotationalPeriod();
-	}
-
-	public static float getSemiMajorAxis(World world) {
-		return getBody(world).semiMajorAxisKm;
 	}
 
 	public static boolean hasTrait(World world, Class<? extends CelestialBodyTrait> trait) {

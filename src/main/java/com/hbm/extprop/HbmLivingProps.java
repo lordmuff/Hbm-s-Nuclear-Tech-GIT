@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.UUID;
 
 import com.hbm.config.RadiationConfig;
+import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.entity.mob.EntityDuck;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
-import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.packet.PlayerInformPacket;
+import com.hbm.packet.toclient.AuxParticlePacketNT;
+import com.hbm.packet.toclient.PlayerInformPacket;
 import com.hbm.util.ChatBuilder;
 
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
@@ -50,10 +51,12 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 	private int oil;
 	private float activation;
 	private int temperature;
-	private int oxygen;
+	private int oxygen = 100;
 	private boolean frozen = false;
 	private boolean burning = false;
 	private List<ContaminationEffect> contamination = new ArrayList();
+	private CBT_Atmosphere atmosphere;
+	private boolean gravity = false;
 	
 	public HbmLivingProps(EntityLivingBase entity) {
 		this.entity = entity;
@@ -344,6 +347,22 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 	public static boolean isFrozen(EntityLivingBase entity) { return getData(entity).frozen; };
 	public static boolean isBurning(EntityLivingBase entity) { return getData(entity).burning; };
 
+	/// ATMOSPHERE ///
+	public static CBT_Atmosphere getAtmosphere(EntityLivingBase entity) {
+		return getData(entity).atmosphere;
+	}
+
+	public static void setAtmosphere(EntityLivingBase entity, CBT_Atmosphere atmosphere) {
+		HbmLivingProps data = getData(entity);
+		data.atmosphere = atmosphere;
+		data.gravity = atmosphere != null;
+	}
+
+	// and gravity (attached to atmospheres, for now)
+	public static boolean hasGravity(EntityLivingBase entity) {
+		return getData(entity).gravity;
+	}
+
 	@Override
 	public void init(Entity entity, World world) { }
 
@@ -361,6 +380,7 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 		props.setInteger("hfr_oil", oil);
 		props.setInteger("hfr_oxygen", oxygen);
 		props.setFloat("hfr_activation", activation);
+		props.setBoolean("hfr_gravity", gravity);
 		
 		props.setInteger("hfr_cont_count", this.contamination.size());
 		
@@ -386,6 +406,7 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 			oil = props.getInteger("hfr_oil");
 			activation = props.getFloat("hfr_activation");
 			oxygen = props.getInteger("hfr_oxygen");
+			gravity = props.getBoolean("hfr_gravity");
 			
 			int cont = props.getInteger("hfr_cont_count");
 			

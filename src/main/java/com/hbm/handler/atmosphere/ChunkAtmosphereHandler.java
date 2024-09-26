@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.hbm.config.GeneralConfig;
 import com.hbm.dim.CelestialBody;
+import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.handler.ThreeInts;
@@ -41,7 +42,7 @@ public class ChunkAtmosphereHandler {
 	 * Methods to get information about the current atmosphere
 	 */
 	public CBT_Atmosphere getAtmosphere(Entity entity) {
-		return getAtmosphere(entity.worldObj, MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY), MathHelper.floor_double(entity.posZ), null);
+		return getAtmosphere(entity.worldObj, MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY + entity.getEyeHeight()), MathHelper.floor_double(entity.posZ), null);
 	}
 
 	public CBT_Atmosphere getAtmosphere(World world, int x, int y, int z) {
@@ -52,13 +53,7 @@ public class ChunkAtmosphereHandler {
 		ThreeInts pos = new ThreeInts(x, y, z);
 		HashMap<IAtmosphereProvider, AtmosphereBlob> blobs = worldBlobs.get(world.provider.dimensionId);
 
-		CBT_Atmosphere atmosphere = CelestialBody.getTrait(world, CBT_Atmosphere.class);
-		if(atmosphere == null) {
-			atmosphere = new CBT_Atmosphere();
-		} else {
-			// Don't modify the trait directly
-			atmosphere = atmosphere.clone();
-		}
+		CBT_Atmosphere atmosphere = getCelestialAtmosphere(world);
 
 		for(AtmosphereBlob blob : blobs.values()) {
 			if(blob == excludeBlob) continue;
@@ -76,6 +71,16 @@ public class ChunkAtmosphereHandler {
 		if(atmosphere.fluids.size() == 0) return null;
 
 		return atmosphere;
+	}
+
+	// returns a atmosphere that is safe for modification
+	private CBT_Atmosphere getCelestialAtmosphere(World world) {
+		if(world.provider instanceof WorldProviderOrbit) return new CBT_Atmosphere();
+		CBT_Atmosphere atmosphere = CelestialBody.getTrait(world, CBT_Atmosphere.class);
+		if(atmosphere == null)
+			return new CBT_Atmosphere();
+
+		return atmosphere.clone();
 	}
 
 	public List<AtmosphereBlob> getBlobs(World world, int x, int y, int z) {

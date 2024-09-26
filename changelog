@@ -1,12 +1,12 @@
 ## Changed
-* To address certain balancing concerns, the RF to HE conversion rate is now 2:5. The HE to RF rate however is still 5:1
-  * Because of this, using chains of converters as batteries becomes exponentially lossy with size, therefore the input decay has been removed
-  * Input decay can still be configured if desired
-  * No input decay also means that converters are no longer infinite energy sinks
-* Power converter recipes have been updated
-* Soldering stations will no longer work if the recipe requires no input fluid while fluid is present
-  * While this does complicate using the soldering station manually, as switching from milgrade to standard ICs requires emptying the solderer with a siphon, it does make automating easier, since soldering stations will no longer treat incomplete milgrade circuits as ICs
-* Cement is now edible
+* Fans no longer work in a vacuum
+* Drop pods no longer look like valid rocket parts (they're standalone)
+* Stardar SLF button now produces a drive for the station you're currently on if in orbit
+* Atmosphere fog fades with altitude again, but higher than the sky color
 
 ## Fixed
-* Fixed some machines not sending fluid gauge syncs properly
+* Rocket pad crash on unexpected items
+* Beds can be used in orbit (doesn't currently skip time)
+* Gas giant harvesters now work in Laythe orbit
+* Fix missing Alkyl Bromide fluid and tank texture
+* Attempt at fixing thruster deregistration issue

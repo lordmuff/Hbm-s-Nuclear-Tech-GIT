@@ -35,6 +35,7 @@ public class TileEntityMachineDriveProcessor extends TileEntityMachineBase imple
 	public int maxProgress = 100; // 5 seconds
 
 	public String status = "";
+	public boolean hasDrive = false;
 
 	private int lastTier;
 
@@ -82,6 +83,7 @@ public class TileEntityMachineDriveProcessor extends TileEntityMachineBase imple
 			}
 
 			lastTier = getProcessingTier();
+			hasDrive = slots[0] != null && slots[0].getItem() == ModItems.full_drive;
 
 			networkPackNT(15);
 		}
@@ -94,6 +96,7 @@ public class TileEntityMachineDriveProcessor extends TileEntityMachineBase imple
 		buf.writeLong(power);
 		buf.writeBoolean(isProcessing);
 		buf.writeInt(progress);
+		buf.writeBoolean(hasDrive);
 
 		BufferUtil.writeString(buf, status);
 	}
@@ -105,6 +108,7 @@ public class TileEntityMachineDriveProcessor extends TileEntityMachineBase imple
 		power = buf.readLong();
 		isProcessing = buf.readBoolean();
 		progress = buf.readInt();
+		hasDrive = buf.readBoolean();
 
 		status = BufferUtil.readString(buf);
 	}
@@ -173,6 +177,7 @@ public class TileEntityMachineDriveProcessor extends TileEntityMachineBase imple
 			return;
 		}
 
+		ItemVOTVdrive.markCopied(slots[0]);
 		slots[1] = slots[0].copy();
 
 		status = EnumChatFormatting.GREEN + "Drive cloned ";
@@ -196,7 +201,7 @@ public class TileEntityMachineDriveProcessor extends TileEntityMachineBase imple
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+	public Object provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return new GUIMachineDriveProcessor(player.inventory, this);
 	}
 

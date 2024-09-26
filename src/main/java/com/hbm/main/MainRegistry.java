@@ -250,6 +250,7 @@ public class MainRegistry {
 	public static Achievement achBreeding;
 	public static Achievement achFusion;
 	public static Achievement achMeltdown;
+	public static Achievement achDriveFail;
 	
 	public static int generalOverride = 0;
 	public static int polaroidID = 1;
@@ -746,6 +747,7 @@ public class MainRegistry {
 		achTantalum = new Achievement("achievement.tantalum", "tantalum", 7, 3, ModItems.gem_tantalium, achChemplant).initIndependentStat().setSpecial().registerStat();
 		achGasCent = new Achievement("achievement.gasCent", "gasCent", 13, 2, ModItems.ingot_uranium_fuel, achDesh).initIndependentStat().registerStat();
 		achCentrifuge = new Achievement("achievement.centrifuge", "centrifuge", 12, -2, new ItemStack(ModBlocks.machine_centrifuge), achPolymer).initIndependentStat().registerStat();
+		achDriveFail = new Achievement("achievement.driveFail", "driveFail", 8, -3, new ItemStack(ModItems.full_drive), achPolymer).initIndependentStat().setSpecial().registerStat();
 		achFOEQ = new Achievement("achievement.FOEQ", "FOEQ", 5, 5, ModItems.sat_foeq, achDesh).initIndependentStat().setSpecial().registerStat();
 		achSoyuz = new Achievement("achievement.soyuz", "soyuz", 7, 6, Items.baked_potato, achDesh).initIndependentStat().setSpecial().registerStat();
 		achSpace = new Achievement("achievement.space", "space", 9, 7, ModItems.missile_carrier, achDesh).initIndependentStat().setSpecial().registerStat();
@@ -815,6 +817,7 @@ public class MainRegistry {
 				achTantalum,
 				achGasCent,
 				achCentrifuge,
+				achDriveFail,
 				achFOEQ,
 				achSoyuz,
 				achSpace,
@@ -904,7 +907,10 @@ public class MainRegistry {
 		proxy.registerMissileItems();
 		
 		BlockMotherOfAllOres.init();
-		
+
+		// Load compatibility for OC.
+		CompatHandler.init();
+
 		//expand for the largest entity we have (currently Quackos who is 17.5m in diameter, that's one fat duck)
 		World.MAX_ENTITY_RADIUS = Math.max(World.MAX_ENTITY_RADIUS, 8.75);
 
@@ -1467,6 +1473,52 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.test_leggings");
 		ignoreMappings.add("hbm:item.test_boots");
 		ignoreMappings.add("hbm:item.cape_test");
+		ignoreMappings.add("hbm:tile.fluid_duct");
+		ignoreMappings.add("hbm:tile.fluid_duct_solid");
+		ignoreMappings.add("hbm:item.void_anim");
+		ignoreMappings.add("hbm:item.pellet_mercury");
+		ignoreMappings.add("hbm:item.pellet_meteorite");
+		ignoreMappings.add("hbm:item.d_smoke1");
+		ignoreMappings.add("hbm:item.d_smoke2");
+		ignoreMappings.add("hbm:item.d_smoke3");
+		ignoreMappings.add("hbm:item.d_smoke4");
+		ignoreMappings.add("hbm:item.d_smoke5");
+		ignoreMappings.add("hbm:item.d_smoke6");
+		ignoreMappings.add("hbm:item.d_smoke7");
+		ignoreMappings.add("hbm:item.d_smoke8");
+		ignoreMappings.add("hbm:item.smoke1");
+		ignoreMappings.add("hbm:item.smoke2");
+		ignoreMappings.add("hbm:item.smoke3");
+		ignoreMappings.add("hbm:item.smoke4");
+		ignoreMappings.add("hbm:item.smoke5");
+		ignoreMappings.add("hbm:item.smoke6");
+		ignoreMappings.add("hbm:item.smoke7");
+		ignoreMappings.add("hbm:item.smoke8");
+		ignoreMappings.add("hbm:item.battery_su");
+		ignoreMappings.add("hbm:item.battery_su_l");
+		ignoreMappings.add("hbm:item.redstone_depleted");
+		ignoreMappings.add("hbm:item.euphemium_stopper");
+		ignoreMappings.add("hbm:item.energy_ball");
+		ignoreMappings.add("hbm:item.discharge");
+		ignoreMappings.add("hbm:item.empblast");
+		ignoreMappings.add("hbm:item.spill1");
+		ignoreMappings.add("hbm:item.spill2");
+		ignoreMappings.add("hbm:item.spill3");
+		ignoreMappings.add("hbm:item.spill4");
+		ignoreMappings.add("hbm:item.spill5");
+		ignoreMappings.add("hbm:item.spill6");
+		ignoreMappings.add("hbm:item.spill7");
+		ignoreMappings.add("hbm:item.spill8");
+		ignoreMappings.add("hbm:item.gas1");
+		ignoreMappings.add("hbm:item.gas2");
+		ignoreMappings.add("hbm:item.gas3");
+		ignoreMappings.add("hbm:item.gas4");
+		ignoreMappings.add("hbm:item.gas5");
+		ignoreMappings.add("hbm:item.gas6");
+		ignoreMappings.add("hbm:item.gas7");
+		ignoreMappings.add("hbm:item.gas8");
+		ignoreMappings.add("hbm:tile.brick_forgotten");
+		ignoreMappings.add("hbm:tile.watz_conductor");
 		
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);

@@ -1,5 +1,7 @@
 package com.hbm.dim;
 
+import java.util.ArrayList;
+
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
@@ -14,10 +16,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
+import net.minecraft.util.WeightedRandomFishable;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.IRenderHandler;
@@ -90,7 +95,12 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	}
 
 	public void deserialize(ByteBuf buf) {
-		setWorldTime(buf.readLong());
+		long time = buf.readLong();
+
+		// Allow a half second desync for smoothness
+		if(Math.abs(time - getWorldTime()) > 10) {
+			setWorldTime(time);
+		}
 	}
 
 
@@ -163,12 +173,14 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		color.xCoord *= pressureFactor;
 		color.yCoord *= pressureFactor;
 		color.zCoord *= pressureFactor;
-		if(Minecraft.getMinecraft().renderViewEntity.posY > 300) {
-			double curvature = MathHelper.clamp_float((800.0F - (float)Minecraft.getMinecraft().renderViewEntity.posY) / 500.0F, 0.0F, 1.0F);
+
+		if(Minecraft.getMinecraft().renderViewEntity.posY > 600) {
+			double curvature = MathHelper.clamp_float((1000.0F - (float)Minecraft.getMinecraft().renderViewEntity.posY) / 400.0F, 0.0F, 1.0F);
 			color.xCoord *= curvature;
 			color.zCoord *= curvature;
 			color.yCoord *= curvature;
 		}
+		
 		return color;
 	}
 
@@ -292,13 +304,10 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		float distanceStart = 20_000_000;
 		float distanceEnd = 80_000_000;
 
-		float semiMajorAxisKm = CelestialBody.getSemiMajorAxis(worldObj);
+		float semiMajorAxisKm = CelestialBody.getPlanet(worldObj).semiMajorAxisKm;
 		float distanceFactor = MathHelper.clamp_float((semiMajorAxisKm - distanceStart) / (distanceEnd - distanceStart), 0F, 1F);
 
-		// Vacuum still increases star brightness tho
 		float starBrightness = super.getStarBrightness(par1);
-		if (!CelestialBody.hasTrait(worldObj, CBT_Atmosphere.class))
-			starBrightness *= 2F;
 
 		return MathHelper.clamp_float(starBrightness, distanceFactor, 1F);
 	}
@@ -428,5 +437,49 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		f1 = 0.5F - Math.cos(f1 * Math.PI) / 2.0F;
 		return (float)(f2 + (f1 - f2) / 3.0D);
 	}
+
+	@Override
+	public float getCurrentMoonPhaseFactor() {
+		// Closest satellite determines monster spawning
+		CelestialBody body = CelestialBody.getBody(worldObj);
+		if(body.satellites.size() == 0) return 0.5F;
+		// SolarSystem.calculateSingleAngle(worldObj, 0, body, body.satellites.get(0));
+		return 0.5F;
+	}
+
+	// This is the vanilla junk table, for replacing fish on dead worlds
+	private static ArrayList<WeightedRandomFishable> junk;
+
+	// you know what that means
+	/// FISH ///
+
+	// returning null from any of these methods will revert to overworld loot tables
+	public ArrayList<WeightedRandomFishable> getFish() {
+		if(junk == null) {
+			junk = new ArrayList<>();
+			// junk.add((new WeightedRandomFishable(new ItemStack(Items.leather_boots), 10)).func_150709_a(0.9F));
+			// junk.add(new WeightedRandomFishable(new ItemStack(Items.leather), 10));
+			// junk.add(new WeightedRandomFishable(new ItemStack(Items.bone), 10));
+			junk.add(new WeightedRandomFishable(new ItemStack(Items.potionitem), 10));
+			junk.add(new WeightedRandomFishable(new ItemStack(Items.string), 5));
+			junk.add((new WeightedRandomFishable(new ItemStack(Items.fishing_rod), 2)).func_150709_a(0.9F));
+			junk.add(new WeightedRandomFishable(new ItemStack(Items.bowl), 10));
+			junk.add(new WeightedRandomFishable(new ItemStack(Items.stick), 5));
+			junk.add(new WeightedRandomFishable(new ItemStack(Items.dye, 10, 0), 1));
+			junk.add(new WeightedRandomFishable(new ItemStack(Blocks.tripwire_hook), 10));
+			// junk.add(new WeightedRandomFishable(new ItemStack(Items.rotten_flesh), 10));
+		}
+
+		return junk;
+	}
+
+	public ArrayList<WeightedRandomFishable> getJunk() {
+		return null;
+	}
+
+	public ArrayList<WeightedRandomFishable> getTreasure() {
+		return null;
+	}
+	/// FISH ///
 
 }

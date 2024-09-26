@@ -3,12 +3,12 @@ package com.hbm.explosion;
 import java.util.List;
 import java.util.Random;
 
-import com.hbm.entity.projectile.EntityOilSpill;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.main.MainRegistry;
-import com.hbm.packet.AuxParticlePacketNT;
+import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.util.ParticleUtil;
 
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
@@ -159,20 +159,6 @@ public class ExplosionLarge {
 			item.motionZ = motionZ + rand.nextGaussian() * deviation * 0.1;
 			
 			world.spawnEntityInWorld(item);
-		}
-	}
-	
-	public static void spawnOilSpills(World world, double x, double y, double z, int count) {
-		
-		for(int i = 0; i < count; i++) {
-			EntityOilSpill shrapnel = new EntityOilSpill(world);
-			shrapnel.posX = x;
-			shrapnel.posY = y;
-			shrapnel.posZ = z;
-			shrapnel.motionY = ((rand.nextFloat() * 0.5) + 0.5) * (1 + (count / (15 + rand.nextInt(21)))) + (rand.nextFloat() / 50 * count) * 0.25F;
-			shrapnel.motionX = rand.nextGaussian() * 1	* (1 + (count / 50)) * 0.15F;
-			shrapnel.motionZ = rand.nextGaussian() * 1	* (1 + (count / 50)) * 0.15F;
-			world.spawnEntityInWorld(shrapnel);
 		}
 	}
 	

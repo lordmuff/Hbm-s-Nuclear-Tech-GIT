@@ -72,7 +72,8 @@ public class ChemplantRecipes extends SerializableRecipe {
 						new FluidStack(Fluids.PEROXIDE, 800),
 						new FluidStack(Fluids.WATER, 1_000))
 				.outputFluids(new FluidStack(Fluids.SULFURIC_ACID, 2_000)));
-		recipes.add(new ChemRecipe(92, "NITRIC_ACID", 50)
+		recipes.add(new ChemRecipe(92, "SOLVENT", 50)
+		recipes.add(new ChemRecipe(95, "NITRIC_ACID", 50)
 				.inputItems(new OreDictStack(KNO.dust()))
 				.inputFluids(new FluidStack(Fluids.SULFURIC_ACID, 500))
 				.outputFluids(new FluidStack(Fluids.NITRIC_ACID, 1_000)));
@@ -133,7 +134,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.inputItems(new OreDictStack(KNO.dust()))
 				.inputFluids(new FluidStack(Fluids.AROMATICS, 500, GeneralConfig.enable528 ? 1 : 0))
 				.outputItems(new ItemStack(ModItems.ball_tnt, 4)));
-		recipes.add(new ChemRecipe(95, "TATB", 50)
+		recipes.add(new ChemRecipe(98, "TATB", 50)
 				.inputItems(new ComparableStack(ModItems.ball_tnt))
 				.inputFluids(new FluidStack(Fluids.SOURGAS, 200, 1), new FluidStack(Fluids.NITRIC_ACID, 10))
 				.outputItems(new ItemStack(ModItems.ball_tatb)));
@@ -187,12 +188,14 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.outputItems(new ItemStack(ModItems.plate_kevlar, 4)));
 		recipes.add(new ChemRecipe(55, "CONCRETE", 100)
 				.inputItems(
+						new ComparableStack(ModItems.powder_cement, 1),
 						new ComparableStack(Blocks.gravel, 8),
 						new OreDictStack(KEY_SAND, 8))
 				.inputFluids(new FluidStack(Fluids.WATER, 2000))
 				.outputItems(new ItemStack(ModBlocks.concrete_smooth, 16)));
 		recipes.add(new ChemRecipe(56, "CONCRETE_ASBESTOS", 100)
 				.inputItems(
+						new ComparableStack(ModItems.powder_cement, 1),
 						new ComparableStack(Blocks.gravel, 2),
 						new OreDictStack(KEY_SAND, 2),
 						(GeneralConfig.enableLBSM && GeneralConfig.enableLBSMSimpleChemsitry) ?
@@ -202,9 +205,10 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.outputItems(new ItemStack(ModBlocks.concrete_asbestos, 16)));
 		recipes.add(new ChemRecipe(79, "DUCRETE", 150)
 				.inputItems(
+						new ComparableStack(ModItems.powder_cement, 4),
+						new ComparableStack(Blocks.gravel, 2),
 						new OreDictStack(KEY_SAND, 8),
-						new OreDictStack(U238.billet(), 2),
-						new ComparableStack(Items.clay_ball, 4))
+						new OreDictStack(U238.billet(), 2))
 				.inputFluids(new FluidStack(Fluids.WATER, 2000))
 				.outputItems(new ItemStack(ModBlocks.ducrete_smooth, 8)));
 		recipes.add(new ChemRecipe(57, "SOLID_FUEL", 200)
@@ -218,7 +222,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.outputFluids(
 						new FluidStack(Fluids.HYDROGEN, 400),
 						new FluidStack(Fluids.OXYGEN, 400)));
-		recipes.add(new ChemRecipe(59, "XENON", 300)
+		recipes.add(new ChemRecipe(59, "XENON", 250, 1)
 				.inputFluids(new FluidStack(Fluids.NONE, 0))
 				.outputFluids(new FluidStack(Fluids.XENON, 50)));
 		recipes.add(new ChemRecipe(60, "XENON_OXY", 20)
@@ -566,6 +570,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 		public ItemStack[] outputs;
 		public FluidStack[] outputFluids;
 		private int duration;
+		public int oxygenConsumption = 0; // How much oxygen the recipe consumes from the atmosphere per tick while processing
 		
 		public ChemRecipe(int index, String name, int duration) {
 			this.id = index;
@@ -583,6 +588,11 @@ public class ChemplantRecipes extends SerializableRecipe {
 			} else {
 				throw new IllegalStateException("Chemical plant recipe " + name + " has been registered with duplicate id " + id + " used by " + indexMapping.get(id).name + "!");
 			}
+		}
+
+		public ChemRecipe(int index, String name, int duration, int oxygenConsumption) {
+			this(index, name, duration);
+			this.oxygenConsumption = oxygenConsumption;
 		}
 		
 		public ChemRecipe inputItems(AStack... in) {

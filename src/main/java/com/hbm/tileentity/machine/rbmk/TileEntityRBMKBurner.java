@@ -18,7 +18,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class TileEntityRBMKBurner extends TileEntityRBMKBase implements IFluidStandardReceiver {
-
+	
 	public FluidTank tank;
 	private int lastHot;
 	public TileEntityRBMKBurner() {
