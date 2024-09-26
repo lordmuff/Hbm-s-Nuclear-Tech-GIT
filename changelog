@@ -1,12 +1,10 @@
 ## Changed
-* Fans no longer work in a vacuum
-* Drop pods no longer look like valid rocket parts (they're standalone)
-* Stardar SLF button now produces a drive for the station you're currently on if in orbit
-* Atmosphere fog fades with altitude again, but higher than the sky color
+* Updated russian and chinese localization
+* The fine soot recipe in the pyrolysis oven now only needs 4 tar
+* Overdrive upgrades now use fullerite instead of lithium crystals
+* Machines now only send their sync packets once a second instead of once per tick if the values haven't changed, reducing network traffic by a considerable amount
+* Tom's explosion no longer causes any block updates on the millions of blocks it deletes which hopefully fixes a majority of the lag caused by the crater
 
 ## Fixed
-* Rocket pad crash on unexpected items
-* Beds can be used in orbit (doesn't currently skip time)
-* Gas giant harvesters now work in Laythe orbit
-* Fix missing Alkyl Bromide fluid and tank texture
-* Attempt at fixing thruster deregistration issue
+* The conveyor grabber should no longer skip over items when used in long lines
+* Fixed a potential crash regarding crucibles

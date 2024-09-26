@@ -263,6 +263,7 @@ public class MainRegistry {
 
 	@EventHandler
 	public void PreLoad(FMLPreInitializationEvent PreEvent) {
+		CrashHelper.init();
 		
 		startupTime = System.currentTimeMillis();
 		configDir = PreEvent.getModConfigurationDirectory();

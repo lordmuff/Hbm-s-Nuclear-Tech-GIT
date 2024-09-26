@@ -24,10 +24,13 @@ public class HbmAnimations {
 		RELOAD_END,		//animation for transitioning from our RELOAD_CYCLE to idle
 		CYCLE,			//animation for every firing cycle
 		CYCLE_EMPTY,	//animation for the final shot in the magazine
+		CYCLE_DRY,		//animation for trying to fire, but no round is available
 		ALT_CYCLE,		//animation for alt fire cycles
 		SPINUP,			//animation for actionstart
 		SPINDOWN,		//animation for actionend
-		EQUIP			//animation for drawing the weapon
+		EQUIP,			//animation for drawing the weapon
+		INSPECT,		//animation for inspecting the weapon
+		JAMMED			//animation for jammed weapons
 	}
 
 	// A NOTE ON SHOTGUN STYLE RELOADS

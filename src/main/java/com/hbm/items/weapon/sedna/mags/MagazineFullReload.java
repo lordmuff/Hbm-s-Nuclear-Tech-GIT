@@ -6,15 +6,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 /** Uses individual bullets which are loaded all at once */
-public class MagazineRevolverDrum extends MagazineStandardBase {
+public class MagazineFullReload extends MagazineSingleTypeBase {
 
-	public MagazineRevolverDrum(int index, int capacity) {
+	public MagazineFullReload(int index, int capacity) {
 		super(index, capacity);
 	}
 
 	/** Returns true if the player has the same ammo if partially loaded, or any valid ammo if not */
 	@Override
 	public boolean canReload(ItemStack stack, EntityPlayer player) {
+		
+		if(this.getAmount(stack) >= this.getCapacity(stack)) return false;
 		
 		for(ItemStack slot : player.inventory.mainInventory) {
 			
@@ -24,7 +26,7 @@ public class MagazineRevolverDrum extends MagazineStandardBase {
 						if(config.ammo.matchesRecipe(slot, true)) return true;
 					}
 				} else {
-					BulletConfig config = (BulletConfig) this.getType(stack);
+					BulletConfig config = this.getType(stack);
 					if(config == null) { config = this.acceptedBullets.get(0); this.setType(stack, config); }
 					if(config.ammo.matchesRecipe(slot, true)) return true;
 				}
@@ -57,7 +59,7 @@ public class MagazineRevolverDrum extends MagazineStandardBase {
 					}
 				//mag has a type set, only load that
 				} else {
-					BulletConfig config = (BulletConfig) this.getType(stack);
+					BulletConfig config = this.getType(stack);
 					if(config == null) { config = this.acceptedBullets.get(0); this.setType(stack, config); } //fixing broken NBT
 
 					if(config.ammo.matchesRecipe(slot, true)) {
@@ -69,14 +71,5 @@ public class MagazineRevolverDrum extends MagazineStandardBase {
 				}
 			}
 		}
-	}
-
-	@Override
-	public ItemStack getIcon(ItemStack stack) {
-		Object o = this.getType(stack);
-		if(o instanceof BulletConfig) {
-			return ((BulletConfig) o).ammo.toStack();
-		}
-		return null;
 	}
 }
