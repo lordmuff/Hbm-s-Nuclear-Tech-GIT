@@ -187,11 +187,6 @@ public class ModBlocks {
 
 	public static Block ore_tikite;
 
-	public static Block crystal_power;
-	public static Block crystal_energy;
-	public static Block crystal_robust;
-	public static Block crystal_trixite;
-
 	public static Block block_thorium;
 	public static Block block_thorium_fuel;
 	public static Block block_uranium;
@@ -587,7 +582,6 @@ public class ModBlocks {
 	public static Block ore_sellafield_uranium_scorched;
 	public static Block ore_sellafield_schrabidium;
 	public static Block ore_sellafield_radgem;
-	public static Block sellafield_bedrock;
 
 	public static Block geysir_water;
 	public static Block geysir_chlorine;
@@ -1507,11 +1501,6 @@ public class ModBlocks {
 		ore_bedrock_oil = new BlockGeneric(Material.rock).noMobSpawn().setBlockName("ore_bedrock_oil").setCreativeTab(MainRegistry.blockTab).setBlockUnbreakable().setResistance(1_000_000).setBlockTextureName(RefStrings.MODID + ":ore_bedrock_oil");
 
 		ore_tikite = new BlockDragonProof(Material.rock).setBlockName("ore_tikite").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":ore_tikite_alt");
-
-		crystal_power = new BlockCrystal(Material.glass).setBlockName("crystal_power").setStepSound(Block.soundTypeGlass).setCreativeTab(MainRegistry.blockTab).setHardness(2.0F).setResistance(1.0F).setBlockTextureName(RefStrings.MODID + ":crystal_power");
-		crystal_energy = new BlockCrystal(Material.glass).setBlockName("crystal_energy").setStepSound(Block.soundTypeGlass).setCreativeTab(MainRegistry.blockTab).setHardness(2.0F).setResistance(1.0F).setBlockTextureName(RefStrings.MODID + ":crystal_energy");
-		crystal_robust = new BlockCrystal(Material.glass).setBlockName("crystal_robust").setStepSound(Block.soundTypeGlass).setCreativeTab(MainRegistry.blockTab).setHardness(10.0F).setResistance(100.0F).setBlockTextureName(RefStrings.MODID + ":crystal_robust");
-		crystal_trixite = new BlockCrystal(Material.glass).setBlockName("crystal_trixite").setStepSound(Block.soundTypeGlass).setCreativeTab(MainRegistry.blockTab).setHardness(2.0F).setResistance(1.0F).setBlockTextureName(RefStrings.MODID + ":crystal_trixite");
 
 		block_uranium = new BlockHazard().makeBeaconable().setBlockName("block_uranium").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeMetal).setHardness(5.0F).setResistance(50.0F).setBlockTextureName(RefStrings.MODID + ":block_uranium");
 		block_u233 = new BlockHazard().makeBeaconable().setDisplayEffect(ExtDisplayEffect.RADFOG).setBlockName("block_u233").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeMetal).setHardness(5.0F).setResistance(50.0F).setBlockTextureName(RefStrings.MODID + ":block_u233");
@@ -2762,12 +2751,6 @@ public class ModBlocks {
 		//Secret
 		register(stone_keyhole);
 
-		//Crystals
-		GameRegistry.registerBlock(crystal_power, crystal_power.getUnlocalizedName());
-		GameRegistry.registerBlock(crystal_energy, crystal_energy.getUnlocalizedName());
-		GameRegistry.registerBlock(crystal_robust, crystal_robust.getUnlocalizedName());
-		GameRegistry.registerBlock(crystal_trixite, crystal_trixite.getUnlocalizedName());
-
 		//Resource-bearing Stones
 		register(stone_resource);
 		register(stalagmite);
@@ -3171,7 +3154,6 @@ public class ModBlocks {
 		GameRegistry.registerBlock(lattice_log, lattice_log.getUnlocalizedName());
 		//RAD
 		register(sellafield_slaked);
-		register(sellafield_bedrock);
 		register(ore_sellafield_diamond);
 		register(sellafield_bedrock);
 		register(ore_sellafield_emerald);

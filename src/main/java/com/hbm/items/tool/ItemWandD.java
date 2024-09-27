@@ -8,7 +8,6 @@ import com.hbm.config.SpaceConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.WorldConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
-import com.hbm.entity.mob.EntityDoner;
 import com.hbm.entity.mob.EntityGhost;
 import com.hbm.handler.ImpactWorldHandler;
 import com.hbm.explosion.vanillant.ExplosionVNT;
@@ -37,7 +36,6 @@ import com.hbm.particle.helper.ExplosionCreator;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
-import com.hbm.entity.mob.EntityDoner;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -62,14 +60,14 @@ public class ItemWandD extends Item {
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		if(world.isRemote)
 			return stack;
-		
+
 		MovingObjectPosition pos = Library.rayTrace(player, 500, 1, false, true, false);
-		
+
 		if(pos != null) {
 
 			if(stack.stackTagCompound == null)
 				stack.stackTagCompound = new NBTTagCompound();
-			
+
 			if(!player.isSneaking()) {
 				int targetId = stack.stackTagCompound.getInteger("dim");
 

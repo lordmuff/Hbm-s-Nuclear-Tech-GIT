@@ -7,8 +7,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandlerXR;
 import com.hbm.handler.pollution.PollutionHandler;
 import com.hbm.handler.pollution.PollutionHandler.PollutionType;
-import com.hbm.interfaces.IFluidAcceptor;
-import com.hbm.interfaces.IFluidContainer;
 import com.hbm.inventory.UpgradeManager;
 import com.hbm.inventory.container.ContainerMachineTurbofan;
 import com.hbm.inventory.fluid.Fluids;
@@ -57,7 +55,7 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 	public static final long maxPower = 1_000_000;
 	public FluidTank tank;
 	public FluidTank blood;
-	
+
 	public int afterburner;
 	public boolean wasOn;
 	public boolean showBlood = false;
@@ -67,7 +65,7 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 	public float spin;
 	public float lastSpin;
 	public int momentum = 0;
-	
+
 	private AudioWrapper audio;
 
 	public TileEntityMachineTurbofan() {
@@ -94,7 +92,7 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		
+
 		nbt.setLong("powerTime", power);
 		tank.writeToNBT(nbt, "fuel");
 		blood.writeToNBT(nbt, "blood");
@@ -104,12 +102,12 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 	public long getPowerScaled(long i) {
 		return (power * i) / maxPower;
 	}
-	
+
 	protected DirPos[] getConPos() {
-		
+
 		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10).getRotation(ForgeDirection.UP);
 		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
-		
+
 		return new DirPos[] {
 				new DirPos(this.xCoord + rot.offsetX * 2, this.yCoord, this.zCoord + rot.offsetZ * 2, rot),
 				new DirPos(this.xCoord + rot.offsetX * 2 - dir.offsetX, this.yCoord, this.zCoord + rot.offsetZ * 2 - dir.offsetZ, rot),
@@ -120,11 +118,11 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 
 	@Override
 	public void updateEntity() {
-		
+
 		if(!worldObj.isRemote) {
 			this.output = 0;
 			this.consumption = 0;
-			
+
 			//meta below 12 means that it's an old multiblock configuration
 			if(this.getBlockMetadata() < 12) {
 				//get old direction
@@ -146,54 +144,54 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 				worldObj.getTileEntity(xCoord, yCoord, zCoord).readFromNBT(data);
 				return;
 			}
-			
+
 			tank.setType(4, slots);
 			tank.loadTank(0, 1, slots);
 			blood.setTankType(Fluids.BLOOD);
-			
+
 			this.wasOn = false;
-			
+
 			UpgradeManager.eval(slots, 2, 2);
 			this.afterburner = UpgradeManager.getLevel(UpgradeType.AFTERBURN);
-			
+
 			if(slots[2] != null && slots[2].getItem() == ModItems.flame_pony)
 				this.afterburner = 100;
-			
+
 			long burnValue = 0;
 			int amount = 1 + this.afterburner;
-			
+
 			if(tank.getTankType().hasTrait(FT_Combustible.class) && tank.getTankType().getTrait(FT_Combustible.class).getGrade() == FuelGrade.AERO) {
 				burnValue = tank.getTankType().getTrait(FT_Combustible.class).getCombustionEnergy() / 1_000;
 			}
-			
+
 			int amountToBurn = breatheAir(this.tank.getFill() > 0 ? amount : 0) ? Math.min(amount, this.tank.getFill()) : 0;
-			
+
 			if(amountToBurn > 0) {
 				this.wasOn = true;
 				this.tank.setFill(this.tank.getFill() - amountToBurn);
 				this.output = (int) (burnValue * amountToBurn * (1 + Math.min(this.afterburner / 3D, 4)));
 				this.power += this.output;
 				this.consumption = amountToBurn;
-				
+
 				if(worldObj.getTotalWorldTime() % 20 == 0) super.pollute(tank.getTankType(), FluidTrait.FluidReleaseType.BURN, amountToBurn * 5);;
 			}
-			
+
 			power = Library.chargeItemsFromTE(slots, 3, power, power);
-			
+
 			for(DirPos pos : getConPos()) {
 				this.tryProvide(worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 				this.trySubscribe(tank.getTankType(), worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 				if(this.blood.getFill() > 0) this.sendFluid(blood, worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 				this.sendSmoke(pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 			}
-			
+
 			if(burnValue > 0 && amountToBurn > 0) {
 
 				ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10).getRotation(ForgeDirection.UP);
 				ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
-				
+
 				if(this.afterburner > 0) {
-					
+
 					for(int i = 0; i < 2; i++) {
 						double speed = 2 + worldObj.rand.nextDouble() * 3;
 						double deviation = worldObj.rand.nextGaussian() * 0.2;
@@ -204,15 +202,15 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 						data.setFloat("scale", 8F);
 						PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, this.xCoord + 0.5F - dir.offsetX * (3 - i), this.yCoord + 1.5F, this.zCoord + 0.5F - dir.offsetZ * (3 - i)), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 150));
 					}
-					
+
 					/*if(this.afterburner > 90 && worldObj.rand.nextInt(60) == 0) {
 						worldObj.newExplosion(null, xCoord + 0.5 + dir.offsetX * 3.5, yCoord + 0.5, zCoord + 0.5 + dir.offsetZ * 3.5, 3F, false, false);
 					}*/
-					
+
 					if(this.afterburner > 90 && worldObj.rand.nextInt(30) == 0) {
 						worldObj.playSoundEffect(xCoord + 0.5, yCoord + 1.5, zCoord + 0.5, "hbm:block.damage", 3.0F, 0.95F + worldObj.rand.nextFloat() * 0.2F);
 					}
-					
+
 					if(this.afterburner > 90) {
 						NBTTagCompound data = new NBTTagCompound();
 						data.setString("type", "gasfire");
@@ -225,16 +223,16 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 								), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 150));
 					}
 				}
-				
+
 				double minX = this.xCoord + 0.5 - dir.offsetX * 3.5 - rot.offsetX * 1.5;
 				double maxX = this.xCoord + 0.5 - dir.offsetX * 19.5 + rot.offsetX * 1.5;
 				double minZ = this.zCoord + 0.5 - dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
 				double maxZ = this.zCoord + 0.5 - dir.offsetZ * 19.5 + rot.offsetZ * 1.5;
-				
+
 				List<Entity> list = worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(Math.min(minX, maxX), yCoord, Math.min(minZ, maxZ), Math.max(minX, maxX), yCoord + 3, Math.max(minZ, maxZ)));
-				
+
 				for(Entity e : list) {
-					
+
 					if(this.afterburner > 0) {
 						e.setFire(5);
 						e.attackEntityFrom(DamageSource.onFire, 5F);
@@ -242,40 +240,40 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 					e.motionX -= dir.offsetX * 0.2;
 					e.motionZ -= dir.offsetZ * 0.2;
 				}
-				
+
 				minX = this.xCoord + 0.5 + dir.offsetX * 3.5 - rot.offsetX * 1.5;
 				maxX = this.xCoord + 0.5 + dir.offsetX * 8.5 + rot.offsetX * 1.5;
 				minZ = this.zCoord + 0.5 + dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
 				maxZ = this.zCoord + 0.5 + dir.offsetZ * 8.5 + rot.offsetZ * 1.5;
-				
+
 				list = worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(Math.min(minX, maxX), yCoord, Math.min(minZ, maxZ), Math.max(minX, maxX), yCoord + 3, Math.max(minZ, maxZ)));
-				
+
 				for(Entity e : list) {
 					e.motionX -= dir.offsetX * 0.2;
 					e.motionZ -= dir.offsetZ * 0.2;
 				}
-				
+
 				minX = this.xCoord + 0.5 + dir.offsetX * 3.5 - rot.offsetX * 1.5;
 				maxX = this.xCoord + 0.5 + dir.offsetX * 3.75 + rot.offsetX * 1.5;
 				minZ = this.zCoord + 0.5 + dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
 				maxZ = this.zCoord + 0.5 + dir.offsetZ * 3.75 + rot.offsetZ * 1.5;
-				
+
 				list = worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(Math.min(minX, maxX), yCoord, Math.min(minZ, maxZ), Math.max(minX, maxX), yCoord + 3, Math.max(minZ, maxZ)));
-				
+
 				for(Entity e : list) {
 					e.attackEntityFrom(ModDamageSource.turbofan, 1000);
 					e.setInWeb();
-					
+
 					if(!e.isEntityAlive() && e instanceof EntityLivingBase) {
 						NBTTagCompound vdat = new NBTTagCompound();
 						vdat.setString("type", "giblets");
 						vdat.setInteger("ent", e.getEntityId());
 						vdat.setInteger("cDiv", 5);
 						PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(vdat, e.posX, e.posY + e.height * 0.5, e.posZ), new TargetPoint(e.dimension, e.posX, e.posY + e.height * 0.5, e.posZ, 150));
-						
+
 						worldObj.playSoundEffect(e.posX, e.posY, e.posZ, "mob.zombie.woodbreak", 2.0F, 0.95F + worldObj.rand.nextFloat() * 0.2F);
-						
-						blood.setFill(blood.getFill() + 50); 
+
+						blood.setFill(blood.getFill() + 50);
 						if(blood.getFill() > blood.getMaxFill()) {
 							blood.setFill(blood.getMaxFill());
 						}
@@ -283,11 +281,11 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 					}
 				}
 			}
-			
+
 			if(this.power > this.maxPower) {
 				this.power = this.maxPower;
 			}
-			
+
 			NBTTagCompound data = new NBTTagCompound();
 			data.setLong("power", power);
 			data.setByte("after", (byte) afterburner);
@@ -296,11 +294,11 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 			tank.writeToNBT(data, "tank");
 			blood.writeToNBT(data, "blood");
 			this.networkPack(data, 150);
-			
+
 		} else {
-			
+
 			this.lastSpin = this.spin;
-			
+
 			if(wasOn) {
 				if(this.momentum < 100F)
 					this.momentum++;
@@ -308,16 +306,16 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 				if(this.momentum > 0)
 					this.momentum--;
 			}
-			
+
 			this.spin += momentum / 2;
-			
+
 			if(this.spin >= 360) {
 				this.spin -= 360F;
 				this.lastSpin -= 360F;
 			}
 
 			if(momentum > 0) {
-				
+
 				if(audio == null) {
 					audio = createAudioLoop();
 					audio.startSound();
@@ -328,9 +326,9 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 				audio.keepAlive();
 				audio.updateVolume(getVolume(momentum / 50F));
 				audio.updatePitch(momentum / 200F + 0.5F + this.afterburner * 0.16F);
-				
+
 			} else {
-				
+
 				if(audio != null) {
 					audio.stopSound();
 					audio = null;
@@ -349,37 +347,37 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 				double maxX = this.xCoord + 0.5 - dir.offsetX * 19.5 + rot.offsetX * 1.5;
 				double minZ = this.zCoord + 0.5 - dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
 				double maxZ = this.zCoord + 0.5 - dir.offsetZ * 19.5 + rot.offsetZ * 1.5;
-				
+
 				List<Entity> list = worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(Math.min(minX, maxX), yCoord, Math.min(minZ, maxZ), Math.max(minX, maxX), yCoord + 3, Math.max(minZ, maxZ)));
-				
+
 				for(Entity e : list) {
 					if(e == MainRegistry.proxy.me()) {
 						e.motionX -= dir.offsetX * 0.2;
 						e.motionZ -= dir.offsetZ * 0.2;
 					}
 				}
-				
+
 				minX = this.xCoord + 0.5 + dir.offsetX * 3.5 - rot.offsetX * 1.5;
 				maxX = this.xCoord + 0.5 + dir.offsetX * 8.5 + rot.offsetX * 1.5;
 				minZ = this.zCoord + 0.5 + dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
 				maxZ = this.zCoord + 0.5 + dir.offsetZ * 8.5 + rot.offsetZ * 1.5;
-				
+
 				list = worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(Math.min(minX, maxX), yCoord, Math.min(minZ, maxZ), Math.max(minX, maxX), yCoord + 3, Math.max(minZ, maxZ)));
-				
+
 				for(Entity e : list) {
 					if(e == MainRegistry.proxy.me()) {
 						e.motionX -= dir.offsetX * 0.2;
 						e.motionZ -= dir.offsetZ * 0.2;
 					}
 				}
-				
+
 				minX = this.xCoord + 0.5 + dir.offsetX * 3.5 - rot.offsetX * 1.5;
 				maxX = this.xCoord + 0.5 + dir.offsetX * 3.75 + rot.offsetX * 1.5;
 				minZ = this.zCoord + 0.5 + dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
 				maxZ = this.zCoord + 0.5 + dir.offsetZ * 3.75 + rot.offsetZ * 1.5;
-				
+
 				list = worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(Math.min(minX, maxX), yCoord, Math.min(minZ, maxZ), Math.max(minX, maxX), yCoord + 3, Math.max(minZ, maxZ)));
-				
+
 				for(Entity e : list) {
 					if(e == MainRegistry.proxy.me()) {
 						e.setInWeb();
@@ -388,10 +386,10 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 			}
 		}
 	}
-	
+
 	public void networkUnpack(NBTTagCompound nbt) {
 		super.networkUnpack(nbt);
-		
+
 		this.power = nbt.getLong("power");
 		this.afterburner = nbt.getByte("after");
 		this.wasOn = nbt.getBoolean("wasOn");
@@ -399,7 +397,7 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 		tank.readFromNBT(nbt, "tank");
 		blood.readFromNBT(nbt, "blood");
 	}
-	
+
 	public AudioWrapper createAudioLoop() {
 		return MainRegistry.proxy.getLoopedSound("hbm:block.turbofanOperate", xCoord, yCoord, zCoord, 1.0F, 50F, 1.0F, 20);
 	}
@@ -438,7 +436,7 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 	public void setPower(long i) {
 		this.power = i;
 	}
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return TileEntity.INFINITE_EXTENT_AABB;

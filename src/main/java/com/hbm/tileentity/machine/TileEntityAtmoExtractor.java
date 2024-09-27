@@ -7,8 +7,6 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
-import com.hbm.interfaces.IFluidAcceptor;
-import com.hbm.interfaces.IFluidSource;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
@@ -75,7 +73,7 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IE
 			}
 
 			markDirty();
-			
+
 			this.networkPackNT(50);
 		} else {
 			float maxSpeed = 30F;
@@ -184,7 +182,7 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IE
 	public FluidTank[] getAllTanks() {
 		return new FluidTank[] { tank };
 	}
-	
+
 	private DirPos[] getConPos() {
 		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
@@ -192,13 +190,13 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IE
 		return new DirPos[] {
 				new DirPos(this.xCoord - dir.offsetX * 2, this.yCoord, this.zCoord - dir.offsetZ * 2, dir.getOpposite()),
 				new DirPos(this.xCoord - dir.offsetX * 2 + rot.offsetX, this.yCoord, this.zCoord - dir.offsetZ * 2 + rot.offsetZ, dir.getOpposite()),
-				
+
 				new DirPos(this.xCoord + dir.offsetX, this.yCoord, this.zCoord + dir.offsetZ, dir),
 				new DirPos(this.xCoord + dir.offsetX + rot.offsetX, this.yCoord, this.zCoord + dir.offsetZ  + rot.offsetZ, dir),
-				
+
 				new DirPos(this.xCoord - rot.offsetX, this.yCoord, this.zCoord - rot.offsetZ, rot.getOpposite()),
 				new DirPos(this.xCoord - dir.offsetX - rot.offsetX, this.yCoord, this.zCoord - dir.offsetZ - rot.offsetZ, rot.getOpposite()),
-				
+
 				new DirPos(this.xCoord + rot.offsetX * 2, this.yCoord, this.zCoord + rot.offsetZ * 2, rot),
 				new DirPos(this.xCoord - dir.offsetX + rot.offsetX * 2, this.yCoord, this.zCoord - dir.offsetZ + rot.offsetZ * 2, rot),
 		};

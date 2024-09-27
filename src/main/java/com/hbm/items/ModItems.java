@@ -313,11 +313,6 @@ public class ModItems {
 	public static Item bedrock_ore;
 	public static Item bedrock_ore_fragment;
 
-	public static Item crystal_mineral;
-	public static Item crystal_cleaned;
-	public static Item mineral_dust;
-	public static Item mineral_fragment;
-
 	public static Item billet_uranium;
 	public static Item billet_u233;
 	public static Item billet_u235;
@@ -3047,9 +3042,6 @@ public class ModItems {
 		woodemium_briquette = new Item().setUnlocalizedName("woodemium_briquette").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":briquette_woodemium");
 		butter = new Item().setUnlocalizedName("butter").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":ingot_butter");
 		s_cream	= new ItemLemon(2, 4F, false).setUnlocalizedName("s_cream").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":ice_cream_s");
-		ingot_money = new Item().setUnlocalizedName("ingot_money").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":ingot_money");
-		piss_burger = new ItemLemon(4, 4F, false).setUnlocalizedName("piss_burger").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":piss_burger");
-		doner = new ItemLemon(8, 6F, false).setUnlocalizedName("doner").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":donerr");
 
 		powder_ash = new ItemEnumMulti(EnumAshType.class, true, true).setUnlocalizedName("powder_ash").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_ash");
 		powder_limestone = new Item().setUnlocalizedName("powder_limestone").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_limestone");
@@ -6513,7 +6505,6 @@ public class ModItems {
 		GameRegistry.registerItem(flesh_wafer, flesh_wafer.getUnlocalizedName());
 		GameRegistry.registerItem(grilled_flesh, grilled_flesh.getUnlocalizedName());
 		GameRegistry.registerItem(flesh_burger, flesh_burger.getUnlocalizedName());
-		GameRegistry.registerItem(doner, doner.getUnlocalizedName());
 
 		//Nuggets
 		GameRegistry.registerItem(nugget_uranium, nugget_uranium.getUnlocalizedName());
@@ -8044,7 +8035,6 @@ public class ModItems {
 		GameRegistry.registerItem(pancake, pancake.getUnlocalizedName());
 		GameRegistry.registerItem(butter, butter.getUnlocalizedName());
 		GameRegistry.registerItem(s_cream, s_cream.getUnlocalizedName());
-		GameRegistry.registerItem(piss_burger, piss_burger.getUnlocalizedName());
 		GameRegistry.registerItem(nugget, nugget.getUnlocalizedName());
 		GameRegistry.registerItem(peas, peas.getUnlocalizedName());
 		GameRegistry.registerItem(marshmallow, marshmallow.getUnlocalizedName());
@@ -8587,7 +8577,6 @@ public class ModItems {
 		GameRegistry.registerItem(ln2_9, ln2_9.getUnlocalizedName());
 		GameRegistry.registerItem(ln2_10, ln2_10.getUnlocalizedName());
 		GameRegistry.registerItem(nothing, nothing.getUnlocalizedName());
-		GameRegistry.registerItem(void_anim, void_anim.getUnlocalizedName());
 		GameRegistry.registerItem(achievement_icon, achievement_icon.getUnlocalizedName());
 		GameRegistry.registerItem(bob_metalworks, bob_metalworks.getUnlocalizedName());
 		GameRegistry.registerItem(bob_assembly, bob_assembly.getUnlocalizedName());
