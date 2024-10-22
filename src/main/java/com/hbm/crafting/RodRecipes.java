@@ -23,9 +23,9 @@ import net.minecraft.stats.StatList;
  * @author hbm
  */
 public class RodRecipes {
-	
+
 	public static void register() {
-		
+
 		//Zirnox Fuel
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.rod_zirnox_empty, 4), new Object[] { "Z Z", "ZBZ", "Z Z", 'Z', ZR.nugget(), 'B', BE.ingot() }));
 		addZIRNOXRod(U, EnumZirnoxType.NATURAL_URANIUM_FUEL);
@@ -123,7 +123,7 @@ public class RodRecipes {
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.pile_rod_boron, 1), new Object[] { " B ", " W ", " B ", 'B', B.ingot(), 'W', KEY_PLANKS });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.pile_rod_lithium, 1), new Object[] { ModItems.cell_empty, LI.ingot() });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.pile_rod_detector, 1), new Object[] { " B ", "CM ", " B ", 'B', B.ingot(), 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.VACUUM_TUBE), 'M', ModItems.motor });
-		
+
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.rbmk_fuel_empty, 1), new Object[] { "ZRZ", "Z Z", "ZRZ", 'Z', ZR.ingot(), 'R', ModItems.rod_quad_empty });
 		addRBMKRod(U, ModItems.rbmk_fuel_ueu);
 		addRBMKRod(ModItems.billet_uranium_fuel, ModItems.rbmk_fuel_meu);
@@ -208,6 +208,16 @@ public class RodRecipes {
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.CF252), new Object[] { "F", "I", "F", 'F', ModItems.billet_cf252, 'I', ModItems.plate_polymer });
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.BK247), new Object[] { "F", "I", "F", 'F', ModItems.billet_bk247, 'I', ModItems.plate_polymer });
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.ES253), new Object[] { "F", "I", "F", 'F', ModItems.billet_es253, 'I', ModItems.plate_polymer });
+
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.FLASHGOLD), new Object[] { "F", "I", "F", 'F', ModItems.billet_balefire_gold, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.FLASHLEAD), new Object[] { "F", "I", "F", 'F', ModItems.billet_flashlead, 'I', ModItems.plate_polymer });
+
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.BALEFIRE), new Object[] { "F", "I", "F", 'F', ModItems.egg_balefire_shard, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.BALEFIRE_ASH), new Object[] { "F", "I", "F", 'F', ModItems.powder_balefire, 'I', ModItems.plate_polymer });
+
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.THMEU), new Object[] { "F", "I", "U", 'F', ModItems.billet_thorium_fuel, 'U', ModItems.billet_uranium_fuel, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.THMEU), new Object[] { "U", "I", "F", 'F', ModItems.billet_thorium_fuel, 'U', ModItems.billet_uranium_fuel, 'I', ModItems.plate_polymer });
+
 
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.icf_pellet_empty), new Object[] { "ZLZ", "L L", "ZLZ", 'Z', ZR.wireFine(), 'L', PB.wireFine() });
 	}
@@ -317,7 +327,7 @@ public class RodRecipes {
 	public static void addZIRNOXRod(DictFrame mat, EnumZirnoxType num) {
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.rod_zirnox, 1, num.ordinal()), new Object[] { ModItems.rod_zirnox_empty, mat.billet(), mat.billet() });
 	}
-	
+
 	/** Watz pellet crafting **/
 	public static void addPellet(DictFrame mat, EnumWatzType num) {
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.watz_pellet, 1, num.ordinal()), new Object[] { " I ", "IGI", " I ", 'I', mat.ingot(), 'G', GRAPHITE.ingot() });

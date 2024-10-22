@@ -31,6 +31,7 @@ import com.hbm.items.special.ItemBedrockOreNew.BedrockOreGrade;
 import com.hbm.items.special.ItemBedrockOreNew.BedrockOreType;
 import com.hbm.items.special.ItemByproduct.EnumByproduct;
 //import com.hbm.items.special.ItemMineralOre.EnumMineralOre;
+import com.hbm.items.special.ItemWasteLong;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.ItemStackUtil;
 
@@ -543,7 +544,31 @@ public class CentrifugeRecipes extends SerializableRecipe {
                     new ItemStack(ModItems.nugget_cm_mix, 3),
                     new ItemStack(ModItems.nugget_cf251, 6),
                     new ItemStack(ModItems.nuclear_waste_tiny, 1)});
-
+			recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.FLASHGOLD)), new ItemStack[]{
+				new ItemStack(ModItems.nugget_au198, 3),
+				new ItemStack(ModItems.nugget_australium, 2),
+				new ItemStack(ModItems.powder_balefire, 2),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1)});
+			recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.FLASHLEAD)), new ItemStack[]{
+				new ItemStack(ModItems.nugget_au198, 3),
+				new ItemStack(ModItems.nugget_pb209, 2),
+				new ItemStack(ModItems.nugget_gh336, 1),
+				new ItemStack(ModItems.nugget_bismuth, 1)});
+			recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.BALEFIRE)), new ItemStack[]{
+				new ItemStack(ModItems.powder_balefire, 6),
+				new ItemStack(ModItems.powder_balefire, 5),
+				new ItemStack(ModItems.nugget_au198, 3),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1)});
+			recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.BALEFIRE_ASH)), new ItemStack[]{
+				new ItemStack(ModItems.powder_balefire, 12),
+				new ItemStack(ModItems.powder_balefire, 9),
+				new ItemStack(ModItems.nuclear_waste_tiny, 3),
+				new ItemStack(ModItems.nuclear_waste_tiny, 3)});
+			recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.THMEU)), new ItemStack[]{
+				new ItemStack(ModItems.nugget_u235, 2),
+				new ItemStack(ModItems.nugget_u233, 3),
+				new ItemStack(ModItems.nugget_thorium_fuel, 1),
+				new ItemStack(ModItems.nuclear_waste_long_tiny, 2, ItemWasteLong.WasteClass.THORIUM.ordinal())});
 
             recipes.put(new ComparableStack(ModItems.icf_pellet_depleted), new ItemStack[]{
                     new ItemStack(ModItems.icf_pellet_empty, 1),
