@@ -213,10 +213,14 @@ public class RodRecipes {
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.FLASHLEAD), new Object[] { "F", "I", "F", 'F', ModItems.billet_flashlead, 'I', ModItems.plate_polymer });
 
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.BALEFIRE), new Object[] { "F", "I", "F", 'F', ModItems.egg_balefire_shard, 'I', ModItems.plate_polymer });
-		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.BALEFIRE_ASH), new Object[] { "F", "I", "F", 'F', ModItems.powder_balefire, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.BALEFIRE_ASH), new Object[] { "FFF", "PIP", "FFF", 'F', ModItems.powder_balefire, 'P', ModItems.nugget_pu239, 'I', ModItems.plate_polymer });
 
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.THMEU), new Object[] { "F", "I", "U", 'F', ModItems.billet_thorium_fuel, 'U', ModItems.billet_uranium_fuel, 'I', ModItems.plate_polymer });
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.THMEU), new Object[] { "U", "I", "F", 'F', ModItems.billet_thorium_fuel, 'U', ModItems.billet_uranium_fuel, 'I', ModItems.plate_polymer });
+
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.NAUS), new Object[] { "F", "I", "F", 'F', ModItems.billet_australium, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.LEAUS), new Object[] { "F", "I", "F", 'F', ModItems.billet_australium_lesser, 'I', ModItems.plate_polymer });
+		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.HEAUS), new Object[] { "F", "I", "F", 'F', ModItems.billet_australium_greater, 'I', ModItems.plate_polymer });
 
 
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.icf_pellet_empty), new Object[] { "ZLZ", "L L", "ZLZ", 'Z', ZR.wireFine(), 'L', PB.wireFine() });

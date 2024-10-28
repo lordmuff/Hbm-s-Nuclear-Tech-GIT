@@ -569,6 +569,21 @@ public class CentrifugeRecipes extends SerializableRecipe {
 				new ItemStack(ModItems.nugget_u233, 3),
 				new ItemStack(ModItems.nugget_thorium_fuel, 1),
 				new ItemStack(ModItems.nuclear_waste_long_tiny, 2, ItemWasteLong.WasteClass.THORIUM.ordinal())});
+			recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.NAUS)), new ItemStack[]{
+				new ItemStack(Items.gold_nugget, 2),
+				new ItemStack(ModItems.nugget_au198, 3),
+				new ItemStack(ModItems.nugget_australium_lesser, 2),
+				new ItemStack(ModItems.nugget_lead, 3)});
+			recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.LEAUS)), new ItemStack[]{
+				new ItemStack(ModItems.nugget_pb209, 1),
+				new ItemStack(ModItems.nugget_lead, 3),
+				new ItemStack(ModItems.nugget_australium_lesser, 1),
+				new ItemStack(Items.gold_nugget, 2)});
+			recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.pwr_fuel_depleted, EnumPWRFuel.HEAUS)), new ItemStack[]{
+				new ItemStack(ModItems.nugget_pb209, 3),
+				new ItemStack(ModItems.nugget_au198, 4),
+				new ItemStack(ModItems.nugget_australium_greater, 2),
+				new ItemStack(ModItems.nugget_lead, 2)});
 
             recipes.put(new ComparableStack(ModItems.icf_pellet_depleted), new ItemStack[]{
                     new ItemStack(ModItems.icf_pellet_empty, 1),

@@ -49,8 +49,10 @@ public class ItemPWRFuel extends ItemEnumMulti {
 		FLASHLEAD(		010.5D,	new FunctionSqrt(90)),
 		BALEFIRE(		08.5D,	new FunctionSqrt(120)),
 		BALEFIRE_ASH(		011.8D, new FunctionLogarithmic(40 * 40).withDiv(1_000)),
-		THMEU(		07.0D,	new FunctionLogarithmic(10 * 25).withDiv(2_000));
-
+		THMEU(		06.0D,	new FunctionLogarithmic(10 * 25).withDiv(2_000)),
+		NAUS(		28.0D,	new FunctionLogarithmic(60 * 60).withDiv(3_333)),
+		LEAUS(		18.0D,	new FunctionLogarithmic(60 * 60).withDiv(3_000)),
+		HEAUS(		32.0D,	new FunctionLogarithmic(60 * 60).withDiv(2_500));
 
 
 
