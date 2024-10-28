@@ -45,6 +45,7 @@ public class Fluids {
 	public static FluidType ULTRAHOTSTEAM;
 	public static FluidType COOLANT;
 	public static FluidType COOLANT_HOT;
+	public static FluidType SUPERHEATED_HYDROGEN;
 	public static FluidType LAVA;
 	public static FluidType DEUTERIUM;
 	public static FluidType TRITIUM;
@@ -214,20 +215,38 @@ public class Fluids {
 	public static FluidType CREAM;
 	public static FluidType DICYANOACETYLENE;//DICYANOACETYLENE
 	public static FluidType FULLERENE;
+	public static FluidType MORKITE;
+	public static FluidType MORKINE; //gaseous morkite
+	public static FluidType MSLURRY; // Morkite slurry, similar to MINSOL
+	public static FluidType PHEROMONE;
+	public static FluidType PHEROMONE_M;
+
+	//morkite would be like a gravelly oil. it would be a goopy liquidized gravel.
+	//point being, if the crystals were melted down and the liquid extracted
+	//you could be able to dissolve it directly with the vacuum refinery, or maybe something else
+	//you would get a slurry, a gaseous version, and maybe some other mysterious product.
+	//the slurry would be churned into various minerals like copper and quartz.
+	//the gaseous version would be distilled to get acetylene, hydrogen, maybe some aromatics.
+	//or fractioned for acetylene and sour gas? im making shit up here oh god...
+	//regardless, you can get some fuels from it, but its more utility wise imo... would be best for welding
+	//or chemical mixing with nitrogens.
+
+	//bitch its simple
+	//fraction the morkine gas to get ethylene
+	//sourgas never fit anyway
+
+	//alright well thats the *light* part of morkite done. now for the heavier shit.
+	//im thinking it actually needs to be gas centrifuged maybe to get the other products or something else entirely.
+	//reformation of hydrocarbons, aka that feedstock shit could be used in the "MSLURRY", the oils get extracted while leaving some goopy deposits idfk.
+	//MSLURRY should defintely be dissolved though, acidized and fed through some sort of machine that settles the silica goop to the bottom before finally leaving
+	//some aqueous gel-like fluid behind.
+	//that aqueous gel would then be the main plaything of this godforsaken chain
 	public static FluidType STELLAR_FLUX;
 	public static FluidType VITRIOL;
 	public static FluidType SLOP;
-	public static FluidType NITROGEN;
-	public static FluidType AIR;
-	public static FluidType MINSOL;
-    public static FluidType MORKITE;
-    public static FluidType MORKINE; //gaseous morkite
-    public static FluidType MSLURRY; // Morkite slurry, similar to MINSOL
-    public static FluidType FLUORINE;
-    public static FluidType HTcO4;
 
 
-    /* Lagacy names for compatibility purposes */
+	/* Lagacy names for compatibility purposes */
 	@Deprecated public static FluidType ACID;	//JAOPCA uses this, apparently
 
 	public static final HashBiMap<String, FluidType> renameMapping = HashBiMap.create();
@@ -276,13 +295,13 @@ public class Fluids {
 	public static final FT_Polluting P_LIQUID_GAS =		new FT_Polluting().burn(PollutionType.SOOT, SOOT_GAS * 2F);
 
 	public static void init() {
-		
+
 		// ##### ##### ##### ##### ##  # ##### #   # ##### ##  # #####
 		// #   #   #     #   #     ##  # #     #   # #   # ##  # #
 		// #####   #     #   ###   # # # ##### ##### #   # # # # ###
 		// #   #   #     #   #     #  ##     # #   # #   # #  ## #
 		// #   #   #     #   ##### #  ## ##### #   # ##### #  ## #####
-		
+
 		/*
 		 * The mapping ID is set in the CTOR, which is the static, never shifting ID that is used to save the fluid type.
 		 * Therefore, ALWAYS append new fluid entries AT THE BOTTOM to avoid unnecessary ID shifting.
@@ -375,10 +394,15 @@ public class Fluids {
 		BLOOD =			    	new FluidType("BLOOD",				0x4D0000, 2, 0, 0, EnumSymbol.NONE).addContainers(0x4D0000, ExtContainer.CANISTER).addTraits(DELICIOUS, ULTRAKILL, LIQUID);
 		NITRIC_ACID =			new FluidType("NITRIC_ACID",		0xFFCC80, 3, 0, 3, EnumSymbol.ACID).addTraits(new FT_Poison(true, 4)).addTraits(new FT_Flammable(20_000), new FT_Combustible(FuelGrade.MEDIUM, 50_000), new FT_Corrosive(20), LIQUID);
 		AMMONIA =				new FluidType("AMMONIA",			0x00A0F7, 2, 0, 1, EnumSymbol.ASPHYXIANT).addTraits(new FT_Poison(true, 4), GASEOUS);
-		BLOOD_HOT =				new FluidType( "BLOOD_HOT",		0x890404, 3, 0, 0, EnumSymbol.NONE).addTraits(LIQUID).setTemp(666);//0xE4E3EF
-		SOLVENT =				new FluidType( "SOLVENT",		0xE4E3EF, 2, 3, 0, EnumSymbol.NONE).addContainers(0xE4E3EF, ExtContainer.CANISTER).addTraits(LIQUID);
-		SYNGAS =				new FluidType("SYNGAS",				0x131313, 1, 4, 2, EnumSymbol.NONE).addTraits(GASEOUS);
-		OXYHYDROGEN =			new FluidType( "OXYHYDROGEN",	0x483FC1, 0, 4, 2, EnumSymbol.NONE).addTraits(GASEOUS);
+		HYDRAZINE =				new FluidType("HYDRAZINE",			0x31517D, 2, 3, 2, EnumSymbol.NONE).addContainers(new CD_Canister(0x31517D)).addTraits((new FT_Flammable(500_000)), new FT_Combustible(FuelGrade.HIGH, 1_250_000), new FT_Corrosive(30), LIQUID, new FT_Rocket(210, 277810 ));
+		BLOODGAS =				new FluidType("BLOODGAS",		    0x591000, 3, 1, 1, EnumSymbol.NONE).addContainers(new CD_Canister(0x591000)).addTraits(new FT_Flammable(1_000_000), new FT_Combustible(FuelGrade.AERO, 2_500_000)).addTraits(LIQUID);
+		AIR =					new FluidType("AIR",				0xD1CEBE, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
+		BLOOD_HOT =				new FluidType("BLOOD_HOT",			0xF22419, 3, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS).setTemp(666); //it's funny because it's the satan number
+		SOLVENT =				new FluidType("SOLVENT",			0xE4E3EF, 2, 3, 0, EnumSymbol.NONE).addContainers(new CD_Canister(0xE4E3EF)).addTraits(LIQUID, new FT_Corrosive(30));
+		HCL =					new FluidType("HCL",				0x00D452, 3, 0, 3, EnumSymbol.ACID).addTraits(new FT_Corrosive(30), LIQUID);
+		MINSOL =				new FluidType("MINSOL",				0xFADF6A, 3, 0, 3, EnumSymbol.ACID).addTraits(new FT_Corrosive(10), LIQUID);
+		SYNGAS =				new FluidType("SYNGAS",				0x131313, 1, 4, 2, EnumSymbol.NONE).addContainers(new CD_Gastank(0xFFFFFF, 0x131313)).addTraits(GASEOUS);
+		OXYHYDROGEN =			new FluidType("OXYHYDROGEN",		0x483FC1, 0, 4, 2, EnumSymbol.NONE).addTraits(GASEOUS);
 		RADIOSOLVENT =			new FluidType("RADIOSOLVENT",		0xA4D7DD, 3, 3, 0, EnumSymbol.NONE).addTraits(LIQUID, LEADCON, new FT_Corrosive(50), new FT_VentRadiation(0.01F));
 		CHLORINE =				new FluidType("CHLORINE",			0xBAB572, 3, 0, 0, EnumSymbol.OXIDIZER).addContainers(new CD_Gastank(0xBAB572, 0x887B34)).addTraits(GASEOUS, new FT_Corrosive(25));
 		HEAVYOIL_VACUUM =		new FluidType("HEAVYOIL_VACUUM",	0x131214, 2, 1, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS).addContainers(new CD_Canister(0x513F39));
@@ -392,15 +416,15 @@ public class Fluids {
 		KEROSENE_REFORM =		new FluidType("KEROSENE_REFORM",	0xFFA5F3, 1, 2, 0, EnumSymbol.NONE).addTraits(LIQUID, P_FUEL, new FT_Rocket(321, 1_564_000)).addContainers(new CD_Canister(0xFF377D));
 		REFORMGAS =				new FluidType("REFORMGAS",			0x6362AE, 1, 4, 1, EnumSymbol.NONE).addContainers(new CD_Gastank(0x9392FF, 0xFFB992)).addTraits(GASEOUS, P_GAS);
 		COLLOID =				new FluidType("COLLOID",			0x787878, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
-		EVEAIR =				new FluidType("EVEAIR",				0xDCABF8, 4, 0, 0, EnumSymbol.OXIDIZER).addTraits(GASEOUS, new FT_Corrosive(25), new FT_Poison(true, 1));	
-		KMnO4 =					new FluidType("KMnO4",				0x560046, 4, 0, 0, EnumSymbol.ACID).addTraits(LIQUID, new FT_Corrosive(15), new FT_Poison(true, 1));	
+		EVEAIR =				new FluidType("EVEAIR",				0xDCABF8, 4, 0, 0, EnumSymbol.OXIDIZER).addTraits(GASEOUS, new FT_Corrosive(25), new FT_Poison(true, 1));
+		KMnO4 =					new FluidType("KMnO4",				0x560046, 4, 0, 0, EnumSymbol.ACID).addTraits(LIQUID, new FT_Corrosive(15), new FT_Poison(true, 1));
 		CHLOROMETHANE =			new FluidType("CHLOROMETHANE",		0xD3CF9E, 2, 4, 0, EnumSymbol.NONE).addTraits(GASEOUS, new FT_Corrosive(15)).addTraits(new FT_Flammable(50_000));
 		METHANOL =				new FluidType("METHANOL",			0x88739F, 3, 4, 0, EnumSymbol.NONE).addTraits(GASEOUS).addTraits(new FT_Flammable(400_000)).addTraits(new FT_Combustible(FuelGrade.HIGH, 600_000), LIQUID);	//ethanol but more etha per nol
 		BROMINE =				new FluidType("BROMINE",			0xAF2214, 2, 0, 1, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS, new FT_Corrosive(10));
 		METHYLENE =				new FluidType("METHYLENE",			0xBBA9A0, 2, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
-		POLYTHYLENE =			new FluidType("POLYTHYLENE",		0x35302E, 1, 2, 0, EnumSymbol.NONE).addTraits(LIQUID).addTraits(new FT_Flammable(50_000));	
-		FLUORINE =				new FluidType("FLUORINE",			0xC5C539, 4, 4, 4, EnumSymbol.OXIDIZER).addTraits(GASEOUS, new FT_Corrosive(40), new FT_Poison(true, 1)).addTraits(new FT_Flammable(10_000));	
-		TEKTOAIR =				new FluidType("TEKTOAIR",			0x78A23F, 4, 2, 0, EnumSymbol.OXIDIZER).addTraits(GASEOUS,new FT_Poison(true, 1)).addTraits(new FT_Flammable(30_000));		
+		POLYTHYLENE =			new FluidType("POLYTHYLENE",		0x35302E, 1, 2, 0, EnumSymbol.NONE).addTraits(LIQUID).addTraits(new FT_Flammable(50_000));
+		FLUORINE =				new FluidType("FLUORINE",			0xC5C539, 4, 4, 4, EnumSymbol.OXIDIZER).addTraits(GASEOUS, new FT_Corrosive(40), new FT_Poison(true, 1)).addTraits(new FT_Flammable(10_000));
+		TEKTOAIR =				new FluidType("TEKTOAIR",			0x78A23F, 4, 2, 0, EnumSymbol.OXIDIZER).addTraits(GASEOUS,new FT_Poison(true, 1)).addTraits(new FT_Flammable(30_000));
 		PHOSGENE =				new FluidType("PHOSGENE",			0xCFC4A4, 4, 0, 1, EnumSymbol.NONE).addContainers(new CD_Gastank(0xCFC4A4, 0x361414)).addTraits(GASEOUS, new FT_Polluting().release(PollutionType.POISON, POISON_EXTREME));
 		MUSTARDGAS =			new FluidType("MUSTARDGAS",			0xBAB572, 4, 1, 1, EnumSymbol.NONE).addContainers(new CD_Gastank(0xBAB572, 0x361414)).addTraits(GASEOUS, new FT_Polluting().release(PollutionType.POISON, POISON_EXTREME));
 		IONGEL =				new FluidType("IONGEL",				0xB8FFFF, 1, 0, 4, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
@@ -427,6 +451,17 @@ public class Fluids {
 		SMOKE =					new FluidType("SMOKE",				0x808080, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS, NOID, NOCON);
 		SMOKE_LEADED =			new FluidType( "SMOKE_LEADED",		0x808080, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS, NOID, NOCON);
 		SMOKE_POISON =			new FluidType("SMOKE_POISON",		0x808080, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS, NOID, NOCON);
+		JOOLGAS =				new FluidType("JOOLGAS",		0x829F82, 0, 0, 0, EnumSymbol.ASPHYXIANT).addTraits(GASEOUS);
+		SARNUSGAS =				new FluidType("SARNUSGAS",		0xE47D5C, 0, 0, 0, EnumSymbol.ASPHYXIANT).addTraits(GASEOUS);
+		UGAS =					new FluidType("UGAS",		0x718C9A, 0, 0, 0, EnumSymbol.ASPHYXIANT).addTraits(GASEOUS);
+		NGAS =					new FluidType("NGAS",		0x8A668A, 0, 0, 0, EnumSymbol.ASPHYXIANT).addTraits(GASEOUS);
+		EMILK =					new FluidType("EMILK",				0xCFCFCF, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID);//F5DEE4
+		CMILK =					new FluidType("CMILK",				0xCFCFCF, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID);//F5DEE4
+		CREAM =					new FluidType("CREAM",				0xCFCFCF, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID);//F5DEE4
+		MORKITE =				new FluidType("MORKITE",			0x333C42, 3, 3, 3, EnumSymbol.NONE).addTraits(new FT_Flammable(60), LIQUID, VISCOUS);
+		DICYANOACETYLENE =		new FluidType("DICYANOACETYLENE",	0x675A9F, 1, 2, 1, EnumSymbol.NONE).addTraits(new FT_Flammable(4_000_000), GASEOUS);
+		MORKINE =				new FluidType("MORKINE",			0x796089, 3, 3, 3, EnumSymbol.NONE).addTraits(new FT_Flammable(200), LIQUID, VISCOUS);
+		MSLURRY =				new FluidType("MSLURRY",			0x364D47, 0, 0, 2, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
 		HELIUM4 =				new FluidType("HELIUM4",			0xE54B0A, 0, 0, 0, EnumSymbol.ASPHYXIANT).addTraits(GASEOUS);
 		HEAVYWATER_HOT =		new FluidType("HEAVYWATER_HOT",		0x4D007B, 1, 0, 0, EnumSymbol.NONE).setTemp(600).addTraits(LIQUID, VISCOUS);
 		SODIUM =				new FluidType("SODIUM",				0xCCD4D5, 1, 2, 3, EnumSymbol.NONE).setTemp(400).addTraits(LIQUID, VISCOUS);
@@ -476,17 +511,18 @@ public class Fluids {
 		DICYANOACETYLENE =		new FluidType("DICYANOACETYLENE",	0x675A9F, 1, 2, 1, EnumSymbol.NONE).addTraits(new FT_Flammable(4_000_000), GASEOUS);
         VITRIOL =				new FluidType("VITRIOL",			0x6E5222, 2, 0, 1, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
         SLOP =					new FluidType("SLOP",			0x929D45, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
+		SUPERHEATED_HYDROGEN =	new FluidType("SUPERHEATED_HYDROGEN",		0xE39393, 0, 0, 0, EnumSymbol.NONE).setTemp(2200).addTraits(GASEOUS, NOCON, NOID);
+
         // ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
-		
+
 		File folder = MainRegistry.configHbmDir;
 		File customTypes = new File(folder.getAbsolutePath() + File.separatorChar + "hbmFluidTypes.json");
 		if(!customTypes.exists()) initDefaultFluids(customTypes);
 		readCustomFluids(customTypes);
-		
+
 		//AND DON'T FORGET THE META DOWN HERE
 		// V V V V V V V V
-
 
 		//null
 		metaOrder.add(NONE);
@@ -508,6 +544,7 @@ public class Fluids {
 		metaOrder.add(CRYOGEL);
 		metaOrder.add(MUG);
 		metaOrder.add(MUG_HOT);
+		//blood
 		metaOrder.add(BLOOD);
 		metaOrder.add(BLOOD_HOT);
 		metaOrder.add(SODIUM);
@@ -684,6 +721,7 @@ public class Fluids {
 		metaOrder.add(HYDRAZINE);
 		metaOrder.add(HCL);
 		metaOrder.add(DUNAAIR);
+		metaOrder.add(SUPERHEATED_HYDROGEN);
 		metaOrder.add(MORKINE);
 		metaOrder.add(MORKITE);
 		metaOrder.add(FLUORINE);
@@ -700,7 +738,6 @@ public class Fluids {
 		// LEGACY
 		ACID = PEROXIDE;
 
-
 		for(FluidType custom : customFluids) metaOrder.add(custom);
 
 		CHLORINE.addTraits(new FT_Toxin().addEntry(new ToxinDirectDamage(ModDamageSource.cloud, 2F, 20, HazardClass.GAS_LUNG, false)));
@@ -712,6 +749,7 @@ public class Fluids {
 
 		double eff_steam_boil = 1.0D;
 		double eff_steam_heatex = 0.25D;
+
 
 		WATER.addTraits(new FT_Heatable().setEff(HeatingType.BOILER, eff_steam_boil).setEff(HeatingType.HEATEXCHANGER, eff_steam_heatex)
 				.addStep(200, 1, STEAM, 100)
@@ -742,29 +780,35 @@ public class Fluids {
 
 		COOLANT.addTraits(new FT_Heatable().setEff(HeatingType.BOILER, 1.0D).setEff(HeatingType.HEATEXCHANGER, 1.0D).setEff(HeatingType.PWR, 1.0D).setEff(HeatingType.ICF, 1.0D).addStep(300, 1, COOLANT_HOT, 1));
 		COOLANT_HOT.addTraits(new FT_Coolable(COOLANT, 1, 1, 300).setEff(CoolingType.HEATEXCHANGER, 1.0D));
-		
+
 		MUG.addTraits(new FT_Heatable().setEff(HeatingType.HEATEXCHANGER, 1.0D).setEff(HeatingType.PWR, 1.0D).setEff(HeatingType.ICF, 1.25D).addStep(400, 1, MUG_HOT, 1), new FT_PWRModerator(1.15D));
 		MUG_HOT.addTraits(new FT_Coolable(MUG, 1, 1, 400).setEff(CoolingType.HEATEXCHANGER, 1.0D));
-		
+
 		BLOOD.addTraits(new FT_Heatable().setEff(HeatingType.HEATEXCHANGER, 1.0D).setEff(HeatingType.ICF, 1.25D).addStep(500, 1, BLOOD_HOT, 1));
 		BLOOD_HOT.addTraits(new FT_Coolable(BLOOD, 1, 1, 500).setEff(CoolingType.HEATEXCHANGER, 1.0D));
 
+		HYDROGEN.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).addStep(300, 1, SUPERHEATED_HYDROGEN, 1));
+		SUPERHEATED_HYDROGEN.addTraits(new FT_Coolable(HYDROGEN, 1, 1, 300));
+
+
+
+
 		HEAVYWATER.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).addStep(300, 1, HEAVYWATER_HOT, 1), new FT_PWRModerator(1.25D));
 		HEAVYWATER_HOT.addTraits(new FT_Coolable(HEAVYWATER, 1, 1, 300).setEff(CoolingType.HEATEXCHANGER, 1.0D));
-		
+
 		SODIUM.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 2.5D).setEff(HeatingType.ICF, 3D).addStep(400, 1, SODIUM_HOT, 1));
 		SODIUM_HOT.addTraits(new FT_Coolable(SODIUM, 1, 1, 400).setEff(CoolingType.HEATEXCHANGER, 1.0D));
-		
+
 		THORIUM_SALT.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).addStep(400, 1, THORIUM_SALT_HOT, 1), new FT_PWRModerator(2.5D));
 		THORIUM_SALT_HOT.addTraits(new FT_Coolable(THORIUM_SALT_DEPLETED, 1, 1, 400).setEff(CoolingType.HEATEXCHANGER, 1.0D));
-		
+
 		if(idMapping.size() != metaOrder.size()) {
 			throw new IllegalStateException("A severe error has occoured during NTM's fluid registering process! The MetaOrder and Mappings are inconsistent! Mapping size: " + idMapping.size()+ " / MetaOrder size: " + metaOrder.size());
 		}
-		
-		
+
+
 		/// FINAL ///
-		
+
 		long baseline = 100_000L; //we do not know
 		double demandVeryLow = 0.5D; //for waste gasses
 		double demandLow = 1.0D; //for fuel oils
@@ -832,13 +876,11 @@ public class Fluids {
 		registerCalculatedFuel(DICYANOACETYLENE, (baseline / 0.15 * flammabilityHigh * demandHigh * complexityRefinery * complexityCracking) + UNSATURATEDS.getTrait(FT_Flammable.class).getHeatEnergy(), 0, null);
 		registerCalculatedFuel(MORKITE, (baseline / 0.9D * flammabilityLow * demandLow), 0, null);
 		registerCalculatedFuel(REFORMGAS, (baseline / 0.06 * flammabilityHigh * demandLow * complexityVacuum * complexityFraction), 1.5D, FuelGrade.GAS);
-        registerCalculatedFuel(NMASSTETRANOL, BALEFIRE.getTrait(FT_Flammable.class).getHeatEnergy() * 1000, 10.5, FuelGrade.HIGH); //0.8
 
-
-        //all hail the spreadsheet
+		//all hail the spreadsheet
 		//the spreadsheet must not be questioned
 		//none may enter the orb- i mean the spreadsheet
-		
+
 		int coalHeat = 400_000; // 200TU/t for 2000 ticks
 		registerCalculatedFuel(COALOIL, (coalHeat * (1000 /* bucket */ / 100 /* mB per coal */) * flammabilityLow * demandLow * complexityChemplant), 0, null);
 		long coaloil = COALOIL.getTrait(FT_Flammable.class).getHeatEnergy();
@@ -861,24 +903,24 @@ public class Fluids {
 
 		registerCalculatedFuel(SYNGAS, (coalHeat * (1000 /* bucket */ / 100 /* mB per coal */) * flammabilityLow * demandLow * complexityChemplant) * 1.5, 1.25, FuelGrade.GAS); //same as coal oil, +50% bonus
 		registerCalculatedFuel(OXYHYDROGEN, 5_000, 3, FuelGrade.GAS); // whatever
-		
+
 		File config = new File(folder.getAbsolutePath() + File.separatorChar + "hbmFluidTraits.json");
 		File template = new File(folder.getAbsolutePath() + File.separatorChar + "_hbmFluidTraits.json");
-		
+
 		if(!config.exists()) {
 			writeDefaultTraits(template);
 		} else {
 			readTraits(config);
 		}
 	}
-	
+
 	private static void initDefaultFluids(File file) {
-		
+
 		try {
 			JsonWriter writer = new JsonWriter(new FileWriter(file));
 			writer.setIndent("  ");
 			writer.beginObject();
-			
+
 			writer.name("CUSTOM_DEMO").beginObject();
 			writer.name("name").value("Custom Fluid Demo");
 			writer.name("id").value(1000);
@@ -889,21 +931,21 @@ public class Fluids {
 			writer.name("texture").value("custom_water");
 			writer.name("temperature").value(20);
 			writer.endObject();
-			
+
 			writer.endObject();
 			writer.close();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static void readCustomFluids(File file) {
-		
+
 		try {
 			JsonObject json = gson.fromJson(new FileReader(file), JsonObject.class);
-			
+
 			for(Entry<String, JsonElement> entry : json.entrySet()) {
-				
+
 				JsonObject obj = (JsonObject) entry.getValue();
 
 				String name = entry.getKey();
@@ -917,54 +959,54 @@ public class Fluids {
 				EnumSymbol symbol = EnumSymbol.valueOf(obj.get("symbol").getAsString());
 				String texture = obj.get("texture").getAsString();
 				int temperature = obj.get("temperature").getAsInt();
-				
+
 				FluidType type = new FluidType(name, color, p, f, r, symbol, texture, tint, id, displayName).setTemp(temperature);
 				customFluids.add(type);
 			}
-			
+
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	private static void writeDefaultTraits(File file) {
 
 		try {
 			JsonWriter writer = new JsonWriter(new FileWriter(file));
 			writer.setIndent("  ");
 			writer.beginObject();
-			
+
 			for(FluidType type : metaOrder) {
 				writer.name(type.getName()).beginObject();
-				
+
 				for(Entry<Class<? extends FluidTrait>, FluidTrait> entry : type.traits.entrySet()) {
 					writer.name(FluidTrait.traitNameMap.inverse().get(entry.getKey())).beginObject();
 					entry.getValue().serializeJSON(writer);
 					writer.endObject();
 				}
-				
+
 				writer.endObject();
 			}
-			
+
 			writer.endObject();
 			writer.close();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static void readTraits(File config) {
-		
+
 		try {
 			JsonObject json = gson.fromJson(new FileReader(config), JsonObject.class);
-			
+
 			for(FluidType type : metaOrder) {
-				
+
 				JsonElement element = json.get(type.getName());
 				if(element != null) {
 					type.traits.clear();
 					JsonObject obj = element.getAsJsonObject();
-					
+
 					for(Entry<String, JsonElement> entry : obj.entrySet()) {
 						Class<? extends FluidTrait> traitClass = FluidTrait.traitNameMap.get(entry.getKey());
 						try {
@@ -977,14 +1019,14 @@ public class Fluids {
 					}
 				}
 			}
-			
+
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	private static void registerCalculatedFuel(FluidType type, double base, double combustMult, FuelGrade grade) {
-		
+
 		long flammable = (long) base;
 		long combustible = (long) (base * combustMult);
 
@@ -992,11 +1034,11 @@ public class Fluids {
 		combustible = round(combustible);
 
 		type.addTraits(new FT_Flammable(flammable));
-		
+
 		if(combustible > 0 && grade != null)
 			type.addTraits(new FT_Combustible(grade, combustible));
 	}
-	
+
 	/** ugly but it does the thing well enough */
 	private static long round(long l) {
 		if(l > 10_000_000L) return l - (l % 100_000L);
@@ -1004,10 +1046,10 @@ public class Fluids {
 		if(l > 100_000L) return l - (l % 1_000L);
 		if(l > 10_000L) return l - (l % 100L);
 		if(l > 1_000L) return l - (l % 10L);
-		
+
 		return l;
 	}
-	
+
 	protected static int registerSelf(FluidType fluid) {
 		int id = idMapping.size();
 		idMapping.put(id, fluid);
@@ -1015,31 +1057,31 @@ public class Fluids {
 		nameMapping.put(fluid.getName(), fluid);
 		return id;
 	}
-	
+
 	protected static void register(FluidType fluid, int id) {
 		idMapping.put(id, fluid);
 		registerOrder.add(fluid);
 		nameMapping.put(fluid.getName(), fluid);
 	}
-	
+
 	public static FluidType fromID(int id) {
 		FluidType fluid = idMapping.get(id);
-		
+
 		if(fluid == null)
 			fluid = Fluids.NONE;
-		
+
 		return fluid;
 	}
-	
+
 	public static FluidType fromName(String name) {
 		FluidType fluid = nameMapping.get(name);
-		
+
 		if(fluid == null)
 			fluid = Fluids.NONE;
-		
+
 		return fluid;
 	}
-	
+
 	/** for old worlds with types saved as name, do not use otherwise */
 	public static FluidType fromNameCompat(String name) {
 		if(renameMapping.containsKey(name)) {
@@ -1071,34 +1113,35 @@ public class Fluids {
 	public static FluidType[] getAll() {
 		return getInOrder(false);
 	}
-	
+
 	public static FluidType[] getInNiceOrder() {
 		return getInOrder(true);
 	}
-	
+
 	private static FluidType[] getInOrder(final boolean nice) {
 		FluidType[] all = new FluidType[idMapping.size()];
-		
+
 		for(int i = 0; i < all.length; i++) {
 			FluidType type = nice ? metaOrder.get(i) : registerOrder.get(i);
-			
+
 			if(type == null) {
 				throw new IllegalStateException("A severe error has occoured with NTM's fluid system! Fluid of the ID " + i + " has returned NULL in the registry!");
 			}
-			
+
 			all[i] = type;
 		}
-		
+
 		return all;
 	}
-	
+
 	public static class CD_Canister {
 		public int color;
 		public CD_Canister(int color) { this.color = color; }
 	}
-	
+
 	public static class CD_Gastank {
 		public int bottleColor, labelColor;
 		public CD_Gastank(int color1, int color2) { this.bottleColor = color1; this.labelColor = color2; }
 	}
 }
+
