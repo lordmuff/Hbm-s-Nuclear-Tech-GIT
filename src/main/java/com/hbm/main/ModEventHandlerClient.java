@@ -1075,6 +1075,8 @@ public class ModEventHandlerClient  {
 
 		if(event.phase == Phase.END) {
 
+			EntityPlayer player = mc.thePlayer;
+
 			ItemGunBaseNT.offsetVertical += ItemGunBaseNT.recoilVertical;
 			ItemGunBaseNT.offsetHorizontal += ItemGunBaseNT.recoilHorizontal;
 			player.rotationPitch -= ItemGunBaseNT.recoilVertical;

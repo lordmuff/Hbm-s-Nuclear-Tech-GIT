@@ -46,6 +46,7 @@ public class ModBlocks {
 	}
 
 	//mayo zone!!!
+	public static Block machine_arc_furnace;
 	public static Block block_francium;
 	//mayo zone END!!!
 	public static Block event_tester;
@@ -104,7 +105,6 @@ public class ModBlocks {
 	public static Block ore_fire;
 	public static Block ore_shale;
 
-	//public static Block ore_random;
 	public static Block ore_bedrock;
 	public static Block ore_volcano;
 
@@ -1456,7 +1456,6 @@ public class ModBlocks {
 
 		stone_keyhole = new BlockKeyhole().setBlockName("stone_keyhole").setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":stone_keyhole");
 
-		ore_random = new BlockMotherOfAllOres().setBlockName("ore_random").setCreativeTab(MainRegistry.blockTab);
 		ore_bedrock = new BlockBedrockOreTE().setBlockName("ore_bedrock").setCreativeTab(null);
 		ore_volcano = new BlockFissure().setBlockName("ore_volcano").setLightLevel(1F).setCreativeTab(MainRegistry.blockTab);
 
@@ -2745,9 +2744,6 @@ public class ModBlocks {
 
 		//End Ores
 		GameRegistry.registerBlock(ore_tikite, ore_tikite.getUnlocalizedName());
-
-		//It's a meme you dip
-		GameRegistry.registerBlock(ore_random, ItemRandomOreBlock.class, ore_random.getUnlocalizedName());
 
 		//Bedrock ore
 		register(ore_bedrock);
