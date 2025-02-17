@@ -7,6 +7,7 @@ import static com.hbm.items.special.ItemByproduct.EnumByproduct.*;
 import java.util.Locale;
 
 import com.hbm.lib.RefStrings;
+import com.hbm.util.Compat;
 import com.hbm.util.EnumUtil;
 
 import cpw.mods.fml.relauncher.Side;
@@ -39,7 +40,7 @@ public class ItemBedrockOre extends ItemEnumMulti {
 	    this.overlayIconBismuth = p_94581_1_.registerIcon(RefStrings.MODID + ":ore_overlay_b");
 	    this.overlayIcon = p_94581_1_.registerIcon(RefStrings.MODID + ":ore_overlay");
 	}
-	
+
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -56,30 +57,30 @@ public class ItemBedrockOre extends ItemEnumMulti {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack stack, int pass) {
-		
+
 		if(pass == 1) {
 			EnumBedrockOre ore = EnumUtil.grabEnumSafely(EnumBedrockOre.class, stack.getItemDamage());
 			return ore.color;
 		}
-		
+
 		return 0xffffff;
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		
+
 		EnumBedrockOre ore = EnumUtil.grabEnumSafely(EnumBedrockOre.class, stack.getItemDamage());
 		String oreName = StatCollector.translateToLocal("item.ore." + ore.oreName.toLowerCase(Locale.US));
 		return StatCollector.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".name", oreName);
 	}
-	
+
 	/*
 	 * BYPRODUCT TIER 1: NITRIC ACID - CHEMPLANT GATE / NO GATE
 	 * BYPRODUCT TIER 2: ORGANIC SOLVENT - CRACKING OIL GATE
 	 * BYPRODUCT TIER 3: HIPERF SOLVENT - RBMK GATE
 	 * BYPRODUCT TIER 4: SCHRABIDIC ACID - FUSION GATE?
 	 */
-	
+
 	/*
 	 * [BEDROCK x1] -C-> [CENTRIFUGED x4] -(PER)-> [CLEANED x4] -C-> [SEPARATED x16] -(SUL)-> [PURIFIED x16] -C-> [ENRICHED x64]
 	 *                                                                       \
@@ -105,19 +106,19 @@ public class ItemBedrockOre extends ItemEnumMulti {
 		TUNGSTEN("Tungsten", 0x2C293C,				B_LEAD,		B_IRON,		B_BISMUTH), //ferberite has iron, raspite has lead, russelite is bismuth tungsten
 		GOLD("Gold", 0xF9D738,						B_LEAD,		B_COPPER,	B_BISMUTH), //occurs with copper, lead and rare bismuthide
 		BISMUTH("Bismuth", 0xffffff,				B_LEAD,		B_COPPER,	B_SULFUR), //seems to be similar, based off Aikinite
-		CAD("Cadmium", 0xA85400,					B_SULFUR,	B_CALCIUM,	B_STRONTIUM), //strontium for utility, no other real place for it (and this old BRO shit is approaching nuketh)
-		URANIUM("Uranium", 0x868D82,				B_LEAD,		B_RADIUM,	B_POLONIUM), //uranium and its decay products
+		CAD("Cadmium", 0xA85400,					B_SULFUR,	B_CALCIUM,	B_STRONTIUM), //strontium for utility, no other real place for it (and this old BRO shit is approaching nuketh)			B_SULFUR,	B_CALCIUM,	B_SULFUR), //seems to be similar as well
+		URANIUM((Compat.isModLoaded(Compat.MOD_GT6) ? "Uraninite" : "Uranium"), 0x868D82,				B_LEAD,		B_RADIUM,	B_POLONIUM), //uranium and its decay products
 		THORIUM("Thorium232", 0x7D401D,				B_SILICON,	B_URANIUM,	B_TECHNETIUM), //thorium occours with uraninite and decay products
 		CHLOROCALCITE("Chlorocalcite", 0xCDE036, 	B_LITHIUM, 	B_SILICON, 	B_SILICON), //i guess?
 		FLUORITE("Fluorite", 0xF6F3E7, 				B_SILICON, 	B_LITHIUM, 	B_ALUMINIUM), //different silicon-bearing gemstones, generic lithium, aluminium from sodium compound trailings
 		HEMATITE("Hematite", 0xA37B72,				B_SULFUR,	B_TITANIUM,	B_TITANIUM), //titanium, sulfur from pyrite
 		MALACHITE("Malachite", 0x66B48C,			B_SULFUR,	B_SULFUR,	B_SULFUR), //sulfur sulfur sulfur sulfur
 		NEODYMIUM("Neodymium", 0x8F8F5F,			B_LITHIUM,	B_SILICON,	B_BISMUTH); //yeah whatever
-		
+
 		public String oreName;
 		public int color;
 		public EnumByproduct[] byproducts;
-		
+
 		/** Byproduct count must be consistent with current tier count, use NULL if no byproduct should be generated! */
 		private EnumBedrockOre(String name, int color, EnumByproduct... by) {
 			this.oreName = name;

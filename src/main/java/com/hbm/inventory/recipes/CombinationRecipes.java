@@ -9,6 +9,8 @@ import static com.hbm.inventory.OreDictManager.*;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
+import com.hbm.blocks.BlockEnums.EnumStoneType;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.FluidStack;
 import com.hbm.inventory.OreDictManager.DictFrame;
 import com.hbm.inventory.RecipesCommon.AStack;
@@ -16,7 +18,6 @@ import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.recipes.loader.SerializableRecipe;
-import com.hbm.items.ItemEnums;
 import com.hbm.items.ItemEnums.EnumAshType;
 import com.hbm.items.ItemEnums.EnumBriquetteType;
 import com.hbm.items.ItemEnums.EnumCokeType;
@@ -32,6 +33,7 @@ import com.hbm.util.Tuple.Pair;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class CombinationRecipes extends SerializableRecipe {
 
@@ -52,6 +54,41 @@ public class CombinationRecipes extends SerializableRecipe {
 		recipes.put(CINNABAR.crystal(),							new Pair(new ItemStack(ModItems.sulfur), new FluidStack(Fluids.MERCURY, 100)));
 		recipes.put(new ComparableStack(Items.glowstone_dust),	new Pair(new ItemStack(ModItems.sulfur), new FluidStack(Fluids.CHLORINE, 100)));
 		recipes.put(SODALITE.gem(),								new Pair(new ItemStack(ModItems.powder_sodium), new FluidStack(Fluids.CHLORINE, 100)));
+		recipes.put(new ComparableStack(DictFrame.fromOne(ModBlocks.stone_resource, EnumStoneType.BAUXITE)), new Pair(new ItemStack(ModItems.ingot_aluminium, 2), new FluidStack(Fluids.REDMUD, 250)));
+
+		for(ItemStack GT6bauxiteraw : OreDictionary.getOres("oreRawBauxite")) {
+			recipes.put(new ComparableStack(GT6bauxiteraw), new Pair(new ItemStack(ModItems.ingot_aluminium, 2), new FluidStack(Fluids.REDMUD, 250)));
+		}
+		for(ItemStack GT6bauxiteblock : OreDictionary.getOres("oreDenseBauxite")) {
+			recipes.put(new ComparableStack(GT6bauxiteblock), new Pair(new ItemStack(ModItems.ingot_aluminium, 2), new FluidStack(Fluids.REDMUD, 250)));
+		}
+		for(ItemStack GT6bauxitedust : OreDictionary.getOres("dustBauxite")) {
+			recipes.put(new ComparableStack(GT6bauxitedust), new Pair(new ItemStack(ModItems.ingot_aluminium, 1), new FluidStack(Fluids.REDMUD, 75)));
+		}
+		for(ItemStack GT6bauxiteblockdust : OreDictionary.getOres("blockDustBauxite")) {
+			recipes.put(new ComparableStack(GT6bauxiteblockdust), new Pair(new ItemStack(ModItems.ingot_aluminium, 9), new FluidStack(Fluids.REDMUD, 675)));
+		}
+
+		for(ItemStack GT6raw : OreDictionary.getOres("oreRawIlmenite")) {
+			recipes.put(new ComparableStack(GT6raw), new Pair(new ItemStack(ModItems.ingot_titanium, 2), new FluidStack(Fluids.REDMUD, 500)));
+		}
+		for(ItemStack GT6dust : OreDictionary.getOres("dustIlmenite")) {
+			recipes.put(new ComparableStack(GT6dust), new Pair(new ItemStack(ModItems.ingot_titanium, 1), new FluidStack(Fluids.REDMUD, 150)));
+		}
+		for(ItemStack GT6blockdust : OreDictionary.getOres("blockDustIlmenite")) {
+			recipes.put(new ComparableStack(GT6blockdust), new Pair(new ItemStack(ModItems.ingot_titanium, 9), new FluidStack(Fluids.REDMUD, 2250)));
+		}
+
+		for(ItemStack GT6raw : OreDictionary.getOres("oreRawRutile")) {
+			recipes.put(new ComparableStack(GT6raw), new Pair(new ItemStack(ModItems.ingot_titanium, 4), new FluidStack(Fluids.REDMUD, 1000)));
+		}
+		for(ItemStack GT6dust : OreDictionary.getOres("dustRutile")) {
+			recipes.put(new ComparableStack(GT6dust), new Pair(new ItemStack(ModItems.ingot_titanium, 2), new FluidStack(Fluids.REDMUD, 300)));
+		}
+		for(ItemStack GT6blockdust : OreDictionary.getOres("blockDustRutile")) {
+			recipes.put(new ComparableStack(GT6blockdust), new Pair(new ItemStack(ModItems.ingot_titanium, 18), new FluidStack(Fluids.REDMUD, 4500)));
+		}
+
 		recipes.put(new ComparableStack(DictFrame.fromOne(ModItems.chunk_ore, ItemEnums.EnumChunkType.CRYOLITE)), new Pair(new ItemStack(ModItems.powder_aluminium, 1), new FluidStack(Fluids.LYE, 150)));
 		recipes.put(NA.dust(),									new Pair(null, new FluidStack(Fluids.SODIUM, 100)));
 		recipes.put(LIMESTONE.dust(),							new Pair(new ItemStack(ModItems.powder_calcium), new FluidStack(Fluids.CARBONDIOXIDE, 50)));
