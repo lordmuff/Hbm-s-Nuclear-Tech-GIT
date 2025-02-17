@@ -330,16 +330,6 @@ public class HazardRegistry {
 		HazardSystem.register(waste_cf252, makeData(NEUTRON,wst * cf252));
 		HazardSystem.register(waste_es253, makeData(NEUTRON,wst * es253));
 
-
-		registerOtherFuel(pellet_schrabidium, sa326 * ingot * 5, wst * ingot * 100, true);
-		registerOtherFuel(pellet_hes, saf * ingot * 5, wst * ingot * 75, true);
-		registerOtherFuel(pellet_mes, saf * ingot * 5, wst * ingot * 50, true);
-		registerOtherFuel(pellet_les, saf * ingot * 5, wst * ingot * 20, false);
-		registerOtherFuel(pellet_beryllium, 0F, 10F, false);
-		registerOtherFuel(pellet_neptunium, np237 * ingot * 5, wst * ingot * 10, false);
-		registerOtherFuel(pellet_lead, 0F, 15F, false);
-		registerOtherFuel(pellet_advanced, 0F, 20F, false);
-
 		registerOtherFuel(plate_fuel_u233, u233 * ingot, wst * ingot * 13F, false);
 		registerOtherFuel(plate_fuel_u235, u235 * ingot, wst * ingot * 10F, false);
 		registerOtherFuel(plate_fuel_mox, mox * ingot, wst * ingot * 16F, false);

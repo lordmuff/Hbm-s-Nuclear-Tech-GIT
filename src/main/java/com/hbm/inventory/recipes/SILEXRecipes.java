@@ -1023,16 +1023,19 @@ public static class SILEXRecipe {
 		public EnumWavelengths laserStrength;
 		public List<WeightedRandomObject> outputs = new ArrayList();
 
-		public SILEXRecipe(int fluidProduced, int fluidConsumed, EnumWavelengths laserStrength) {
-			this.fluidProduced = fluidProduced;
-			this.fluidConsumed = fluidConsumed;
-			this.laserStrength = laserStrength;
-		}
+	public SILEXRecipe(int fluidProduced, int fluidConsumed, EnumWavelengths laserStrength) {
+		this.fluidProduced = fluidProduced;
+		this.fluidConsumed = fluidConsumed;
+		this.laserStrength = laserStrength;
+	}
 
-		public SILEXRecipe(int fluidProduced, int fluidConsumed, int laserStrength) {
-			this(fluidProduced, fluidConsumed, EnumWavelengths.values()[laserStrength]);
-		}
+	public SILEXRecipe(int fluidProduced, int fluidConsumed, int laserStrength) {
+		this(fluidProduced, fluidConsumed, EnumWavelengths.values()[laserStrength]);
+	}
 
+	public SILEXRecipe addOut(ItemStack stack, int weight) {
+		return addOut(new WeightedRandomObject(stack, weight));
+	}
 		public SILEXRecipe addOut(WeightedRandomObject entry) {
 			outputs.add(entry);
 			return this;

@@ -2,8 +2,7 @@ package com.hbm.items.tool;
 
 import com.hbm.dim.CelestialBody;
 import com.hbm.items.special.ItemBedrockOreBase;
-import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOre;
-import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOreType;
+import com.hbm.items.special.ItemBedrockOreNew;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toclient.PlayerInformPacket;
 import com.hbm.util.ChatBuilder;
@@ -19,24 +18,24 @@ public class ItemOreDensityScanner extends Item {
 
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int i, boolean bool) {
-		
+
 		if(!(entity instanceof EntityPlayerMP) || world.getTotalWorldTime() % 5 != 0) return;
-		
+
 		EntityPlayerMP player = (EntityPlayerMP) entity;
 
 		CelestialBody body = CelestialBody.getBody(world);
-		
-		for(CelestialBedrockOreType type : CelestialBedrockOre.get(body.getEnum()).types) {
-			double level = ItemBedrockOreBase.getOreLevel(world, (int) Math.floor(player.posX), (int) Math.floor(player.posZ), type);
+
+		for(ItemBedrockOreNew.BedrockOreType type : ItemBedrockOreNew.BedrockOreType.values()) {
+			double level = ItemBedrockOreBase.getOreLevel((int) Math.floor(player.posX), (int) Math.floor(player.posZ), type);
 			PacketDispatcher.wrapper.sendTo(new PlayerInformPacket(
-					ChatBuilder.startTranslation("item.bedrock_ore.type." + type.suffix + ".name")
+				ChatBuilder.startTranslation("item.bedrock_ore.type." + type.suffix + ".name")
 					.next(": " + ((int) (level * 100) / 100D) + " (")
 					.nextTranslation(translateDensity(level)).color(getColor(level))
 					.next(")").color(EnumChatFormatting.RESET).flush(),
-			777 + type.index, 4000), player);
+				777 + type.ordinal(), 4000), player);
 		}
 	}
-	
+
 	public static String translateDensity(double density) {
 		if(density <= 0.1) return "item.ore_density_scanner.verypoor";
 		if(density <= 0.35) return "item.ore_density_scanner.poor";
@@ -46,7 +45,7 @@ public class ItemOreDensityScanner extends Item {
 		if(density >= 1.25) return "item.ore_density_scanner.high";
 		return "item.ore_density_scanner.moderate";
 	}
-	
+
 	public static EnumChatFormatting getColor(double density) {
 		if(density <= 0.1) return EnumChatFormatting.DARK_RED;
 		if(density <= 0.35) return EnumChatFormatting.RED;

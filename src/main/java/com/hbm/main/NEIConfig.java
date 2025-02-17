@@ -14,8 +14,6 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBattery;
 import com.hbm.items.special.ItemBedrockOreNew;
 import com.hbm.items.special.ItemBedrockOreNew.BedrockOreGrade;
-import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOre;
-import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOreType;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT;
 import com.hbm.items.weapon.sedna.factory.GunFactory.EnumAmmoSecret;
 import com.hbm.lib.RefStrings;
@@ -90,13 +88,6 @@ public class NEIConfig implements IConfigureNEI {
 
 		API.hideItem(new ItemStack(ModItems.rocket_custom));
 		API.hideItem(new ItemStack(ModBlocks.orbital_station));
-
-		for(BedrockOreGrade grade : BedrockOreGrade.values()) {
-			if(grade == BedrockOreGrade.BASE) continue;
-			for(CelestialBedrockOreType type : CelestialBedrockOre.getAllTypes()) {
-				API.hideItem(ItemBedrockOreNew.make(grade, type));
-			}
-		}
 
 		API.registerHighlightIdentifier(ModBlocks.plushie, new IHighlightHandler() {
 			@Override public ItemStack identifyHighlight(World world, EntityPlayer player, MovingObjectPosition mop) {

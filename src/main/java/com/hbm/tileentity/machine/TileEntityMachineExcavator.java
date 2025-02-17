@@ -10,7 +10,7 @@ import com.hbm.blocks.network.CraneInserter;
 import com.hbm.config.WorldConfig;
 import com.hbm.entity.item.EntityMovingItem;
 import com.hbm.interfaces.IControlReceiver;
-import com.hbm.inventory.UpgradeManager;
+import com.hbm.inventory.UpgradeManagerNT;
 import com.hbm.inventory.container.ContainerMachineExcavator;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
@@ -20,7 +20,9 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemDrillbit;
 import com.hbm.items.machine.ItemDrillbit.EnumDrillType;
 import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
+import com.hbm.items.special.ItemBedrockOreBase;
 import com.hbm.lib.Library;
+import com.hbm.tileentity.IFluidCopiable;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.IUpgradeInfoProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -71,7 +73,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import static gregapi.data.CS.RNGSUS;
 import static gregapi.data.CS.SIDE_TOP;
 
-public class TileEntityMachineExcavator extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidStandardReceiver, IControlReceiver, IGUIProvider, IUpgradeInfoProvider {
+public class TileEntityMachineExcavator extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidStandardReceiver, IControlReceiver, IGUIProvider, IUpgradeInfoProvider, IFluidCopiable {
 
 	public int rng(int aRange) {return RNGSUS.nextInt(aRange);}
 	public final List<OreDictMaterial> mList = new ArrayListNoNulls<>();
@@ -90,7 +92,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 	protected int ticksWorked = 0;
 	protected int targetDepth = 0; //0 is the first block below null position
 	protected boolean bedrockDrilling = false;
-
+	public UpgradeManagerNT UpgradeManager = new UpgradeManagerNT();
 	public float drillRotation = 0F;
 	public float prevDrillRotation = 0F;
 	public float drillExtension = 0F;
@@ -119,7 +121,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 	public void updateEntity() {
 
 		//needs to happen on client too for GUI rendering
-		UpgradeManager.eval(slots, 2, 3);
+		UpgradeManager.checkSlots(this, slots, 2, 3);
 		int speedLevel = Math.min(UpgradeManager.getLevel(UpgradeType.SPEED), 3);
 		int powerLevel = Math.min(UpgradeManager.getLevel(UpgradeType.POWER), 3);
 
@@ -389,7 +391,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 			stacks.add(stack);
 
 			if(stack.getItem() == ModItems.bedrock_ore_base) {
-				ItemBedrockOreBase.setOreAmount(worldObj, stack, pos.getX(), pos.getZ());
+				ItemBedrockOreBase.setOreAmount(stack, pos.getX(), pos.getZ());
 			}
 
 			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10);
@@ -934,9 +936,11 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 	}
 
 	@Override
-	public int getMaxLevel(UpgradeType type) {
-		if(type == UpgradeType.SPEED) return 3;
-		if(type == UpgradeType.POWER) return 3;
-		return 0;
+	public HashMap<UpgradeType, Integer> getValidUpgrades() {
+		HashMap<UpgradeType, Integer> upgrades = new HashMap<>();
+		upgrades.put(UpgradeType.SPEED, 3);
+		upgrades.put(UpgradeType.POWER, 3);
+		upgrades.put(UpgradeType.EFFECT, 3);
+		return upgrades;
 	}
 }
