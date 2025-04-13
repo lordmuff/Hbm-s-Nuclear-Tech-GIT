@@ -288,7 +288,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 							break;
 						}
 
-						if(shouldIgnoreBlock(b, x, y ,z)) continue;
+							if(shouldIgnoreBlock(b, x, y ,z)) continue;
 
 						ignoreAll = false;
 
@@ -357,26 +357,27 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		else if(oreTile instanceof PrefixBlockTileEntity) {
 			PrefixBlockTileEntity ore = (PrefixBlockTileEntity) oreTile;
 
-			if (oreBlock == CS.BlocksGT.oreBedrock) {
-				OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, oreTile.xCoord, oreTile.yCoord, oreTile.zCoord, SIDE_TOP);
-				OreDictMaterial matstack = (tMaterial.mMaterial);
-				stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
-				if (rng(500) == 0) {
-					// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
-					stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+				if (oreBlock == CS.BlocksGT.oreBedrock) {
+						OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, oreTile.xCoord, oreTile.yCoord, oreTile.zCoord, SIDE_TOP);
+						mList.add(tMaterial.mMaterial); mList.add(tMaterial.mMaterial);
+						OreDictMaterial matstack = (UT.Code.select(mList.get(0), mList.get(0).mByProducts));
+						stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+					if (rng(750) == 0) {
+						// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
+						stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+					}
 				}
-			}
 
-			if (oreBlock == CS.BlocksGT.oreSmallBedrock) {
-				OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj,  oreTile.xCoord, oreTile.yCoord, oreTile.zCoord, SIDE_TOP);
-				OreDictMaterial matstack = (tMaterial.mMaterial);
-				stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
-				if (rng(750) == 0) {
-					// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
-					stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+				if (oreBlock == CS.BlocksGT.oreSmallBedrock) {
+						OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, oreTile.xCoord, oreTile.yCoord, oreTile.zCoord, SIDE_TOP);
+						mList.add(tMaterial.mMaterial);
+						OreDictMaterial matstack = (UT.Code.select(mList.get(0), mList.get(0).mByProducts));
+						stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+					if (rng(500) == 0) {
+						// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
+						stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+					}
 				}
-			}
-
 		}
 
 		else if (oreBlock == IL.HBM_Bedrock_Oil.getBlock()) {
