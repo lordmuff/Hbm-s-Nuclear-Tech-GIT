@@ -16,30 +16,30 @@ import java.io.IOException;
 public class TileEntityConverterRfHe extends TileEntityLoadedBase implements IEnergyProviderMK2, IEnergyHandler, IConfigurableMachine {
 
 	public long power;
-	public final long maxPower = 5_000_000;
-	public static long rfInput = 2;
+	public final long maxPower = 500_000_000;
+	public static long rfInput = 3;
 	public static long heOutput = 5;
 	public static double inputDecay = 0.0;
 
-	public EnergyStorage storage = new EnergyStorage(1_000_000, 1_000_000, 1_000_000);
+	public EnergyStorage storage = new EnergyStorage(100_000_000, 100_000_000, 100_000_000);
 
 	@Override
 	public void updateEntity() {
-		
+
 		if (!worldObj.isRemote) {
-			
+
 			long rfCreated = Math.min(storage.getEnergyStored(), (maxPower - power) * rfInput / heOutput);
 			storage.setEnergyStored((int) (storage.getEnergyStored() - rfCreated));
 			power += rfCreated * heOutput / rfInput;
 			if(storage.getEnergyStored() > 0) storage.extractEnergy((int) Math.ceil(storage.getEnergyStored() * inputDecay), false);
 			if(rfCreated > 0) this.worldObj.markTileEntityChunkModified(this.xCoord, this.yCoord, this.zCoord, this);
-			
+
 			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 				this.tryProvide(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir);
 			}
 		}
 	}
-	
+
 	@Override public boolean canConnectEnergy(ForgeDirection from) { return true; }
 	@Override public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) { return storage.receiveEnergy(maxReceive, simulate); }
 	@Override public int getEnergyStored(ForgeDirection from) { return storage.getEnergyStored(); }
@@ -49,19 +49,19 @@ public class TileEntityConverterRfHe extends TileEntityLoadedBase implements IEn
 	@Override public long getPower() { return power; }
 	@Override public void setPower(long power) { this.power = power; }
 	@Override public long getMaxPower() { return maxPower; }
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		
+
 		this.power = nbt.getLong("power");
 		storage.readFromNBT(nbt);
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		
+
 		nbt.setLong("power", power);
 		storage.writeToNBT(nbt);
 	}

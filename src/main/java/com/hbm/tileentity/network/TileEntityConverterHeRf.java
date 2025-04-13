@@ -22,11 +22,11 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements IEn
 	//Thanks to the great people of Fusion Warfare for helping me with the original implementation of the RF energy API
 	
 	public long power;
-	public final long maxPower = 5_000_000;
+	public final long maxPower = 500_000_000;
 	public static long heInput = 5;
 	public static long rfOutput = 1;
 	public static double inputDecay = 0.0;
-	public EnergyStorage storage = new EnergyStorage(1_000_000, 1_000_000, 1_000_000);
+	public EnergyStorage storage = new EnergyStorage(100_000_000, 100_000_000, 100_000_000);
 
 	@Override
 	public void updateEntity() {
