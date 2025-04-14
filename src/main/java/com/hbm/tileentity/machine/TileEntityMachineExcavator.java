@@ -279,7 +279,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 
 						Block b = worldObj.getBlock(x, y, z);
 
-						if(b == ModBlocks.ore_bedrock || b == CS.BlocksGT.oreBedrock || b == CS.BlocksGT.oreSmallBedrock) {
+						if(b == ModBlocks.ore_bedrock || b == CS.BlocksGT.oreBedrock || b == CS.BlocksGT.oreSmallBedrock || b == IL.HBM_Bedrock_Oil.getBlock()) {
 							combinedHardness = 60 * 20;
 							bedrockOre = new BlockPos(x, y, z);
 							bedrockDrilling = true;
