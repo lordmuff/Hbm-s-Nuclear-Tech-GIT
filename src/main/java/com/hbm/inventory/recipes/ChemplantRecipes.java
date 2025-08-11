@@ -26,6 +26,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+@Deprecated
 public class ChemplantRecipes extends SerializableRecipe {
 
 	/**
@@ -39,7 +40,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 	@Override
 	public void registerDefaults() {
 
-		//6-30, formerly oil cracking, coal liquefaction and solidifciation
+		//6-30, formerly oil cracking, coal liquefaction and solidification
 		registerOtherOil();
 
 		 recipes.add(new ChemRecipe(1004, "URANIUM_BROMIDE", 50)
@@ -246,11 +247,13 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.outputFluids(
 						new FluidStack(Fluids.HYDROGEN, 400),
 						new FluidStack(Fluids.OXYGEN, 400)));
-		recipes.add(new ChemRecipe(59, "XENON", 250, 1)
-				.inputFluids(new FluidStack(Fluids.NONE, 0))
+		recipes.add(new ChemRecipe(59, "XENON", 300)
+				.inputFluids(new FluidStack(Fluids.AIR, 16_000))
 				.outputFluids(new FluidStack(Fluids.XENON, 50)));
 		recipes.add(new ChemRecipe(60, "XENON_OXY", 20)
-				.inputFluids(new FluidStack(Fluids.OXYGEN, 250))
+				.inputFluids(
+						new FluidStack(Fluids.AIR, 8_000),
+						new FluidStack(Fluids.OXYGEN, 250))
 				.outputFluids(new FluidStack(Fluids.XENON, 50)));
 		recipes.add(new ChemRecipe(62, "BALEFIRE", 100)
 				.inputItems(new ComparableStack(ModItems.egg_balefire_shard))
@@ -355,7 +358,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 						new ComparableStack(ModItems.nugget_bismuth, 4))
 				.inputFluids(new FluidStack(Fluids.PEROXIDE, 1000, 5))
 				.outputFluids(new FluidStack(Fluids.DEATH, 1000, 0)));
-		//one bucket of ethanol equals 275_000 TU using the diesel baseline0
+		//one bucket of ethanol equals 275_000 TU using the diesel baseline
 		//the coal baseline is 400_000 per piece
 		//if we assume a burntime of 1.5 ops (300 ticks) for sugar at 100 TU/t that would equal a total of 30_000 TU
 		recipes.add(new ChemRecipe(75, "ETHANOL", 50)
@@ -462,21 +465,21 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.outputItems(
 						new ItemStack(ModItems.nugget_u233, 1),
 						new ItemStack(ModItems.nuclear_waste_tiny, 1)));
-		
+
 		recipes.add(new ChemRecipe(120, "MASS_CAKE", 30)
 				.inputFluids(new FluidStack(Fluids.CMILK, 4000), new FluidStack(Fluids.CREAM, 1000)) // why not regular milk? well its because the refined products allow for higher mass cakes while still needing less milk
 				.inputItems(
 						new ComparableStack(Items.sugar, 8),				// if there is a hole in my logic i will shoot myself
-						new ComparableStack(Items.egg, 4))				//ex: since a cake needs 3 buckets of milk, c-milk is more dense, leading to it being only 4 buckets of condensed milk, thats 1 bucket per cake. 
+						new ComparableStack(Items.egg, 4))				//ex: since a cake needs 3 buckets of milk, c-milk is more dense, leading to it being only 4 buckets of condensed milk, thats 1 bucket per cake.
 				.outputItems(
 						new ItemStack(Items.cake, 4)));
-		
+
 		recipes.add(new ChemRecipe(121, "BUTTER", 50)
-				.inputFluids(new FluidStack(Fluids.EMILK, 1000)) 
+				.inputFluids(new FluidStack(Fluids.EMILK, 1000))
 				.outputItems(
 						new ItemStack(ModItems.butter)));
 		recipes.add(new ChemRecipe(122, "STRAWICE", 50)
-				.inputFluids(new FluidStack(Fluids.CREAM, 1000)) 
+				.inputFluids(new FluidStack(Fluids.CREAM, 1000))
 				.inputItems(
 						new ComparableStack(ModItems.butter, 2),
 						new ComparableStack(Blocks.packed_ice, 1),
@@ -494,11 +497,16 @@ public class ChemplantRecipes extends SerializableRecipe {
 		recipes.add(new ChemRecipe(1002, "CHLOROMETHANE", 50)
 				.inputFluids(new FluidStack(Fluids.GAS, 750), new FluidStack(Fluids.CHLORINE, 250))
 				.outputFluids(new FluidStack(Fluids.CHLOROMETHANE, 1000)));
+		recipes.add(new ChemRecipe(1003, "RUSTY_DECO_STEEL", 100)
+			.inputItems(new ComparableStack(ModBlocks.deco_steel, 8))
+			.inputFluids(new FluidStack(Fluids.WATER, 1000))
+			.outputItems(new ItemStack(ModBlocks.deco_rusty_steel, 8)));
 	}
 
 	public static void registerOtherOil() {
 		recipes.add(new ChemRecipe(31, "BP_BIOGAS", 60)
 				.inputItems(new ComparableStack(ModItems.biomass, 16)) //if we assume 1B BF = 500k and translate that to 2B BG = 500k, then each biomass is worth ~31k or roughly 1.5 furnace operations
+				.inputFluids(new FluidStack(Fluids.AIR, 4000))
 				.outputFluids(new FluidStack(2000, Fluids.BIOGAS)));
 		recipes.add(new ChemRecipe(32, "BP_BIOFUEL", 60)
 				.inputFluids(new FluidStack(1500, Fluids.BIOGAS), new FluidStack(250, Fluids.ETHANOL))
@@ -516,7 +524,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.outputItems(new ItemStack(ModBlocks.asphalt, 16)));
 	}
 
-	public static class ChemRecipe {
+	@Deprecated public static class ChemRecipe {
 
 		public int listing;
 		private int id;

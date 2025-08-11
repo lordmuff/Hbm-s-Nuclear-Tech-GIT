@@ -78,7 +78,7 @@ public class ExplosiveCharge extends BlockDetonatable implements IBomb, IDetConn
 			}
 			if(this == ModBlocks.det_nuke) {
 				world.spawnEntityInWorld(EntityNukeExplosionMK5.statFac(world, BombConfig.missileRadius, x + 0.5, y + 0.5, z + 0.5));
-				EntityNukeTorex.statFac(world, x + 0.5, y + 0.5, z + 0.5, BombConfig.missileRadius);
+				EntityNukeTorex.statFacStandard(world, x + 0.5, y + 0.5, z + 0.5, BombConfig.missileRadius);
 			}
 			if(this == ModBlocks.det_salt) {
 				world.spawnEntityInWorld(EntityNukeExplosionMK5.statFacSalted(world, BombConfig.missileRadius, x + 0.5, y + 0.5, z + 0.5));

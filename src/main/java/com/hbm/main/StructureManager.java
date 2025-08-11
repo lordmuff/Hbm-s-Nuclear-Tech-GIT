@@ -1,7 +1,7 @@
 package com.hbm.main;
 
 import com.hbm.lib.RefStrings;
-import com.hbm.world.gen.NBTStructure;
+import com.hbm.world.gen.nbt.NBTStructure;
 
 import net.minecraft.util.ResourceLocation;
 
@@ -75,6 +75,13 @@ public class StructureManager {
 
 	public static final NBTStructure vertibird = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/vertibird.nbt"));
 	public static final NBTStructure crashed_vertibird = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/crashed-vertibird.nbt"));
+	public static final NBTStructure aircraft_carrier = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/aircraft_carrier.nbt"));
+	public static final NBTStructure oil_rig = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/oil_rig.nbt"));
+	public static final NBTStructure beached_patrol = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/beached_patrol.nbt"));
+	public static final NBTStructure lighthouse = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/lighthouse.nbt"));
+	public static final NBTStructure dish = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dish.nbt"));
+
+	public static final NBTStructure spire = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/spire.nbt"));
 
 	public static final NBTStructure trenches = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/trenches.nbt"));
 
@@ -82,5 +89,7 @@ public class StructureManager {
 	// public static final NBTStructure test_jigsaw = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/test-jigsaw.nbt"));
 	// public static final NBTStructure test_jigsaw_core = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/test-jigsaw-core.nbt"));
 	// public static final NBTStructure test_jigsaw_hall = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/test-jigsaw-hall.nbt"));
+	// public static final NBTStructure test_tandem_core = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/test-tandem-core.nbt"));
+	// public static final NBTStructure test_tandem = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/test-tandem.nbt"));
 
 }

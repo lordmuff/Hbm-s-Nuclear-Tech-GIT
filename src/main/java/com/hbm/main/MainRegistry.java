@@ -14,10 +14,12 @@ import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.entity.mob.siege.SiegeTier;
 import com.hbm.handler.*;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
+import com.hbm.handler.ae2.AE2CompatHandler;
 import com.hbm.handler.imc.IMCBlastFurnace;
 import com.hbm.handler.imc.IMCCentrifuge;
 import com.hbm.handler.imc.IMCCrystallizer;
 import com.hbm.handler.imc.IMCHandler;
+import com.hbm.handler.microblocks.MicroBlocksCompatHandler;
 import com.hbm.handler.neutron.NeutronHandler;
 import com.hbm.handler.pollution.PollutionHandler;
 import com.hbm.handler.radiation.ChunkRadiationManager;
@@ -34,6 +36,7 @@ import com.hbm.items.ItemEnums.EnumAchievementType;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemFertilizer;
 import com.hbm.items.weapon.ItemGenericGrenade;
+import com.hbm.items.weapon.sedna.mods.WeaponModManager;
 import com.hbm.lib.HbmWorld;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
@@ -142,7 +145,7 @@ public class MainRegistry {
 	public static ToolMaterial enumToolMaterialBatNail = EnumHelper.addToolMaterial("BATNAIL", 0, 450, 1.0F, 4F, 25);
 	public static ToolMaterial enumToolMaterialGolfClub = EnumHelper.addToolMaterial("GOLFCLUB", 1, 1000, 2.0F, 5F, 25);
 	public static ToolMaterial enumToolMaterialPipeRusty = EnumHelper.addToolMaterial("PIPERUSTY", 1, 350, 1.5F, 4.5F, 25);
-	public static ToolMaterial enumToolMaterialPipeLead = EnumHelper.addToolMaterial("PIPELEAD", 1, 250, 1.5F, 5.5F, 25);
+	public static ToolMaterial enumToolMaterialPipeLead = EnumHelper.addToolMaterial("PIPELEAD", 1, 250, 1.5F, 3F, 25);
 
 	public static ToolMaterial enumToolMaterialBottleOpener = EnumHelper.addToolMaterial("OPENER", 1, 250, 1.5F, 0.5F, 200);
 	public static ToolMaterial enumToolMaterialSledge = EnumHelper.addToolMaterial("SHIMMERSLEDGE", 1, 0, 25.0F, 26F, 200);
@@ -282,7 +285,7 @@ public class MainRegistry {
 				polaroidID = rand.nextInt(18) + 1;
 		}
 
-		//ShadyUtil.test();
+		ShadyUtil.test();
 		loadConfig(PreEvent);
 		HbmPotion.init();
 
@@ -305,6 +308,7 @@ public class MainRegistry {
 		SiegeTier.registerTiers();
 		HazardRegistry.registerItems();
 		HazardRegistry.registerTrafos();
+		WeaponModManager.init();
 
 		SolarSystem.init();
 
@@ -314,6 +318,7 @@ public class MainRegistry {
 		OreDictManager.registerOres();
 
 		if(WorldConfig.enableCraterBiomes) BiomeGenCraterBase.initDictionary();
+		//BiomeGenNoMansLand.initDictionary();
 
 		aMatSchrab.customCraftingMaterial = ModItems.ingot_schrabidium;
 		aMatHaz.customCraftingMaterial = ModItems.hazmat_cloth;
@@ -678,6 +683,8 @@ public class MainRegistry {
 				}
 			}
 		});
+
+		MicroBlocksCompatHandler.preInit();
 	}
 
 	@EventHandler
@@ -733,9 +740,9 @@ public class MainRegistry {
 		//progression achieves
 		achBurnerPress = new Achievement("achievement.burnerPress", "burnerPress", 0, 0, new ItemStack(ModBlocks.machine_press), null).initIndependentStat().registerStat();
 		achBlastFurnace = new Achievement("achievement.blastFurnace", "blastFurnace", 1, 3, new ItemStack(ModBlocks.machine_difurnace_off), achBurnerPress).initIndependentStat().registerStat();
-		achAssembly = new Achievement("achievement.assembly", "assembly", 3, -1, new ItemStack(ModBlocks.machine_assembler), achBurnerPress).initIndependentStat().registerStat();
+		achAssembly = new Achievement("achievement.assembly", "assembly", 3, -1, new ItemStack(ModBlocks.machine_assembly_machine), achBurnerPress).initIndependentStat().registerStat();
 		achSelenium = new Achievement("achievement.selenium", "selenium", 3, 2, ModItems.ingot_starmetal, achBurnerPress).initIndependentStat().setSpecial().registerStat();
-		achChemplant = new Achievement("achievement.chemplant", "chemplant", 6, -1, new ItemStack(ModBlocks.machine_chemplant), achAssembly).initIndependentStat().registerStat();
+		achChemplant = new Achievement("achievement.chemplant", "chemplant", 6, -1, new ItemStack(ModBlocks.machine_chemical_plant), achAssembly).initIndependentStat().registerStat();
 		achConcrete	= new Achievement("achievement.concrete", "concrete", 6, -4, new ItemStack(ModBlocks.concrete), achChemplant).initIndependentStat().registerStat();
 		achPolymer = new Achievement("achievement.polymer", "polymer", 9, -1, ModItems.ingot_polymer, achChemplant).initIndependentStat().registerStat();
 		achDesh = new Achievement("achievement.desh", "desh", 9, 2, ModItems.ingot_desh, achChemplant).initIndependentStat().registerStat();
@@ -887,7 +894,9 @@ public class MainRegistry {
 
 		FalloutConfigJSON.initialize();
 		ItemPoolConfigJSON.initialize();
+
 		ClientConfig.initConfig();
+		ServerConfig.initConfig();
 
 		TileEntityNukeCustom.registerBombItems();
 		ArmorUtil.register();
@@ -897,10 +906,15 @@ public class MainRegistry {
 		BlockToolConversion.registerRecipes();
 		AchievementHandler.register();
 
+		MobUtil.intializeMobPools();
+
 		proxy.registerMissileItems();
 
 		// Load compatibility for OC.
 		CompatHandler.init();
+
+		// Load compatibility for AE2.
+		AE2CompatHandler.init();
 
 		//expand for the largest entity we have (currently Quackos who is 17.5m in diameter, that's one fat duck)
 		World.MAX_ENTITY_RADIUS = Math.max(World.MAX_ENTITY_RADIUS, 8.75);
@@ -948,11 +962,22 @@ public class MainRegistry {
 		new OreCave(ModBlocks.laythe_silt, 3).setDimension(SpaceConfig.laytheDimension).setThreshold(0.2D).setRangeMult(60).setYLevel(58).setMaxRange(14).setBlockOverride(ModBlocks.laythe_silt).setIgnoreWater(true).setStalagmites(false);
 
 
+		if(WorldConfig.enableSulfurCave) new OreCave(ModBlocks.stone_resource, 0).setThreshold(1.5D).setRangeMult(20).setYLevel(30).setMaxRange(20).withFluid(ModBlocks.sulfuric_acid_block);	//sulfur
+		if(WorldConfig.enableAsbestosCave) new OreCave(ModBlocks.stone_resource, 1).setThreshold(1.75D).setRangeMult(20).setYLevel(25).setMaxRange(20);											//asbestos
+		if(WorldConfig.enableHematite) new OreLayer3D(ModBlocks.stone_resource, EnumStoneType.HEMATITE.ordinal()).setScaleH(0.04D).setScaleV(0.25D).setThreshold(230);
+		if(WorldConfig.enableBauxite) new OreLayer3D(ModBlocks.stone_resource, EnumStoneType.BAUXITE.ordinal()).setScaleH(0.03D).setScaleV(0.15D).setThreshold(300);
+		if(WorldConfig.enableMalachite) new OreLayer3D(ModBlocks.stone_resource, EnumStoneType.MALACHITE.ordinal()).setScaleH(0.1D).setScaleV(0.15D).setThreshold(275);
+		//new BiomeCave().setThreshold(1.5D).setRangeMult(20).setYLevel(40).setMaxRange(20);
+		//new OreLayer(Blocks.coal_ore, 0.2F).setThreshold(4).setRangeMult(3).setYLevel(70);
 		BedrockOre.init();
 
 		Compat.handleRailcraftNonsense();
 		SuicideThreadDump.register();
 		CommandReloadClient.register();
+
+		// to make sure that foreign registered fluids are accounted for,
+		// even when the reload listener is registered too late due to load order
+		Fluids.reloadFluids();
 
 		WorldTypeTeleport.init();
 
@@ -1014,6 +1039,9 @@ public class MainRegistry {
 		event.registerServerCommand(new CommandRadiation());
 		event.registerServerCommand(new CommandStations());
 		event.registerServerCommand(new CommandPacketInfo());
+		event.registerServerCommand(new CommandReloadServer());
+		event.registerServerCommand(new CommandLocate());
+		ArcFurnaceRecipes.registerFurnaceSmeltables(); // because we have to wait for other mods to take their merry ass time to register recipes
 	}
 
 	@EventHandler
@@ -1754,6 +1782,55 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.bobmazon_weapons");
 		ignoreMappings.add("hbm:item.bobmazon_tools");
 		ignoreMappings.add("hbm:item.missile_carrier");
+		ignoreMappings.add("hbm:item.magnet_circular");
+		ignoreMappings.add("hbm:item.mechanism_revolver_1");
+		ignoreMappings.add("hbm:item.mechanism_revolver_2");
+		ignoreMappings.add("hbm:item.mechanism_rifle_1");
+		ignoreMappings.add("hbm:item.mechanism_rifle_2");
+		ignoreMappings.add("hbm:item.mechanism_launcher_1");
+		ignoreMappings.add("hbm:item.mechanism_launcher_2");
+		ignoreMappings.add("hbm:item.mechanism_special");
+		ignoreMappings.add("hbm:tile.transission_hatch");
+		ignoreMappings.add("hbm:tile.machine_nuke_furnace_off");
+		ignoreMappings.add("hbm:tile.machine_nuke_furnace_on");
+		ignoreMappings.add("hbm:item.singularity_micro");
+		ignoreMappings.add("hbm:item.gun_cryocannon");
+		ignoreMappings.add("hbm:item.gun_cryolator_ammo");
+		ignoreMappings.add("hbm:item.canteen_fab");
+		ignoreMappings.add("hbm:item.fabsols_vodka");
+		ignoreMappings.add("hbm:item.test_nuke_igniter");
+		ignoreMappings.add("hbm:item.test_nuke_propellant");
+		ignoreMappings.add("hbm:item.test_nuke_tier1_shielding");
+		ignoreMappings.add("hbm:item.test_nuke_tier2_shielding");
+		ignoreMappings.add("hbm:item.test_nuke_tier1_bullet");
+		ignoreMappings.add("hbm:item.test_nuke_tier2_bullet");
+		ignoreMappings.add("hbm:item.test_nuke_tier1_target");
+		ignoreMappings.add("hbm:item.test_nuke_tier2_target");
+		ignoreMappings.add("hbm:tile.hadron_cooler");
+		ignoreMappings.add("hbm:tile.machine_transformer_20");
+		ignoreMappings.add("hbm:tile.machine_transformer_dnt_20");
+		ignoreMappings.add("hbm:item.levitation_unit");
+		ignoreMappings.add("hbm:item.letter");
+		ignoreMappings.add("hbm:item.chopper_head");
+		ignoreMappings.add("hbm:item.chopper_gun");
+		ignoreMappings.add("hbm:item.chopper_torso");
+		ignoreMappings.add("hbm:item.chopper_tail");
+		ignoreMappings.add("hbm:item.chopper_wing");
+		ignoreMappings.add("hbm:item.chopper_blades");
+		ignoreMappings.add("hbm:item.component_emitter");
+		ignoreMappings.add("hbm:item.component_limiter");
+		ignoreMappings.add("hbm:item.bottle2_korl_special");
+		ignoreMappings.add("hbm:item.bottle2_fritz_special");
+		ignoreMappings.add("hbm:item.journal_pip");
+		ignoreMappings.add("hbm:item.journal_bj");
+		ignoreMappings.add("hbm:item.journal_silver");
+		ignoreMappings.add("hbm:tile.machine_arc_furnace_off");
+		ignoreMappings.add("hbm:tile.machine_arc_furnace_on");
+		ignoreMappings.add("hbm:item.heavy_component");
+		ignoreMappings.add("hbm:item.mp_w_20");
+		ignoreMappings.add("hbm:item.mp_f_20");
+		ignoreMappings.add("hbm:item.mp_thruster_10_kerosene_tec");
+		ignoreMappings.add("hbm:item.mp_thruster_15_kerosene_tec");
 		ignoreMappings.add("hbm:item.alloy_knife");
 
 		/// REMAP ///
@@ -1761,6 +1838,8 @@ public class MainRegistry {
 		remapItems.put("hbm:item.man_explosive8", ModItems.explosive_lenses);
 		remapItems.put("hbm:item.briquette_lignite", ModItems.briquette);
 		remapItems.put("hbm:item.antiknock", ModItems.fuel_additive);
+		remapItems.put("hbm:item.kit_toolbox_empty", ModItems.toolbox);
+		remapItems.put("hbm:item.kit_toolbox", ModItems.legacy_toolbox);
 
 		for(MissingMapping mapping : event.get()) {
 
@@ -1776,7 +1855,6 @@ public class MainRegistry {
 			}
 
 			if(mapping.type == GameRegistry.Type.ITEM) {
-
 				if(remapItems.get(mapping.name) != null) {
 					mapping.remap(remapItems.get(mapping.name));
 					continue;

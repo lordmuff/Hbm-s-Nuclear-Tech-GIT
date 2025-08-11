@@ -4,6 +4,9 @@ import com.hbm.handler.HbmKeybinds.EnumKeybind;
 import com.hbm.render.util.MissilePart;
 import com.hbm.saveddata.TomSaveData;
 import com.hbm.sound.AudioWrapper;
+import com.hbm.util.i18n.I18nServer;
+import com.hbm.util.i18n.ITranslate;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -14,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServerProxy {
+	
+	private static final I18nServer I18N = new I18nServer();
 
 	//sort by estimated time of display. longer lasting ones should be sorted at the top.
 	public static final int ID_DUCK = 0;
@@ -22,12 +27,15 @@ public class ServerProxy {
 	public static final int ID_CABLE = 3;
 	public static final int ID_DRONE = 4;
 	public static final int ID_JETPACK = 5;
-	public static final int ID_HUD = 6;
-	public static final int ID_DETONATOR = 7;
-	public static final int ID_FLUID_ID = 8;
-	public static final int ID_TOOLABILITY = 9;
-	public static final int ID_GUN_MODE = 10;
-	public static final int ID_GAS_HAZARD = 11;
+	public static final int ID_MAGNET = 6;
+	public static final int ID_HUD = 7;
+	public static final int ID_DETONATOR = 8;
+	public static final int ID_FLUID_ID = 9;
+	public static final int ID_FAN_MODE = 10;
+	public static final int ID_TOOLABILITY = 11;
+	public static final int ID_GAS_HAZARD = 12;
+	
+	public ITranslate getI18n() { return I18N; }
 
 	public void registerPreRenderInfo() { }
 	public void registerRenderInfo() { }
@@ -55,11 +63,13 @@ public class ServerProxy {
 	public void displayTooltip(String msg, int id) {
 		displayTooltip(msg, 1000, id);
 	}
+	
 	public void displayTooltip(String msg, int time, int id) { }
 
 	public boolean getIsKeyPressed(EnumKeybind key) {
 		return false;
 	}
+	
 	public EntityPlayer me() {
 		return null;
 	}

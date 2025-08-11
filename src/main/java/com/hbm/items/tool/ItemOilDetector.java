@@ -7,6 +7,7 @@ import com.hbm.main.ServerProxy;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toclient.PlayerInformPacket;
 import com.hbm.util.ChatBuilder;
+import com.hbm.util.i18n.I18nUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
@@ -22,8 +23,8 @@ public class ItemOilDetector extends Item {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean bool) {
-		list.add(I18n.format(this.getUnlocalizedName() + ".desc1"));
-		list.add(I18n.format(this.getUnlocalizedName() + ".desc2"));
+		list.add(I18nUtil.format(this.getUnlocalizedName() + ".desc1"));
+		list.add(I18nUtil.format(this.getUnlocalizedName() + ".desc2"));
 	}
 
 	@Override
@@ -39,14 +40,50 @@ public class ItemOilDetector extends Item {
 
 			if((reserve = searchDirect(world, x, y, z)) != null) {
 				direct = true;
-			} else {
-				reserve = search(world, x, y, z);
-			}
+		for(int i =  y + 15; i > 5; i--)
+			if(world.getBlock(x + 5, i, z) == ModBlocks.ore_oil)
+				oil = true;
+		for(int i =  y + 15; i > 5; i--)
+			if(world.getBlock(x - 5, i, z) == ModBlocks.ore_oil)
+				oil = true;
+		for(int i =  y + 15; i > 5; i--)
+			if(world.getBlock(x, i, z + 5) == ModBlocks.ore_oil)
+				oil = true;
+		for(int i =  y + 15; i > 5; i--)
+			if(world.getBlock(x, i, z - 5) == ModBlocks.ore_oil)
+				oil = true;
 
-			String reserveType = "";
-			if(reserve == ModBlocks.ore_gas)
-				reserveType = "_gas";
-						
+		for(int i =  y + 15; i > 10; i--)
+			if(world.getBlock(x + 10, i, z) == ModBlocks.ore_oil)
+				oil = true;
+		for(int i =  y + 15; i > 10; i--)
+			if(world.getBlock(x - 10, i, z) == ModBlocks.ore_oil)
+				oil = true;
+		for(int i =  y + 15; i > 10; i--)
+			if(world.getBlock(x, i, z + 10) == ModBlocks.ore_oil)
+				oil = true;
+		for(int i =  y + 15; i > 10; i--)
+			if(world.getBlock(x, i, z - 10) == ModBlocks.ore_oil)
+				oil = true;
+
+		for(int i =  y + 15; i > 5; i--)
+			if(world.getBlock(x + 5, i, z + 5) == ModBlocks.ore_oil)
+				oil = true;
+		for(int i =  y + 15; i > 5; i--)
+			if(world.getBlock(x - 5, i, z + 5) == ModBlocks.ore_oil)
+				oil = true;
+		for(int i =  y + 15; i > 5; i--)
+			if(world.getBlock(x + 5, i, z - 5) == ModBlocks.ore_oil)
+				oil = true;
+		for(int i =  y + 15; i > 5; i--)
+			if(world.getBlock(x - 5, i, z - 5) == ModBlocks.ore_oil)
+				oil = true;
+
+		if(direct)
+			oil = true;
+
+		if(!world.isRemote) {
+
 			if(direct) {
 				PacketDispatcher.wrapper.sendTo(new PlayerInformPacket(ChatBuilder.start("").nextTranslation(this.getUnlocalizedName() + ".bullseye" + reserveType).color(EnumChatFormatting.DARK_GREEN).flush(), ServerProxy.ID_DETONATOR), (EntityPlayerMP) player);
 			} else if(reserve != null) {
@@ -57,9 +94,9 @@ public class ItemOilDetector extends Item {
 		}
 
 		world.playSoundAtEntity(player, "hbm:item.techBleep", 1.0F, 1.0F);
-		
+
 		player.swingItem();
-		
+
 		return stack;
 	}
 
@@ -69,12 +106,12 @@ public class ItemOilDetector extends Item {
 		if((reserve = searchDirect(world, x - 5, y, z)) != null) return reserve;
 		if((reserve = searchDirect(world, x, y, z + 5)) != null) return reserve;
 		if((reserve = searchDirect(world, x, y, z - 5)) != null) return reserve;
-		
+
 		if((reserve = searchDirect(world, x + 10, y, z)) != null) return reserve;
 		if((reserve = searchDirect(world, x - 10, y, z)) != null) return reserve;
 		if((reserve = searchDirect(world, x, y, z + 10)) != null) return reserve;
 		if((reserve = searchDirect(world, x, y, z - 10)) != null) return reserve;
-		
+
 		if((reserve = searchDirect(world, x + 5, y, z + 5)) != null) return reserve;
 		if((reserve = searchDirect(world, x - 5, y, z + 5)) != null) return reserve;
 		if((reserve = searchDirect(world, x + 5, y, z - 5)) != null) return reserve;

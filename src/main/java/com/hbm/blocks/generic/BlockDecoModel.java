@@ -1,7 +1,7 @@
 package com.hbm.blocks.generic;
 
 import com.hbm.blocks.BlockEnumMulti;
-import com.hbm.world.gen.INBTTransformable;
+import com.hbm.world.gen.nbt.INBTBlockTransformable;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.material.Material;
@@ -12,7 +12,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockDecoModel extends BlockEnumMulti implements INBTTransformable {
+public class BlockDecoModel extends BlockEnumMulti implements INBTBlockTransformable {
 
 	public BlockDecoModel(Material mat, Class<? extends Enum> theEnum, boolean multiName, boolean multiTexture) {
 		super(mat, theEnum, multiName, multiTexture);
@@ -108,6 +108,7 @@ public class BlockDecoModel extends BlockEnumMulti implements INBTTransformable 
 
 	@Override
 	public int transformMeta(int meta, int coordBaseMode) {
+		if(coordBaseMode == 0) return meta;
 		//N: 0b00, S: 0b01, W: 0b10, E: 0b11
 		int rot = meta >> 2;
 		int type = meta & 3;

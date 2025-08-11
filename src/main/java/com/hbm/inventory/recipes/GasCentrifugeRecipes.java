@@ -12,7 +12,7 @@ import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
-import com.hbm.util.I18nUtil;
+import com.hbm.util.i18n.I18nUtil;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;

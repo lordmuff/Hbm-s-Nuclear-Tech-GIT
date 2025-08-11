@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 
 public class FractionRecipes extends SerializableRecipe {
 
-	private static Map<FluidType, Pair<FluidStack, FluidStack>> fractions = new HashMap();
+	public static Map<FluidType, Pair<FluidStack, FluidStack>> fractions = new HashMap();
 
 	@Override
 	public void registerDefaults() {

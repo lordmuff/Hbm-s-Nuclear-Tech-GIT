@@ -108,19 +108,15 @@ public class ToolRecipes {
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.lead_gavel, 1), new Object[] { "PIP", "IGI", "PIP", 'P', ModItems.pellet_buckshot, 'I', PB.ingot(), 'G', ModItems.wood_gavel });
 
 		//Misc weapons
-		CraftingManager.addRecipeAuto(new ItemStack(ModItems.saw, 1), new Object[] { "IIL", "PP ", 'P', STEEL.plate(), 'I', STEEL.ingot(), 'L', Items.leather });
-		CraftingManager.addRecipeAuto(new ItemStack(ModItems.bat, 1), new Object[] { "P", "P", "S", 'S', STEEL.plate(), 'P', KEY_PLANKS });
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.bat_nail, 1), new Object[] { ModItems.bat, STEEL.plate() });
-		CraftingManager.addRecipeAuto(new ItemStack(ModItems.golf_club, 1), new Object[] { "IP", " P", " P", 'P', STEEL.plate(), 'I', STEEL.ingot() });
-		CraftingManager.addRecipeAuto(new ItemStack(ModItems.pipe_rusty, 1), new Object[] { "II", " I", " I", 'I', IRON.pipe() });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.pipe_lead, 1), new Object[] { "II", " I", " I", 'I', PB.pipe() });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.ullapool_caber, 1), new Object[] { "ITI", " S ", " S ", 'I', IRON.plate(), 'T', Blocks.tnt, 'S', KEY_STICK });
 
 		//Utility
-		CraftingManager.addRecipeAuto(new ItemStack(ModItems.designator, 1), new Object[] { "  A", "#B#", "#B#", '#', IRON.plate(), 'A', STEEL.plate(), 'B', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.BASIC) });
-		CraftingManager.addRecipeAuto(new ItemStack(ModItems.designator_range, 1), new Object[] { "RRD", "PIC", "  P", 'P', STEEL.plate(), 'R', Items.redstone, 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.ADVANCED), 'D', ModItems.designator, 'I', STEEL.ingot() });
+		CraftingManager.addRecipeAuto(new ItemStack(ModItems.rangefinder, 1), new Object[] { "GRC", "  S", 'G', KEY_ANYPANE, 'R', REDSTONE.dust(), 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.BASIC), 'S' ,STEEL.plate() });
+		CraftingManager.addRecipeAuto(new ItemStack(ModItems.designator, 1), new Object[] { "  A", "#B#", "#B#", '#', ANY_PLASTIC.ingot(), 'A', STEEL.plate(), 'B', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.BASIC) });
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.designator_range, 1), new Object[] { ModItems.rangefinder, ModItems.designator, ANY_PLASTIC.ingot() });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.designator_manual, 1), new Object[] { "  A", "#C#", "#B#", '#', ANY_PLASTIC.ingot(), 'A', PB.plate(), 'B', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.ADVANCED), 'C', ModItems.designator });
-		CraftingManager.addRecipeAuto(new ItemStack(ModItems.designator_arty_range, 1), new Object[] { "M", "C", "P", 'M', ModItems.magnetron, 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.ADVANCED), 'P', ANY_PLASTIC.ingot() });
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.designator_arty_range, 1), new Object[] { ModItems.rangefinder, DictFrame.fromOne(ModItems.circuit, EnumCircuitType.ADVANCED), ANY_PLASTIC.ingot() });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.linker, 1), new Object[] { "I I", "ICI", "GGG", 'I', IRON.plate(), 'G', GOLD.plate(), 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.ADVANCED) });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.oil_detector, 1), new Object[] { "W I", "WCI", "PPP", 'W', GOLD.wireFine(), 'I', CU.ingot(), 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.ANALOG), 'P', STEEL.plate528() });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.turret_chip, 1), new Object[] { "WWW", "CPC", "WWW", 'W', GOLD.wireFine(), 'P', ANY_PLASTIC.ingot(), 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.ADVANCED), });
@@ -134,7 +130,6 @@ public class ToolRecipes {
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.defuser, 1), new Object[] { " PS", "P P", " P ", 'P', ANY_PLASTIC.ingot(), 'S', STEEL.plate() });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.coltan_tool, 1), new Object[] { "ACA", "CXC", "ACA", 'A', ALLOY.ingot(), 'C', CINNABAR.crystal(), 'X', Items.compass });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.reacher, 1), new Object[] { "BIB", "P P", "B B", 'B', W.bolt(), 'I', W.ingot(), 'P', ANY_RUBBER.ingot() });
-		CraftingManager.addRecipeAuto(new ItemStack(ModItems.bismuth_tool, 1), new Object[] { "TBT", "SRS", "SCS", 'T', TA.nugget(), 'B', ModItems.nugget_bismuth, 'S', ANY_RESISTANTALLOY.ingot(), 'R', ModItems.reacher, 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.CHIP) });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.sat_designator, 1), new Object[] { "RRD", "PIC", "  P", 'P', GOLD.plate(), 'R', Items.redstone, 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.ADVANCED), 'D', ModItems.sat_chip, 'I', GOLD.ingot() });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.sat_relay), new Object[] { ModItems.sat_chip, ModItems.ducttape, ModItems.radar_linker });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.transporter_linker, 1), new Object[] { "S", "C", "P", 'S', ModItems.crt_display, 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.BASIC), 'P', AL.plate() });
@@ -152,7 +147,7 @@ public class ToolRecipes {
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.power_net_tool), new Object[] { "WRW", " I ", " B ", 'W', MINGRADE.wireFine(), 'R', REDSTONE.dust(), 'I', IRON.ingot(), 'B', ModItems.battery_generic });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.analysis_tool), new Object[] { "  G", " S ", "S  ", 'G', KEY_ANYPANE, 'S', STEEL.ingot() });
 
-		CraftingManager.addRecipeAuto(new ItemStack(ModItems.kit_toolbox_empty), new Object[] { "CCC", "CIC", 'C', CU.plate(), 'I', IRON.ingot() });
+		CraftingManager.addRecipeAuto(new ItemStack(ModItems.toolbox), new Object[] { "CCC", "CIC", 'C', CU.plate(), 'I', IRON.ingot() });
 
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.screwdriver, 1), new Object[] { "  I", " I ", "S  ", 'S', STEEL.ingot(), 'I', IRON.ingot() });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.screwdriver_desh, 1), new Object[] { "  I", " I ", "S  ", 'S', ANY_PLASTIC.ingot(), 'I', DESH.ingot() });
@@ -163,9 +158,14 @@ public class ToolRecipes {
 		CraftingManager.addRecipeAuto(ItemBlowtorch.getEmptyTool(ModItems.blowtorch), new Object[] { "CC ", " I ", "CCC", 'C', CU.plate528(), 'I', IRON.ingot() });
 		CraftingManager.addRecipeAuto(ItemBlowtorch.getEmptyTool(ModItems.acetylene_torch), new Object[] { "SS ", " PS", " T ", 'S', STEEL.plate528(), 'P', ANY_PLASTIC.ingot(), 'T', ModItems.tank_steel });
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.boltgun), new Object[] { "DPS", " RD", " D ", 'D', DURA.ingot(), 'P', DictFrame.fromOne(ModItems.part_generic, EnumPartType.PISTON_PNEUMATIC), 'R', RUBBER.ingot(), 'S', STEEL.shell() });
+		CraftingManager.addRecipeAuto(new ItemStack(ModItems.rebar_placer), new Object[] { "RDR", "DWD", "RDR", 'R', ModBlocks.rebar, 'D', ModItems.ducttape, 'W', ModItems.wrench });
 
 		//Bobmazon
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.bobmazon), new Object[] { Items.book, Items.gold_nugget, Items.string, KEY_BLUE });
+
+		//Blueprints
+		//CraftingManager.addShapelessAuto(new ItemStack(ModItems.blueprint_folder, 1, 0), new Object[] { ModItems.blueprints, ModItems.blueprints, ModItems.blueprints });
+		//CraftingManager.addShapelessAuto(new ItemStack(ModItems.blueprint_folder, 1, 1), new Object[] { ModItems.blueprints, ModItems.blueprints, ModItems.blueprints, ModItems.blueprints, ModItems.blueprints, ModItems.fragment_meteorite });
 
 		//Carts
 		CraftingManager.addRecipeAuto(ItemModMinecart.createCartItem(EnumCartBase.WOOD, EnumMinecart.EMPTY), new Object[] { "P P", "WPW", 'P',KEY_SLAB, 'W', KEY_PLANKS });
@@ -199,14 +199,6 @@ public class ToolRecipes {
 			addShovel(	SA326.ingot(), ModItems.schrabidium_shovel);
 			addHoe(		SA326.ingot(), ModItems.schrabidium_hoe);
 		} else {
-			/*
-			CraftingManager.addRecipeAuto(new ItemStack(ModItems.cobalt_decorated_sword, 1), new Object[] { " I ", " I ", "SBS", 'I', CO.ingot(), 'S', ModItems.ingot_meteorite_forged, 'B', ModItems.cobalt_sword });
-			CraftingManager.addRecipeAuto(new ItemStack(ModItems.cobalt_decorated_pickaxe, 1), new Object[] { "III", " B ", " S ", 'I', CO.ingot(), 'S', ModItems.ingot_meteorite_forged, 'B', ModItems.cobalt_pickaxe });
-			CraftingManager.addRecipeAuto(new ItemStack(ModItems.cobalt_decorated_axe, 1), new Object[] { "II", "IB", " S", 'I', CO.ingot(), 'S', ModItems.ingot_meteorite_forged, 'B', ModItems.cobalt_axe });
-			CraftingManager.addRecipeAuto(new ItemStack(ModItems.cobalt_decorated_shovel, 1), new Object[] { "I", "B", "S", 'I', CO.ingot(), 'S', ModItems.ingot_meteorite_forged, 'B', ModItems.cobalt_shovel });
-			CraftingManager.addRecipeAuto(new ItemStack(ModItems.cobalt_decorated_hoe, 1), new Object[] { "II", " B", " S", 'I', CO.ingot(), 'S', ModItems.ingot_meteorite_forged, 'B', ModItems.cobalt_hoe });
-
-			 */
 			CraftingManager.addRecipeAuto(new ItemStack(ModItems.starmetal_sword, 1), new Object[] { " I ", " B ", "ISI", 'I', STAR.ingot(), 'S', ModItems.ring_starmetal, 'B', ModItems.cobalt_decorated_sword });
 			CraftingManager.addRecipeAuto(new ItemStack(ModItems.starmetal_pickaxe, 1), new Object[] { "ISI", " B ", " I ", 'I', STAR.ingot(), 'S', ModItems.ring_starmetal, 'B', ModItems.cobalt_decorated_pickaxe });
 			CraftingManager.addRecipeAuto(new ItemStack(ModItems.starmetal_axe, 1), new Object[] { "IS", "IB", " I", 'I', STAR.ingot(), 'S', ModItems.ring_starmetal, 'B', ModItems.cobalt_decorated_axe });

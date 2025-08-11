@@ -52,7 +52,13 @@ public class BlockOre extends Block implements IBlockMultiPass, IBlockMulti {
 		if(this == ModBlocks.ore_fire) {
 			return rand != null && rand.nextInt(10) == 0 ? ModItems.ingot_phosphorus : ModItems.powder_fire;
 		}
-		if(this == ModBlocks.ore_rare) {
+		if(this == ModBlocks.block_meteor_cobble) {
+			return ModItems.fragment_meteorite;
+		}
+		if(this == ModBlocks.block_meteor_broken) {
+			return ModItems.fragment_meteorite;
+		}
+		if(this == ModBlocks.ore_rare || this == ModBlocks.ore_gneiss_rare) {
 			return ModItems.chunk_ore;
 		}
 		if(this == ModBlocks.ore_asbestos) {
@@ -115,17 +121,17 @@ public class BlockOre extends Block implements IBlockMultiPass, IBlockMulti {
 		}
 		return 1;
 	}
-	
+
 	public boolean allowFortune = true;
-	
+
 	public BlockOre noFortune() {
 		this.allowFortune = false;
 		return this;
 	}
-	
+
 	@Override
 	public int quantityDroppedWithBonus(int fortune, Random rand) {
-		
+
 		if(fortune > 0 && Item.getItemFromBlock(this) != this.getItemDropped(0, rand, fortune) && allowFortune) {
 			int mult = rand.nextInt(fortune + 2) - 1;
 
@@ -203,7 +209,7 @@ public class BlockOre extends Block implements IBlockMultiPass, IBlockMulti {
 		for(int i = 0; i < getSubCount(); i++)
 			list.add(new ItemStack(item, 1, i));
 	}
-	
+
 	@Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
 		int meta = stack.getItemDamage();
@@ -214,12 +220,12 @@ public class BlockOre extends Block implements IBlockMultiPass, IBlockMulti {
 	public int getPasses() {
 		return 2;
 	}
-	
+
 	@Override
 	public boolean shouldRenderItemMulti() {
 		return true;
 	}
-	
+
 	@Override
 	public int getRenderType() {
 		return IBlockMultiPass.getRenderType();
