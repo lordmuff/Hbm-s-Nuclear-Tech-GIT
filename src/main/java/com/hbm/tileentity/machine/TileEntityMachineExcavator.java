@@ -26,10 +26,7 @@ import com.hbm.tileentity.IFluidCopiable;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.IUpgradeInfoProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-import com.hbm.util.Compat;
-import com.hbm.util.EnumUtil;
-import com.hbm.util.InventoryUtil;
-import com.hbm.util.ItemStackUtil;
+import com.hbm.util.*;
 import com.hbm.util.fauxpointtwelve.BlockPos;
 import com.hbm.util.fauxpointtwelve.DirPos;
 import com.hbm.util.i18n.I18nUtil;
@@ -109,7 +106,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 
 	public TileEntityMachineExcavator() {
 		super(14);
-		this.tank = new FluidTank(Fluids.NONE, 16_000);
+		this.tank = new FluidTank(Fluids.SULFURIC_ACID, 16_000);
 	}
 
 	@Override

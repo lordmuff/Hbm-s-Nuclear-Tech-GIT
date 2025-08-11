@@ -57,8 +57,9 @@ public class ShadyUtil {
 
 	public static final Set<String> hashes = new HashSet();
 	static {
-		hashes.add("41de5c372b0589bbdb80571e87efa95ea9e34b0d74c6005b8eab495b7afd9994");
-		hashes.add("31da6223a100ed348ceb3254ceab67c9cc102cb2a04ac24de0df3ef3479b1036");
+		hashes.add("41de5c372b0589bbdb80571e87efa95ea9e34b0d74c6005b8eab495b7afd9994"); //hiddencat?
+		hashes.add("31da6223a100ed348ceb3254ceab67c9cc102cb2a04ac24de0df3ef3479b1036"); //something else?
+		hashes.add("0b3b5ee0de9c79e80c65df87e38347062a20864d5ec72459fe7b8a3daddd64bf"); //owo
 	}
 
 	public static final int c = 0x3d;
@@ -136,7 +137,7 @@ public class ShadyUtil {
 
 	public static void test() {
 		if(!GeneralConfig.enableDebugMode) return; //only run in debug mode
-		
+
 		//unit test for smooshing
 		MainRegistry.logger.debug(smoosh(smTest1, smTest2, smTest3, smTest4));
 
