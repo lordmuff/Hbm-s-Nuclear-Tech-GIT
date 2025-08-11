@@ -5,28 +5,26 @@ import com.google.common.collect.Multimap;
 import com.hbm.blocks.IStepTickReceiver;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockAshes;
+import com.hbm.blocks.machine.BlockBeamBase;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.MobConfig;
 import com.hbm.config.RadiationConfig;
+import com.hbm.config.ServerConfig;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
-import com.hbm.dim.DebugTeleporter;
+import com.hbm.dim.CelestialTeleporter;
 import com.hbm.dim.WorldGeneratorCelestial;
 import com.hbm.dim.WorldProviderCelestial;
+import com.hbm.dim.WorldProviderEarth;
 import com.hbm.dim.WorldTypeTeleport;
 import com.hbm.dim.orbit.OrbitalStation;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.dim.trait.CBT_Lights;
+import com.hbm.entity.mob.EntityCreeperTainted;
 import com.hbm.entity.mob.EntityCyberCrab;
-import com.hbm.entity.mob.EntityDuck;
 import com.hbm.entity.missile.EntityRideableRocket;
 import com.hbm.entity.missile.EntityRideableRocket.RocketState;
-import com.hbm.entity.mob.EntityCreeperNuclear;
-import com.hbm.entity.mob.EntityQuackos;
-import com.hbm.entity.mob.ai.EntityAIFireGun;
-import com.hbm.entity.mob.EntityCreeperTainted;
-import com.hbm.config.ServerConfig;
-import com.hbm.entity.mob.*;
 import com.hbm.entity.projectile.EntityBulletBaseMK4;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.entity.train.EntityRailCarBase;
@@ -75,9 +73,11 @@ import com.hbm.util.*;
 import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
+import com.hbm.world.PlanetGen;
 import com.hbm.world.generator.TimedGenerator;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.eventhandler.Event.Result;
@@ -92,11 +92,10 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
-import li.cil.oc.api.internal.Server;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockFire;
-import net.minecraft.client.Minecraft;
+import net.minecraft.block.IGrowable;
 import net.minecraft.command.CommandGameRule;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -108,6 +107,8 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityFishHook;
@@ -139,10 +140,6 @@ import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.living.LivingHealEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
@@ -153,8 +150,8 @@ import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.Level;
@@ -178,17 +175,17 @@ public class ModEventHandler {
 
 				if(HTTPHandler.newVersion) {
 					event.player.addChatMessage(
-							new ChatComponentText("New version " + HTTPHandler.versionNumber + " is available! Click ")
+						new ChatComponentText("New version " + HTTPHandler.versionNumber + " is available! Click ")
 							.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW))
 							.appendSibling(new ChatComponentText("[here]")
-									.setChatStyle(new ChatStyle()
-										.setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/JameH2/Hbm-s-Nuclear-Tech-GIT/releases"))
-										.setUnderlined(true)
-										.setColor(EnumChatFormatting.RED)
-									)
+								.setChatStyle(new ChatStyle()
+									.setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/JameH2/Hbm-s-Nuclear-Tech-GIT/releases"))
+									.setUnderlined(true)
+									.setColor(EnumChatFormatting.RED)
 								)
+							)
 							.appendSibling(new ChatComponentText(" to download!").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)))
-							);
+					);
 				}
 			}
 
@@ -353,6 +350,10 @@ public class ModEventHandler {
 			event.entity.dropItem(ModItems.book_of_, 1);
 		}
 
+		if(event.entity.getUniqueID().toString().equals(ShadyUtil.MellowRPG8)) {
+			event.entity.entityDropItem(new ItemStack(ModBlocks.block_meteor, 1 + rand.nextInt(10)), 0.0F);
+		}
+
 		if(event.entity instanceof EntityCreeperTainted && event.source == ModDamageSource.boxcar) {
 
 			for(Object o : event.entity.worldObj.getEntitiesWithinAABB(EntityPlayer.class, event.entity.boundingBox.expand(50, 50, 50))) {
@@ -381,7 +382,7 @@ public class ModEventHandler {
 			}
 
 			if(event.source instanceof EntityDamageSource && ((EntityDamageSource)event.source).getEntity() instanceof EntityPlayer
-					 && !(((EntityDamageSource)event.source).getEntity() instanceof FakePlayer)) {
+				&& !(((EntityDamageSource)event.source).getEntity() instanceof FakePlayer)) {
 
 				if(event.entityLiving instanceof EntitySpider && event.entityLiving.getRNG().nextInt(500) == 0) {
 					event.entityLiving.dropItem(ModItems.spider_milk, 1);
@@ -407,10 +408,10 @@ public class ModEventHandler {
 
 				if(event.entityLiving instanceof EntityVillager&& event.entityLiving.getRNG().nextInt(1) == 0) {
 					event.entityLiving.dropItem(ModItems.flesh, 5);
+				}
 			}
 		}
 	}
-}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onEntityDeathLast(LivingDeathEvent event) {
@@ -567,9 +568,32 @@ public class ModEventHandler {
 	public void onBlockPlaced(PlaceEvent event) {
 		if(event.world.isRemote) return;
 		boolean placeCancelled = ChunkAtmosphereManager.proxy.runEffectsOnBlock(event.world, event.block, event.x, event.y, event.z);
+		if(placeCancelled) return;
 
-		if(SpaceConfig.allowNetherPortals && !placeCancelled && event.world.provider.dimensionId > 1 && event.block instanceof BlockFire) {
+		if(event.block instanceof IGrowable) {
+			ChunkAtmosphereManager.proxy.trackPlant(event.world, event.x, event.y, event.z);
+		}
+
+		if(SpaceConfig.allowNetherPortals && event.world.provider.dimensionId > 1 && event.block instanceof BlockFire) {
 			Blocks.portal.func_150000_e(event.world, event.x, event.y, event.z);
+		}
+
+		// sneaky sneaky space furnace
+		if(event.block == Blocks.furnace) {
+			event.world.setBlock(event.x, event.y, event.z, ModBlocks.furnace, 0, 2);
+			ModBlocks.furnace.onBlockPlacedBy(event.world, event.x, event.y, event.z, event.player, event.itemInHand);
+		}
+
+		if(event.y >= event.world.provider.getHorizon()) {
+			if(event.block.getLightValue() > 10) {
+				CelestialBody body = CelestialBody.getBody(event.world);
+				CBT_Lights lights = body.getTrait(CBT_Lights.class);
+
+				if(lights == null) lights = new CBT_Lights();
+				lights.addLight(event.block, event.x, event.y, event.z);
+
+				body.modifyTraits(lights);
+			}
 		}
 	}
 
@@ -577,12 +601,21 @@ public class ModEventHandler {
 	public void onBucketUse(FillBucketEvent event) {
 		if(event.world.isRemote) return;
 		if(event.target.typeOfHit != MovingObjectType.BLOCK) return;
+		if(!(event.world.provider instanceof WorldProviderCelestial) && !(event.world.provider instanceof WorldProviderOrbit)) return;
 
 		if(event.current != null && event.current.getItem() == Items.water_bucket) {
 			ForgeDirection dir = ForgeDirection.getOrientation(event.target.sideHit);
 			CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(event.world, event.target.blockX + dir.offsetX, event.target.blockY + dir.offsetY, event.target.blockZ + dir.offsetZ);
-			if(!ChunkAtmosphereManager.proxy.hasLiquidPressure(atmosphere)) {
-				event.setCanceled(true);
+			boolean hasLiquidPressure = ChunkAtmosphereManager.proxy.hasLiquidPressure(atmosphere);
+
+			if(Loader.isModLoaded(Compat.MOD_COFH)) {
+				if(!hasLiquidPressure) {
+					event.setCanceled(true);
+				}
+			} else {
+				if(hasLiquidPressure) {
+					event.world.provider.isHellWorld = false;
+				}
 			}
 		}
 	}
@@ -633,8 +666,8 @@ public class ModEventHandler {
 
 					double totalVelocity = Math.sqrt(event.entityLiving.motionX * event.entityLiving.motionX + event.entityLiving.motionZ * event.entityLiving.motionZ);
 					double smoothingAmount = totalVelocity * 0.02;
-						event.entityLiving.motionX -= event.entityLiving.motionX / totalVelocity * smoothingAmount;
-						event.entityLiving.motionZ -= event.entityLiving.motionZ / totalVelocity * smoothingAmount;
+					event.entityLiving.motionX -= event.entityLiving.motionX / totalVelocity * smoothingAmount;
+					event.entityLiving.motionZ -= event.entityLiving.motionZ / totalVelocity * smoothingAmount;
 				}
 			}
 		}
@@ -642,48 +675,35 @@ public class ModEventHandler {
 		boolean isFlying = event.entity instanceof EntityPlayer ? ((EntityPlayer) event.entity).capabilities.isFlying : false;
 
 		if(!isFlying) {
-			if(event.entity.worldObj.provider instanceof WorldProviderOrbit) {
-				float gravity = 0;
+			float gravity = CelestialBody.getGravity(event.entityLiving);
 
-				if(HbmLivingProps.hasGravity(event.entityLiving)) {
-					OrbitalStation station = event.entity.worldObj.isRemote
-						? OrbitalStation.clientStation
-						: OrbitalStation.getStationFromPosition((int)event.entityLiving.posX, (int)event.entityLiving.posZ);
-
-					gravity = AstronomyUtil.STANDARD_GRAVITY * station.gravityMultiplier;
-					if(gravity < 0.2) gravity = 0;
-				}
-
+			if(gravity == 0) {
 				event.entityLiving.motionY /= 0.98F;
 				event.entityLiving.motionY += (AstronomyUtil.STANDARD_GRAVITY / 20F);
-				event.entityLiving.motionY -= (gravity / 20F);
 
-				if(event.entity instanceof EntityPlayer && gravity == 0) {
-					EntityPlayer player = (EntityPlayer) event.entity;
+				if(event.entityLiving instanceof EntityPlayer) {
+					EntityPlayer player = (EntityPlayer) event.entityLiving;
 					if(player.isSneaking()) event.entityLiving.motionY -= 0.01F;
 					if(player.isJumping) event.entityLiving.motionY += 0.01F;
+				} else if(event.entity instanceof EntityChicken) {
+					event.entityLiving.motionY = 0;
 				}
 
-				event.entityLiving.motionY *= gravity == 0 ? 0.91F : 0.98F;
-			} else {
-				CelestialBody body = CelestialBody.getBody(event.entity.worldObj);
-				float gravity = body.getSurfaceGravity() * AstronomyUtil.PLAYER_GRAVITY_MODIFIER;
-
+				event.entityLiving.motionY *= 0.91F;
+			} else if(!event.entityLiving.isInWater() && event.entityLiving.ticksExisted > 20 && (gravity < 1.5F || gravity > 1.7F)) {
 				// If gravity is basically the same as normal, do nothing
 				// Also do nothing in water, or if we've been alive less than a second (so we don't glitch into the ground)
-				if(!event.entityLiving.isInWater() && event.entityLiving.ticksExisted > 20 && (gravity < 1.5F || gravity > 1.7F)) {
 
-					// Minimum gravity to prevent floating bug
-					if(gravity < 0.2F) gravity = 0.2F;
+				// Minimum gravity to prevent floating bug
+				if(gravity < 0.2F) gravity = 0.2F;
 
-					// Undo falling, and add our intended falling speed
-					// On high gravity planets, only apply falling speed when descending, so we can still jump up single blocks
-					if (gravity < 1.5F || event.entityLiving.motionY < 0) {
-						event.entityLiving.motionY /= 0.98F;
-						event.entityLiving.motionY += (AstronomyUtil.STANDARD_GRAVITY / 20F);
-						event.entityLiving.motionY -= (gravity / 20F);
-						event.entityLiving.motionY *= 0.98F;
-					}
+				// Undo falling, and add our intended falling speed
+				// On high gravity planets, only apply falling speed when descending, so we can still jump up single blocks
+				if((gravity < 1.5F || event.entityLiving.motionY < 0) && !(event.entity instanceof EntityChicken)) {
+					event.entityLiving.motionY /= 0.98F;
+					event.entityLiving.motionY += (AstronomyUtil.STANDARD_GRAVITY / 20F);
+					event.entityLiving.motionY -= (gravity / 20F);
+					event.entityLiving.motionY *= 0.98F;
 				}
 			}
 		}
@@ -691,8 +711,8 @@ public class ModEventHandler {
 		ItemStack[] prevArmor = event.entityLiving.previousEquipment;
 
 		if(event.entityLiving instanceof EntityPlayer && prevArmor != null && event.entityLiving.getHeldItem() != null
-				&& (prevArmor[0] == null || prevArmor[0].getItem() != event.entityLiving.getHeldItem().getItem())
-				&& event.entityLiving.getHeldItem().getItem() instanceof IEquipReceiver) {
+			&& (prevArmor[0] == null || prevArmor[0].getItem() != event.entityLiving.getHeldItem().getItem())
+			&& event.entityLiving.getHeldItem().getItem() instanceof IEquipReceiver) {
 
 			((IEquipReceiver)event.entityLiving.getHeldItem().getItem()).onEquip((EntityPlayer) event.entityLiving, event.entityLiving.getHeldItem());
 		}
@@ -753,6 +773,10 @@ public class ModEventHandler {
 		BobmazonOfferFactory.init();
 
 		updateWaterOpacity(event.world);
+
+		if(!(event.world.provider instanceof WorldProviderEarth)) {
+			PlanetGen.overrideOverworldProvider();
+		}
 	}
 
 	@SubscribeEvent
@@ -780,36 +804,49 @@ public class ModEventHandler {
 				}*/
 			}
 
-			int thunder = AuxSavedData.getThunder(event.world);
+			List loadedEntityList = new ArrayList();
+			loadedEntityList.addAll(event.world.loadedEntityList); // ConcurrentModificationException my balls
 
-			if(thunder > 0)
-				AuxSavedData.setThunder(event.world, thunder - 1);
+			int tickrate = Math.max(1, ServerConfig.ITEM_HAZARD_DROP_TICKRATE.get());
 
-			if(!event.world.loadedEntityList.isEmpty()) {
+			for(Object e : loadedEntityList) {
 
-				List<Object> oList = new ArrayList<Object>();
-				oList.addAll(event.world.loadedEntityList);
+				if(e instanceof EntityPlayer) {
+					EntityPlayer player = (EntityPlayer) e;
 
-			if(event.phase == Phase.END) {
+					// handle dismount events, or our players will splat upon leaving tall rockets
+					if(player.ridingEntity != null && player.ridingEntity instanceof EntityRideableRocket && player.isSneaking()) {
+						EntityRideableRocket rocket = (EntityRideableRocket) player.ridingEntity;
+						RocketState state = rocket.getState();
 
-				int tickrate = Math.max(1, ServerConfig.ITEM_HAZARD_DROP_TICKRATE.get());
+						// Prevent leaving a rocket in motion, for safety
+						if(state != RocketState.LANDING && state != RocketState.LAUNCHING && state != RocketState.DOCKING && state != RocketState.UNDOCKING) {
+							boolean inOrbit = event.world.provider instanceof WorldProviderOrbit;
+							Entity ridingEntity = player.ridingEntity;
+							float prevHeight = ridingEntity.height;
 
-				if(event.world.getTotalWorldTime() % tickrate == 0) {
-					List loadedEntityList = new ArrayList();
-					loadedEntityList.addAll(event.world.loadedEntityList); // ConcurrentModificationException my balls
-
-					for(Object e : loadedEntityList) {
-
-						if(e instanceof EntityItem) {
-							EntityItem item = (EntityItem) e;
-							HazardSystem.updateDroppedItem(item);
+							ridingEntity.height = inOrbit ? ridingEntity.height + 1.0F : 1.0F;
+							player.mountEntity(null);
+							if(!inOrbit) player.setPositionAndUpdate(player.posX + 2, player.posY, player.posZ);
+							ridingEntity.height = prevHeight;
 						}
+
+						player.setSneaking(false);
 					}
 				}
 
+				if(event.phase == Phase.END && event.world.getTotalWorldTime() % tickrate == 0) {
+					if(e instanceof EntityItem) {
+						EntityItem item = (EntityItem) e;
+						HazardSystem.updateDroppedItem(item);
+					}
+				}
+			}
+
+			if(event.phase == Phase.END) {
 				EntityRailCarBase.updateMotion(event.world);
 
-				DebugTeleporter.runQueuedTeleport();
+				CelestialTeleporter.runQueuedTeleport();
 
 				// Once per second, run atmospheric chemistry
 				if(event.world.getTotalWorldTime() % 20 == 0) {
@@ -1029,18 +1066,13 @@ public class ModEventHandler {
 
 		EntityLivingBase e = event.entityLiving;
 
-		if(event.entity.worldObj.provider instanceof WorldProviderOrbit) {
-			event.distance = 0;
-		} else {
-			CelestialBody body = CelestialBody.getBody(event.entity.worldObj);
-			float gravity = body.getSurfaceGravity() * AstronomyUtil.PLAYER_GRAVITY_MODIFIER;
+		float gravity = CelestialBody.getGravity(e);
 
-			// Reduce fall damage on low gravity bodies
-			if(gravity < 0.3F) {
-				event.distance = 0;
-			} else if(gravity < 1.5F) {
-				event.distance *= gravity / AstronomyUtil.STANDARD_GRAVITY;
-			}
+		// Reduce fall damage on low gravity bodies
+		if(gravity < 0.3F) {
+			event.distance = 0;
+		} else if(gravity < 1.5F) {
+			event.distance *= gravity / AstronomyUtil.STANDARD_GRAVITY;
 		}
 
 		if(e instanceof EntityPlayer && ((EntityPlayer)e).inventory.armorInventory[2] != null && ((EntityPlayer)e).inventory.armorInventory[2].getItem() instanceof ArmorFSB)
@@ -1262,7 +1294,7 @@ public class ModEventHandler {
 
 				if(rx < minBuffer || rx > maxBuffer || rz < minBuffer || rz > maxBuffer) {
 					OrbitalStation station = OrbitalStation.getStationFromPosition((int)player.posX, (int)player.posZ);
-					DebugTeleporter.teleport(player, station.orbiting.dimensionId, rand.nextInt(SpaceConfig.maxProbeDistance * 2) - SpaceConfig.maxProbeDistance, 800, rand.nextInt(SpaceConfig.maxProbeDistance * 2) - SpaceConfig.maxProbeDistance, false);
+					CelestialTeleporter.teleport(player, station.orbiting.dimensionId, rand.nextInt(SpaceConfig.maxProbeDistance * 2) - SpaceConfig.maxProbeDistance, 800, rand.nextInt(SpaceConfig.maxProbeDistance * 2) - SpaceConfig.maxProbeDistance, false);
 				}
 			}
 
@@ -1329,29 +1361,6 @@ public class ModEventHandler {
 						e.addPotionEffect(new PotionEffect(HbmPotion.radiation.id, 300, 2));
 					}
 				}
-				int slot = new Random().nextInt(35);
-				if(player.experience >=1)
-				{
-				player.addExperience(-1);
-				}
-				//if (!(Library.checkForHazmat((EntityPlayer)player) || Library.checkForRads((EntityPlayer)player)))
-				//{
-				Random rand = new Random();
-
-				//if (Library.checkInventory(player, Items.experience_bottle, slot))
-				//{
-				//	((EntityPlayer)player).inventory.mainInventory[slot] = new ItemStack(Items.glass_bottle);
-				//}
-				if (HbmLivingProps.getRadiation(((EntityPlayer)player))>10 && ((EntityPlayer)player).ticksExisted %20 == 0)
-				{
-					((EntityPlayer)player).getFoodStats().addStats(1, 0);
-					HbmLivingProps.incrementRadiation(((EntityPlayer)player), -10);
-				}
-				if (HbmLivingProps.getRadiation(((EntityPlayer)player))>100 && ((EntityPlayer)player).ticksExisted %20 == 0)
-				{
-					((EntityPlayer)player).heal(1);
-					HbmLivingProps.incrementRadiation(((EntityPlayer)player), -100);
-				}
 
 			}
 
@@ -1400,6 +1409,11 @@ public class ModEventHandler {
 			}
 
 		}
+
+		/*if(!player.worldObj.isRemote && event.phase == TickEvent.Phase.END && player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemGunBaseNT && player instanceof EntityPlayerMP) {
+			HeldItemNBTPacket packet = new HeldItemNBTPacket(player.getHeldItem());
+			PacketDispatcher.wrapper.sendTo(packet, (EntityPlayerMP) player);
+		}*/
 	}
 
 	@SubscribeEvent
@@ -1411,23 +1425,19 @@ public class ModEventHandler {
 		if(celestial.hasLife()) return; // Except on Laythe
 
 		switch(event.type) {
-		case BIG_SHROOM:
-		case CACTUS:
-		case DEAD_BUSH:
-		case LILYPAD:
-		case FLOWERS:
-		case GRASS:
-		case PUMPKIN:
-		case REED:
-		case SHROOM:
-		case TREE:
-			event.setResult(Result.DENY);
-		default:
+			case BIG_SHROOM:
+			case CACTUS:
+			case DEAD_BUSH:
+			case LILYPAD:
+			case FLOWERS:
+			case GRASS:
+			case PUMPKIN:
+			case REED:
+			case SHROOM:
+			case TREE:
+				event.setResult(Result.DENY);
+			default:
 		}
-		/*if(!player.worldObj.isRemote && event.phase == TickEvent.Phase.END && player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemGunBaseNT && player instanceof EntityPlayerMP) {
-			HeldItemNBTPacket packet = new HeldItemNBTPacket(player.getHeldItem());
-			PacketDispatcher.wrapper.sendTo(packet, (EntityPlayerMP) player);
-		}*/
 	}
 
 	@SubscribeEvent
@@ -1443,8 +1453,8 @@ public class ModEventHandler {
 			TileEntityMachineRadarNT.updateSystem();
 			// Networks! All of them!
 			UniNodespace.updateNodespace();
+			// Dyson Swarms
 			CelestialBody.updateSwarms();
-			// bob i beg of you i need fluid nodespace :pray:
 		}
 
 		// There is an issue here somewhere...
@@ -1573,6 +1583,23 @@ public class ModEventHandler {
 			}
 		}
 
+		if(event.y > event.world.provider.getHorizon()) {
+			if(event.block.getLightValue() > 10) {
+				// Placing blocks onto beams counts as a break, but doesn't reduce light count
+				if(!(event.block instanceof BlockBeamBase)) {
+					CelestialBody body = CelestialBody.getBody(event.world);
+					CBT_Lights lights = body.getTrait(CBT_Lights.class);
+
+					if(lights == null) lights = new CBT_Lights();
+					lights.removeLight(event.block, event.x, event.y, event.z);
+
+					body.modifyTraits(lights);
+				}
+
+			}
+		}
+
+
 		if(RadiationConfig.enablePollution && RadiationConfig.enableLeadFromBlocks) {
 			if(!ArmorRegistry.hasProtection(player, 3, HazardClass.PARTICLE_FINE)) {
 
@@ -1619,7 +1646,7 @@ public class ModEventHandler {
 		int z = event.y;
 		World world = event.world;
 
-		if(event.action == Action.RIGHT_CLICK_BLOCK && world.getTileEntity(x, y, z) instanceof TileEntitySign) {
+		if(!world.isRemote && event.action == Action.RIGHT_CLICK_BLOCK && world.getTileEntity(x, y, z) instanceof TileEntitySign) {
 
 			TileEntitySign sign = (TileEntitySign)world.getTileEntity(x, y, z);
 
@@ -1631,7 +1658,7 @@ public class ModEventHandler {
 				entityitem.delayBeforeCanPickup = 1;
 				world.spawnEntityInWorld(entityitem);
 				MainRegistry.logger.log(Level.FATAL, "THE HIDDENCAT HAS BEEN OBTAINED " + " x: " + x + " / "	+ " y: " + + y + " / "+ "z: " + + z + " by " + event.entityPlayer.getDisplayName() + "!");
-				MinecraftServer.getServer().addChatMessage(new ChatComponentText("THE HIDDENCAT HAS BEEN OBTAINED " + " x: " + x + " / "	+ " y: " + + y + " / "+ "z: " + + z + " by " + event.entityPlayer.getDisplayName() + "! GET THEY ASS!"));
+
 			}
 		}
 	}
@@ -1646,30 +1673,6 @@ public class ModEventHandler {
 
 		if(event.action == Action.RIGHT_CLICK_BLOCK && event.world.getBlock(event.x, event.y, event.z) instanceof BlockBed) {
 			WorldProviderCelestial.attemptingSleep = true;
-		}
-	}
-
-	@SubscribeEvent
-	public void onEntityHeal(LivingHealEvent event) {
-		if (!event.entity.worldObj.isRemote) {
-			EntityLivingBase entity = event.entityLiving;
-
-			if (entity.isEntityAlive()) {
-				if(entity instanceof EntityPlayer) {
-					if (((EntityPlayer)entity).getUniqueID().toString().equals(ShadyUtil.Pu_238)) {
-						return;
-					}
-				}
-				double amount = event.amount;
-				double rad = HbmLivingProps.getRadiation(entity);
-				if (rad > 100 && rad < 800) { ///TODO get per entity
-					amount *=1-(((rad-100)*(1-0))/(800-100))+0;
-				}
-				if (rad > 800) { ///TODO get per entity
-					amount = 0;
-					event.setCanceled(true);
-				}
-			}
 		}
 	}
 
@@ -1761,7 +1764,6 @@ public class ModEventHandler {
 			player.inventoryContainer.detectAndSendChanges();
 			event.setCanceled(true);
 		}
-
 	}
 
 	@SubscribeEvent
