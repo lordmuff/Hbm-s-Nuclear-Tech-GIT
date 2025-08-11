@@ -48,6 +48,38 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 		this.length = length;
 	}
 
+	private void radiate(float rads, double range) {
+
+		List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(posX, posY, posZ, posX, posY, posZ).expand(range, range, range));
+
+		for(EntityLivingBase e : entities) {
+
+			Vec3 vec = Vec3.createVectorHelper(e.posX - posX, (e.posY + e.getEyeHeight()) - posY, e.posZ - posZ);
+			double len = vec.lengthVector();
+			vec = vec.normalize();
+
+			float res = 0;
+
+			for(int i = 1; i < len; i++) {
+
+				int ix = (int)Math.floor(posX + vec.xCoord * i);
+				int iy = (int)Math.floor(posY + vec.yCoord * i);
+				int iz = (int)Math.floor(posZ + vec.zCoord * i);
+
+				res += worldObj.getBlock(ix, iy, iz).getExplosionResistance(null);
+			}
+
+			if(res < 1)
+				res = 1;
+
+			float eRads = rads;
+			eRads /= (float)res;
+			eRads /= (float)(len * len);
+
+			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.RAD_BYPASS, eRads);
+		}
+	}
+
 	@Override
 	public void onUpdate() {
 
@@ -105,39 +137,7 @@ public class EntityNukeExplosionMK5 extends EntityExplosionChunkloading {
 			this.setDead();
 		}
 	}
-
-	private void radiate(float rads, double range) {
-
-		List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(posX, posY, posZ, posX, posY, posZ).expand(range, range, range));
-
-		for(EntityLivingBase e : entities) {
-
-			Vec3 vec = Vec3.createVectorHelper(e.posX - posX, (e.posY + e.getEyeHeight()) - posY, e.posZ - posZ);
-			double len = vec.lengthVector();
-			vec = vec.normalize();
-
-			float res = 0;
-
-			for(int i = 1; i < len; i++) {
-
-				int ix = (int)Math.floor(posX + vec.xCoord * i);
-				int iy = (int)Math.floor(posY + vec.yCoord * i);
-				int iz = (int)Math.floor(posZ + vec.zCoord * i);
-
-				res += worldObj.getBlock(ix, iy, iz).getExplosionResistance(null);
-			}
-
-			if(res < 1)
-				res = 1;
-
-			float eRads = rads;
-			eRads /= (float)res;
-			eRads /= (float)(len * len);
-
-			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.RAD_BYPASS, eRads);
-		}
-	}
-
+}
 	@Override
 	public void setDead(){
 		if(explosion != null)

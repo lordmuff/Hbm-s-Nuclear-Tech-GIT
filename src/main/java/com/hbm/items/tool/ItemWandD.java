@@ -37,31 +37,37 @@ public class ItemWandD extends Item {
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 
-		if(world.isRemote)
+		if (world.isRemote)
 			return stack;
 
 		MovingObjectPosition pos = Library.rayTrace(player, 500, 1, false, true, false);
 
-		if(pos != null) {
+		if (pos != null) {
 
 			int y = world.getHeightValue(pos.blockX, pos.blockZ);
 
 			Random rand = new Random();
 
-			if(world.getBlock(pos.blockX, y - 1, pos.blockZ).canPlaceTorchOnTop(world, pos.blockX, y - 1, pos.blockZ)) {
+			if (world.getBlock(pos.blockX, y - 1, pos.blockZ).canPlaceTorchOnTop(world, pos.blockX, y - 1, pos.blockZ)) {
 				world.setBlock(pos.blockX, y, pos.blockZ, ModBlocks.safe, rand.nextInt(4) + 2, 2);
 				TileEntitySafe safe = (TileEntitySafe) world.getTileEntity(pos.blockX, y, pos.blockZ);
 
-				switch(rand.nextInt(10)) {
-					case 0: case 1: case 2: case 3:
+				switch (rand.nextInt(10)) {
+					case 0:
+					case 1:
+					case 2:
+					case 3:
 						safe.setMod(1);
 						WeightedRandomChestContent.generateChestContents(rand, ItemPool.getPool(ItemPoolsSingle.POOL_VAULT_RUSTY), safe, rand.nextInt(4) + 3);
 						break;
-					case 4: case 5: case 6:
+					case 4:
+					case 5:
+					case 6:
 						safe.setMod(0.1);
 						WeightedRandomChestContent.generateChestContents(rand, ItemPool.getPool(ItemPoolsSingle.POOL_VAULT_STANDARD), safe, rand.nextInt(3) + 2);
 						break;
-					case 7: case 8:
+					case 7:
+					case 8:
 						safe.setMod(0.02);
 						WeightedRandomChestContent.generateChestContents(rand, ItemPool.getPool(ItemPoolsSingle.POOL_VAULT_REINFORCED), safe, rand.nextInt(3) + 1);
 						break;
@@ -76,9 +82,11 @@ public class ItemWandD extends Item {
 
 				safe.fillWithSpiders(); // debug
 
-				if(GeneralConfig.enableDebugMode)
-					MainRegistry.logger.info("[Debug] Successfully spawned safe at " + pos.blockX + " " + (y + 1) +" " + pos.blockZ);
+				if (GeneralConfig.enableDebugMode)
+					MainRegistry.logger.info("[Debug] Successfully spawned safe at " + pos.blockX + " " + (y + 1) + " " + pos.blockZ);
 			}
+		}
+
 
 			/*ExplosionVNT vnt = new ExplosionVNT(world, pos.hitVec.xCoord, pos.hitVec.yCoord, pos.hitVec.zCoord, 7);
 			vnt.setBlockAllocator(new BlockAllocatorBulkie(60));
@@ -88,7 +96,7 @@ public class ItemWandD extends Item {
 			vnt.setSFX(new ExplosionEffectStandard());
 			vnt.explode();*/
 
-			//PollutionHandler.incrementPollution(world, pos.blockX, pos.blockY, pos.blockZ, PollutionType.SOOT, 15);
+		//PollutionHandler.incrementPollution(world, pos.blockX, pos.blockY, pos.blockZ, PollutionType.SOOT, 15);
 
 			/*int i = pos.blockX >> 4;
 			int j = pos.blockZ >> 4;
@@ -122,7 +130,7 @@ public class ItemWandD extends Item {
 			TimeAnalyzer.startEndCount("getBlock");
 			world.getBlock(pos.blockX, pos.blockY, pos.blockZ);
 			TimeAnalyzer.endCount();
-			TimeAnalyzer.dump();*/
+			TimeAnalyzer.dump();
 
 			/*TomSaveData data = TomSaveData.forWorld(world);
 			data.impact = true;
@@ -136,9 +144,9 @@ public class ItemWandD extends Item {
 				}
 			}
 
-			WorldUtil.syncBiomeChange(world, pos.blockX, pos.blockZ);*/
+			WorldUtil.syncBiomeChange(world, pos.blockX, pos.blockZ);
 
-			/*EntityTomBlast tom = new EntityTomBlast(world);
+			EntityTomBlast tom = new EntityTomBlast(world);
 			tom.posX = pos.blockX;
 			tom.posY = pos.blockY;
 			tom.posZ = pos.blockZ;
@@ -162,16 +170,16 @@ public class ItemWandD extends Item {
 			IntHashMap map = ReflectionHelper.getPrivateValue(EntityTracker.class, entitytracker, "trackedEntityIDs", "field_72794_c");
 			EntityTrackerEntry entry = (EntityTrackerEntry) map.lookup(torex.getEntityId());
 			entry.blocksDistanceThreshold = 1000;*/
-			//world.spawnEntityInWorld(EntityNukeExplosionMK5.statFacNoRad(world, 150, pos.blockX, pos.blockY + 1, pos.blockZ));
+		//world.spawnEntityInWorld(EntityNukeExplosionMK5.statFacNoRad(world, 150, pos.blockX, pos.blockY + 1, pos.blockZ));
 
-			//DungeonToolbox.generateBedrockOreWithChance(world, world.rand, pos.blockX, pos.blockZ, EnumBedrockOre.TITANIUM,	new FluidStack(Fluids.SULFURIC_ACID, 500), 2, 1);
+		//DungeonToolbox.generateBedrockOreWithChance(world, world.rand, pos.blockX, pos.blockZ, EnumBedrockOre.TITANIUM,	new FluidStack(Fluids.SULFURIC_ACID, 500), 2, 1);
 
 			/*EntitySiegeTunneler tunneler = new EntitySiegeTunneler(world);
 			tunneler.setPosition(pos.blockX, pos.blockY + 1, pos.blockZ);
 			tunneler.onSpawnWithEgg(null);
 			world.spawnEntityInWorld(tunneler);*/
 
-			//CellularDungeonFactory.meteor.generate(world, x, y, z, world.rand);
+		//CellularDungeonFactory.meteor.generate(world, x, y, z, world.rand);
 
 			/*int r = 5;
 
@@ -207,7 +215,7 @@ public class ItemWandD extends Item {
 							player.addChatMessage(new ChatComponentText("Atmosphere: " + entry.fluid.getUnlocalizedName() + " - " + entry.pressure + "bar"));
 							isVacuum = false;
 						// }
-			}*/
+			}
 
 			//new Bunker().generate(world, world.rand, x, y, z);
 
@@ -226,17 +234,17 @@ public class ItemWandD extends Item {
 
     		MainRegistry.proxy.effectNT(data);*/
 
-			//new Spaceship().generate_r0(world, world.rand, x - 4, y, z - 8);
+		//new Spaceship().generate_r0(world, world.rand, x - 4, y, z - 8);
 
-			//new Ruin001().generate_r0(world, world.rand, x, y - 8, z);
+		//new Ruin001().generate_r0(world, world.rand, x, y - 8, z);
 
-			//CellularDungeonFactory.jungle.generate(world, x, y, z, world.rand);
-			//CellularDungeonFactory.jungle.generate(world, x, y + 4, z, world.rand);
-			//CellularDungeonFactory.jungle.generate(world, x, y + 8, z, world.rand);
+		//CellularDungeonFactory.jungle.generate(world, x, y, z, world.rand);
+		//CellularDungeonFactory.jungle.generate(world, x, y + 4, z, world.rand);
+		//CellularDungeonFactory.jungle.generate(world, x, y + 8, z, world.rand);
 
-			//new AncientTomb().build(world, world.rand, x, y + 10, z);
+		//new AncientTomb().build(world, world.rand, x, y + 10, z);
 
-			//new ArcticVault().trySpawn(world, x, y, z);
+		//new ArcticVault().trySpawn(world, x, y, z);
 
 			/*for(int ix = x - 10; ix <= x + 10; ix++) {
 				for(int iz = z - 10; iz <= z + 10; iz++) {
@@ -307,4 +315,9 @@ public class ItemWandD extends Item {
 			}
 		}
 	}
+}
+
+			 */
+        return stack;
+    }
 }
