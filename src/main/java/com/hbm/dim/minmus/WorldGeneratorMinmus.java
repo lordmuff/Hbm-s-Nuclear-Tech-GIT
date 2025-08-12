@@ -10,10 +10,10 @@ import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.main.StructureManager;
-import com.hbm.world.gen.NBTStructure;
-import com.hbm.world.gen.NBTStructure.JigsawPiece;
-import com.hbm.world.gen.NBTStructure.JigsawPool;
-import com.hbm.world.gen.NBTStructure.SpawnCondition;
+import com.hbm.world.gen.nbt.NBTStructure;
+import com.hbm.world.gen.nbt.JigsawPiece;
+import com.hbm.world.gen.nbt.JigsawPool;
+import com.hbm.world.gen.nbt.SpawnCondition;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;

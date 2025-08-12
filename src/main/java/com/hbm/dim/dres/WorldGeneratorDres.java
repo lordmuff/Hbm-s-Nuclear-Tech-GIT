@@ -7,7 +7,7 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
-import com.hbm.world.gen.NBTStructure;
+import com.hbm.world.gen.nbt.NBTStructure;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;

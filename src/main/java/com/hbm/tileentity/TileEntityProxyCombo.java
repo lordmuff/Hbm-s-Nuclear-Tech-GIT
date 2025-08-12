@@ -425,42 +425,6 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 	}
 
 	@Override
-	public long transferFluid(FluidType type, int pressure, long fluid) {
-
-		if(!this.fluid)
-			return fluid;
-
-		if(getTile() instanceof IFluidConnector) {
-			return ((IFluidConnector)getTile()).transferFluid(type, pressure, fluid);
-		}
-		return fluid;
-	}
-
-	@Override
-	public long getDemand(FluidType type, int pressure) {
-
-		if(!this.fluid)
-			return 0;
-
-		if(getTile() instanceof IFluidConnector) {
-			return ((IFluidConnector)getTile()).getDemand(type, pressure);
-		}
-		return 0;
-	}
-
-	@Override
-	public boolean canConnect(FluidType type, ForgeDirection dir) {
-
-		if(!this.fluid)
-			return false;
-
-		if(getTile() instanceof IFluidConnector) {
-			return ((IFluidConnector)getTile()).canConnect(type, dir);
-		}
-		return true;
-	}
-
-	@Override
 	public int getHeatStored() {
 
 		if(!this.heat)

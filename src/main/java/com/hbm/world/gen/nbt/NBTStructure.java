@@ -37,6 +37,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.structure.MapGenStructure;
+import net.minecraft.world.gen.structure.MapGenStructureData;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -488,13 +489,13 @@ public class NBTStructure {
 	public void build(World world, JigsawPiece piece, int x, int y, int z, int coordBaseMode, String structureName) {
 		StructureBoundingBox bb;
 		switch(coordBaseMode) {
-		case 1:
-		case 3:
-			bb = new StructureBoundingBox(x, y, z, x + piece.structure.size.z - 1, y + piece.structure.size.y - 1, z + piece.structure.size.x - 1);
-			break;
-		default:
-			bb = new StructureBoundingBox(x, y, z, x + piece.structure.size.x - 1, y + piece.structure.size.y - 1, z + piece.structure.size.z - 1);
-			break;
+			case 1:
+			case 3:
+				bb = new StructureBoundingBox(x, y, z, x + piece.structure.size.z - 1, y + piece.structure.size.y - 1, z + piece.structure.size.x - 1);
+				break;
+			default:
+				bb = new StructureBoundingBox(x, y, z, x + piece.structure.size.x - 1, y + piece.structure.size.y - 1, z + piece.structure.size.z - 1);
+				break;
 		}
 
 		build(world, piece, bb, bb, coordBaseMode, structureName);
@@ -615,8 +616,6 @@ public class NBTStructure {
 			return blockTable.get(definition.block).getSelectedBlockMetaData();
 		}
 
-		if(coordBaseMode == 0) return definition.meta;
-
 		// Our shit
 		if(definition.block instanceof INBTBlockTransformable) return ((INBTBlockTransformable) definition.block).transformMeta(definition.meta, coordBaseMode);
 
@@ -640,37 +639,37 @@ public class NBTStructure {
 
 	public int rotateX(int x, int z, int coordBaseMode) {
 		switch(coordBaseMode) {
-		case 1: return size.z - 1 - z;
-		case 2: return size.x - 1 - x;
-		case 3: return z;
-		default: return x;
+			case 1: return size.z - 1 - z;
+			case 2: return size.x - 1 - x;
+			case 3: return z;
+			default: return x;
 		}
 	}
 
 	public int rotateZ(int x, int z, int coordBaseMode) {
 		switch(coordBaseMode) {
-		case 1: return x;
-		case 2: return size.z - 1 - z;
-		case 3: return size.x - 1 - x;
-		default: return z;
+			case 1: return x;
+			case 2: return size.z - 1 - z;
+			case 3: return size.x - 1 - x;
+			default: return z;
 		}
 	}
 
 	private int unrotateX(int x, int z, int coordBaseMode) {
 		switch(coordBaseMode) {
-		case 3: return size.x - 1 - z;
-		case 2: return size.x - 1 - x;
-		case 1: return z;
-		default: return x;
+			case 3: return size.x - 1 - z;
+			case 2: return size.x - 1 - x;
+			case 1: return z;
+			default: return x;
 		}
 	}
 
 	private int unrotateZ(int x, int z, int coordBaseMode) {
 		switch(coordBaseMode) {
-		case 3: return x;
-		case 2: return size.z - 1 - z;
-		case 1: return size.z - 1 - x;
-		default: return z;
+			case 3: return x;
+			case 2: return size.z - 1 - z;
+			case 1: return size.z - 1 - x;
+			default: return z;
 		}
 	}
 
@@ -701,151 +700,6 @@ public class NBTStructure {
 		BlockDefinition(Block block, int meta) {
 			this.block = block;
 			this.meta = meta;
-		}
-
-	}
-
-	public static class SpawnCondition {
-
-		// If defined, will spawn a single jigsaw piece, for single nbt structures
-		public JigsawPiece structure;
-
-		// If defined, will spawn in a non-nbt structure component
-		public Function<Quartet<World, Random, Integer, Integer>, StructureStart> start;
-
-		public Predicate<BiomeGenBase> canSpawn;
-		public int spawnWeight = 1;
-
-		// Named jigsaw pools that are referenced within the structure
-		public Map<String, JigsawPool> pools;
-		public String startPool;
-
-		// Maximum amount of components in this structure
-		public int sizeLimit = 8;
-
-		// How far the structure can extend horizontally from the center, maximum of 128
-		// This could be increased by changing GenStructure:range from 8, but this is already quite reasonably large
-		public int rangeLimit = 128;
-
-		// Height modifiers, will clamp height that the start generates at, allowing for:
-		//  * Submarines that must spawn under the ocean surface
-		//  * Bunkers that sit underneath the ground
-		public int minHeight = 1;
-		public int maxHeight = 128;
-
-		// Can this spawn in the current biome
-		protected boolean isValid(BiomeGenBase biome) {
-			if(canSpawn == null) return true;
-			return canSpawn.test(biome);
-		}
-
-		protected JigsawPool getPool(String name) {
-			return pools.get(name).clone();
-		}
-
-		// Builds all of the pools into neat rows and columns, for editing and debugging!
-		// Make sure structure debug is enabled, or it will no-op
-		// Do not use in generation
-		public void buildAll(World world, int x, int y, int z) {
-			if(!StructureConfig.debugStructures) return;
-
-			int padding = 5;
-			int oz = 0;
-
-			for(JigsawPool pool : pools.values()) {
-				int highestWidth = 0;
-				int ox = 0;
-
-				for(Pair<JigsawPiece, Integer> entry : pool.pieces) {
-					NBTStructure structure = entry.key.structure;
-					structure.build(world, x + ox + (structure.size.x / 2), y, z + oz + (structure.size.z / 2));
-
-					ox += structure.size.x + padding;
-					highestWidth = Math.max(highestWidth, structure.size.z);
-				}
-
-				oz += highestWidth + padding;
-			}
-		}
-
-	}
-
-	// A set of pieces with weights
-	public static class JigsawPool {
-
-		// Weighted list of pieces to pick from
-		private List<Pair<JigsawPiece, Integer>> pieces = new ArrayList<>();
-		private int totalWeight = 0;
-
-		public String fallback;
-
-		private boolean isClone;
-
-		public void add(JigsawPiece piece, int weight) {
-			if(weight <= 0) throw new IllegalStateException("JigsawPool spawn weight must be positive!");
-			pieces.add(new Pair<>(piece, weight));
-			totalWeight += weight;
-		}
-
-		protected JigsawPool clone() {
-			JigsawPool clone = new JigsawPool();
-			clone.pieces = new ArrayList<>(this.pieces);
-			clone.fallback = this.fallback;
-			clone.totalWeight = this.totalWeight;
-			clone.isClone = true;
-
-			return clone;
-		}
-
-		// If from a clone, will remove from the pool
-		public JigsawPiece get(Random rand) {
-			if(totalWeight <= 0) return null;
-			int weight = rand.nextInt(totalWeight);
-
-			for(int i = 0; i < pieces.size(); i++) {
-				Pair<JigsawPiece, Integer> pair = pieces.get(i);
-				weight -= pair.getValue();
-
-				if(weight < 0) {
-					if(isClone) {
-						pieces.remove(i);
-						totalWeight -= pair.getValue();
-					}
-
-					return pair.getKey();
-				}
-			}
-
-			return null;
-		}
-
-	}
-
-	// Assigned to a Component to build
-	public static class JigsawPiece {
-
-		public final String name;
-		public final NBTStructure structure;
-
-		// Block modifiers, for randomization and terrain matching
-		public Map<Block, BlockSelector> blockTable;
-		public boolean conformToTerrain = false; // moves every single column to the terrain (digging out trenches, natural formations)
-		public boolean alignToTerrain = false; // aligns this component y-level individually, without moving individual columns (village houses)
-		public int heightOffset = 0; // individual offset for the structure
-
-		public JigsawPiece(String name, NBTStructure structure) {
-			this(name, structure, 0);
-		}
-
-		public JigsawPiece(String name, NBTStructure structure, int heightOffset) {
-			if(name == null) throw new IllegalStateException("A severe error has occurred in NBTStructure! A jigsaw piece has been registered without a valid name!");
-			if(jigsawMap.containsKey(name)) throw new IllegalStateException("A severe error has occurred in NBTStructure! A jigsaw piece has been registered with the same name as another: " + name);
-
-			this.name = name;
-			this.structure = structure;
-			jigsawMap.put(name, this);
-
-			this.heightOffset = heightOffset;
 		}
 
 	}
@@ -909,13 +763,13 @@ public class NBTStructure {
 			this.maxHeight = spawn.maxHeight;
 
 			switch(this.coordBaseMode) {
-			case 1:
-			case 3:
-				this.boundingBox = new StructureBoundingBox(x, y, z, x + piece.structure.size.z - 1, y + piece.structure.size.y - 1, z + piece.structure.size.x - 1);
-				break;
-			default:
-				this.boundingBox = new StructureBoundingBox(x, y, z, x + piece.structure.size.x - 1, y + piece.structure.size.y - 1, z + piece.structure.size.z - 1);
-				break;
+				case 1:
+				case 3:
+					this.boundingBox = new StructureBoundingBox(x, y, z, x + piece.structure.size.z - 1, y + piece.structure.size.y - 1, z + piece.structure.size.x - 1);
+					break;
+				default:
+					this.boundingBox = new StructureBoundingBox(x, y, z, x + piece.structure.size.x - 1, y + piece.structure.size.y - 1, z + piece.structure.size.z - 1);
+					break;
 			}
 		}
 
@@ -1330,12 +1184,48 @@ public class NBTStructure {
 		private SpawnCondition findSpawn(BiomeGenBase biome) {
 			List<SpawnCondition> spawnList = weightedMap.get(worldObj.provider.dimensionId);
 
-			for(int i = 0; i < 64; i++) {
+			for(int i = 0; i < 256; i++) {
 				SpawnCondition spawn = spawnList.get(rand.nextInt(spawnList.size()));
 				if(spawn.isValid(biome)) return spawn;
 			}
 
 			return null;
+		}
+
+		// Thermos was written by fucking monkeys
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@Override
+		public void func_143027_a(World p_143027_1_) {
+			if(this.field_143029_e == null) {
+				this.field_143029_e = (MapGenStructureData)p_143027_1_.perWorldStorage.loadData(MapGenStructureData.class, this.func_143025_a());
+
+				if(this.field_143029_e == null) {
+					this.field_143029_e = new MapGenStructureData(this.func_143025_a());
+					p_143027_1_.perWorldStorage.setData(this.func_143025_a(), this.field_143029_e);
+				} else {
+					NBTTagCompound nbttagcompound = this.field_143029_e.func_143041_a();
+					Iterator iterator = nbttagcompound.func_150296_c().iterator();
+
+					while(iterator.hasNext()) {
+						String s = (String)iterator.next();
+						NBTBase nbtbase = nbttagcompound.getTag(s);
+
+						if(nbtbase.getId() == 10) {
+							NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbtbase;
+
+							if(nbttagcompound1.hasKey("ChunkX") && nbttagcompound1.hasKey("ChunkZ")) {
+								int i = nbttagcompound1.getInteger("ChunkX");
+								int j = nbttagcompound1.getInteger("ChunkZ");
+								StructureStart structurestart = MapGenStructureIO.func_143035_a(nbttagcompound1, p_143027_1_);
+
+								if(structurestart != null) {
+									this.structureMap.put(Long.valueOf(ChunkCoordIntPair.chunkXZ2Int(i, j)), structurestart);
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
 	}

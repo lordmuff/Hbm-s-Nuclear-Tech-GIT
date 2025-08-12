@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import com.hbm.config.RadiationConfig;
 import com.hbm.explosion.ExplosionNukeSmall;
 import com.hbm.hazard.modifier.HazardModifier;
-import com.hbm.util.I18nUtil;
+import com.hbm.util.i18n.I18nUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;

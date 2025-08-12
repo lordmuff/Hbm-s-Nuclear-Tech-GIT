@@ -6,7 +6,7 @@ import java.util.Random;
 
 import com.hbm.config.StructureConfig;
 import com.hbm.main.StructureManager;
-import com.hbm.world.gen.NBTStructure.SpawnCondition;
+import com.hbm.world.gen.nbt.SpawnCondition;
 import com.hbm.world.gen.component.BunkerComponents.BunkerStart;
 import com.hbm.world.gen.component.Component.CrabSpawners;
 import com.hbm.world.gen.component.Component.GreenOoze;

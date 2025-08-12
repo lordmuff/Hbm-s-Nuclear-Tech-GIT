@@ -26,7 +26,7 @@ if(Files.exists(Paths.get("curseforge.properties"))) {
 
 def version_name = version = mod_version
 if(!mod_build_number.isEmpty()) {
-	version_name = mod_version + "_X" + mod_build_number + "_H261"
+	version_name = mod_version + "_X" + mod_build_number
 	version = "[${version_name}]"
 }
 group = "com.hbm" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -79,10 +79,21 @@ repositories {
 	//	name = "CurseForge"
 	//	url = "https://minecraft.curseforge.com/api/maven/"
 	//}
+	maven {
+		name = "Jitpack"
+		url = "https://jitpack.io"
+	}
+	maven {
+		name = "CurseMaven"
+		url = "https://cursemaven.com"
+	}
+	maven {
+		name = "OpenComputers"
+		url = "https://maven.cil.li/"
+	}
 }
 
 dependencies {
-
 	implementation 'codechicken:CodeChickenCore:1.7.10-1.0.4.29:dev'
 	compileOnly 'codechicken:CodeChickenCore:1.7.10-1.0.4.29:src'
 
@@ -96,8 +107,9 @@ dependencies {
 
 	implementation "li.cil.oc:OpenComputers:MC1.7.10-1.5.+:api"
 
-	compile "com.gregoriust.gregtech:gregtech_1.7.10:+:dev"
+	compileOnly "com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta.56-GTNH:dev"
 
+	compile "com.gregoriust.gregtech:gregtech_1.7.10:+:dev"
 }
 
 processResources {
@@ -113,8 +125,8 @@ processResources {
 		filesMatching('mcmod.info') {
 			// replace version, mcversion and credits
 			expand([
-					version: version_name,
-					credits: project.credits
+				version: version_name,
+				credits: project.credits
 			])
 		}
 	}
@@ -127,9 +139,9 @@ processResources {
 
 // add AT to meta-inf
 jar {
-    manifest {
-        attributes 'FMLAT': 'HBM_at.cfg'
-    }
+	manifest {
+		attributes 'FMLAT': 'HBM_at.cfg'
+	}
 }
 
 task version {
@@ -147,9 +159,9 @@ if(Files.exists(Paths.get("curseforge.properties"))) {
 		displayName = "Hbm's Nuclear Tech Mod " + version_name.replace("_", "") + " for Minecraft 1.7.10"
 
 		gameVersions.addAll([
-				"Forge",
-				"Java 8",
-				"Client", "Server"
+			"Forge",
+			"Java 8",
+			"Client", "Server"
 		])
 
 		if (Files.exists(Paths.get("changelog"))) {

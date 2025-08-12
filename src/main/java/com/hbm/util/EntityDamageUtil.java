@@ -30,6 +30,26 @@ public class EntityDamageUtil {
 
 	public static boolean wasAttackedByV1(DamageSource source) {
 
+		if(source instanceof EntityDamageSource) {
+			Entity attacker = ((EntityDamageSource) source).getEntity();
+
+			if(attacker instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) attacker;
+				ItemStack chestplate = player.inventory.armorInventory[2];
+
+				if(chestplate != null && ArmorModHandler.hasMods(chestplate)) {
+					ItemStack[] mods = ArmorModHandler.pryMods(chestplate);
+
+					if(mods[ArmorModHandler.extra] != null && mods[ArmorModHandler.extra].getItem() == ModItems.v1) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
 	/** Shitty hack, if the first attack fails, it retries with damage + previous damage, allowing damage to penetrate */
 	@Deprecated public static boolean attackEntityFromIgnoreIFrame(Entity victim, DamageSource src, float damage) {
 
@@ -64,8 +84,8 @@ public class EntityDamageUtil {
 	private static boolean attackEntityFromNTInternal(EntityLivingBase living, DamageSource source, float amount, boolean ignoreIFrame, boolean allowSpecialCancel, double knockbackMultiplier) {
 		boolean superCompatibility = ServerConfig.DAMAGE_COMPATIBILITY_MODE.get();
 		return superCompatibility
-				? attackEntitySuperCompatibility(living, source, amount, ignoreIFrame, allowSpecialCancel, knockbackMultiplier)
-				: attackEntitySEDNAPatch(living, source, amount, ignoreIFrame, allowSpecialCancel, knockbackMultiplier);
+			? attackEntitySuperCompatibility(living, source, amount, ignoreIFrame, allowSpecialCancel, knockbackMultiplier)
+			: attackEntitySEDNAPatch(living, source, amount, ignoreIFrame, allowSpecialCancel, knockbackMultiplier);
 	}
 
 	/**
