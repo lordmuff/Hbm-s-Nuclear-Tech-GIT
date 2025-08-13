@@ -291,7 +291,7 @@ public class Fluids {
 	private static final HashMap<String, FluidType> nameMapping = new HashMap();
 	/** Inconsequential, only actually used when listing all fluids with niceOrder disabled */
 	protected static final List<FluidType> registerOrder = new ArrayList();
-	protected static final List<FluidType> metaOrder = new ArrayList();
+	public static final List<FluidType> metaOrder = new ArrayList();
 
 	public static final FT_Liquid LIQUID = new FT_Liquid();
 	public static final FT_Viscous VISCOUS = new FT_Viscous();

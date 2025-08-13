@@ -35,6 +35,9 @@ public abstract class SerializableRecipe {
 
 	public static final Gson gson = new Gson();
 	public static List<SerializableRecipe> recipeHandlers = new ArrayList();
+	public static List<IRecipeRegisterListener> additionalListeners = new ArrayList();
+
+	public static Map<String, InputStream> recipeSyncHandlers = new HashMap();
 
 	public boolean modified = false;
 
@@ -135,6 +138,10 @@ public abstract class SerializableRecipe {
 				MainRegistry.logger.info("No recipe file found, registering defaults for " + recipe.getFileName());
 				recipe.registerDefaults();
 
+				for(IRecipeRegisterListener listener : additionalListeners) {
+					listener.onRecipeLoad(recipe.getClass().getSimpleName());
+				}
+
 				File recTemplate = new File(recDir.getAbsolutePath() + File.separatorChar + "_" + recipe.getFileName());
 				MainRegistry.logger.info("Writing template file " + recTemplate.getName());
 				recipe.writeTemplateFile(recTemplate);
@@ -229,7 +236,6 @@ public abstract class SerializableRecipe {
 	}
 
 	public void readRecipeFile(File file) {
-
 		try {
 			readRecipeStream(new FileReader(file));
 		} catch(FileNotFoundException ex) { }

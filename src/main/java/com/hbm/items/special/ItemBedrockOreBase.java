@@ -1,12 +1,16 @@
 package com.hbm.items.special;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
-import com.hbm.items.special.ItemBedrockOreNew.BedrockOreType;
+import com.hbm.dim.CelestialBody;
+import com.hbm.dim.SolarSystem;
+import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOre;
+import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOreType;
 import com.hbm.items.tool.ItemOreDensityScanner;
 import com.hbm.util.i18n.I18nUtil;
-import com.hbm.main.MainRegistry;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -18,6 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 
 public class ItemBedrockOreBase extends Item {
@@ -26,8 +31,8 @@ public class ItemBedrockOreBase extends Item {
 		this.setHasSubtypes(true);
 	}
 
-	public static double getOreAmount(ItemStack stack, BedrockOreType type) {
-		if(!stack.hasTagCompound()) return 0;
+	public static double getOreAmount(ItemStack stack, CelestialBedrockOreType type) {
+		if(!stack.hasTagCompound()) return 1;
 		NBTTagCompound data = stack.getTagCompound();
 		return data.getDouble(type.suffix);
 	}
@@ -73,7 +78,10 @@ public class ItemBedrockOreBase extends Item {
 		return MathHelper.clamp_double(Math.abs(level.func_151601_a(x * scale, z * scale) * ore.func_151601_a(x * scale, z * scale)) * 0.05, 0, 2);
 	}
 
-		return MathHelper.clamp_double(Math.abs(level.func_151601_a(x * scale, z * scale) * ores[type.ordinal()].func_151601_a(x * scale, z * scale)) * 0.05, 0, 2);
+	private static Map<Long, NoiseGeneratorPerlin> generators = new HashMap<>();
+
+	private static NoiseGeneratorPerlin getGenerator(long seed) {
+		return generators.computeIfAbsent(seed, key -> new NoiseGeneratorPerlin(new Random(seed), 4));
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

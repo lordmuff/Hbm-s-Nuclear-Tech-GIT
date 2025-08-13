@@ -461,7 +461,6 @@ public class AnvilRecipes extends SerializableRecipe {
 						new OreDictStack(Fluids.SOURGAS.getDict(1_000), 8),
 				},
 				new AnvilOutput(new ItemStack(ModBlocks.machine_deuterium_tower))).setTier(4));
-<<<<<<<<< Temporary merge branch 1
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
 						new OreDictStack(STEEL.shell(), 6),
@@ -480,9 +479,6 @@ public class AnvilRecipes extends SerializableRecipe {
 				},
 				new AnvilOutput(new ItemStack(ModBlocks.machine_atmo_vent))).setTier(2));
 
-=========
-
->>>>>>>>> Temporary merge branch 2
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
 						new OreDictStack(ANY_CONCRETE.any(), 2),

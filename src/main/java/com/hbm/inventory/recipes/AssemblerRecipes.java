@@ -297,7 +297,7 @@ import net.minecraft.item.ItemStack;
 				new ComparableStack(ModItems.thruster_small, 3),
 				new ComparableStack(ModItems.circuit, 3, EnumCircuitType.CONTROLLER_ADVANCED),
 				new ComparableStack(ModItems.part_generic, 12, EnumPartType.LDE)
-			},600, ModItems.journal_bj);
+			},600);
 
 		makeRecipe(new ComparableStack(ModItems.sat_base, 1), new AStack[] {
 				new OreDictStack(RUBBER.ingot(), 12),
