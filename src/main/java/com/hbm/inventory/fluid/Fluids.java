@@ -233,8 +233,6 @@ public class Fluids {
 	public static FluidType DICYANOACETYLENE;//DICYANOACETYLENE
 	public static FluidType FULLERENE;
 	public static FluidType MAGMA;
-	public static FluidType MORKINE;
-	public static FluidType MSLURRY;
 	public static FluidType PHEROMONE;
 	public static FluidType PHEROMONE_M;
 	public static FluidType SODIUM_ALUMINATE;
@@ -459,6 +457,7 @@ public class Fluids {
 		CCL =					new FluidType("CCL",				0x0C3B2F, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, new FT_Corrosive(10));
 		COLLOID =				new FluidType("COLLOID",			0x787878, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
 		EVEAIR =				new FluidType("EVEAIR",				0xDCABF8, 4, 0, 0, EnumSymbol.OXIDIZER).addTraits(GASEOUS, new FT_Corrosive(25), new FT_Poison(true, 1));
+		DUNAAIR =				new FluidType("DUNAAIR",		0xD4704E, 3, 0, 0, EnumSymbol.ASPHYXIANT).addTraits(GASEOUS, new FT_Polluting().release(PollutionType.POISON, POISON_MINOR));
 		KMnO4 =					new FluidType("KMnO4",				0x560046, 4, 0, 0, EnumSymbol.ACID).addTraits(LIQUID, new FT_Corrosive(15), new FT_Poison(true, 1));
 		CHLOROMETHANE =			new FluidType("CHLOROMETHANE",		0xD3CF9E, 2, 4, 0, EnumSymbol.NONE).addTraits(GASEOUS, new FT_Corrosive(15)).addTraits(new FT_Flammable(50_000));
 		METHANOL =				new FluidType("METHANOL",			0x88739F, 3, 4, 0, EnumSymbol.NONE).addTraits(GASEOUS).addTraits(new FT_Flammable(400_000)).addTraits(new FT_Combustible(FuelGrade.HIGH, 600_000), LIQUID);	//ethanol but more etha per nol
@@ -549,7 +548,7 @@ public class Fluids {
 		TCRUDE =			new FluidType("TCRUDE",		0x051914, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		CBENZ =			new FluidType("CBENZ",		0x91C6BB, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		HALOLIGHT =			new FluidType("HALOLIGHT",		0xB6F9CF, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
-
+		SUPERHEATED_HYDROGEN =	new FluidType("SUPERHEATED_HYDROGEN",		0xE39393, 0, 0, 0, EnumSymbol.NONE).setTemp(2200).addTraits(GASEOUS, NOCON, NOID, new FT_Rocket(900, 700_000));
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
 
@@ -742,7 +741,6 @@ public class Fluids {
 		metaOrder.add(SODIUM_ALUMINATE);
 		metaOrder.add(BAUXITE_SOLUTION);
 		metaOrder.add(ALUMINA);
-		metaOrder.add(CONCRETE);
 		//solutions and working fluids
 		metaOrder.add(FRACKSOL);
 		metaOrder.add(LYE);
