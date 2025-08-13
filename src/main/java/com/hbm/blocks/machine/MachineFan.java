@@ -85,9 +85,9 @@ public class MachineFan extends BlockContainer implements IToolable, ITooltipPro
 
 		public float spin;
 		public float prevSpin;
-		public boolean falloff = true;
 
 		private boolean hasAtmosphere;
+		public boolean falloff = true;
 
 		@Override
 		public void updateEntity() {
@@ -96,15 +96,8 @@ public class MachineFan extends BlockContainer implements IToolable, ITooltipPro
 
 			if(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
 				if(!worldObj.isRemote) {
-					boolean prevHasAtmosphere = hasAtmosphere;
-
 					CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(worldObj, xCoord, yCoord, zCoord);
-					hasAtmosphere = atmosphere != null&& atmosphere.getPressure() > 0.01D;
-
-					// update when changing and every 3 seconds
-					if(prevHasAtmosphere != hasAtmosphere || worldObj.getTotalWorldTime() % 60 == 0) {
-						PacketDispatcher.wrapper.sendToAllAround(new BufPacket(xCoord, yCoord, zCoord, this), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 150));
-					}
+					hasAtmosphere = atmosphere != null && atmosphere.getPressure() > 0.01D;
 				}
 
 				if(hasAtmosphere) {
@@ -136,9 +129,16 @@ public class MachineFan extends BlockContainer implements IToolable, ITooltipPro
 
 					for(Entity e : affected) {
 
-						e.motionX += dir.offsetX * push;
-						e.motionY += dir.offsetY * push;
-						e.motionZ += dir.offsetZ * push;
+						double coeff = push;
+
+						if(falloff) {
+							double dist = e.getDistance(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
+							coeff *= 1.5 * (1 - dist / range / 2);
+						}
+
+						e.motionX += dir.offsetX * coeff;
+						e.motionY += dir.offsetY * coeff;
+						e.motionZ += dir.offsetZ * coeff;
 					}
 
 					if(worldObj.isRemote && worldObj.rand.nextInt(30) == 0) {
@@ -180,11 +180,13 @@ public class MachineFan extends BlockContainer implements IToolable, ITooltipPro
 
 		@Override
 		public void serialize(ByteBuf buf) {
+			buf.writeBoolean(falloff);
 			buf.writeBoolean(hasAtmosphere);
 		}
 
 		@Override
 		public void deserialize(ByteBuf buf) {
+			falloff = buf.readBoolean();
 			hasAtmosphere = buf.readBoolean();
 		}
 	}
@@ -194,15 +196,15 @@ public class MachineFan extends BlockContainer implements IToolable, ITooltipPro
 		if(tool == ToolType.SCREWDRIVER) {
 			int meta = world.getBlockMetadata(x, y, z);
 
-		if(meta == 0) world.setBlockMetadataWithNotify(x, y, z, 1, 3);
-		if(meta == 1) world.setBlockMetadataWithNotify(x, y, z, 0, 3);
-		if(meta == 2) world.setBlockMetadataWithNotify(x, y, z, 3, 3);
-		if(meta == 3) world.setBlockMetadataWithNotify(x, y, z, 2, 3);
-		if(meta == 4) world.setBlockMetadataWithNotify(x, y, z, 5, 3);
-		if(meta == 5) world.setBlockMetadataWithNotify(x, y, z, 4, 3);
+			if(meta == 0) world.setBlockMetadataWithNotify(x, y, z, 1, 3);
+			if(meta == 1) world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+			if(meta == 2) world.setBlockMetadataWithNotify(x, y, z, 3, 3);
+			if(meta == 3) world.setBlockMetadataWithNotify(x, y, z, 2, 3);
+			if(meta == 4) world.setBlockMetadataWithNotify(x, y, z, 5, 3);
+			if(meta == 5) world.setBlockMetadataWithNotify(x, y, z, 4, 3);
 
-		return true;
-	}
+			return true;
+		}
 
 		if(tool == ToolType.HAND_DRILL) {
 			TileEntityFan tile = (TileEntityFan) world.getTileEntity(x, y, z);

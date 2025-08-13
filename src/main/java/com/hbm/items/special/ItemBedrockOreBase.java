@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.hbm.items.special.ItemBedrockOreNew.BedrockOreType;
 import com.hbm.items.tool.ItemOreDensityScanner;
+import com.hbm.util.i18n.I18nUtil;
 import com.hbm.main.MainRegistry;
 
 import cpw.mods.fml.relauncher.Side;
@@ -21,13 +22,8 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 
 public class ItemBedrockOreBase extends Item {
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
-		ItemStack ore = new ItemStack(item);
-		EntityPlayer player = MainRegistry.proxy.me();
-		if(player != null) setOreAmount(ore, (int) Math.floor(player.posX), (int) Math.floor(player.posZ));
-		list.add(ore);
+	public ItemBedrockOreBase() {
+		this.setHasSubtypes(true);
 	}
 
 	public static double getOreAmount(ItemStack stack, BedrockOreType type) {
@@ -36,35 +32,59 @@ public class ItemBedrockOreBase extends Item {
 		return data.getDouble(type.suffix);
 	}
 
-	public static void setOreAmount(ItemStack stack, int x, int z) {
+	public static SolarSystem.Body getOreBody(ItemStack stack) {
+		return SolarSystem.Body.values()[stack.getItemDamage()];
+	}
+
+	public static void setOreAmount(World world, ItemStack stack, int x, int z) {
 		if(!stack.hasTagCompound()) stack.stackTagCompound = new NBTTagCompound();
 		NBTTagCompound data = stack.getTagCompound();
 
-		for(BedrockOreType type : BedrockOreType.values()) {
-			data.setDouble(type.suffix, getOreLevel(x, z, type));
+		SolarSystem.Body body = CelestialBody.getEnum(world);
+
+		stack.setItemDamage(body.ordinal());
+
+		for(CelestialBedrockOreType type : CelestialBedrockOre.get(body).types) {
+			data.setDouble(type.suffix, getOreLevel(world, x, z, type));
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
+		SolarSystem.Body body = getOreBody(stack);
+		list.add("Mined on: " + I18nUtil.resolveKey("body." + body.name));
 
-		for(BedrockOreType type : BedrockOreType.values()) {
-			double amount = this.getOreAmount(stack, type);
+		for(CelestialBedrockOreType type : CelestialBedrockOre.get(body).types) {
+			double amount = getOreAmount(stack, type);
 			String typeName = StatCollector.translateToLocalFormatted("item.bedrock_ore.type." + type.suffix + ".name");
 			list.add(typeName + ": " + ((int) (amount * 100)) / 100D + " (" + ItemOreDensityScanner.getColor(amount) + StatCollector.translateToLocalFormatted(ItemOreDensityScanner.translateDensity(amount)) + EnumChatFormatting.GRAY + ")");
 		}
 	}
 
-	private static NoiseGeneratorPerlin[] ores = new NoiseGeneratorPerlin[BedrockOreType.values().length];
-	private static NoiseGeneratorPerlin level;
+	public static double getOreLevel(World world, int x, int z, CelestialBedrockOreType type) {
+		long seed = world.getSeed() + world.provider.dimensionId;
 
-	public static double getOreLevel(int x, int z, BedrockOreType type) {
-
-		if(level == null) level = new NoiseGeneratorPerlin(new Random(2114043), 4);
-		if(ores[type.ordinal()] == null) ores[type.ordinal()] = new NoiseGeneratorPerlin(new Random(2082127 + type.ordinal()), 4);
+		NoiseGeneratorPerlin level = getGenerator(seed);
+		NoiseGeneratorPerlin ore = getGenerator(seed - 4096 + type.index);
 
 		double scale = 0.01D;
 
+		return MathHelper.clamp_double(Math.abs(level.func_151601_a(x * scale, z * scale) * ore.func_151601_a(x * scale, z * scale)) * 0.05, 0, 2);
+	}
+
 		return MathHelper.clamp_double(Math.abs(level.func_151601_a(x * scale, z * scale) * ores[type.ordinal()].func_151601_a(x * scale, z * scale)) * 0.05, 0, 2);
 	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(Item item, CreativeTabs tab, List list) {
+
+		for(SolarSystem.Body body : SolarSystem.Body.values()) {
+			if(body == SolarSystem.Body.ORBIT) continue;
+			list.add(new ItemStack(item, 1, body.ordinal()));
+		}
+	}
+
 }

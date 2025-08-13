@@ -14,7 +14,6 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 import com.hbm.items.weapon.sedna.factory.XFactoryCatapult;
-import com.hbm.main.MainRegistry;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.tileentity.bomb.TileEntityLandmine;

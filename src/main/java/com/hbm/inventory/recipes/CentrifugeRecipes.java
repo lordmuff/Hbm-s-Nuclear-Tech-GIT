@@ -513,8 +513,8 @@ public class CentrifugeRecipes extends SerializableRecipe {
 				new ItemStack(Blocks.gravel, 1) });
 
 		recipes.put(new OreDictStack(NI.ore()), new ItemStack[] {
-				new ItemStack(ModItems.powder_nickel, 1),
-				new ItemStack(ModItems.powder_nickel, 1),
+				new ItemStack(ModItems.chunk_ore, 2, ItemEnums.EnumChunkType.PENTLANDITE.ordinal()),
+				new ItemStack(ModItems.sulfur, 1),
 				new ItemStack(ModItems.powder_iron, 1),
 				new ItemStack(Blocks.gravel, 1) });
 
@@ -716,7 +716,7 @@ public class CentrifugeRecipes extends SerializableRecipe {
 				new ItemStack(ModItems.powder_iron, 1)});
 
 		recipes.put(new ComparableStack(ModItems.ingot_magma, 1), new ItemStack[] {
-				Mats.MAT_GALLIUM.make(ModItems.bedrock_ore_fragment, 2),
+				Mats.MAT_GALLIUM.make(ModItems.bedrock_ore_fragment, 4),
 				Mats.MAT_ARSENIC.make(ModItems.bedrock_ore_fragment, 2),
 				new ItemStack(ModItems.powder_meteorite_tiny, 2),
 				new ItemStack(ModItems.dust_tiny, 3),
@@ -835,6 +835,9 @@ public class CentrifugeRecipes extends SerializableRecipe {
 		recipes.put(new ComparableStack(ModItems.crystal_mineral), new ItemStack[] { new ItemStack(ModItems.mineral_dust, 2), new ItemStack(ModItems.powder_iron, 2), new ItemStack(ModItems.powder_aluminium, 2), new ItemStack(ModItems.powder_lithium_tiny, 1) });
 		recipes.put(new ComparableStack(ModItems.crystal_nickel), new ItemStack[] { new ItemStack(ModItems.powder_nickel, 2), new ItemStack(ModItems.powder_nickel, 2), new ItemStack(ModItems.powder_iron, 2), new ItemStack(ModItems.powder_titanium, 1) });
 		recipes.put(new ComparableStack(ModItems.crystal_niobium), new ItemStack[] { new ItemStack(ModItems.powder_niobium, 2), new ItemStack(ModItems.powder_niobium, 2), new ItemStack(ModItems.powder_iron, 2), new ItemStack(ModItems.nugget_hafnium, 1) }); //THERE WE GO
+		recipes.put(new ComparableStack(ModItems.crystal_zinc), new ItemStack[] { new ItemStack(ModItems.powder_zinc, 2), new ItemStack(ModItems.powder_zinc, 2), new ItemStack(ModItems.sulfur, 2), new ItemStack(ModItems.powder_aluminium, 1) });
+		recipes.put(new ComparableStack(ModItems.nickel_salts), new ItemStack[] { new ItemStack(ModItems.powder_iron, 2), new ItemStack(ModItems.powder_nickel, 2), new ItemStack(ModItems.powder_sodium, 1), new ItemStack(ModItems.sulfur, 1) });
+
 	}
 
 	@Override

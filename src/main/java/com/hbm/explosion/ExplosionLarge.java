@@ -7,7 +7,6 @@ import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.toclient.AuxParticlePacketNT;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.handler.threading.PacketThreading;
 import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.util.ParticleUtil;
@@ -65,7 +64,8 @@ public class ExplosionLarge {
 			data.setDouble("posZ", z);
 			MainRegistry.proxy.effectNT(data);
 		} else {
-			PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(data, x, y + 0.5, z),  new TargetPoint(world.provider.dimensionId, x, y, z, 250));		}
+			PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(data, x, y + 0.5, z), new TargetPoint(world.provider.dimensionId, x, y, z, 250));
+		}
 	}
 
 	public static void spawnBurst(World world, double x, double y, double z, int count, double strength) {

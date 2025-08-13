@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.dim.CelestialBody;
 import com.hbm.handler.RocketStruct;
 import com.hbm.handler.atmosphere.IBlockSealable;
@@ -205,6 +206,18 @@ public class BlockOrbitalStation extends BlockDummyable implements IBlockSealabl
 			return;
 
 		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+	}
+
+	@Override
+    public boolean canPlaceBlockAt(World worldIn, int x, int y, int z) {
+		if(this == ModBlocks.orbital_station) return false; // block placing of extra main ports (use the dedicated sub-ports!)
+		return super.canPlaceBlockAt(worldIn, x, y, z);
+	}
+
+	@Override
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+		if(this == ModBlocks.orbital_station) return false; // block removal of main port
+		return super.removedByPlayer(world, player, x, y, z, willHarvest);
 	}
 
 }

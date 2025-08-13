@@ -50,20 +50,6 @@ public class ChemplantRecipes extends SerializableRecipe {
 					new OreDictStack(ASBESTOS.ingot(), 1))
 				.inputFluids(new FluidStack(Fluids.HYDROGEN, 4000))
 				.outputFluids(new FluidStack(Fluids.URANIUM_BROMIDE, 4000)));
-		recipes.add(new ChemRecipe(1005, "PLUTONIUM_BROMIDE", 50)
-		        .inputItems(
-			        new OreDictStack(PU239.billet(), 1),
-			        new ComparableStack(ModItems.powder_bromine),
-			        new OreDictStack(ASBESTOS.ingot(), 1))
-		        .inputFluids(new FluidStack(Fluids.HYDROGEN, 4000))
-		        .outputFluids(new FluidStack(Fluids.PLUTONIUM_BROMIDE, 4000)));
-		recipes.add(new ChemRecipe(1006, "SCHRABIDIUM_BROMIDE", 50)
-		        .inputItems(
-			        new OreDictStack(SA326.billet(), 1),
-			        new ComparableStack(ModItems.powder_bromine),
-			        new OreDictStack(ASBESTOS.ingot(), 1))
-		        .inputFluids(new FluidStack(Fluids.HYDROGEN, 4000))
-		        .outputFluids(new FluidStack(Fluids.SCHRABIDIUM_BROMIDE, 4000)));
 		recipes.add(new ChemRecipe(1007, "THORIUM_BROMIDE", 50)
 		        .inputItems(
 			        new OreDictStack(TH232.billet(), 1),
@@ -247,13 +233,11 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.outputFluids(
 						new FluidStack(Fluids.HYDROGEN, 400),
 						new FluidStack(Fluids.OXYGEN, 400)));
-		recipes.add(new ChemRecipe(59, "XENON", 300)
-				.inputFluids(new FluidStack(Fluids.AIR, 16_000))
+		recipes.add(new ChemRecipe(59, "XENON", 250, 1)
+				.inputFluids(new FluidStack(Fluids.NONE, 0))
 				.outputFluids(new FluidStack(Fluids.XENON, 50)));
 		recipes.add(new ChemRecipe(60, "XENON_OXY", 20)
-				.inputFluids(
-						new FluidStack(Fluids.AIR, 8_000),
-						new FluidStack(Fluids.OXYGEN, 250))
+				.inputFluids(new FluidStack(Fluids.OXYGEN, 250))
 				.outputFluids(new FluidStack(Fluids.XENON, 50)));
 		recipes.add(new ChemRecipe(62, "BALEFIRE", 100)
 				.inputItems(new ComparableStack(ModItems.egg_balefire_shard))
@@ -414,7 +398,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 						new ComparableStack(ModItems.nugget_arsenic))
 				.outputItems(new ItemStack(ModItems.nugget_gaas, 1)));
 		recipes.add(new ChemRecipe(106, "ANIMAN", 250)
-				.inputFluids(new FluidStack(Fluids.OLIVEOIL, 500))
+				.inputFluids(new FluidStack(Fluids.NMASSTETRANOL, 500))
 				.inputItems(
 						new ComparableStack(ModItems.canned_conserve, 1, 5))
 				.outputItems(new ItemStack(ModItems.animan, 1)));
@@ -497,16 +481,22 @@ public class ChemplantRecipes extends SerializableRecipe {
 		recipes.add(new ChemRecipe(1002, "CHLOROMETHANE", 50)
 				.inputFluids(new FluidStack(Fluids.GAS, 750), new FluidStack(Fluids.CHLORINE, 250))
 				.outputFluids(new FluidStack(Fluids.CHLOROMETHANE, 1000)));
-		recipes.add(new ChemRecipe(1003, "RUSTY_DECO_STEEL", 100)
+
+		// WARNING: NILERED CHEMISTRY ZONE //
+		recipes.add(new ChemRecipe(1003, "HYDRAPISS", 300)
+				.inputFluids(new FluidStack(Fluids.NITRIC_ACID, 2000))
+				.inputItems(new ComparableStack(ModItems.rag_piss)) // urea...
+				.outputFluids(new FluidStack(Fluids.HYDRAZINE, 800)));
+
+		recipes.add(new ChemRecipe(123, "RUSTY_DECO_STEEL", 100)
 			.inputItems(new ComparableStack(ModBlocks.deco_steel, 8))
 			.inputFluids(new FluidStack(Fluids.WATER, 1000))
 			.outputItems(new ItemStack(ModBlocks.deco_rusty_steel, 8)));
 	}
 
 	public static void registerOtherOil() {
-		recipes.add(new ChemRecipe(31, "BP_BIOGAS", 60)
+		recipes.add(new ChemRecipe(31, "BP_BIOGAS", 60, 1)
 				.inputItems(new ComparableStack(ModItems.biomass, 16)) //if we assume 1B BF = 500k and translate that to 2B BG = 500k, then each biomass is worth ~31k or roughly 1.5 furnace operations
-				.inputFluids(new FluidStack(Fluids.AIR, 4000))
 				.outputFluids(new FluidStack(2000, Fluids.BIOGAS)));
 		recipes.add(new ChemRecipe(32, "BP_BIOFUEL", 60)
 				.inputFluids(new FluidStack(1500, Fluids.BIOGAS), new FluidStack(250, Fluids.ETHANOL))

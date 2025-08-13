@@ -47,6 +47,7 @@ public class TileEntitySolarBoiler extends TileEntityLoadedBase implements IFlui
 				: CelestialBody.getBody(worldObj).getSunPower();
 
 			int process = (int)(heat * sunPower) / 50;
+			this.display = process;
 			process = Math.min(process, water.getFill());
 			process = Math.min(process, (steam.getMaxFill() - steam.getFill()) / 100);
 

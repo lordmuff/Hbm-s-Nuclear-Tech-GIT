@@ -10,19 +10,24 @@ import java.util.Map;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.orbit.OrbitalStation;
 import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CBT_Dyson;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.dim.trait.CBT_Water;
 import com.hbm.dim.trait.CelestialBodyTrait;
+import com.hbm.extprop.HbmLivingProps;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ItemVOTVdrive.Target;
+import com.hbm.lib.RefStrings;
 import com.hbm.render.shader.Shader;
 import com.hbm.util.AstronomyUtil;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -42,9 +47,16 @@ public class CelestialBody {
 
 	public boolean canLand = false; // does this body have an associated dimension and a solid surface?
 
+	// Orbital elements
 	public float massKg = 0;
 	public float radiusKm = 0;
 	public float semiMajorAxisKm = 0; // Distance to the parent body
+	public float semiMinorAxisFactor = 0; // has a sqrt so done ahead of time
+	public float eccentricity = 0;
+	public float inclination = 0;
+	public float ascendingNode = 0;
+	public float argumentPeriapsis = 0;
+
 	private int rotationalPeriod = 6 * 60 * 60; // Day length in seconds
 
 	public float axialTilt = 0;
@@ -52,9 +64,16 @@ public class CelestialBody {
 	private int minProcessingLevel = 0; // What level of technology can locate this body? This defines the minimum level, automatically adjusted based on stardar location
 
 	public ResourceLocation texture = null;
+	public ResourceLocation biomeMask = null;
+	public ResourceLocation cityMask = null;
 	public float[] color = new float[] {0.4F, 0.4F, 0.4F}; // When too small to render the texture
 
 	public String tidallyLockedTo = null;
+
+	public boolean hasRings = false; // put a ring on it
+	public float ringTilt = 0;
+	public float[] ringColor = new float[] {0.5F, 0.5F, 0.5F};
+	public float ringSize = 2;
 
 	public List<CelestialBody> satellites = new ArrayList<CelestialBody>(); // moon boyes
 	public CelestialBody parent = null;
@@ -71,7 +90,7 @@ public class CelestialBody {
 
 	public CelestialBody(String name) {
 		this.name = name;
-		this.texture = new ResourceLocation("hbm:textures/misc/space/" + name + ".png");
+		this.texture = new ResourceLocation(RefStrings.MODID, "textures/misc/space/" + name + ".png");
 
 		nameToBodyMap.put(name, this);
 	}
@@ -94,8 +113,13 @@ public class CelestialBody {
 		return this;
 	}
 
-	public CelestialBody withSemiMajorAxis(float km) {
-		this.semiMajorAxisKm = km;
+	public CelestialBody withOrbitalParameters(float semiMajorAxisKm, float eccentricity, float argumentPeriapsisDegrees, float inclinationDegrees, float ascendingNodeDegrees) {
+		this.semiMajorAxisKm = semiMajorAxisKm;
+		this.semiMinorAxisFactor = (float)Math.sqrt(1 - eccentricity * eccentricity);
+		this.eccentricity = eccentricity;
+		this.argumentPeriapsis = (float)Math.toRadians(argumentPeriapsisDegrees);
+		this.inclination = (float)Math.toRadians(inclinationDegrees);
+		this.ascendingNode = (float)Math.toRadians(ascendingNodeDegrees);
 		return this;
 	}
 
@@ -114,8 +138,18 @@ public class CelestialBody {
 		return this;
 	}
 
-	public CelestialBody withTexture(String path) {
-		this.texture = new ResourceLocation(path);
+	public CelestialBody withTexture(ResourceLocation location) {
+		this.texture = location;
+		return this;
+	}
+
+	public CelestialBody withCityMask(ResourceLocation location) {
+		this.cityMask = location;
+		return this;
+	}
+
+	public CelestialBody withBiomeMask(ResourceLocation location) {
+		this.biomeMask = location;
 		return this;
 	}
 
@@ -131,6 +165,14 @@ public class CelestialBody {
 
 	public CelestialBody withTidalLockingTo(String name) {
 		tidallyLockedTo = name;
+		return this;
+	}
+
+	public CelestialBody withRings(float tilt, float size, float... color) {
+		this.hasRings = true;
+		this.ringTilt = tilt;
+		this.ringSize = size;
+		this.ringColor = color;
 		return this;
 	}
 
@@ -150,7 +192,6 @@ public class CelestialBody {
 	public CelestialBody withShader(ResourceLocation fragmentShader) {
 		return withShader(fragmentShader, 1);
 	}
-
 
 	public CelestialBody withShader(ResourceLocation fragmentShader, float scale) {
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) return this;
@@ -322,7 +363,6 @@ public class CelestialBody {
 		setTraits(world, currentTraits);
 	}
 
-	// Checks if we need to update any traits based on the current atmospheric constituents
 	public static void updateChemistry(World world) {
 		boolean hasUpdated = false;
 		HashMap<Class<? extends CelestialBodyTrait>, CelestialBodyTrait> currentTraits = getTraits(world);
@@ -368,6 +408,25 @@ public class CelestialBody {
 
 
 
+	public static void damage(int dmg, World world) {
+		HashMap<Class<? extends CelestialBodyTrait>, CelestialBodyTrait> currentTraits = getTraits(world);
+
+		CBT_War war = (CBT_War) currentTraits.get(CBT_War.class);
+		if(war == null) {
+			war = new CBT_War();
+			currentTraits.put(CBT_War.class, war);
+		}
+
+		if(war.shield > 0) {
+			war.shield -= dmg;
+		} else {
+			war.health -= dmg;
+		}
+
+		setTraits(world, currentTraits);
+	}
+
+
 	// Static getters
 	// A lot of these are member getters but without having to check the celestial body exists
 	// If it doesn't exist, return the overworld as the default, may cause issues with terraforming the overworld
@@ -403,7 +462,7 @@ public class CelestialBody {
 	}
 
 	public static Target getTarget(World world, int x, int z) {
-		if(world.provider.dimensionId == SpaceConfig.orbitDimension) {
+		if(inOrbit(world)) {
 			OrbitalStation station = !world.isRemote ? OrbitalStation.getStationFromPosition(x, z) : OrbitalStation.clientStation;
 			return new Target(station.orbiting, true, station.hasStation);
 		}
@@ -417,6 +476,28 @@ public class CelestialBody {
 
 	public static CelestialBody getPlanet(World world) {
 		return getBody(world).getPlanet();
+	}
+
+
+	public static float getGravity(EntityLivingBase entity) {
+		if(entity instanceof EntityWaterMob) return AstronomyUtil.STANDARD_GRAVITY;
+
+		if(inOrbit(entity.worldObj)) {
+			if(HbmLivingProps.hasGravity(entity)) {
+				OrbitalStation station = entity.worldObj.isRemote
+					? OrbitalStation.clientStation
+					: OrbitalStation.getStationFromPosition((int)entity.posX, (int)entity.posZ);
+
+				float gravity = AstronomyUtil.STANDARD_GRAVITY * station.gravityMultiplier;
+				if(gravity < 0.2) return 0;
+				return gravity;
+			}
+
+			return 0;
+		}
+
+		CelestialBody body = CelestialBody.getBody(entity.worldObj);
+		return body.getSurfaceGravity() * AstronomyUtil.PLAYER_GRAVITY_MODIFIER;
 	}
 
 	public static boolean inOrbit(World world) {
@@ -433,6 +514,10 @@ public class CelestialBody {
 
 	public static double getRotationalPeriod(World world) {
 		return getBody(world).getRotationalPeriod();
+	}
+
+	public static float getSemiMajorAxis(World world) {
+		return getBody(world).semiMajorAxisKm;
 	}
 
 	public static boolean hasTrait(World world, Class<? extends CelestialBodyTrait> trait) {

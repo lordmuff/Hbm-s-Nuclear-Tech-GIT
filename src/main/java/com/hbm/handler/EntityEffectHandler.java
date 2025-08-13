@@ -13,6 +13,8 @@ import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.entity.missile.EntityRideableRocket;
 import com.hbm.entity.mob.EntityCyberCrab;
+import com.hbm.entity.mob.EntityTankbot;
+import com.hbm.entity.mob.EntityWarBehemoth;
 import com.hbm.entity.mob.EntityMoonCow;
 import com.hbm.entity.mob.glyphid.EntityGlyphid;
 import com.hbm.entity.mob.EntityCreeperNuclear;
@@ -46,6 +48,7 @@ import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
 import com.hbm.world.biome.BiomeGenCraterBase;
 
+import api.hbm.entity.ISuffocationImmune;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -70,6 +73,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProviderHell;
 import net.minecraft.world.biome.BiomeGenBase;
 
 public class EntityEffectHandler {
@@ -117,7 +121,7 @@ public class EntityEffectHandler {
 				}
 			}
 			//only sets players on fire so mod compatibility doesnt die
-			if((GeneralConfig.enable528 && GeneralConfig.enable528NetherBurn) && entity instanceof EntityPlayer && !entity.isImmuneToFire() && entity.worldObj.provider.isHellWorld) {
+			if((GeneralConfig.enable528 && GeneralConfig.enable528NetherBurn) && entity instanceof EntityPlayer && !entity.isImmuneToFire() && entity.worldObj.provider instanceof WorldProviderHell) {
 				entity.setFire(5);
 			}
 
@@ -314,7 +318,7 @@ public class EntityEffectHandler {
 			}
 			if(neut<1e-5)
 				HbmLivingProps.setNeutronActivation(entity,0);
-			if(world.provider.isHellWorld && RadiationConfig.hellRad > 0 && rad < RadiationConfig.hellRad)
+			if(world.provider instanceof WorldProviderHell && RadiationConfig.hellRad > 0 && rad < RadiationConfig.hellRad)
 				rad = (float) RadiationConfig.hellRad;
 
 			if(world.provider instanceof WorldProviderCelestial || world.provider instanceof WorldProviderOrbit) {
@@ -334,9 +338,7 @@ public class EntityEffectHandler {
 				}
 			}
 
-			if(rad > 0) {
-				ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, rad / 20F);
-			}
+			if(rad > 0) ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, rad / 20F);
 
 			if(entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode) return;
 
@@ -402,9 +404,7 @@ public class EntityEffectHandler {
 
 	private static void handleOxy(EntityLivingBase entity, CBT_Atmosphere atmosphere) {
 		if(entity.worldObj.isRemote) return;
-		if(entity instanceof EntityGlyphid) return; // can't suffocate the bastards
-		if(entity instanceof EntityCyberCrab) return; // machines
-		if(entity instanceof EntityMoonCow) return; // MOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+		if(entity instanceof ISuffocationImmune) return;
 		if(entity.ridingEntity != null && entity.ridingEntity instanceof EntityRideableRocket) return; // breathe easy in your ship
 
 		if (!ArmorUtil.checkForOxy(entity, atmosphere)) {
@@ -841,7 +841,7 @@ public class EntityEffectHandler {
 					stamina++;
 
 					if(stamina % perDash == perDash-1) {
-						player.playSound("hbm:item.techBoop", 1.0F, (1.0F + ((1F/12F)*(stamina/perDash))));
+						player.playSound("hbm:player.dashRecharge", 1.0F, (1.0F + ((1F/12F)*(stamina/perDash))));
 						stamina++;
 					}
 				}

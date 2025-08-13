@@ -33,7 +33,7 @@ public class LaunchPadRocket extends BlockDummyable implements ILookOverlay, ITo
 	public TileEntity createNewTileEntity(World world, int meta) {
 		if(meta >= 12) return new TileEntityLaunchPadRocket();
 		if(meta >= 6) return new TileEntityProxyCombo().inventory().power().fluid();
-		return new TileEntityProxyCombo().inventory();
+		return null;
 	}
 
 	@Override

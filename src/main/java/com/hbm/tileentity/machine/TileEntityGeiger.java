@@ -41,7 +41,7 @@ public class TileEntityGeiger extends TileEntity implements SimpleComponent, IIn
 		}
 
 		if(timer % 5 == 0) {
-
+			
 			if(ticker > 0) {
 				if(worldObj.rand.nextFloat() > ticker) return;
 				List<Integer> list = new ArrayList<Integer>();
@@ -58,7 +58,7 @@ public class TileEntityGeiger extends TileEntity implements SimpleComponent, IIn
 				int r = list.get(worldObj.rand.nextInt(list.size()));
 
 				if(r > 0) worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "hbm:item.geiger" + r, 1.0F, 1.0F);
-
+				
 			} else if(worldObj.rand.nextInt(50) == 0) {
 				worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "hbm:item.geiger"+ (1 + worldObj.rand.nextInt(1)), 1.0F, 1.0F);
 			}
@@ -69,7 +69,7 @@ public class TileEntityGeiger extends TileEntity implements SimpleComponent, IIn
 	public float check() {
 		return ChunkRadiationManager.proxy.getRadiation(worldObj, xCoord, yCoord, zCoord);
 	}
-
+	
 	@Override
 	@Optional.Method(modid = "OpenComputers")
 	public String getComponentName() {
@@ -89,7 +89,7 @@ public class TileEntityGeiger extends TileEntity implements SimpleComponent, IIn
 		data.setString(CompatEnergyControl.S_CHUNKRAD, chunkPrefix + rads + " RAD/s");
 
 	}
-
+	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);

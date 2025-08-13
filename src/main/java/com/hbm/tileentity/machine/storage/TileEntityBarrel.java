@@ -49,12 +49,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "opencomputers")})
-public class TileEntityBarrel extends TileEntityMachineBase implements SimpleComponent, IFluidStandardTransceiverMK2, IPersistentNBT, IGUIProvider, CompatHandler.OCComponent, IFluidCopiable, IRORValueProvider, IRORInteractive {
+public class TileEntityBarrel extends TileEntityMachineBase implements SimpleComponent, IFluidStandardTransceiverMK2, IPersistentNBT, IGUIProvider, CompatHandler.OCComponent, IFluidCopiable, IRORValueProvider, IRORInteractive, IOverpressurable {
 
 	protected FluidNode node;
 	protected FluidType lastType;
@@ -64,9 +63,6 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 	public short mode = 0;
 	public static final short modes = 4;
 	public int age = 0;
-	protected boolean sendingBrake = false;
-
-	public Explosion lastExplosion = null;
 	public byte lastRedstone = 0;
 
 	public TileEntityBarrel() {
@@ -101,7 +97,6 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 	public void updateEntity() {
 
 		if(!worldObj.isRemote) {
-			if(!this.hasExploded) {
 
 			byte comp = this.getComparatorPower(); //do comparator shenanigans
 			if(comp != this.lastRedstone) {
@@ -110,57 +105,61 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 			}
 			this.lastRedstone = comp;
 
-			tank.setType(0, 1, slots);
-			tank.loadTank(2, 3, slots);
-			tank.unloadTank(4, 5, slots);
+			if(!this.hasExploded) {
+				tank.setType(0, 1, slots);
+				tank.loadTank(2, 3, slots);
+				tank.unloadTank(4, 5, slots);
 
-			// In buffer mode, acts like a pipe block, providing fluid to its own node
-			// otherwise, it is a regular providing/receiving machine, blocking further propagation
-			if(mode == 1) {
-				if(this.node == null || this.node.expired || tank.getTankType() != lastType) {
-
-					this.node = (FluidNode) UniNodespace.getNode(worldObj, xCoord, yCoord, zCoord, tank.getTankType().getNetworkProvider());
-
+				// In buffer mode, acts like a pipe block, providing fluid to its own node
+				// otherwise, it is a regular providing/receiving machine, blocking further propagation
+				if(mode == 1) {
 					if(this.node == null || this.node.expired || tank.getTankType() != lastType) {
-						this.node = this.createNode(tank.getTankType());
-						UniNodespace.createNode(worldObj, this.node);
-						lastType = tank.getTankType();
+
+						this.node = (FluidNode) UniNodespace.getNode(worldObj, xCoord, yCoord, zCoord, tank.getTankType().getNetworkProvider());
+
+						if(this.node == null || this.node.expired || tank.getTankType() != lastType) {
+							this.node = this.createNode(tank.getTankType());
+							UniNodespace.createNode(worldObj, this.node);
+							lastType = tank.getTankType();
+						}
+					}
+
+					if(node != null && node.hasValidNet()) {
+						node.net.addProvider(this);
+						node.net.addReceiver(this);
+					}
+				} else {
+					if(this.node != null) {
+						UniNodespace.destroyNode(worldObj, xCoord, yCoord, zCoord, tank.getTankType().getNetworkProvider());
+						this.node = null;
+					}
+
+					for(DirPos pos : getConPos()) {
+						FluidNode dirNode = (FluidNode) UniNodespace.getNode(worldObj, pos.getX(), pos.getY(), pos.getZ(), tank.getTankType().getNetworkProvider());
+
+						if(mode == 2) {
+							tryProvide(tank, worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
+						} else {
+							if(dirNode != null && dirNode.hasValidNet()) dirNode.net.removeProvider(this);
+						}
+
+						if(mode == 0) {
+							if(dirNode != null && dirNode.hasValidNet()) dirNode.net.addReceiver(this);
+						} else {
+							if(dirNode != null && dirNode.hasValidNet()) dirNode.net.removeReceiver(this);
+						}
 					}
 				}
 
-				if(node != null && node.hasValidNet()) {
-					node.net.addProvider(this);
-					node.net.addReceiver(this);
+				if(tank.getFill() > 0) {
+					checkFluidInteraction();
 				}
-			} else {
-				if(this.node != null) {
-					UniNodespace.destroyNode(worldObj, xCoord, yCoord, zCoord, tank.getTankType().getNetworkProvider());
-					this.node = null;
-				}
-
-				for(DirPos pos : getConPos()) {
-					FluidNode dirNode = (FluidNode) UniNodespace.getNode(worldObj, pos.getX(), pos.getY(), pos.getZ(), tank.getTankType().getNetworkProvider());
-
-					if(mode == 2) {
-						tryProvide(tank, worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
-					} else {
-						if(dirNode != null && dirNode.hasValidNet()) dirNode.net.removeProvider(this);
-					}
-
-					if(mode == 0) {
-						if(dirNode != null && dirNode.hasValidNet()) dirNode.net.addReceiver(this);
-					} else {
-						if(dirNode != null && dirNode.hasValidNet()) dirNode.net.removeReceiver(this);
-					}
-				}
-			}
-
-			if(tank.getFill() > 0) {
-				checkFluidInteraction();
+			} else if(this.node != null) {
+				UniNodespace.destroyNode(worldObj, xCoord, yCoord, zCoord, tank.getTankType().getNetworkProvider());
+				this.node = null;
 			}
 
 			this.networkPackNT(50);
-		}
 		}
 	}
 

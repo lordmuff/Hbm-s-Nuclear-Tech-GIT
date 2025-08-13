@@ -1,15 +1,14 @@
 package com.hbm.blocks.bomb;
 
+import org.apache.logging.log4j.Level;
+
+import com.hbm.config.GeneralConfig;
 import com.hbm.explosion.vanillant.ExplosionVNT;
 import com.hbm.explosion.vanillant.standard.BlockAllocatorStandard;
 import com.hbm.explosion.vanillant.standard.BlockProcessorStandard;
 import com.hbm.explosion.vanillant.standard.EntityProcessorCrossSmooth;
 import com.hbm.explosion.vanillant.standard.ExplosionEffectTiny;
 import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
-import org.apache.logging.log4j.Level;
-
-import com.hbm.config.GeneralConfig;
-import com.hbm.explosion.ExplosionChaos;
 import com.hbm.interfaces.IBomb;
 import com.hbm.main.MainRegistry;
 import com.hbm.particle.helper.ExplosionCreator;

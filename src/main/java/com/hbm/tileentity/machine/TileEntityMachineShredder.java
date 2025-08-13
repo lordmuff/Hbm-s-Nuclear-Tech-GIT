@@ -343,15 +343,12 @@ public class TileEntityMachineShredder extends TileEntityLoadedBase implements I
 	public boolean canProcess() {
 		if(slots[27] != null && slots[28] != null && this.getGearLeft() > 0 && this.getGearLeft() < 3 && this.getGearRight() > 0 && this.getGearRight() < 3) {
 
-			for(int i = 0; i < 9; i++)
-			{
+			for(int i = 0; i < 9; i++) {
 				if(slots[i] != null && slots[i].getItem() == Item.getItemFromBlock(ModBlocks.bobblehead)&& slots[i].getItemDamage() == BobbleType.GWEN.ordinal()) {
 					worldObj.func_147480_a(xCoord, yCoord, zCoord, false);
 					worldObj.newExplosion(null, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 5, true, true);
 					break;
-				}
-				else if(slots[i] != null && slots[i].stackSize > 0 && hasSpace(slots[i]))
-				{
+				} else if(slots[i] != null && slots[i].stackSize > 0 && hasSpace(slots[i])) {
 					return true;
 				}
 			}

@@ -12,13 +12,11 @@ import net.minecraft.world.biome.BiomeGenBase;
 
 public class BiomeGenEveSeismicPlains extends BiomeGenBaseEve {
 
-	public static final BiomeGenBase.Height height = new BiomeGenBase.Height(0.270F, 0.3F);
-
 	public BiomeGenEveSeismicPlains(int id) {
 		super(id);
 		this.setBiomeName("Eve Seismic Plains");
 
-		this.setHeight(height);
+		this.setHeight(new BiomeGenBase.Height(0.270F, 0.3F));
 
 		this.topBlock = ModBlocks.eve_silt;
 		this.fillerBlock = ModBlocks.eve_silt;
@@ -78,7 +76,7 @@ public class BiomeGenEveSeismicPlains extends BiomeGenBaseEve {
 							} else if(l1 < 56 - l) {
 								block = null;
 								block1 = ModBlocks.eve_rock;
-								blocks[i2] = Blocks.gravel;
+								blocks[i2] = ModBlocks.basalt;
 							} else {
 								blocks[i2] = block1;
 							}

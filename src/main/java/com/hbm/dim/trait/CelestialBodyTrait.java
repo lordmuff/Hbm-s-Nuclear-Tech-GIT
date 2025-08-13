@@ -13,11 +13,15 @@ public abstract class CelestialBodyTrait {
 	// Similarly to fluid traits, we have classes, and instance members.
 	// For the simple traits, we'll just init both here rather than two places.
 
-	public static class CBT_War extends CelestialBodyTrait { }
-	public static CBT_War WAR = new CBT_War();
-	
-	public static class CBT_Destroyed extends CelestialBodyTrait { }
-	public static CBT_Destroyed SPLODE = new CBT_Destroyed();
+
+	public static class CBT_BATTLEFIELD extends CelestialBodyTrait { }
+	public static CBT_BATTLEFIELD BATTLE = new CBT_BATTLEFIELD();
+
+
+
+	public static class CBT_COMPROMISED extends CelestialBodyTrait { }
+	public static CBT_COMPROMISED COMP = new CBT_COMPROMISED();
+
 
 	// Constructor and loading
 	public static List<Class<? extends CelestialBodyTrait>> traitList = new ArrayList<Class<? extends CelestialBodyTrait>>();
@@ -30,19 +34,25 @@ public abstract class CelestialBodyTrait {
 		registerTrait("war", CBT_War.class);
 		registerTrait("destroyed", CBT_Destroyed.class);
 		registerTrait("water", CBT_Water.class);
+		registerTrait("battle", CBT_BATTLEFIELD.class);
+		registerTrait("infected", CBT_COMPROMISED.class);
 		registerTrait("dyson", CBT_Dyson.class);
+		registerTrait("impact", CBT_Impact.class);
+		registerTrait("lights", CBT_Lights.class);
 	};
 
 	private static void registerTrait(String name, Class<? extends CelestialBodyTrait> clazz) {
 		traitList.add(clazz);
 		traitMap.put(name, clazz);
 	}
-	
+
 	// Serialization
 	public void readFromNBT(NBTTagCompound nbt) { }
 	public void writeToNBT(NBTTagCompound nbt) { }
 
 	public void readFromBytes(ByteBuf buf) { }
 	public void writeToBytes(ByteBuf buf) { }
+
+	public void update(boolean isremote) { }
 
 }

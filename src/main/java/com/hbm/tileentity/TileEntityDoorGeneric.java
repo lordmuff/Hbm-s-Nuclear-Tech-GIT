@@ -7,7 +7,6 @@ import java.util.Set;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.generic.BlockDoorGeneric;
 import com.hbm.handler.atmosphere.IBlockSealable;
-import com.hbm.interfaces.IAnimatedDoor;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.sound.AudioWrapper;
@@ -96,7 +95,7 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase   {
 					}
 				}
 
-			} else if(state == 2){
+			} else if(state == 2) {
 
 				for(int i = 0; i < ranges.length; i++) {
 
@@ -141,9 +140,10 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase   {
 				state = 0;
 				((IBlockSealable)blockType).updateSealedState(worldObj, xCoord, yCoord, zCoord);
 			}
-			PacketDispatcher.wrapper.sendToAllAround(new TEDoorAnimationPacket(xCoord, yCoord, zCoord, state, skinIndex, (byte)(shouldUseBB ? 1 : 0)), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 100));
 
-			if(redstonePower == -1 && state == 1){
+			this.networkPackNT(100);
+
+			if(redstonePower == -1 && state == 1) {
 				tryToggle(-1);
 			} else if(redstonePower > 0 && state == 0) {
 				tryToggle(-1);
@@ -180,7 +180,7 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase   {
 		}
 	}
 
-	public DoorDecl getDoorType(){
+	public DoorDecl getDoorType() {
 
 		if(this.doorType == null && this.getBlockType() instanceof BlockDoorGeneric)
 			this.doorType = ((BlockDoorGeneric)this.getBlockType()).type;
@@ -188,11 +188,11 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase   {
 		return this.doorType;
 	}
 
-	public boolean tryToggle(EntityPlayer player){
+	public boolean tryToggle(EntityPlayer player) {
 
 		if(this.isLocked() && player == null) return false;
 
-		if(state == 0 && redstonePower > 0){
+		if(state == 0 && redstonePower > 0) {
 			//Redstone "power locks" doors, just like minecraft iron doors
 			return false;
 		}
@@ -210,7 +210,7 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase   {
 		return false;
 	}
 
-	public boolean tryToggle(int passcode){
+	public boolean tryToggle(int passcode) {
 		if(this.isLocked() && passcode != this.lock)
 			return false;
 		if(this.state == 0) {
@@ -228,7 +228,7 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase   {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void handleNewState(byte state){
+	public void handleNewState(byte state) {
 
 		if(this.state != state) {
 			DoorDecl doorType = getDoorType();
@@ -417,4 +417,3 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase   {
 	}
 
 }
-

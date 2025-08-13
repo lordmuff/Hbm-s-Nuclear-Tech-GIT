@@ -1,7 +1,7 @@
 package com.hbm.entity.mob;
 
-import com.hbm.handler.threading.PacketThreading;
 import com.hbm.config.GeneralConfig;
+import com.hbm.handler.threading.PacketThreading;
 import com.hbm.items.ModItems;
 import com.hbm.packet.toclient.AuxParticlePacketNT;
 

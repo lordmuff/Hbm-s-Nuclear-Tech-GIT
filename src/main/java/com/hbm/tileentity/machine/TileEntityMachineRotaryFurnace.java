@@ -43,7 +43,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityMachineRotaryFurnace extends TileEntityMachinePolluting implements IFluidStandardTransceiver, IGUIProvider, IFluidCopiable, IConditionalInvAccess {
+public class TileEntityMachineRotaryFurnace extends TileEntityMachinePolluting implements IFluidStandardTransceiver, IGUIProvider, IFluidCopiable, IConditionalInvAccess, IConfigurableMachine {
 
 	public FluidTank[] tanks;
 	public boolean isProgressing;
@@ -183,10 +183,6 @@ public class TileEntityMachineRotaryFurnace extends TileEntityMachinePolluting i
 			}
 
 			this.isVenting = false;
-			if(this.burnTime > 0 && (this.canBreathe || breatheAir(1))) {
-				this.pollute(PollutionType.SOOT, PollutionHandler.SOOT_PER_SECOND / 10F);
-				this.burnTime--;
-			}
 
 			this.networkPackNT(50);
 

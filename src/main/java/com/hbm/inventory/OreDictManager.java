@@ -26,6 +26,9 @@ import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.material.NTMMaterial;
 import com.hbm.inventory.material.NTMMaterial.SmeltingBehavior;
+import com.hbm.inventory.recipes.GasCentrifugeRecipes;
+import com.hbm.inventory.recipes.MixerRecipes;
+import com.hbm.inventory.recipes.MixerRecipes.MixerRecipe;
 import com.hbm.items.ModItems;
 import com.hbm.items.ItemEnums.EnumAshType;
 import com.hbm.items.ItemEnums.EnumBriquetteType;
@@ -179,7 +182,8 @@ public class OreDictManager {
 	public static final DictFrame MINGRADE = new DictFrame("Mingrade");
 	public static final DictFrame ALLOY = new DictFrame("AdvancedAlloy");
 	/** NICKEL */
-	public static final DictFrame NI = new DictFrame("Nickel");
+	public static final DictFrame NI = new DictFrame("NickelPure");
+	public static final DictFrame NIM = new DictFrame("Nickel"); // Compat with "ferrous metal" so thermal isn't invalidated and neither is our intended progression!
 	/** TUNGSTEN */
 	public static final DictFrame W = new DictFrame("Tungsten");
 	/** ALUMINUM */
@@ -225,6 +229,7 @@ public class OreDictManager {
 	public static final DictFrame PVC = new DictFrame("PVC");
 	public static final DictFrame LATEX = new DictFrame("Latex");
 	public static final DictFrame RUBBER = new DictFrame("Rubber");
+	public static final DictFrame SEMTEX = new DictFrame("Semtex");
 	public static final DictFrame MAGTUNG = new DictFrame("MagnetizedTungsten");
 	public static final DictFrame CMB = new DictFrame("CMBSteel");
 	public static final DictFrame DESH = new DictFrame("Desh");
@@ -266,13 +271,16 @@ public class OreDictManager {
 	public static final DictFrame SODALITE = new DictFrame("Sodalite");
 	public static final DictFrame VOLCANIC = new DictFrame("Volcanic");
 	public static final DictFrame HEMATITE = new DictFrame("Hematite");
-	public static final DictFrame CONGLOMERATE  = new DictFrame("conglomerate");
+	public static final DictFrame CONGLOMERATE  = new DictFrame("Conglomerate");
 	public static final DictFrame MALACHITE = new DictFrame("Malachite");
 	public static final DictFrame LIMESTONE = new DictFrame("Limestone");
 	public static final DictFrame SLAG = new DictFrame("Slag");
 	public static final DictFrame BAUXITE = new DictFrame("Bauxite");
 	public static final DictFrame CRYOLITE = new DictFrame("Cryolite");
 	public static final DictFrame RICHMAGMA = new DictFrame("RichMagma");
+	public static final DictFrame FLOUR = new DictFrame("foodFlour");
+	public static final DictFrame PENTLANDITE = new DictFrame("Pentlandite");
+
 	/*
 	 * HAZARDS, MISC
 	 */
@@ -430,6 +438,7 @@ public class OreDictManager {
 		 * STABLE
 		 */
 		NI																	.ingot(ingot_nickel)												.dust(powder_nickel)            .plate(plate_nickel) 			.block(block_nickel)		.oreAll(ore_nickel) 												.nugget(nugget_nickel);
+		NIM																	.dust(fromOne(chunk_ore, EnumChunkType.PENTLANDITE)); // dust selected for compat reasons
 		TI																	.ingot(ingot_titanium)												.dust(powder_titanium)			.plate(plate_titanium)			.block(block_titanium)		.oreAll(ore_titanium);
 		CU																	.ingot(ingot_copper)												.dust(powder_copper)			.plate(plate_copper)			.block(block_copper)		.ore(ore_gneiss_copper) .oreAll(ore_copper);
 		MINGRADE															.ingot(ingot_red_copper)											.dust(powder_red_copper)		.billet(billet_red_copper)		.block(block_red_copper);
@@ -465,6 +474,7 @@ public class OreDictManager {
 		//PET																	.ingot(ingot_pet);
 		PC																	.ingot(ingot_pc);
 		PVC																	.ingot(ingot_pvc);
+		SEMTEX																.ingot(ingot_semtex)																												.block(block_semtex);
 		MAGTUNG																.ingot(ingot_magnetized_tungsten)									.dust(powder_magnetized_tungsten)								.block(block_magnetized_tungsten);
 		CMB																	.ingot(ingot_combine_steel)											.dust(powder_combine_steel)		.plate(plate_combine_steel)		.block(block_combine_steel);
 		DESH		.nugget(nugget_desh)									.ingot(ingot_desh)													.dust(powder_desh)												.block(block_desh);
@@ -512,6 +522,7 @@ public class OreDictManager {
 		SLAG																									.block(block_slag);
 		CONGLOMERATE																													.ore(fromOne(stone_resource, EnumStoneType.CONGLOMERATE));
 		RICHMAGMA						.ingot(ingot_magma);
+		PENTLANDITE	.crystal(fromOne(chunk_ore, EnumChunkType.PENTLANDITE));
 
 		/*
 		 * HAZARDS, MISC
@@ -728,8 +739,11 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_SAND, laythe_silt);
 		OreDictionary.registerOre(KEY_SAND, eve_silt);
 		OreDictionary.registerOre(KEY_SAND, moon_turf);
+		OreDictionary.registerOre(KEY_SAND, rubber_silt);
+		OreDictionary.registerOre(KEY_SAND, vinyl_sand);
 
-		OreDictionary.registerOre(KEY_COBBLESTONE, duna_rock);
+		OreDictionary.registerOre(KEY_STONE, duna_rock);
+		OreDictionary.registerOre(KEY_COBBLESTONE, duna_cobble);
 		OreDictionary.registerOre(KEY_COBBLESTONE, dres_rock);
 		OreDictionary.registerOre(KEY_COBBLESTONE, ike_regolith);
 		OreDictionary.registerOre(KEY_STONE, ike_stone);
@@ -740,6 +754,7 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_COBBLESTONE, minmus_regolith);
 		OreDictionary.registerOre(KEY_STONE, minmus_smooth);
 		OreDictionary.registerOre(KEY_STONE, minmus_stone);
+		OreDictionary.registerOre(KEY_STICK, stick_pvc);
 
 		for(NTMMaterial mat : Mats.orderedList) {
 			if(mat.autogen.contains(MaterialShapes.FRAGMENT)) {

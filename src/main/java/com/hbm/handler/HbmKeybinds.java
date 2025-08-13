@@ -84,22 +84,19 @@ public class HbmKeybinds {
 		ClientRegistry.registerKeyBinding(copyToolCtrl);
 	}
 
-	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public void mouseEvent(MouseInputEvent event) {
-		HbmPlayerProps props = HbmPlayerProps.getData(MainRegistry.proxy.me());
 
-		for(EnumKeybind key : EnumKeybind.values()) {
-			boolean last = props.getKeyPressed(key);
-			boolean current = MainRegistry.proxy.getIsKeyPressed(key);
+		/// OVERLAP HANDLING ///
+		handleOverlap(Mouse.getEventButtonState(), Mouse.getEventButton() - 100);
 
-			if(last != current) {
-				PacketDispatcher.wrapper.sendToServer(new KeybindPacket(key, current));
-				props.setKeyPressed(key, current);
-			}
-		}
+		/// KEYBIND PROPS ///
+		handleProps(Mouse.getEventButtonState(), Mouse.getEventButton() - 100);
 	}
 
-	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public void keyEvent(KeyInputEvent event) {
 
 		/// OVERLAP HANDLING ///
@@ -113,8 +110,20 @@ public class HbmKeybinds {
 			MainRegistry.proxy.me().closeScreen();
 			FMLCommonHandler.instance().showGuiScreen(new GUICalculator());
 		}
+	}
 
-		HbmPlayerProps props = HbmPlayerProps.getData(MainRegistry.proxy.me());
+	/**
+	 * Shitty hack: Keybinds fire before minecraft checks right click on block, which means the tool cycle keybind would fire too.
+	 * If cycle collides with right click and a block is being used, cancel the keybind.
+	 * @param event
+	 */
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void postClientTick(ClientTickEvent event) {
+		if(event.phase != event.phase.END) return;
+		EntityPlayer player = MainRegistry.proxy.me();
+		if(player == null) return;
+		if(player.worldObj == null) return;
 
 		HbmPlayerProps props = HbmPlayerProps.getData(player);
 

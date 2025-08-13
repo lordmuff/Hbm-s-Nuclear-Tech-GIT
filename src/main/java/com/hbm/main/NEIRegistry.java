@@ -48,8 +48,8 @@ public class NEIRegistry {
 		handlers.add(new CrucibleCastingHandler());
 		handlers.add(new ToolingHandler());
 		handlers.add(new ConstructionHandler());
-		handlers.add(new DairyHandler());
 		handlers.add(new SatelliteHandler());
+		handlers.add(new DairyHandler());
 
 		//universal boyes
 		handlers.add(new ZirnoxRecipeHandler());

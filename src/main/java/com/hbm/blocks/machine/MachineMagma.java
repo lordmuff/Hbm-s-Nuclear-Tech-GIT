@@ -88,6 +88,8 @@ public class MachineMagma extends BlockDummyable implements ILookOverlay, IToolt
 
 		if(body.name != "moho") {
 			text.add("&[" + (BobMathUtil.getBlink() ? 0xff0000 : 0xffff00) + "&]! ! ! MUST BE ON MOHO ! ! !");
+		} else if(!drill.validPosition) {
+			text.add("&[" + (BobMathUtil.getBlink() ? 0xff0000 : 0xffff00) + "&]! ! ! INSUFFICIENT LAVA FOUND ! ! !");
 		} else {
 			text.add((drill.power < drill.consumption ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + "Power: " + BobMathUtil.getShortNumber(drill.power) + "HE");
 

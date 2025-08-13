@@ -249,41 +249,6 @@ public class ItemSyringe extends Item {
 			}
 		}
 
-		if(this == ModItems.gun_kit_1 || this == ModItems.gun_kit_2) {
-			if(!world.isRemote) {
-				float repair = 0;
-
-				if(this == ModItems.gun_kit_1) {
-					repair = 0.1F;
-					world.playSoundAtEntity(player, "hbm:item.spray", 1.0F, 1.0F);
-				}
-				if(this == ModItems.gun_kit_2) {
-					repair = 0.5F;
-					world.playSoundAtEntity(player, "hbm:item.repair", 1.0F, 1.0F);
-				}
-
-				for(int i = 0; i < 9; i++) {
-
-					ItemStack gun = player.inventory.mainInventory[i];
-
-					if(gun != null && gun.getItem() instanceof ItemGunBase) {
-
-						int full = ((ItemGunBase) gun.getItem()).mainConfig.durability;
-						int wear = ItemGunBase.getItemWear(gun);
-
-						int nWear = (int) (wear - (full * repair));
-
-						if(nWear < 0)
-							nWear = 0;
-
-						ItemGunBase.setItemWear(gun, nWear);
-					}
-				}
-
-				stack.stackSize--;
-			}
-		}
-
 		if(this == ModItems.cbt_device) {
 			if(!world.isRemote) {
 				player.addPotionEffect(new PotionEffect(HbmPotion.bang.id, 30, 0));

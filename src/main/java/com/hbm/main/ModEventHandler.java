@@ -20,6 +20,8 @@ import com.hbm.dim.WorldTypeTeleport;
 import com.hbm.dim.orbit.OrbitalStation;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.dim.trait.CBT_Destroyed;
+import com.hbm.dim.trait.CelestialBodyTrait;
 import com.hbm.dim.trait.CBT_Lights;
 import com.hbm.entity.mob.EntityCreeperTainted;
 import com.hbm.entity.mob.EntityCyberCrab;
@@ -64,6 +66,7 @@ import com.hbm.packet.toclient.PlayerInformPacket;
 import com.hbm.packet.toclient.SerializableRecipePacket;
 import com.hbm.particle.helper.BlackPowderCreator;
 import com.hbm.potion.HbmPotion;
+import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.tileentity.machine.TileEntityMachineRadarNT;
 import com.hbm.tileentity.machine.rbmk.RBMKDials;
 import com.hbm.tileentity.network.RTTYSystem;
@@ -149,6 +152,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
+import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -175,17 +179,17 @@ public class ModEventHandler {
 
 				if(HTTPHandler.newVersion) {
 					event.player.addChatMessage(
-						new ChatComponentText("New version " + HTTPHandler.versionNumber + " is available! Click ")
+							new ChatComponentText("New version " + HTTPHandler.versionNumber + " is available! Click ")
 							.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW))
 							.appendSibling(new ChatComponentText("[here]")
-								.setChatStyle(new ChatStyle()
-									.setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/JameH2/Hbm-s-Nuclear-Tech-GIT/releases"))
-									.setUnderlined(true)
-									.setColor(EnumChatFormatting.RED)
+									.setChatStyle(new ChatStyle()
+										.setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/JameH2/Hbm-s-Nuclear-Tech-GIT/releases"))
+										.setUnderlined(true)
+										.setColor(EnumChatFormatting.RED)
+									)
 								)
-							)
 							.appendSibling(new ChatComponentText(" to download!").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)))
-					);
+							);
 				}
 			}
 
@@ -382,7 +386,7 @@ public class ModEventHandler {
 			}
 
 			if(event.source instanceof EntityDamageSource && ((EntityDamageSource)event.source).getEntity() instanceof EntityPlayer
-				&& !(((EntityDamageSource)event.source).getEntity() instanceof FakePlayer)) {
+					 && !(((EntityDamageSource)event.source).getEntity() instanceof FakePlayer)) {
 
 				if(event.entityLiving instanceof EntitySpider && event.entityLiving.getRNG().nextInt(500) == 0) {
 					event.entityLiving.dropItem(ModItems.spider_milk, 1);
@@ -408,10 +412,10 @@ public class ModEventHandler {
 
 				if(event.entityLiving instanceof EntityVillager&& event.entityLiving.getRNG().nextInt(1) == 0) {
 					event.entityLiving.dropItem(ModItems.flesh, 5);
-				}
 			}
 		}
 	}
+}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onEntityDeathLast(LivingDeathEvent event) {
@@ -666,8 +670,8 @@ public class ModEventHandler {
 
 					double totalVelocity = Math.sqrt(event.entityLiving.motionX * event.entityLiving.motionX + event.entityLiving.motionZ * event.entityLiving.motionZ);
 					double smoothingAmount = totalVelocity * 0.02;
-					event.entityLiving.motionX -= event.entityLiving.motionX / totalVelocity * smoothingAmount;
-					event.entityLiving.motionZ -= event.entityLiving.motionZ / totalVelocity * smoothingAmount;
+						event.entityLiving.motionX -= event.entityLiving.motionX / totalVelocity * smoothingAmount;
+						event.entityLiving.motionZ -= event.entityLiving.motionZ / totalVelocity * smoothingAmount;
 				}
 			}
 		}
@@ -711,8 +715,8 @@ public class ModEventHandler {
 		ItemStack[] prevArmor = event.entityLiving.previousEquipment;
 
 		if(event.entityLiving instanceof EntityPlayer && prevArmor != null && event.entityLiving.getHeldItem() != null
-			&& (prevArmor[0] == null || prevArmor[0].getItem() != event.entityLiving.getHeldItem().getItem())
-			&& event.entityLiving.getHeldItem().getItem() instanceof IEquipReceiver) {
+				&& (prevArmor[0] == null || prevArmor[0].getItem() != event.entityLiving.getHeldItem().getItem())
+				&& event.entityLiving.getHeldItem().getItem() instanceof IEquipReceiver) {
 
 			((IEquipReceiver)event.entityLiving.getHeldItem().getItem()).onEquip((EntityPlayer) event.entityLiving, event.entityLiving.getHeldItem());
 		}
@@ -1078,6 +1082,23 @@ public class ModEventHandler {
 		if(e instanceof EntityPlayer && ((EntityPlayer)e).inventory.armorInventory[2] != null && ((EntityPlayer)e).inventory.armorInventory[2].getItem() instanceof ArmorFSB)
 			((ArmorFSB)((EntityPlayer)e).inventory.armorInventory[2].getItem()).handleFall((EntityPlayer)e, event.distance);
 	}
+	
+	//this exists!?
+	@SubscribeEvent
+	public void onUseHoe(UseHoeEvent event) {
+	    World world = event.world;
+	    int x = event.x;
+	    int y = event.y;
+	    int z = event.z;
+
+	    Block block = world.getBlock(x, y, z);
+
+	    if (block == ModBlocks.rubber_grass || block == ModBlocks.rubber_silt) {
+	        world.setBlock(x, y, z, ModBlocks.rubber_farmland);
+	        event.current.damageItem(1, event.entityPlayer); 
+	        event.setResult(Result.ALLOW); 
+	    }
+	}
 
 	private static final UUID fopSpeed = UUID.fromString("e5a8c95d-c7a0-4ecf-8126-76fb8c949389");
 
@@ -1425,18 +1446,18 @@ public class ModEventHandler {
 		if(celestial.hasLife()) return; // Except on Laythe
 
 		switch(event.type) {
-			case BIG_SHROOM:
-			case CACTUS:
-			case DEAD_BUSH:
-			case LILYPAD:
-			case FLOWERS:
-			case GRASS:
-			case PUMPKIN:
-			case REED:
-			case SHROOM:
-			case TREE:
-				event.setResult(Result.DENY);
-			default:
+		case BIG_SHROOM:
+		case CACTUS:
+		case DEAD_BUSH:
+		case LILYPAD:
+		case FLOWERS:
+		case GRASS:
+		case PUMPKIN:
+		case REED:
+		case SHROOM:
+		case TREE:
+			event.setResult(Result.DENY);
+		default:
 		}
 	}
 
@@ -1444,8 +1465,14 @@ public class ModEventHandler {
 	public void onServerTick(TickEvent.ServerTickEvent event) {
 
 		if(event.phase == Phase.START) {
-
-			// Redstone over Radio
+			    for(CelestialBody body : CelestialBody.getAllBodies()) {
+			        List<CelestialBodyTrait> traits = new ArrayList<>(body.getTraits().values());
+			        for (CelestialBodyTrait trait : traits) {
+			            trait.update(false);
+			        }
+			    }
+			
+			// do other shit I guess?
 			RTTYSystem.updateBroadcastQueue();
 			// Logistics drone network
 			RequestNetwork.updateEntries();
@@ -1456,6 +1483,7 @@ public class ModEventHandler {
 			// Dyson Swarms
 			CelestialBody.updateSwarms();
 		}
+
 
 		// There is an issue here somewhere...
 		// I cannot, for the life of me, figure out why a single certain bug happens.

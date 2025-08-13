@@ -87,6 +87,22 @@ public abstract class BlockDummyable extends BlockContainer implements ICustomBl
 
 		super.updateTick(world, x, y, z, rand);
 
+		if(!internalPlayers.isEmpty()) {
+			boolean anyStillInside = false;
+			for(EntityPlayer player : internalPlayers) {
+				if(isPlayerInside(world, player)) {
+					anyStillInside = true;
+					break;
+				}
+			}
+
+			if(anyStillInside) {
+				world.scheduleBlockUpdate(x, y, z, this, 1);
+			} else {
+				internalPlayers.clear();
+			}
+		}
+
 		destroyIfOrphan(world, x, y, z);
 	}
 
@@ -222,7 +238,7 @@ public abstract class BlockDummyable extends BlockContainer implements ICustomBl
 			}
 		}
 
-		if(!checkRequirement(world, ox, oy, oz, dir, 0)) {
+		if(!checkRequirement(world, ox - dir.offsetX * o, oy, oz - dir.offsetZ * o, dir, o)) {
 
 			if(!pl.capabilities.isCreativeMode) {
 				ItemStack stack = pl.inventory.mainInventory[pl.inventory.currentItem];

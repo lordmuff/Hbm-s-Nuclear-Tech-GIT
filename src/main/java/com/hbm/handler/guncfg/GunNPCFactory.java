@@ -109,6 +109,7 @@ public class GunNPCFactory {
 
 		return bullet;
 	}
+
 	public static BulletConfiguration getBehemothBullet() {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
@@ -123,6 +124,7 @@ public class GunNPCFactory {
 
 		return bullet;
 	}
+
 	public static BulletConfiguration getMaskmanTracer() {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();

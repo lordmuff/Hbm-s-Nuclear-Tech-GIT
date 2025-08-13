@@ -167,7 +167,7 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 		List toAdd = new ArrayList();
 
 		if(canSeal) {
-			list.add(EnumChatFormatting.BLUE + "" + I18n.format("armor.canSeal"));
+			list.add(EnumChatFormatting.BLUE + "" + I18nUtil.format("armor.canSeal"));
 		}
 
 		if(!effects.isEmpty()) {
@@ -252,10 +252,10 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 
 		EntityPlayer player = event.player;
 		boolean step = true;
-		
+
 		if(player.getUniqueID().equals(ShadyUtil.the_NCR) || player.getUniqueID().equals(ShadyUtil.Barnaby99_x)) {
 			step = false;
-			
+
 			if(player.worldObj.isRemote && player.onGround) {
 				steppy(player, "hbm:step.powered");
 			}
@@ -317,7 +317,7 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 			}	*/
 		}
 	}
-	
+
 	public static void steppy(EntityPlayer player, String sound) {
 
 		try {

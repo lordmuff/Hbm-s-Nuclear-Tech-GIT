@@ -19,6 +19,7 @@ import com.hbm.entity.missile.EntityRideableRocket.EntityRideableRocketDummy;
 import com.hbm.entity.mob.*;
 import com.hbm.entity.mob.botprime.*;
 import com.hbm.entity.mob.glyphid.*;
+import com.hbm.entity.mob.siege.EntitySiegeCraft;
 import com.hbm.entity.particle.*;
 import com.hbm.entity.projectile.*;
 import com.hbm.entity.train.EntityRailCarBase.BoundingBoxDummyEntity;
@@ -221,6 +222,7 @@ public class EntityMappings {
 		addEntity(EntityDisperserCanister.class, "entity_disperser", 250);
 		addEntity(EntityWaypoint.class, "entity_waypoint", 250, false);
 		addMob(EntityWarBehemoth.class, "entity_war_behemoth", 0x204131, 0x75CE00);
+		addMob(EntityTankbot.class, "entity_tankbot", 0x204131, 0x75CE00);
 
 		addMob(EntityCreeperNuclear.class, "entity_mob_nuclear_creeper", 0x204131, 0x75CE00);
 		addMob(EntityCreeperTainted.class, "entity_mob_tainted_creeper", 0x813b9b, 0xd71fdd);
@@ -239,6 +241,11 @@ public class EntityMappings {
 
 		addMob(EntityMoonCow.class, "entity_moon_cow", 0xECD376, 0x262A44);
 		addMob(EntityScutterfish.class, "entity_scutterfish", 0xC8C9CD, 0x858894);
+		addMob(EntityScuttlecrab.class, "entity_scuttlecrab", 0xF17951, 0xEDDABB);
+		addMob(EntityDepthSquid.class, "entity_depthsquid", 0x00B4Df, 0x016085);
+		addMob(EntityScrapFish.class, "entity_scrapfish", 0xDF9835, 0x510E13);
+		addMob(EntitySifterEel.class, "entity_siftereel", 0x5B963E, 0xC0B286);
+		addMob(EntitySiegeCraft.class, "entity_micro_ufo", 0x5B963E, 0xC0B286);
 
 		addMob(EntityFBI.class, "entity_ntm_fbi", 0x008000, 0x404040);
 		addMob(EntityFBIDrone.class, "entity_ntm_fbi_drone", 0x008000, 0x404040);
@@ -291,6 +298,7 @@ public class EntityMappings {
 
 			if(biome == null) continue;
 			if(biome instanceof BiomeGenBaseCelestial) continue;
+			if(biome instanceof BiomeGenMushroomIsland) continue;
 
 			List<SpawnListEntry> spawns = biome.getSpawnableList(typeOfCreature);
 

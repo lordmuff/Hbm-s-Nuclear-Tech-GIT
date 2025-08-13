@@ -12,13 +12,11 @@ import net.minecraft.world.biome.BiomeGenBase;
 
 public class BiomeGenMohoBasalt extends BiomeGenBaseMoho {
 
-	public static final BiomeGenBase.Height height = new BiomeGenBase.Height(0, 0.224F);
-
 	public BiomeGenMohoBasalt(int id) {
 		super(id);
 		this.setBiomeName("Moho Basalt Deltas");
 
-		this.setHeight(height);
+		this.setHeight(new BiomeGenBase.Height(0, 0.224F));
 
 		this.topBlock = ModBlocks.basalt;
 		this.fillerBlock = ModBlocks.basalt;
@@ -77,7 +75,7 @@ public class BiomeGenMohoBasalt extends BiomeGenBaseMoho {
 							} else if(by < 56 - l) {
 								block = null;
 								block1 = ModBlocks.moho_stone;
-								blocks[i] = Blocks.gravel;
+								blocks[i] = ModBlocks.basalt;
 							} else {
 								blocks[i] = block1;
 							}

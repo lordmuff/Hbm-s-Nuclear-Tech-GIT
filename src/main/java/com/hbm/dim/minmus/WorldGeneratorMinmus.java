@@ -5,11 +5,14 @@ import java.util.Map;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.BlockOre;
 import com.hbm.blocks.BlockEnums.EnumStoneType;
 import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
+import com.hbm.dim.SolarSystem;
 import com.hbm.main.StructureManager;
+import com.hbm.world.feature.OilBubble;
 import com.hbm.world.gen.nbt.NBTStructure;
 import com.hbm.world.gen.nbt.JigsawPiece;
 import com.hbm.world.gen.nbt.JigsawPool;
@@ -31,8 +34,8 @@ public class WorldGeneratorMinmus implements IWorldGenerator {
 
 		JigsawPiece minmusBase = new JigsawPiece("minmus_base", StructureManager.mun_base) {{ alignToTerrain = true; heightOffset = -1; blockTable = concrete; }};
 
-		NBTStructure.registerStructure(SpaceConfig.minmusDimension, new SpawnCondition() {{
-			spawnWeight = 8;
+		NBTStructure.registerStructure(SpaceConfig.minmusDimension, new SpawnCondition("minmus_base") {{
+			spawnWeight = 6;
 			sizeLimit = 32;
 			startPool = "start";
 			pools = new HashMap<String, JigsawPool>() {{
@@ -57,7 +60,9 @@ public class WorldGeneratorMinmus implements IWorldGenerator {
 			}};
 		}});
 
-		NBTStructure.registerNullWeight(SpaceConfig.minmusDimension, 16);
+		NBTStructure.registerNullWeight(SpaceConfig.minmusDimension, 18);
+
+		BlockOre.addValidBody(ModBlocks.ore_brine, SolarSystem.Body.MINMUS);
 	}
 
 	@Override
@@ -69,6 +74,15 @@ public class WorldGeneratorMinmus implements IWorldGenerator {
 
 	private void generateMinmus(World world, Random rand, int i, int j) {
 		int meta = CelestialBody.getMeta(world);
+
+		if(WorldConfig.minmusBrineSpawn > 0 && rand.nextInt(WorldConfig.minmusBrineSpawn) == 0) {
+			int randPosX = i + rand.nextInt(16);
+			int randPosY = rand.nextInt(25);
+			int randPosZ = j + rand.nextInt(16);
+
+			OilBubble.spawnOil(world, randPosX, randPosY, randPosZ, 10 + rand.nextInt(7), ModBlocks.ore_brine, meta, ModBlocks.minmus_stone);
+		}
+
         DungeonToolbox.generateOre(world, rand, i, j, 1, 16, 6, 40, ModBlocks.stone_resource, EnumStoneType.MALACHITE.ordinal(), ModBlocks.minmus_stone);
         DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.copperSpawn * 3, 12, 8, 56, ModBlocks.ore_copper, meta, ModBlocks.minmus_stone);
 	}

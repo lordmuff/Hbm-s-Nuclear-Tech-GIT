@@ -20,8 +20,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.entity.effect.EntityMist;
 import com.hbm.config.GeneralConfig;
+import com.hbm.entity.effect.EntityMist;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionNukeGeneric;

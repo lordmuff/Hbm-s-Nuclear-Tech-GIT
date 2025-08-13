@@ -130,16 +130,4 @@ public class GunConfiguration implements Cloneable {
 	public static final String RSOUND_GRENADE_NEW = "hbm:weapon.glReload";
 	public static final String RSOUND_FATMAN = "hbm:weapon.fatmanReload";
 
-	public GunConfiguration silenced() {
-		this.firingSound = "hbm:weapon.silencerShoot";
-		return this;
-	}
-	public static void spawnParticles(World world, double x, double y, double z, int count) {
-
-		NBTTagCompound data = new NBTTagCompound();
-		data.setString("type", "smoke");
-		data.setString("mode", "cloud");
-		data.setInteger("count", count);
-		PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, x, y, z),  new TargetPoint(world.provider.dimensionId, x, y, z, 250));
-	}
 }

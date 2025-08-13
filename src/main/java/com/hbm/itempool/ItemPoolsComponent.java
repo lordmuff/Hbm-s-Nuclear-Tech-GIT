@@ -27,6 +27,7 @@ public class ItemPoolsComponent {
 	public static final String POOL_VAULT_LAB = "POOL_VAULT_LAB";
 	public static final String POOL_VAULT_LOCKERS = "POOL_VAULT_LOCKERS";
 	public static final String POOL_SUBMARINE = "POOL_SUBMARINE";
+	public static final String POOL_MACHINE_PARTSTHAT = "POOL_MACHINE_PARTSTHAT";
 	public static final String POOL_METEOR_SAFE = "POOL_METEOR_SAFE";
 	public static final String POOL_OIL_RIG = "POOL_OIL_RIG";
 	public static final String POOL_RTG = "POOL_RTG";
@@ -236,6 +237,17 @@ public class ItemPoolsComponent {
 					weighted(Items.book, 0, 1, 5, 4),
 			};
 		}};
+		
+		new ItemPool(POOL_MACHINE_PARTSTHAT) {{
+			this.pool = new WeightedRandomChestContent[] {
+					weighted(ModItems.nugget_beryllium, 0, 3, 12, 5),
+					weighted(ModItems.circuit, EnumCircuitType.AVIONICS.ordinal(), 3, 12, 5),
+					weighted(ModItems.circuit, EnumCircuitType.PCB.ordinal(), 3, 6, 5),
+					weighted(ModItems.plate_steel, 0, 1, 1, 1),
+					weighted(ModItems.powder_steel, 0, 1, 1, 2),
+
+			};
+		}};
 
 		new ItemPool(POOL_OIL_RIG) {{
 			this.pool = new WeightedRandomChestContent[] {
@@ -247,14 +259,14 @@ public class ItemPoolsComponent {
 				weighted(ModItems.circuit, EnumCircuitType.CAPACITOR.ordinal(), 1, 1, 3),
 			};
 		}};
-
+    
 		new ItemPool(POOL_RTG) {{
 			this.pool = new WeightedRandomChestContent[] {
 				weighted(ModItems.pellet_rtg_depleted, ItemRTGPelletDepleted.DepletedRTGMaterial.LEAD.ordinal(), 1, 1, 40),
 				weighted(ModItems.pellet_rtg_weak,0, 0, 1, 1),
 			};
 		}};
-
+        
 		new ItemPool(POOL_REPAIR_MATERIALS) {{
 			this.pool = new WeightedRandomChestContent[] {
 				weighted(ModItems.ingot_aluminium, 0, 2, 8, 3),

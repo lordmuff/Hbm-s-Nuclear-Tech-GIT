@@ -38,7 +38,7 @@ public abstract class ItemInventory implements IInventory {
 	}
 
 	public NBTTagCompound checkNBT(NBTTagCompound nbt) {
-		
+
 		if(nbt == null || nbt.hasNoTags())
 			return null;
 
@@ -83,7 +83,7 @@ public abstract class ItemInventory implements IInventory {
 				return null; // Reset.
 			}
 		} catch (IOException ignored) {}
-		
+
 		return nbt;
 	}
 

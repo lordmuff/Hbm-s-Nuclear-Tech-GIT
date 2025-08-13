@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.dim.SolarSystem;
 import com.hbm.handler.threading.PacketThreading;
 import com.hbm.inventory.UpgradeManagerNT;
 import com.hbm.inventory.container.ContainerOreSlopper;
@@ -16,12 +17,13 @@ import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
 import com.hbm.items.special.ItemBedrockOreBase;
 import com.hbm.items.special.ItemBedrockOreNew;
 import com.hbm.items.special.ItemBedrockOreNew.BedrockOreGrade;
-import com.hbm.items.special.ItemBedrockOreNew.BedrockOreType;
+import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOre;
+import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOreType;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
-import com.hbm.tileentity.IFluidCopiable;
 import com.hbm.packet.toclient.AuxParticlePacketNT;
+import com.hbm.tileentity.IFluidCopiable;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.IUpgradeInfoProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -72,7 +74,8 @@ public class TileEntityMachineOreSlopper extends TileEntityMachineBase implement
 	public int delay;
 
 	public FluidTank[] tanks;
-	public double[] ores = new double[BedrockOreType.values().length];
+	public double[] ores = new double[CelestialBedrockOre.getAllTypes().size()];
+	private SolarSystem.Body fromBody;
 
 	public UpgradeManagerNT upgradeManager = new UpgradeManagerNT();
 
@@ -128,8 +131,10 @@ public class TileEntityMachineOreSlopper extends TileEntityMachineBase implement
 				while(progress >= 1F && canSlop()) {
 					progress -= 1F;
 
-					for(BedrockOreType type : BedrockOreType.values()) {
-						ores[type.ordinal()] += (ItemBedrockOreBase.getOreAmount(slots[2], type) * (1D + efficiency * 0.1));
+					fromBody = ItemBedrockOreBase.getOreBody(slots[2]);
+
+					for(CelestialBedrockOreType type : CelestialBedrockOre.get(fromBody).types) {
+						ores[type.index] += (ItemBedrockOreBase.getOreAmount(slots[2], type) * (1D + efficiency * 0.1));
 					}
 
 					this.decrStackSize(2, 1);
@@ -160,14 +165,14 @@ public class TileEntityMachineOreSlopper extends TileEntityMachineBase implement
 				this.progress = 0;
 			}
 
-			for(BedrockOreType type : BedrockOreType.values()) {
+			for(CelestialBedrockOreType type : CelestialBedrockOre.getAllTypes()) {
 				ItemStack output = ItemBedrockOreNew.make(BedrockOreGrade.BASE, type);
-				outer: while(ores[type.ordinal()] >= 1) {
+				outer: while(ores[type.index] >= 1) {
 					for(int i = 3; i <= 8; i++) if(slots[i] != null && slots[i].getItem() == output.getItem() && slots[i].getItemDamage() == output.getItemDamage() && slots[i].stackSize < output.getMaxStackSize()) {
-						slots[i].stackSize++; ores[type.ordinal()] -= 1F; continue outer;
+						slots[i].stackSize++; ores[type.index] -= 1F; continue outer;
 					}
 					for(int i = 3; i <= 8; i++) if(slots[i] == null) {
-						slots[i] = output; ores[type.ordinal()] -= 1F; continue outer;
+						slots[i] = output; ores[type.index] -= 1F; continue outer;
 					}
 					break outer;
 				}
@@ -215,40 +220,40 @@ public class TileEntityMachineOreSlopper extends TileEntityMachineBase implement
 				}
 
 				switch(animation) {
-					case LOWERING:
-						this.bucket += 1F/40F;
-						if(bucket >= 1F) {
-							bucket = 1F;
-							animation = SlopperAnimation.LIFTING;
-							delay = 20;
-						}
-						break;
-					case LIFTING:
-						this.bucket -= 1F/40F;
-						if(bucket <= 0) {
-							bucket = 0F;
-							animation = SlopperAnimation.MOVE_SHREDDER;
-							delay = 10;
-						}
-						break;
-					case MOVE_SHREDDER:
-						this.slider += 1/50F;
-						if(slider >= 1F) {
-							slider = 1F;
-							animation = SlopperAnimation.DUMPING;
-							delay = 60;
-						}
-						break;
-					case DUMPING:
-						animation = SlopperAnimation.MOVE_BUCKET;
-						break;
-					case MOVE_BUCKET:
-						this.slider -= 1/50F;
-						if(slider <= 0F) {
-							animation = SlopperAnimation.LOWERING;
-							delay = 10;
-						}
-						break;
+				case LOWERING:
+					this.bucket += 1F/40F;
+					if(bucket >= 1F) {
+						bucket = 1F;
+						animation = SlopperAnimation.LIFTING;
+						delay = 20;
+					}
+					break;
+				case LIFTING:
+					this.bucket -= 1F/40F;
+					if(bucket <= 0) {
+						bucket = 0F;
+						animation = SlopperAnimation.MOVE_SHREDDER;
+						delay = 10;
+					}
+					break;
+				case MOVE_SHREDDER:
+					this.slider += 1/50F;
+					if(slider >= 1F) {
+						slider = 1F;
+						animation = SlopperAnimation.DUMPING;
+						delay = 60;
+					}
+					break;
+				case DUMPING:
+					animation = SlopperAnimation.MOVE_BUCKET;
+					break;
+				case MOVE_BUCKET:
+					this.slider -= 1/50F;
+					if(slider <= 0F) {
+						animation = SlopperAnimation.LOWERING;
+						delay = 10;
+					}
+					break;
 				}
 			}
 		}
@@ -259,14 +264,14 @@ public class TileEntityMachineOreSlopper extends TileEntityMachineBase implement
 		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
 		return new DirPos[] {
-			new DirPos(xCoord + dir.offsetX * 4, yCoord, zCoord + dir.offsetZ * 4, dir),
-			new DirPos(xCoord - dir.offsetX * 4, yCoord, zCoord - dir.offsetZ * 4, dir.getOpposite()),
-			new DirPos(xCoord + rot.offsetX * 2, yCoord, zCoord + rot.offsetZ * 2, rot),
-			new DirPos(xCoord - rot.offsetX * 2, yCoord, zCoord - rot.offsetZ * 2, rot.getOpposite()),
-			new DirPos(xCoord + dir.offsetX * 2 + rot.offsetX * 2, yCoord, zCoord + dir.offsetZ * 2 + rot.offsetZ * 2, rot),
-			new DirPos(xCoord + dir.offsetX * 2 - rot.offsetX * 2, yCoord, zCoord + dir.offsetZ * 2 - rot.offsetZ * 2, rot.getOpposite()),
-			new DirPos(xCoord - dir.offsetX * 2 + rot.offsetX * 2, yCoord, zCoord - dir.offsetZ * 2 + rot.offsetZ * 2, rot),
-			new DirPos(xCoord - dir.offsetX * 2 - rot.offsetX * 2, yCoord, zCoord - dir.offsetZ * 2 - rot.offsetZ * 2, rot.getOpposite())
+				new DirPos(xCoord + dir.offsetX * 4, yCoord, zCoord + dir.offsetZ * 4, dir),
+				new DirPos(xCoord - dir.offsetX * 4, yCoord, zCoord - dir.offsetZ * 4, dir.getOpposite()),
+				new DirPos(xCoord + rot.offsetX * 2, yCoord, zCoord + rot.offsetZ * 2, rot),
+				new DirPos(xCoord - rot.offsetX * 2, yCoord, zCoord - rot.offsetZ * 2, rot.getOpposite()),
+				new DirPos(xCoord + dir.offsetX * 2 + rot.offsetX * 2, yCoord, zCoord + dir.offsetZ * 2 + rot.offsetZ * 2, rot),
+				new DirPos(xCoord + dir.offsetX * 2 - rot.offsetX * 2, yCoord, zCoord + dir.offsetZ * 2 - rot.offsetZ * 2, rot.getOpposite()),
+				new DirPos(xCoord - dir.offsetX * 2 + rot.offsetX * 2, yCoord, zCoord - dir.offsetZ * 2 + rot.offsetZ * 2, rot),
+				new DirPos(xCoord - dir.offsetX * 2 - rot.offsetX * 2, yCoord, zCoord - dir.offsetZ * 2 - rot.offsetZ * 2, rot.getOpposite())
 		};
 	}
 
@@ -354,13 +359,13 @@ public class TileEntityMachineOreSlopper extends TileEntityMachineBase implement
 
 		if(bb == null) {
 			bb = AxisAlignedBB.getBoundingBox(
-				xCoord - 3,
-				yCoord,
-				zCoord - 3,
-				xCoord + 4,
-				yCoord + 7,
-				zCoord + 4
-			);
+					xCoord - 3,
+					yCoord,
+					zCoord - 3,
+					xCoord + 4,
+					yCoord + 7,
+					zCoord + 4
+					);
 		}
 
 		return bb;

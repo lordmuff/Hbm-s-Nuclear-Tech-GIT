@@ -64,7 +64,6 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 	public static final int powerReq = 100000;
 	public FluidTank[] tanks;
 	public FluidTank plasma;
-	public static final int CoolReq = 1;
 
 	public int progress;
 	public static final int duration = 100;
@@ -235,8 +234,6 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 		}
 	}
 
-
-
 	protected List<DirPos> connections;
 
 	private void updateConnections() {
@@ -288,7 +285,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 			NBTTagCompound data = new NBTTagCompound();
 			data.setString("type", "muke");
 			data.setBoolean("balefire", true);
-			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 250));
+			PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(data, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 250));
 
 		} else {
 			Vec3 vec = Vec3.createVectorHelper(5.5, 0, 0);
@@ -476,8 +473,6 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 		tanks[3].readFromNBT(nbt, "hotlant");
 		plasma.readFromNBT(nbt, "plasma");
 	}
-
-
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
@@ -722,14 +717,14 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 
 	@Override
 	public String runRORFunction(String name, String[] params) {
-
+		
 		if((PREFIX_FUNCTION + "toggle").equals(name)) {
 			this.isOn = !this.isOn;
 			this.markChanged();
 			return null;
 		}
-
-
+			
+		
 		if((PREFIX_FUNCTION + "switch").equals(name) && params.length > 0) {
 			if("on".equals(params[0])) {
 				this.isOn = true;
@@ -742,7 +737,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 				return null;
 			}
 		}
-
+		
 		return null;
 	}
 }

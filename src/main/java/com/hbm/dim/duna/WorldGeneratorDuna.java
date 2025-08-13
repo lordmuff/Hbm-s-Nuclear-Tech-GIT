@@ -3,9 +3,12 @@ package com.hbm.dim.duna;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.BlockOre;
+import com.hbm.blocks.machine.Spotlight;
 import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
+import com.hbm.dim.SolarSystem;
 import com.hbm.dim.WorldTypeTeleport;
 import com.hbm.main.StructureManager;
 import com.hbm.world.feature.OilBubble;
@@ -21,12 +24,14 @@ import net.minecraft.world.chunk.IChunkProvider;
 public class WorldGeneratorDuna implements IWorldGenerator {
 
 	public WorldGeneratorDuna() {
-		NBTStructure.registerStructure(SpaceConfig.dunaDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.dunaDimension, new SpawnCondition("duna_comms") {{
 			structure = new JigsawPiece("duna_comms", StructureManager.duna_comms, -1);
 			canSpawn = biome -> biome.heightVariation < 0.1F;
-			spawnWeight = 8;
+			spawnWeight = 4;
 		}});
-		NBTStructure.registerNullWeight(SpaceConfig.dunaDimension, 16);
+		NBTStructure.registerNullWeight(SpaceConfig.dunaDimension, 20);
+
+		BlockOre.addValidBody(ModBlocks.ore_oil, SolarSystem.Body.DUNA);
 	}
 
 	@Override
@@ -63,7 +68,9 @@ public class WorldGeneratorDuna implements IWorldGenerator {
 			int z = 0;
 			int y = world.getHeightValue(x, z) - 1;
 
+			Spotlight.disableOnGeneration = false;
 			StructureManager.martian.build(world, x, y, z);
+			Spotlight.disableOnGeneration = true;
 		}
 	}
 

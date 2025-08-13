@@ -59,18 +59,6 @@ public class MagicRecipes {
 				new ComparableStack(ModItems.blades_desh),
 				new ComparableStack(ModItems.diamond_gavel)));
 
-		recipes.add(new MagicRecipe(new ItemStack(ModBlocks.hadron_coil_mese),
-				new ComparableStack(ModBlocks.hadron_coil_chlorophyte),
-				new ComparableStack(ModItems.powder_dineutronium),
-				new ComparableStack(ModItems.plate_desh),
-				new OreDictStack(GOLD.dust())));
-
-		recipes.add(new MagicRecipe(new ItemStack(ModBlocks.hadron_coil_mese),
-				new ComparableStack(ModBlocks.hadron_coil_chlorophyte),
-				new OreDictStack(DNT.wireDense()),
-				new OreDictStack(W.wireDense()),
-				new OreDictStack(GOLD.wireDense())));
-
 		recipes.add(new MagicRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.bobblehead), 1, 21),
 				new ComparableStack(ModItems.ingot_gwenium),
 				new ComparableStack(ModItems.ingot_dineutronium),

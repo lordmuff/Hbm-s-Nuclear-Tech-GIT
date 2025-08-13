@@ -9,7 +9,6 @@ import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.tileentity.machine.TileEntityCondenser;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.i18n.I18nUtil;
-import com.hbm.util.i18n.I18nUtil;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

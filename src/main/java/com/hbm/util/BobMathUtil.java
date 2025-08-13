@@ -187,7 +187,7 @@ public class BobMathUtil {
 
 		return new BigDecimal(num).setScale(digits, RoundingMode.HALF_UP).doubleValue();
 	}
-
+	
 	/**
 	 * @param amount
 	 * @return the number as a string with thousand group commas
@@ -277,25 +277,6 @@ public class BobMathUtil {
 		return Arrays.stream(in.toArray()).mapToInt(mapper).toArray();
 	}
 
-	public static void shuffleIntArray(int[] array) {
-		Random rand = new Random();
-		for(int i = array.length - 1; i > 0; i--) {
-			int r = rand.nextInt(i + 1);
-			int temp = array[r];
-			array[r] = array[i];
-			array[i] = temp;
-		}
-	}
-
-	public static void reverseIntArray(int[] array) {
-		int len = array.length;
-		for(int i = 0; i < len / 2; i++) {
-			int temp = array[i];
-			array[i] = array[len - 1 - i];
-			array[len - 1 - i] = temp;
-		}
-	}
-
 	public static int floor(double value) {
 		int i = (int)value;
 		return value < (double)i ? i - 1 : i;
@@ -352,6 +333,25 @@ public class BobMathUtil {
 			return start;
 		} else {
 			return delta > 1.0D ? end : lerp(delta, start, end);
+		}
+	}
+
+	public static void shuffleIntArray(int[] array) {
+		Random rand = new Random();
+		for(int i = array.length - 1; i > 0; i--) {
+			int r = rand.nextInt(i + 1);
+			int temp = array[r];
+			array[r] = array[i];
+			array[i] = temp;
+		}
+	}
+
+	public static void reverseIntArray(int[] array) {
+		int len = array.length;
+		for(int i = 0; i < len / 2; i++) {
+			int temp = array[i];
+			array[i] = array[len - 1 - i];
+			array[len - 1 - i] = temp;
 		}
 	}
 
