@@ -169,7 +169,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputItems(new OreDictStack(S.dust()), new OreDictStack(ZI.dust()))
 				.inputFluids(new FluidStack(Fluids.UNSATURATEDS, 500, GeneralConfig.enable528 ? 2 : 0))
 				.outputItems(new ItemStack(ModItems.ingot_rubber)));
-		
+
 		this.register(new GenericRecipe("chem.vinylrubber").setup(100, 400)
 				.inputFluids(new FluidStack(Fluids.VINYL, 500), new FluidStack(Fluids.UNSATURATEDS, 400, GeneralConfig.enable528 ? 2 : 0))
 				.outputItems(new ItemStack(ModItems.ingot_rubber)));
@@ -192,7 +192,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputItems(new ComparableStack(Items.wheat), new ComparableStack(Items.dye, 2, 3))
 				.inputFluids(new FluidStack(Fluids.LUBRICANT, 400), new FluidStack(Fluids.PEROXIDE, 500))
 				.outputItems(new ItemStack(ModItems.chocolate, 4)));
-		
+
 		this.register(new GenericRecipe("chem.epearl").setup(100, 300)
 				.inputItems(new OreDictStack(DIAMOND.dust(), 1))
 				.inputFluids(new FluidStack(Fluids.XPJUICE, 500))
@@ -405,6 +405,15 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputFluids(new FluidStack(Fluids.NITRIC_ACID, 2000))
 				.inputItems(new ComparableStack(ModItems.rag_piss)) // urea...
 				.outputFluids(new FluidStack(Fluids.HYDRAZINE, 800)));
+
+		// WARNING: NILERED CHEMISTRY ZONE //
+		this.register(new GenericRecipe("chem.thoriumsalt").setup(60, 250)
+			.inputFluids(new FluidStack(Fluids.THORIUM_SALT_DEPLETED, 16_000))
+			.inputItems(new OreDictStack(TH232.nugget(), 2))
+			.outputFluids(new FluidStack(Fluids.THORIUM_SALT, 16_000))
+			.outputItems(
+				new ItemStack(ModItems.nugget_u233, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1)));
 
 	}
 
