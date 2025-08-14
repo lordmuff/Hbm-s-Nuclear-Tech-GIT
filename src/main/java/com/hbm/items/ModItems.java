@@ -1261,9 +1261,6 @@ public class ModItems {
 	public static ItemRBMKPellet rbmk_pellet_lecm;
 	public static ItemRBMKPellet rbmk_pellet_mecm;
 	public static ItemRBMKPellet rbmk_pellet_hecm;
-	public static ItemRBMKPellet rbmk_pellet_lecf;
-	public static ItemRBMKPellet rbmk_pellet_mecf;
-	public static ItemRBMKPellet rbmk_pellet_hecf;
 
 	public static Item watz_pellet;
 	public static Item watz_pellet_depleted;
@@ -3580,9 +3577,6 @@ public class ModItems {
 		rbmk_pellet_lecm = (ItemRBMKPellet) new ItemRBMKPellet("Low Enriched Curium-245").setUnlocalizedName("rbmk_pellet_lecm").setTextureName(RefStrings.MODID + ":rbmk_pellet_lecm");
 		rbmk_pellet_mecm = (ItemRBMKPellet) new ItemRBMKPellet("Medium Enriched Curium-245").setUnlocalizedName("rbmk_pellet_mecm").setTextureName(RefStrings.MODID + ":rbmk_pellet_mecm");
 		rbmk_pellet_hecm = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Curium-245").setUnlocalizedName("rbmk_pellet_hecm").setTextureName(RefStrings.MODID + ":rbmk_pellet_hecm");
-		rbmk_pellet_lecf = (ItemRBMKPellet) new ItemRBMKPellet("Low Enriched Californium-252").setUnlocalizedName("rbmk_pellet_lecf").setTextureName(RefStrings.MODID + ":rbmk_pellet_lecf");
-		rbmk_pellet_mecf = (ItemRBMKPellet) new ItemRBMKPellet("Medium Enriched Californium-252").setUnlocalizedName("rbmk_pellet_mecf").setTextureName(RefStrings.MODID + ":rbmk_pellet_mecf");
-		rbmk_pellet_hecf = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Californium-252").setUnlocalizedName("rbmk_pellet_hecf").setTextureName(RefStrings.MODID + ":rbmk_pellet_hecf");
 
 		rbmk_fuel_empty = new Item().setUnlocalizedName("rbmk_fuel_empty").setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":rbmk_fuel_empty");
 		rbmk_fuel_ueu = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_ueu)
