@@ -271,7 +271,7 @@ public class MainRegistry {
 	public void PreLoad(FMLPreInitializationEvent PreEvent) {
 		CrashHelper.init();
 
-		QMAWLoader.registerModFileURL(FMLCommonHandler.instance().findContainerFor(RefStrings.MODID).getSource());
+		//QMAWLoader.registerModFileURL(FMLCommonHandler.instance().findContainerFor(RefStrings.MODID).getSource());
 
 		startupTime = System.currentTimeMillis();
 		configDir = PreEvent.getModConfigurationDirectory();
