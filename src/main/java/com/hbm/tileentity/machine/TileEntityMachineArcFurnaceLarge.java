@@ -313,6 +313,9 @@ public class TileEntityMachineArcFurnaceLarge extends TileEntityMachineBase impl
 		}
 
 		for(int i = 0; i < 3; i++) {
+			if(ItemArcElectrode.getMaxDurability(slots[i]) == ItemArcElectrode.EnumElectrodeType.SATURNITE.durability) {
+				continue;
+			}
 			if(ItemArcElectrode.damage(slots[i])) {
 				slots[i] = new ItemStack(ModItems.arc_electrode_burnt, 1, slots[i].getItemDamage());
 			}
