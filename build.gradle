@@ -103,6 +103,8 @@ dependencies {
 	implementation 'codechicken:NotEnoughItems:1.7.10-1.0.3.74:dev'
 	compileOnly 'codechicken:NotEnoughItems:1.7.10-1.0.3.74:src'
 
+	//compileOnly("com.github.GTNewHorizons:NotEnoughItems:2.5.4-GTNH:dev")
+
 	compileOnly "inventorytweaks:InventoryTweaks:1.59-dev:deobf"
 
 	implementation "li.cil.oc:OpenComputers:MC1.7.10-1.5.+:api"

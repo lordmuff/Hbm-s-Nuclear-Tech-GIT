@@ -40,6 +40,7 @@ import com.hbm.main.MainRegistry;
 import com.hbm.util.Compat;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import gregapi.data.OP;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -638,6 +639,8 @@ public class OreDictManager {
 			if(mat.autogen.contains(MaterialShapes.FRAGMENT)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.FRAGMENT.name() + name, new ItemStack(ModItems.bedrock_ore_fragment, 1, mat.id));
 
 			if(mat.autogen.contains(MaterialShapes.FRAGMENT)) for(String name : mat.names) OreDictionary.registerOre(DUSTTINY.name() + name, new ItemStack(ModItems.bedrock_ore_fragment, 1, mat.id));
+
+			//if(mat.autogen.contains(MaterialShapes.FRAGMENT)) for(String name : mat.names) OreDictionary.registerOre(OP.crushedTiny.mNameInternal + name, new ItemStack(ModItems.bedrock_ore_fragment, 1, mat.id));
 
 			if(mat.autogen.contains(MaterialShapes.WIRE)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.WIRE.name() + name, new ItemStack(ModItems.wire_fine, 1, mat.id));
 
