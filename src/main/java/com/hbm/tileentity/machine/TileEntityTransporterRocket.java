@@ -30,12 +30,12 @@ public class TileEntityTransporterRocket extends TileEntityTransporterBase {
 
 	public int threshold = 0;
 
-    public TileEntityTransporterRocket() {
-        super(16, 8, 128_000, 0, 2, 64_000);
+	public TileEntityTransporterRocket() {
+		super(16, 8, 128_000, 0, 2, 64_000);
 
 		tanks[8].setTankType(Fluids.HYDROGEN);
 		tanks[9].setTankType(Fluids.OXYGEN);
-    }
+	}
 
 	@Override
 	public void updateEntity() {
