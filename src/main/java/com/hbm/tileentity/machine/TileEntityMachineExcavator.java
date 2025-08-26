@@ -26,13 +26,10 @@ import com.hbm.tileentity.IFluidCopiable;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.IUpgradeInfoProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-import com.hbm.util.Compat;
-import com.hbm.util.EnumUtil;
-import com.hbm.util.I18nUtil;
-import com.hbm.util.InventoryUtil;
-import com.hbm.util.ItemStackUtil;
+import com.hbm.util.*;
 import com.hbm.util.fauxpointtwelve.BlockPos;
 import com.hbm.util.fauxpointtwelve.DirPos;
+import com.hbm.util.i18n.I18nUtil;
 
 import api.hbm.conveyor.IConveyorBelt;
 import api.hbm.energymk2.IEnergyReceiverMK2;
@@ -215,10 +212,10 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
 		return new DirPos[] {
-				new DirPos(xCoord + dir.offsetX * 4 + rot.offsetX, yCoord + 1, zCoord + dir.offsetZ * 4 + rot.offsetZ, dir),
-				new DirPos(xCoord + dir.offsetX * 4 - rot.offsetX, yCoord + 1, zCoord + dir.offsetZ * 4 - rot.offsetZ, dir),
-				new DirPos(xCoord + rot.offsetX * 4, yCoord + 1, zCoord + rot.offsetZ * 4, rot),
-				new DirPos(xCoord - rot.offsetX * 4, yCoord + 1, zCoord - rot.offsetZ * 4, rot.getOpposite())
+			new DirPos(xCoord + dir.offsetX * 4 + rot.offsetX, yCoord + 1, zCoord + dir.offsetZ * 4 + rot.offsetZ, dir),
+			new DirPos(xCoord + dir.offsetX * 4 - rot.offsetX, yCoord + 1, zCoord + dir.offsetZ * 4 - rot.offsetZ, dir),
+			new DirPos(xCoord + rot.offsetX * 4, yCoord + 1, zCoord + rot.offsetZ * 4, rot),
+			new DirPos(xCoord - rot.offsetX * 4, yCoord + 1, zCoord - rot.offsetZ * 4, rot.getOpposite())
 		};
 	}
 
@@ -288,7 +285,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 							break;
 						}
 
-							if(shouldIgnoreBlock(b, x, y ,z)) continue;
+						if(shouldIgnoreBlock(b, x, y ,z)) continue;
 
 						ignoreAll = false;
 
@@ -357,33 +354,33 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		else if(oreTile instanceof PrefixBlockTileEntity) {
 			PrefixBlockTileEntity ore = (PrefixBlockTileEntity) oreTile;
 
-				if (oreBlock == CS.BlocksGT.oreBedrock) {
-						OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, oreTile.xCoord, oreTile.yCoord, oreTile.zCoord, SIDE_TOP);
-						mList.add(tMaterial.mMaterial); mList.add(tMaterial.mMaterial);
-						OreDictMaterial matstack = (UT.Code.select(mList.get(0), mList.get(0).mByProducts));
-						stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
-					if (rng(750) == 0) {
-						// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
-						stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
-					}
+			if (oreBlock == CS.BlocksGT.oreBedrock) {
+				OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, oreTile.xCoord, oreTile.yCoord, oreTile.zCoord, SIDE_TOP);
+				mList.add(tMaterial.mMaterial); mList.add(tMaterial.mMaterial);
+				OreDictMaterial matstack = (UT.Code.select(mList.get(0), mList.get(0).mByProducts));
+				stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+				if (rng(750) == 0) {
+					// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
+					stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
 				}
+			}
 
-				if (oreBlock == CS.BlocksGT.oreSmallBedrock) {
-						OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, oreTile.xCoord, oreTile.yCoord, oreTile.zCoord, SIDE_TOP);
-						mList.add(tMaterial.mMaterial);
-						OreDictMaterial matstack = (UT.Code.select(mList.get(0), mList.get(0).mByProducts));
-						stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
-					if (rng(500) == 0) {
-						// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
-						stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
-					}
+			if (oreBlock == CS.BlocksGT.oreSmallBedrock) {
+				OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, oreTile.xCoord, oreTile.yCoord, oreTile.zCoord, SIDE_TOP);
+				mList.add(tMaterial.mMaterial);
+				OreDictMaterial matstack = (UT.Code.select(mList.get(0), mList.get(0).mByProducts));
+				stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+				if (rng(500) == 0) {
+					// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
+					stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
 				}
+			}
 		}
 
 		else if (oreBlock == IL.HBM_Bedrock_Oil.getBlock()) {
 
-				OreDictMaterial matstack = (MT.Oilshale);
-				stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+			OreDictMaterial matstack = (MT.Oilshale);
+			stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
 
 		}
 
@@ -392,7 +389,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 			stacks.add(stack);
 
 			if(stack.getItem() == ModItems.bedrock_ore_base) {
-				ItemBedrockOreBase.setOreAmount(stack, pos.getX(), pos.getZ());
+				ItemBedrockOreBase.setOreAmount(worldObj, stack, pos.getX(), pos.getZ());
 			}
 
 			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10);
@@ -876,13 +873,13 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 
 		if(bb == null) {
 			bb = AxisAlignedBB.getBoundingBox(
-					xCoord - 3,
-					0,
-					zCoord - 3,
-					xCoord + 4,
-					yCoord + 5,
-					zCoord + 4
-					);
+				xCoord - 3,
+				0,
+				zCoord - 3,
+				xCoord + 4,
+				yCoord + 5,
+				zCoord + 4
+			);
 		}
 
 		return bb;
