@@ -26,7 +26,7 @@ if(Files.exists(Paths.get("curseforge.properties"))) {
 
 def version_name = version = mod_version
 if(!mod_build_number.isEmpty()) {
-	version_name = mod_version + "_X" + mod_build_number + "_H261"
+	version_name = mod_version + "_X" + mod_build_number
 	version = "[${version_name}]"
 }
 group = "com.hbm" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -44,7 +44,7 @@ minecraft {
 eclipse.classpath.file.whenMerged { cp ->
 	// Find all codechicken source jars
 	def srcent = cp.entries.findAll { entry -> entry.path.contains("codechicken") && entry.path.endsWith("-src.jar") }
-	
+
 	// Remove them from classpath
 	cp.entries.removeAll srcent
 
@@ -54,10 +54,10 @@ eclipse.classpath.file.whenMerged { cp ->
 		def file = new File(entry.path)
 		srcmap.put(file.getName().replace("-src.jar", "-dev.jar"), file)
 	}
-	
+
 	// Create file reference factory
 	def fileref = new FileReferenceFactory()
-	
+
 	// Find all codechicken development jars
 	cp.entries.findAll { entry -> entry.path.contains("codechicken") && entry.path.endsWith("-dev.jar") }.forEach { entry ->
 		File srcmapping = new File(entry.path) // Initialize the srcmapping from the dev jar path
@@ -88,18 +88,18 @@ repositories {
 		url = "https://cursemaven.com"
 	}
 	maven {
-        name = "OpenComputers"
-        url = "https://maven.cil.li/"
-    }
+		name = "OpenComputers"
+		url = "https://maven.cil.li/"
+	}
 }
 
 dependencies {
 	implementation 'codechicken:CodeChickenCore:1.7.10-1.0.4.29:dev'
 	compileOnly 'codechicken:CodeChickenCore:1.7.10-1.0.4.29:src'
-	
+
 	implementation 'codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev'
 	compileOnly 'codechicken:CodeChickenLib:1.7.10-1.1.3.140:src'
-	
+
 	implementation 'codechicken:NotEnoughItems:1.7.10-1.0.3.74:dev'
 	compileOnly 'codechicken:NotEnoughItems:1.7.10-1.0.3.74:src'
 
@@ -110,6 +110,8 @@ dependencies {
 	implementation "li.cil.oc:OpenComputers:MC1.7.10-1.5.+:api"
 
 	compileOnly "com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta.56-GTNH:dev"
+
+	compile "com.gregoriust.gregtech:gregtech_1.7.10:+:dev"
 }
 
 processResources {
@@ -120,17 +122,17 @@ processResources {
 	// replace stuff in mcmod.info, nothing else
 	from(sourceSets.main.resources.srcDirs) {
 		include 'mcmod.info'
-		
+
 		// replace version and mcversion
 		filesMatching('mcmod.info') {
 			// replace version, mcversion and credits
 			expand([
-					version: version_name,
-					credits: project.credits
+				version: version_name,
+				credits: project.credits
 			])
 		}
 	}
-		
+
 	// copy everything else, thats not the mcmod.info
 	from(sourceSets.main.resources.srcDirs) {
 		exclude 'mcmod.info'
@@ -139,9 +141,9 @@ processResources {
 
 // add AT to meta-inf
 jar {
-    manifest {
-        attributes 'FMLAT': 'HBM_at.cfg'
-    }
+	manifest {
+		attributes 'FMLAT': 'HBM_at.cfg'
+	}
 }
 
 task version {
@@ -159,9 +161,9 @@ if(Files.exists(Paths.get("curseforge.properties"))) {
 		displayName = "Hbm's Nuclear Tech Mod " + version_name.replace("_", "") + " for Minecraft 1.7.10"
 
 		gameVersions.addAll([
-				"Forge",
-				"Java 8",
-				"Client", "Server"
+			"Forge",
+			"Java 8",
+			"Client", "Server"
 		])
 
 		if (Files.exists(Paths.get("changelog"))) {
