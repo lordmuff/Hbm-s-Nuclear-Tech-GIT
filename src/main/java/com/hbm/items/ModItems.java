@@ -490,6 +490,7 @@ public class ModItems {
 	public static Item ingot_pc;
 	public static Item ingot_pvc;
 	public static Item stick_pvc;
+	public static Item stick_vinyl;
 
 	public static Item ingot_fiberglass;
 	public static Item ingot_asbestos;
@@ -647,6 +648,8 @@ public class ModItems {
 	public static Item powder_dura_steel;
 	public static Item powder_polymer;
 	public static Item powder_bakelite;
+	public static Item powder_rubber;
+	public static Item powder_pvc;
 	public static Item powder_euphemium;
 	public static Item powder_meteorite;
 
@@ -2808,6 +2811,7 @@ public class ModItems {
 		ingot_magma = new Item().setUnlocalizedName("ingot_magma").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":ingot_magma");
 		ingot_cft = new Item().setUnlocalizedName("ingot_cft").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":ingot_cft");
 		stick_pvc = new ItemCustomLore().setUnlocalizedName("stick_pvc").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":stick_pvc");
+		stick_vinyl = new ItemCustomLore().setUnlocalizedName("stick_vinyl").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":stick_vinyl");
 
 		ore_byproduct = new ItemByproduct().setUnlocalizedName("ore_byproduct").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":byproduct");
 
@@ -3080,6 +3084,8 @@ public class ModItems {
 		powder_dura_steel = new ItemCustomLore().setUnlocalizedName("powder_dura_steel").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_dura_steel");
 		powder_polymer = new ItemCustomLore().setUnlocalizedName("powder_polymer").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_polymer");
 		powder_bakelite = new ItemCustomLore().setUnlocalizedName("powder_bakelite").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_bakelite");
+		powder_rubber = new ItemCustomLore().setUnlocalizedName("powder_rubber").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_rubber");
+		powder_pvc = new ItemCustomLore().setUnlocalizedName("powder_pvc").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_pvc");
 		powder_euphemium = new ItemCustomLore().setRarity(EnumRarity.epic).setUnlocalizedName("powder_euphemium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_euphemium");
 		powder_wd2004_tiny = new ItemCustomLore().setRarity(EnumRarity.epic).setUnlocalizedName("powder_wd2004_tiny").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_wd2004_tiny");
 		powder_wd2004 = new ItemCustomLore().setRarity(EnumRarity.epic).setUnlocalizedName("powder_wd2004").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_wd2004");
@@ -5834,6 +5840,8 @@ public class ModItems {
 		GameRegistry.registerItem(powder_dura_steel, powder_dura_steel.getUnlocalizedName());
 		GameRegistry.registerItem(powder_polymer, powder_polymer.getUnlocalizedName());
 		GameRegistry.registerItem(powder_bakelite, powder_bakelite.getUnlocalizedName());
+		GameRegistry.registerItem(powder_rubber, powder_rubber.getUnlocalizedName());
+		GameRegistry.registerItem(powder_pvc, powder_pvc.getUnlocalizedName());
 		GameRegistry.registerItem(powder_schrabidium, powder_schrabidium.getUnlocalizedName());
 		GameRegistry.registerItem(powder_schrabidate, powder_schrabidate.getUnlocalizedName());
 		GameRegistry.registerItem(powder_magnetized_tungsten, powder_magnetized_tungsten.getUnlocalizedName());
@@ -5991,6 +5999,7 @@ public class ModItems {
 		GameRegistry.registerItem(grilled_flesh, grilled_flesh.getUnlocalizedName());
 		GameRegistry.registerItem(flesh_burger, flesh_burger.getUnlocalizedName());
 		GameRegistry.registerItem(stick_pvc, stick_pvc.getUnlocalizedName());
+		GameRegistry.registerItem(stick_vinyl, stick_vinyl.getUnlocalizedName());
 
 		//Nuggets
 		GameRegistry.registerItem(nugget_uranium, nugget_uranium.getUnlocalizedName());

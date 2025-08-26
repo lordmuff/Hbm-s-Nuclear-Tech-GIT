@@ -131,6 +131,7 @@ public class SolarSystem {
 					.withOrbitalParameters(68_773_560, 0.05F, 0.0F, 1.304F, 52.0F)
 					.withRotationalPeriod(36_000)
 					.withColor(0.4588f, 0.6784f, 0.3059f)
+					.withGas(Fluids.JOOLGAS)
 					.withSatellites(
 
 						new CelestialBody("laythe", SpaceConfig.laytheDimension, Body.LAYTHE)
@@ -170,6 +171,7 @@ public class SolarSystem {
 					.withRotationalPeriod(28_500)
 					.withColor(1f, 0.6862f, 0.5882f)
 					.withRings(10.0F, 3, 0.6F, 0.4F, 0.3F)
+					.withGas(Fluids.SARNUSGAS)
 					.withSatellites(
 
 					new CelestialBody("hale") //no
@@ -200,8 +202,6 @@ public class SolarSystem {
 						.withMinProcessingLevel(3)
 						.withTraits(new CBT_Atmosphere(Fluids.TEKTOAIR, 1.5F), new CBT_Water(Fluids.CCL)) // :)
 						.withBlockTextures(RefStrings.MODID + ":basalt", "", "", "")
-						
-						
 
 				),
 
@@ -427,6 +427,7 @@ public class SolarSystem {
 		return metrics;
 	}
 
+	// Also expensive, but used infrequently by the server to calculate orbital transfer time
 	public static double calculateDistanceBetweenTwoBodies(World world, CelestialBody from, CelestialBody to) {
 		List<AstroMetric> metrics = new ArrayList<AstroMetric>();
 
@@ -659,10 +660,43 @@ public class SolarSystem {
 	}
 
 	// Gets angle for a single planet, good for locking tidal bodies
-	public static double calculateSingleAngle(World world, float partialTicks, CelestialBody from, CelestialBody to) {
+	public static double calculateSingleAngle(List<AstroMetric> metrics, CelestialBody from, CelestialBody to) {
+		AstroMetric metricFrom = null;
+		AstroMetric metricTo = null;
+
+		for(AstroMetric metric : metrics) {
+			if(metric.body == from) {
+				metricFrom = metric;
+			} else if(metric.body == to) {
+				metricTo = metric;
+			}
+		}
+
+		return getApparentAngleDegrees(metricFrom.position, metricTo.position);
+	}
+
+	public static double calculateSingleAngle(World world, double partialTicks, List<AstroMetric> metrics, CelestialBody orbiting, double altitude) {
+		double ticks = ((double)world.getTotalWorldTime() + partialTicks) * (double)AstronomyUtil.TIME_MULTIPLIER;
+
+		// Add our orbiting satellite position
+		Vec3 from = calculatePositionSatellite(orbiting, altitude, ticks);
+		Vec3 to = Vec3.createVectorHelper(0, 0, 0);
+		for(AstroMetric metric : metrics) {
+			if(metric.body == orbiting) {
+				to = metric.position;
+				from = from.addVector(to.xCoord, to.yCoord, to.zCoord);
+				break;
+			}
+		}
+
+		return getApparentAngleDegrees(from, to);
+	}
+
+	// Expensive, but there is only one call on server for this, everything else is client side
+	public static double calculateSingleAngle(World world, CelestialBody from, CelestialBody to) {
 		List<AstroMetric> metrics = new ArrayList<AstroMetric>();
 
-		double ticks = ((double)world.getTotalWorldTime() + partialTicks) * (double)AstronomyUtil.TIME_MULTIPLIER;
+		double ticks = ((double)world.getTotalWorldTime()) * (double)AstronomyUtil.TIME_MULTIPLIER;
 
 		// Get our XYZ coordinates of all bodies
 		calculatePositionsRecursive(metrics, null, from.getStar(), ticks);
@@ -679,28 +713,6 @@ public class SolarSystem {
 		}
 
 		return getApparentAngleDegrees(metricFrom.position, metricTo.position);
-	}
-
-	public static double calculateSingleAngle(World world, float partialTicks, CelestialBody orbiting, double altitude) {
-		List<AstroMetric> metrics = new ArrayList<AstroMetric>();
-
-		double ticks = ((double)world.getTotalWorldTime() + partialTicks) * (double)AstronomyUtil.TIME_MULTIPLIER;
-
-		// Get our XYZ coordinates of all bodies
-		calculatePositionsRecursive(metrics, null, orbiting.getStar(), ticks);
-
-		// Add our orbiting satellite position
-		Vec3 from = calculatePositionSatellite(orbiting, altitude, ticks);
-		Vec3 to = Vec3.createVectorHelper(0, 0, 0);
-		for(AstroMetric metric : metrics) {
-			if(metric.body == orbiting) {
-				to = metric.position;
-				from = from.addVector(to.xCoord, to.yCoord, to.zCoord);
-				break;
-			}
-		}
-
-		return getApparentAngleDegrees(from, to);
 	}
 
 	public static double calculateSiderealAngle(World world, float partialTicks, CelestialBody body) {

@@ -5,8 +5,10 @@ import java.util.Locale;
 import java.util.Random;
 
 import com.hbm.dim.tekto.TTree;
+import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.handler.atmosphere.IPlantableBreathing;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.lib.RefStrings;
-import com.hbm.util.EnumUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class BlockNTSapling extends BlockSapling implements IBlockMulti {
+public class BlockNTSapling extends BlockSapling implements IBlockMulti, IPlantableBreathing {
 
 	public static enum EnumSapling {
 		VINYL,
@@ -33,6 +35,16 @@ public class BlockNTSapling extends BlockSapling implements IBlockMulti {
 
 	public BlockNTSapling() {
 		super();
+	}
+
+	@Override
+	public boolean canBreathe(CBT_Atmosphere atmosphere) {
+		return atmosphere != null && (atmosphere.hasFluid(Fluids.TEKTOAIR, 0.1) || atmosphere.hasFluid(Fluids.CHLORINE, 0.1));
+	}
+
+	@Override
+	protected boolean canPlaceBlockOn(Block block) {
+		return block == ModBlocks.rubber_silt || block == ModBlocks.rubber_grass || block == ModBlocks.rubber_farmland;
 	}
 
 	@Override
@@ -59,10 +71,6 @@ public class BlockNTSapling extends BlockSapling implements IBlockMulti {
 
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side) {
-		return this.isValidPosition(world, x, y, z, -1);
-	}
-
-	public boolean isValidPosition(World world, int x, int y, int z, int metadata) {
 		Block soil = world.getBlock(x, y - 1, z);
 		return soil == ModBlocks.rubber_grass || soil == ModBlocks.rubber_silt || soil.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this);
 	}

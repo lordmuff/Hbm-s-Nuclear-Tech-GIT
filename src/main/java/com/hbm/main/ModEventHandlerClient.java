@@ -9,14 +9,10 @@ import com.hbm.config.ClientConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
-import com.hbm.dim.SkyProviderCelestial;
 import com.hbm.dim.SolarSystemWorldSavedData;
 import com.hbm.dim.WorldProviderCelestial;
-import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CelestialBodyTrait;
-import com.hbm.dim.SkyProviderCelestial;
-import com.hbm.dim.WorldProviderCelestial;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
@@ -132,6 +128,8 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.sound.PlaySoundEvent17;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.oredict.OreDictionary;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -608,6 +606,10 @@ public class ModEventHandlerClient {
 			if(armor != null && armor.getItem() instanceof JetpackBase) {
 				((ItemArmorMod)armor.getItem()).modRender(event, armor);
 			}
+
+			if(armor != null && armor.getItem() instanceof ItemModHeavyBoots) {
+				((ItemModHeavyBoots)armor.getItem()).armorRender(event, armor);
+			}
 		}
 
 		if(player.getCurrentArmor(2) == null && !player.isPotionActive(Potion.invisibility)) {
@@ -833,6 +835,9 @@ public class ModEventHandlerClient {
 
 		try {
 			QuickManualAndWiki qmaw = QMAWLoader.triggers.get(comp);
+			if(qmaw == null) {
+				qmaw = QMAWLoader.triggers.get(new ComparableStack(comp.item, 1, OreDictionary.WILDCARD_VALUE));
+			}
 			if(qmaw != null) {
 				list.add(EnumChatFormatting.YELLOW + I18nUtil.resolveKey("qmaw.tab", Keyboard.getKeyName(HbmKeybinds.qmaw.getKeyCode())));
 				lastQMAW = qmaw;
@@ -1092,16 +1097,16 @@ public class ModEventHandlerClient {
 				for(int i = 1; i < 4; i++) if(player.stepHeight == i + discriminator) player.stepHeight = defaultStepSize;
 			}
 		}
-		
+
 		if (!mc.isGamePaused() && event.phase == Phase.END) {
 			for(CelestialBody body : CelestialBody.getAllBodies()) {
 				if(SolarSystemWorldSavedData.getClientTraits(body.name) != null) {
 				for(CelestialBodyTrait trait : SolarSystemWorldSavedData.getClientTraits(body.name).values()) {
-						trait.update(true);		
+						trait.update(true);
 					}
 				}
 			}
-			
+
 		    CBT_War war = CelestialBody.getTrait(mc.theWorld, CBT_War.class);
 
 		    if (war != null) {
@@ -1114,7 +1119,7 @@ public class ModEventHandlerClient {
 		            }
 		        }
 		    }
-		
+
 		if(event.phase == Phase.END) {
 
 			if(ClientConfig.GUN_VISUAL_RECOIL.get()) {
