@@ -6,6 +6,7 @@ import com.hbm.explosion.ExplosionNT.ExAttrib;
 import com.hbm.handler.radiation.ChunkRadiationManager;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.util.BobMathUtil;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -50,6 +51,6 @@ public class HazardTypeHydrogolic extends HazardTypeBase {
 
     @Override
     public void addHazardInformation(EntityPlayer player, List list, float level, ItemStack stack, List<HazardModifier> modifiers) {
-        list.add(EnumChatFormatting.RED + "[" + I18nUtil.resolveKey("trait.hydrosuper") + "]");
+        list.add(BobMathUtil.getBlink() ? EnumChatFormatting.RED : EnumChatFormatting.YELLOW + "[ !!!" + I18nUtil.resolveKey("trait.hydrosuper") + "!!! ]");
     }
 }

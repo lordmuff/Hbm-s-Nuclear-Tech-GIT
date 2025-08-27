@@ -98,8 +98,8 @@ public class CyclotronRecipes extends SerializableRecipe {
 		makeRecipe(new ComparableStack(ModItems.part_plutonium), new ComparableStack(ModItems.cell_antimatter), new ItemStack(ModItems.cell_anti_schrabidium), 0);
 		/// PLUTONIUM END ///
 
+		makeRecipe(new ComparableStack(ModItems.nugget_solinium), new OreDictStack("blockLithium"), new ItemStack(ModItems.ingot_francium), 750);
 		makeRecipe(new ComparableStack(ModBlocks.block_euphemium), new ComparableStack(ModBlocks.bf_log), new ItemStack(ModBlocks.eu_log), 0);
-
 	}
 
 	private static void makeRecipe(ComparableStack part, AStack in, ItemStack out, int amat) {

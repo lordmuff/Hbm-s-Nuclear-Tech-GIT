@@ -12,6 +12,7 @@ import com.hbm.items.special.ItemLootCrate;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 
+import com.hbm.util.BobMathUtil;
 import com.hbm.util.i18n.I18nUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -141,6 +142,7 @@ public class ItemCustomMissilePart extends Item {
 		HYDROGEN("item.custom_missile_part.fuel.hydrogen"),
 		XENON("item.custom_missile_part.fuel.xenon"),
 		BALEFIRE("item.custom_missile_part.fuel.balefire"),
+		BALEFIRE_FRANCIUM("item.custom_missile_part.balefire_francium.type"),
 		HYDRAZINE("item.custom_missile_part.fuel.hydrazine"),
 		METHALOX("item.custom_missile_part.fuel.methalox"),
 		KEROLOX("item.custom_missile_part.fuel.kerolox"); // oxygen rather than peroxide
@@ -373,6 +375,8 @@ public class ItemCustomMissilePart extends Item {
 			return EnumChatFormatting.DARK_PURPLE + I18nUtil.resolveKey(FuelType.XENON.unlocalizedName);
 		case BALEFIRE:
 			return EnumChatFormatting.GREEN + I18nUtil.resolveKey(FuelType.BALEFIRE.unlocalizedName);
+			case BALEFIRE_FRANCIUM:
+				return (BobMathUtil.getBlink() ? EnumChatFormatting.GREEN : EnumChatFormatting.DARK_GREEN) + I18nUtil.resolveKey(FuelType.BALEFIRE.unlocalizedName);
 		case HYDRAZINE:
 			return EnumChatFormatting.AQUA + I18nUtil.resolveKey(FuelType.HYDRAZINE.unlocalizedName);
 		default:
@@ -384,6 +388,8 @@ public class ItemCustomMissilePart extends Item {
 		if(!(attributes[0] instanceof FuelType)) return null;
 
 		switch((FuelType)attributes[0]) {
+			case BALEFIRE_FRANCIUM:
+				return Fluids.BALEFIRE_FRANCIUM;
 		case KEROSENE:
 			return Fluids.KEROSENE;
 		case KEROLOX:

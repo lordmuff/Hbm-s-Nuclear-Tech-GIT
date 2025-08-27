@@ -250,6 +250,7 @@ public class Fluids {
 	public static FluidType TCRUDE;
 	public static FluidType CBENZ; //chlorobenzene
 	public static FluidType HALOLIGHT;
+	public static FluidType BALEFIRE_FRANCIUM;
 
 	/* Lagacy names for compatibility purposes */
 	@Deprecated public static FluidType ACID;	//JAOPCA uses this, apparently
@@ -358,7 +359,7 @@ public class Fluids {
 		HYDROGEN =				new FluidType("HYDROGEN",			0x4286f4, 3, 4, 0, EnumSymbol.CROYGENIC).setTemp(-260).addContainers(new CD_Gastank(0x4286f4, 0xffffff)).addTraits(new FT_Flammable(5_000), new FT_Combustible(FuelGrade.HIGH, 10_000), LIQUID, EVAP, new FT_Rocket(380, 700_000));
 		OXYGEN =				new FluidType("OXYGEN",				0x98bdf9, 3, 0, 0, EnumSymbol.CROYGENIC).setTemp(-100).addContainers(new CD_Gastank(0x98bdf9, 0xffffff)).addTraits(LIQUID, EVAP);
 		XENON =					new FluidType("XENON",				0xba45e8, 0, 0, 0, EnumSymbol.ASPHYXIANT).addContainers(new CD_Gastank(0x8C21FF, 0x303030)).addTraits(GASEOUS, new FT_Rocket(4200, 80_000));
-		BALEFIRE =				new FluidType("BALEFIRE",			0x28e02e, 4, 4, 3, EnumSymbol.RADIATION).setTemp(1500).addTraits(new FT_Corrosive(50), new FT_Flammable(1_000_000), new FT_Combustible(FuelGrade.HIGH, 2_500_000), LIQUID, VISCOUS, P_FUEL, new FT_Rocket(666, 1_200_000));
+		BALEFIRE =				new FluidType("BALEFIRE",			0x28e02e, 4, 4, 3, EnumSymbol.RADIATION).setTemp(1500).addTraits(new FT_Corrosive(50), new FT_Flammable(1_000_000), new FT_Combustible(FuelGrade.HIGH, 2_500_000), LIQUID, VISCOUS, P_FUEL, new FT_Rocket(666, 1_200_000), new FT_Polluting().burn(PollutionType.FALLOUT, PollutionHandler.POISON_PER_SECOND * POISON_MINOR));
 		MERCURY =				new FluidType("MERCURY",			0x808080, 2, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, new FT_Poison(false, 2));
 		PAIN =					new FluidType("PAIN",				0x938541, 2, 0, 1, EnumSymbol.ACID).setTemp(300).addTraits(new FT_Corrosive(30), new FT_Poison(true, 2), LIQUID, VISCOUS);
 		WASTEFLUID =			new FluidType("WASTEFLUID",			0x544400, 2, 0, 1, EnumSymbol.RADIATION).addTraits(new FT_VentRadiation(0.5F), NOCON, LIQUID, VISCOUS);
@@ -527,6 +528,7 @@ public class Fluids {
 		TCRUDE =			new FluidType("TCRUDE",		0x051914, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		CBENZ =			new FluidType("CBENZ",		0x91C6BB, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		HALOLIGHT =			new FluidType("HALOLIGHT",		0xB6F9CF, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
+		BALEFIRE_FRANCIUM =				new FluidType("BALEFIRE_FRANCIUM",			0xe5fbe5, 4, 4, 4, EnumSymbol.ANTIMATTER).setTemp(6666).addTraits(new FT_Corrosive(125), new FT_Flammable(10_000_000), new FT_Combustible(FuelGrade.HIGH, 25_000_000), LIQUID, VISCOUS, P_FUEL, ANTI, new FT_VentRadiation(2F), new FT_Rocket(444, 6_666_666), new FT_Polluting().burn(PollutionType.FALLOUT, PollutionHandler.POISON_PER_SECOND * 0.01F));
 
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
@@ -775,6 +777,7 @@ public class Fluids {
 
 		metaOrder.add(AQUEOUS_NICKEL);
 		metaOrder.add(CONCRETE);
+		metaOrder.add(BALEFIRE_FRANCIUM);
 
 		//ANY INTERNAL RENAMING MUST BE REFLECTED HERE - DON'T FORGET TO CHANGE: LANG FILES + TYPE'S STRING ID + NAME OF TANK/GUI TEXTURE FILES!
 		// V
@@ -855,10 +858,10 @@ public class Fluids {
 		HEAVYWATER.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).addStep(300, 1, HEAVYWATER_HOT, 1), new FT_PWRModerator(1.25D));
 		HEAVYWATER_HOT.addTraits(new FT_Coolable(HEAVYWATER, 1, 1, 300).setEff(CoolingType.HEATEXCHANGER, 1.0D));
 
-		SODIUM.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 2.5D).setEff(HeatingType.ICF, 3D).addStep(400, 1, SODIUM_HOT, 1));
+		SODIUM.addTraits(new FT_Heatable().setEff(HeatingType.HEATEXCHANGER, 2.0D).setEff(HeatingType.PWR, 2.5D).setEff(HeatingType.ICF, 3D).addStep(400, 1, SODIUM_HOT, 1));
 		SODIUM_HOT.addTraits(new FT_Coolable(SODIUM, 1, 1, 400).setEff(CoolingType.HEATEXCHANGER, 1.0D));
 		/* Fuck you, this is final now. If you had any concerns, you could have told me like a normal person instead of shitting on in-dev values that change every other day */
-		LEAD.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 0.75D).setEff(HeatingType.ICF, 4D).addStep(800, 1, LEAD_HOT, 1), new FT_PWRModerator(0.75D));
+		LEAD.addTraits(new FT_Heatable().setEff(HeatingType.HEATEXCHANGER, 1.1D).setEff(HeatingType.PWR, 0.75D).setEff(HeatingType.ICF, 4D).addStep(800, 1, LEAD_HOT, 1), new FT_PWRModerator(0.75D));
 		/* Or maybe not, because I blocked your sorry ass. Guess why that is? */
 		LEAD_HOT.addTraits(new FT_Coolable(LEAD, 1, 1, 680).setEff(CoolingType.HEATEXCHANGER, 1.0D));
 		/* Maybe shittalking me in some corner where you thought I wouldn't listen was not that bright of an idea afterall? */
@@ -938,6 +941,8 @@ public class Fluids {
 		registerCalculatedFuel(DICYANOACETYLENE, (baseline / 0.15 * flammabilityHigh * demandHigh * complexityRefinery * complexityCracking) + UNSATURATEDS.getTrait(FT_Flammable.class).getHeatEnergy(), 0, null);
 
 		registerCalculatedFuel(REFORMGAS, (baseline / 0.06 * flammabilityHigh * demandLow * complexityVacuum * complexityFraction), 1.5D, FuelGrade.GAS);
+
+		registerCalculatedFuel(BALEFIRE_FRANCIUM, BALEFIRE.getTrait(FT_Flammable.class).getHeatEnergy() * 25L, 5, FuelGrade.HIGH);
 
 		//all hail the spreadsheet
 		//the spreadsheet must not be questioned

@@ -1453,6 +1453,7 @@ public class ModBlocks {
 
 		//mayo zone!!!
 		block_francium = new BlockLithium(Material.iron).setBlockName("block_francium").setStepSound(Block.soundTypeMetal).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":block_francium");
+		GameRegistry.registerBlock(block_francium, block_francium.getUnlocalizedName());
 		//mayo zone END!!!
 
 		event_tester = new TestEventTester(Material.iron).setBlockName("event_tester").setCreativeTab(null).setHardness(2.5F).setResistance(0.0F).setBlockTextureName(RefStrings.MODID + ":event_tester");

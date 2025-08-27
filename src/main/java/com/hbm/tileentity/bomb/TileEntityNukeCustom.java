@@ -24,15 +24,17 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
+import static com.hbm.hazard.HazardRegistry.*;
+
 public class TileEntityNukeCustom extends TileEntity implements ISidedInventory, IGUIProvider {
 
 	public ItemStack slots[];
 	private String customName;
-	
+
 	public TileEntityNukeCustom() {
 		slots = new ItemStack[27];
 	}
-	
+
 	@Override
 	public int getSizeInventory() {
 		return slots.length;
@@ -58,7 +60,7 @@ public class TileEntityNukeCustom extends TileEntity implements ISidedInventory,
 			{
 				slots[i] = null;
 			}
-			
+
 			return itemStack1;
 		} else {
 			return null;
@@ -95,7 +97,7 @@ public class TileEntityNukeCustom extends TileEntity implements ISidedInventory,
 	public boolean hasCustomInventoryName() {
 		return this.customName != null && this.customName.length() > 0;
 	}
-	
+
 	public void setCustomName(String name) {
 		this.customName = name;
 		markDirty();
@@ -118,12 +120,12 @@ public class TileEntityNukeCustom extends TileEntity implements ISidedInventory,
 
 	@Override
 	public void openInventory() {
-		
+
 	}
 
 	@Override
 	public void closeInventory() {
-		
+
 	}
 
 	@Override
@@ -145,14 +147,14 @@ public class TileEntityNukeCustom extends TileEntity implements ISidedInventory,
 	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
 		return false;
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		
+
 		NBTTagList list = nbt.getTagList("items", 10);
 		slots = new ItemStack[getSizeInventory()];
-		
+
 		for(int i = 0; i < list.tagCount(); i++)
 		{
 			NBTTagCompound nbt1 = list.getCompoundTagAt(i);
@@ -165,13 +167,13 @@ public class TileEntityNukeCustom extends TileEntity implements ISidedInventory,
 
 		customName = nbt.getString("name");
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		
+
 		NBTTagList list = new NBTTagList();
-		
+
 		for(int i = 0; i < slots.length; i++)
 		{
 			if(slots[i] != null)
@@ -183,14 +185,14 @@ public class TileEntityNukeCustom extends TileEntity implements ISidedInventory,
 			}
 		}
 		nbt.setTag("items", list);
-		
+
 		if (customName != null) {
 			nbt.setString("name", customName);
 		}
 	}
-	
+
 	public static HashMap<ComparableStack, CustomNukeEntry> entries = new HashMap();
-	
+
 	public static void registerBombItems() {
 
 		entries.put(new ComparableStack(Items.gunpowder), new CustomNukeEntry(EnumBombType.TNT, 0.8F));
@@ -201,6 +203,10 @@ public class TileEntityNukeCustom extends TileEntity implements ISidedInventory,
 		entries.put(new ComparableStack(ModBlocks.red_barrel), new CustomNukeEntry(EnumBombType.TNT, 2.5F));
 		entries.put(new ComparableStack(ModBlocks.pink_barrel), new CustomNukeEntry(EnumBombType.TNT, 4F));
 		entries.put(new ComparableStack(ModItems.custom_tnt), new CustomNukeEntry(EnumBombType.TNT, 10F));
+
+		entries.put(new ComparableStack(ModItems.nugget_francium), new CustomNukeEntry(EnumBombType.NUKE, 75F * nugget));
+		entries.put(new ComparableStack(ModItems.ingot_francium), new CustomNukeEntry(EnumBombType.NUKE, 75F * ingot));
+		entries.put(new ComparableStack(ModBlocks.block_francium), new CustomNukeEntry(EnumBombType.NUKE, 75F * block));
 
 		entries.put(new ComparableStack(ModItems.ingot_u233), new CustomNukeEntry(EnumBombType.NUKE, 20F));
 		entries.put(new ComparableStack(ModItems.ingot_u235), new CustomNukeEntry(EnumBombType.NUKE, 15F));
@@ -265,11 +271,11 @@ public class TileEntityNukeCustom extends TileEntity implements ISidedInventory,
 	public float dirty;
 	public float schrab;
 	public float euph;
-	
+
 	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void updateEntity() {
-		
+
 		float tnt = 0F,		tntMod = 1F;
 		float nuke = 0F,	nukeMod = 1F;
 		float hydro = 0F,	hydroMod = 1F;
@@ -277,20 +283,20 @@ public class TileEntityNukeCustom extends TileEntity implements ISidedInventory,
 		float dirty = 0F,	dirtyMod = 1F;
 		float schrab = 0F,	schrabMod = 1F;
 		float euph = 0F;
-		
+
 		for(ItemStack stack : slots) {
-			
+
 			if(stack == null)
 				continue;
-			
+
 			ComparableStack comp = new ComparableStack(stack).makeSingular();
 			CustomNukeEntry ent = entries.get(comp);
-			
+
 			if(ent == null)
 				continue;
-			
+
 			if(ent.entry == EnumEntryType.ADD) {
-				
+
 				switch(ent.type) {
 				case TNT: tnt += ent.value * stack.stackSize; break;
 				case NUKE: nuke += ent.value * stack.stackSize; break;
@@ -300,9 +306,9 @@ public class TileEntityNukeCustom extends TileEntity implements ISidedInventory,
 				case SCHRAB: schrab += ent.value * stack.stackSize; break;
 				case EUPH: euph += ent.value * stack.stackSize; break;
 				}
-				
+
 			} else if(ent.entry == EnumEntryType.MULT) {
-				
+
 				switch(ent.type) {
 				case TNT: tntMod *= ent.value * stack.stackSize; break;
 				case NUKE: nukeMod *= ent.value * stack.stackSize; break;
@@ -313,14 +319,14 @@ public class TileEntityNukeCustom extends TileEntity implements ISidedInventory,
 				}
 			}
 		}
-		
+
 		tnt *= tntMod;
 		nuke *= nukeMod;
 		hydro *= hydroMod;
 		amat *= amatMod;
 		dirty *= dirtyMod;
 		schrab *= schrabMod;
-		
+
 		if(tnt < 16) nuke = 0;
 		if(nuke < 100) hydro = 0;
 		//if(nuke < 50) amat = 0;
@@ -335,74 +341,74 @@ public class TileEntityNukeCustom extends TileEntity implements ISidedInventory,
 		this.schrab = schrab;
 		this.euph = euph;
 	}
-	
+
 	public float getNukeAdj() {
-		
+
 		if(nuke == 0)
 			return 0;
-		
+
 		return Math.min(nuke + tnt / 2, NukeCustom.maxNuke);
 	}
-	
+
 	public float getHydroAdj() {
-		
+
 		if(hydro == 0)
 			return 0;
-		
+
 		return Math.min(hydro + nuke / 2 + tnt / 4, NukeCustom.maxHydro);
 	}
-	
+
 	public float getAmatAdj() {
-		
+
 		if(amat == 0)
 			return 0;
-		
+
 		return Math.min(amat + hydro / 2 + nuke / 4 + tnt / 8, NukeCustom.maxAmat);
 	}
-	
+
 	public float getSchrabAdj() {
-		
+
 		if(schrab == 0)
 			return 0;
-		
+
 		return Math.min(schrab + amat / 2 + hydro / 4 + nuke / 8 + tnt / 16, NukeCustom.maxSchrab);
 	}
-	
+
 	public boolean isFalling() {
-		
+
 		for(ItemStack stack : slots) {
 			if(stack != null && stack.getItem() == ModItems.custom_fall)
 				return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public void destruct() {
-		
+
 		clearSlots();
 		worldObj.func_147480_a(xCoord, yCoord, xCoord, false);
 	}
-	
+
 	public void clearSlots() {
 		for(int i = 0; i < slots.length; i++)
 		{
 			slots[i] = null;
 		}
 	}
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return TileEntity.INFINITE_EXTENT_AABB;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared()
 	{
 		return 65536.0D;
 	}
-	
+
 	public static enum EnumBombType {
 		TNT("TNT"),
 		NUKE("Nuclear"),
@@ -411,36 +417,36 @@ public class TileEntityNukeCustom extends TileEntity implements ISidedInventory,
 		DIRTY("Salted"),
 		SCHRAB("Schrabidium"),
 		EUPH("Anti Mass");
-		
+
 		String name;
-		
+
 		EnumBombType(String name) {
 			this.name = name;
 		}
-		
+
 		@Override
 		public String toString() {
 			return name;
 		}
 	}
-	
+
 	public static enum EnumEntryType {
 		ADD,
 		MULT
 	}
-	
+
 	public static class CustomNukeEntry {
-		
+
 		public EnumBombType type;
 		public EnumEntryType entry;
 		public float value;
-		
+
 		public CustomNukeEntry(EnumBombType type, float value) {
 			this.type = type;
 			this.entry = EnumEntryType.ADD;
 			this.value = value;
 		}
-		
+
 		public CustomNukeEntry(EnumBombType type, float value, EnumEntryType entry) {
 			this(type, value);
 			this.entry = entry;

@@ -233,7 +233,7 @@ public class OreDictManager {
 	public static final DictFrame SEMTEX = new DictFrame("Semtex");
 	public static final DictFrame MAGTUNG = new DictFrame("MagnetizedTungsten");
 	public static final DictFrame CMB = new DictFrame("CMBSteel");
-	public static final DictFrame DESH = new DictFrame("Desh");
+	public static final DictFrame DESH = new DictFrame(Compat.isModLoaded(Compat.MOD_GT6) ? "WorkersAlloy" : "Desh");
 	public static final DictFrame STAR = new DictFrame("Starmetal");
 	public static final DictFrame GUNMETAL = new DictFrame("GunMetal");
 	public static final DictFrame WEAPONSTEEL = new DictFrame("WeaponSteel");

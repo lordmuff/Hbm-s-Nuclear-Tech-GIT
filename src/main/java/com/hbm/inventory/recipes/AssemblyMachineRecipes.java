@@ -31,6 +31,7 @@ import com.hbm.items.machine.ItemArcElectrode.EnumElectrodeType;
 import com.hbm.items.machine.ItemCircuit.EnumCircuitType;
 import com.hbm.items.machine.ItemDrillbit.EnumDrillType;
 import com.hbm.items.machine.ItemPACoil.EnumCoilType;
+import com.hbm.items.machine.ItemPWRFuel;
 import com.hbm.items.machine.ItemPistons.EnumPistonType;
 import com.hbm.items.weapon.ItemAmmoHIMARS;
 import com.hbm.items.weapon.sedna.factory.GunFactory.EnumAmmo;
@@ -1295,6 +1296,8 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
 			.inputItems(new ComparableStack(ModItems.seg_15, 1), new ComparableStack(ModItems.plate_polymer, 16), new ComparableStack(ModBlocks.pwr_fuel, 2), new OreDictStack(DESH.ingot(), 16), new OreDictStack(BIGMT.plate(), 24), new OreDictStack(CU.plateCast(), 4), new ComparableStack(ModItems.ingot_uranium_fuel, 8)));
 		this.register(new GenericRecipe("ass.mp_thruster_15_balefire_large").setup(400, 100).outputItems(new ItemStack(ModItems.mp_thruster_15_balefire_large, 1))
 			.inputItems(new ComparableStack(ModItems.seg_15, 1), new ComparableStack(ModItems.plate_polymer, 16), new ComparableStack(ModBlocks.pwr_fuel, 2), new OreDictStack(DESH.ingot(), 24), new OreDictStack(BIGMT.plate(), 32), new OreDictStack(CU.plateCast(), 4), new ComparableStack(ModItems.ingot_uranium_fuel, 8)));
+		this.register(new GenericRecipe("ass.mp_thruster_30_balefire_large").setup(5000, 100).outputItems(new ItemStack(ModItems.mp_thruster_30_balefire_large, 1))
+			.inputItems(new ComparableStack(ModItems.seg_10, 1), new ComparableStack(ModItems.seg_20, 1), new ComparableStack(ModItems.mp_thruster_15_balefire_large, 1), new ComparableStack(ModBlocks.pwr_fuel, 12), new OreDictStack("plateDenseTantalumHafniumCarbide", 48), new OreDictStack(BIGMT.ingot(), 64), new OreDictStack(W.plateCast(), 30), new ComparableStack(ModItems.pellet_rtg_berkelium, 6), new ComparableStack(ModItems.pipes_steel, 18)));
 		this.register(new GenericRecipe("ass.mp_thruster_20_kerosene").setup(400, 100).outputItems(new ItemStack(ModItems.mp_thruster_20_kerosene, 1))
 			.inputItems(new ComparableStack(ModItems.seg_20, 1), new OreDictStack(STEEL.pipe(), 1), new OreDictStack(W.ingot(), 8), new OreDictStack(STEEL.plate(), 6), new OreDictStack(DESH.ingot(), 2)));
 		this.register(new GenericRecipe("ass.mp_thruster_20_kerosene_dual").setup(400, 100).outputItems(new ItemStack(ModItems.mp_thruster_20_kerosene_dual, 1))

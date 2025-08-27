@@ -16,6 +16,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemPWRFuel.EnumPWRFuel;
 import com.hbm.items.machine.ItemWatzPellet.EnumWatzType;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -582,5 +583,13 @@ public class PUREXRecipes extends GenericRecipes<GenericRecipe> {
 						new ItemStack(ModItems.nuclear_waste, 24))
 				.outputFluids(new FluidStack(Fluids.WATZ, 1_000))
 				.setIconToFirstIngredient());
+
+		this.register(new GenericRecipe("purex.bffrfuel").setup(120, 3_750)
+			.inputItems(new ComparableStack((ModBlocks.block_francium), 1))
+			.inputFluids(new FluidStack(Fluids.BALEFIRE, 8000), new FluidStack(Fluids.PEROXIDE, 4000))
+			.outputFluids(new FluidStack(Fluids.BALEFIRE_FRANCIUM, 12_000))
+			.setIconToFirstIngredient());
 	}
-}
+
+	}
+
