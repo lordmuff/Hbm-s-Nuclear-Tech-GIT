@@ -100,7 +100,6 @@ public class Fluids {
 	public static FluidType SCHRABIDIC;
 	public static FluidType AMAT;
 	public static FluidType ASCHRAB;
-	public static FluidType GELASCHRAB_TS;
 	public static FluidType PEROXIDE;
 	public static FluidType WATZ;
 	public static FluidType CRYOGEL;
@@ -131,7 +130,6 @@ public class Fluids {
 	public static FluidType PLASMA_DH3;
 	public static FluidType PLASMA_XM;
 	public static FluidType PLASMA_BF;
-	public static FluidType PLASMA_BFFR;
 	public static FluidType CARBONDIOXIDE;
 	public static FluidType HELIUM3;
 	public static FluidType DEATH;				//osmiridium solution
@@ -253,6 +251,8 @@ public class Fluids {
 	public static FluidType CBENZ; //chlorobenzene
 	public static FluidType HALOLIGHT;
 	public static FluidType BALEFIRE_FRANCIUM;
+	public static FluidType GELASCHRAB_TS;
+	public static FluidType PLASMA_BFFR;
 
 	/* Lagacy names for compatibility purposes */
 	@Deprecated public static FluidType ACID;	//JAOPCA uses this, apparently
@@ -355,7 +355,6 @@ public class Fluids {
 		SCHRABIDIC =			new FluidType("SCHRABIDIC",			0x006B6B, 5, 0, 5, EnumSymbol.ACID).addTraits(new FT_VentRadiation(1F), new FT_Corrosive(75), new FT_Poison(true, 2), LIQUID);
 		AMAT =					new FluidType("AMAT",				0x010101, 5, 0, 5, EnumSymbol.ANTIMATTER).addTraits(ANTI, GASEOUS);
 		ASCHRAB =				new FluidType("ASCHRAB",			0xb50000, 5, 0, 5, EnumSymbol.ANTIMATTER).addTraits(ANTI, GASEOUS);
-		GELASCHRAB_TS =			new FluidType("GELASCHRAB_TS",	0x663e47, 3, 0, 3, EnumSymbol.ANTIMATTER).addTraits(ANTI, GASEOUS).addTraits(new FT_VentRadiation(8F));
 		PEROXIDE =				new FluidType("PEROXIDE",			0xfff7aa, 3, 0, 3, EnumSymbol.OXIDIZER).addTraits(new FT_Corrosive(40), LIQUID);
 		WATZ =					new FluidType("WATZ",				0x86653E, 4, 0, 3, EnumSymbol.ACID).addTraits(new FT_Corrosive(60), new FT_VentRadiation(0.1F), LIQUID, VISCOUS, new FT_Polluting().release(PollutionType.POISON, POISON_EXTREME));
 		CRYOGEL =				new FluidType("CRYOGEL",			0x32ffff, 2, 0, 0, EnumSymbol.CROYGENIC).setTemp(-170).addTraits(LIQUID, VISCOUS);
@@ -376,7 +375,6 @@ public class Fluids {
 		PLASMA_HT =				new FluidType("PLASMA_HT",			0xD1ABF2, 0, 4, 0, EnumSymbol.RADIATION).setTemp(3000).addTraits(NOCON, NOID, PLASMA, new FT_Rocket(10000, 700_000));
 		PLASMA_XM =				new FluidType("PLASMA_XM",			0xC6A5FF, 0, 4, 1, EnumSymbol.RADIATION).setTemp(4250).addTraits(NOCON, NOID, PLASMA, new FT_Rocket(25000, 700_000));
 		PLASMA_BF =				new FluidType("PLASMA_BF",			0xA7F1A3, 4, 5, 4, EnumSymbol.ANTIMATTER).setTemp(8500).addTraits(NOCON, NOID, PLASMA, new FT_Rocket(50000, 700_000));
-		PLASMA_BFFR =		    new FluidType("PLASMA_BFFR",			0x0f330f, 5, 5, 5, EnumSymbol.ANTIMATTER).setTemp(66666).addTraits(NOCON, NOID, PLASMA, new FT_Rocket(125000, 777_777));
 		CARBONDIOXIDE =			new FluidType("CARBONDIOXIDE",		0x404040, 3, 0, 0, EnumSymbol.ASPHYXIANT).addTraits(GASEOUS, new FT_Polluting().release(PollutionType.POISON, POISON_MINOR));
 		PLASMA_DH3 =			new FluidType("PLASMA_DH3",			0xFF83AA, 0, 4, 0, EnumSymbol.RADIATION).setTemp(3480).addTraits(NOCON, NOID, PLASMA, new FT_Rocket(20000, 700_000));
 		HELIUM3 =				new FluidType("HELIUM3",			0xFCF0C4, 0, 0, 0, EnumSymbol.ASPHYXIANT).addTraits(GASEOUS).addContainers(new CD_Gastank(0xFD631F, 0xffffff));
@@ -533,6 +531,8 @@ public class Fluids {
 		CBENZ =			new FluidType("CBENZ",		0x91C6BB, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		HALOLIGHT =			new FluidType("HALOLIGHT",		0xB6F9CF, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		BALEFIRE_FRANCIUM =				new FluidType("BALEFIRE_FRANCIUM",			0xe5fbe5, 4, 4, 4, EnumSymbol.ANTIMATTER).setTemp(6666).addTraits(new FT_Corrosive(125), new FT_Flammable(10_000_000), new FT_Combustible(FuelGrade.HIGH, 25_000_000), LIQUID, VISCOUS, P_FUEL, ANTI, new FT_VentRadiation(2F), new FT_Rocket(444, 6_666_666), new FT_Polluting().burn(PollutionType.FALLOUT, PollutionHandler.POISON_PER_SECOND * 0.01F));
+		PLASMA_BFFR =		    new FluidType("PLASMA_BFFR",			0x0f330f, 5, 5, 5, EnumSymbol.ANTIMATTER).setTemp(66666).addTraits(NOCON, NOID, PLASMA, new FT_Rocket(125000, 777_777));
+		GELASCHRAB_TS =			new FluidType("GELASCHRAB_TS",	0x663e47, 3, 0, 3, EnumSymbol.ANTIMATTER).addTraits(ANTI, GASEOUS).addTraits(new FT_VentRadiation(8F));
 
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
