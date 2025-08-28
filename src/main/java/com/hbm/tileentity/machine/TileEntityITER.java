@@ -5,6 +5,10 @@ import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineITER;
+import com.hbm.config.BombConfig;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityBalefire;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionNT;
 import com.hbm.explosion.ExplosionNT.ExAttrib;
@@ -18,7 +22,6 @@ import com.hbm.inventory.fluid.trait.FT_Heatable;
 import com.hbm.inventory.fluid.trait.FT_Heatable.HeatingStep;
 import com.hbm.inventory.gui.GUIITER;
 import com.hbm.inventory.recipes.BreederRecipes;
-import com.hbm.inventory.recipes.BreederRecipes.BreederRecipe;
 import com.hbm.inventory.recipes.FusionRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemFusionShield;
@@ -30,6 +33,7 @@ import com.hbm.tileentity.IFluidCopiable;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.CompatEnergyControl;
+import com.hbm.util.Tuple;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
 import api.hbm.energymk2.IEnergyReceiverMK2;
@@ -66,7 +70,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 	public FluidTank plasma;
 
 	public int progress;
-	public static final int duration = 100;
+	public static int duration = 100;
 	public long totalRuntime;
 
 	@SideOnly(Side.CLIENT)
@@ -287,7 +291,21 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 			data.setBoolean("balefire", true);
 			PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(data, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 250));
 
-		} else {
+		}
+		if(this.plasma.getTankType() == Fluids.PLASMA_BFFR) {
+
+			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "hbm:weapon.mukeExplosion", 15.0F, 1.0F);
+			ExplosionLarge.spawnShrapnels(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 70);
+
+			EntityBalefire bf = new EntityBalefire(worldObj);
+			bf.antimatter();
+			bf.setPosition(xCoord, yCoord, zCoord);
+			bf.destructionRange = 12;
+			worldObj.spawnEntityInWorld(bf);
+			EntityNukeTorex.startFacAnti(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 24);
+
+		}
+		else {
 			Vec3 vec = Vec3.createVectorHelper(5.5, 0, 0);
 			vec.rotateAroundY(worldObj.rand.nextFloat() * (float)Math.PI * 2F);
 
@@ -303,16 +321,16 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 			return;
 		}
 
-		BreederRecipe out = BreederRecipes.getOutput(slots[1]);
+		Tuple.Pair<ItemStack, Integer> out = BreederRecipes.getOutput(slots[1]);
 
 		if(slots[1] != null && slots[1].getItem() == ModItems.meteorite_sword_irradiated)
-			out = new BreederRecipe(ModItems.meteorite_sword_fused, 1000);
+			out = new Tuple.Pair<>(new ItemStack(ModItems.meteorite_sword_fused), 1000);
 
 		if(slots[1] != null && slots[1].getItem() == ModItems.meteorite_sword_fused)
-			out = new BreederRecipe(ModItems.meteorite_sword_baleful, 4000);
+			out = new Tuple.Pair<>(new ItemStack(ModItems.meteorite_sword_baleful), 4000);
 
 		if(slots[1] != null && slots[1].getItem() == Item.getItemFromBlock(ModBlocks.lattice_log))
-			out = new BreederRecipe(ModItems.woodemium_briquette, 4000);
+			out = new Tuple.Pair<>(new ItemStack(ModItems.woodemium_briquette), 4000);
 
 		if(out == null) {
 			this.progress = 0;
@@ -326,21 +344,21 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 
 		int level = FusionRecipes.getBreedingLevel(plasma.getTankType());
 
-		if(out.flux > level) {
+        if(out.getValue() > level) {
 			this.progress = 0;
 			return;
 		}
 
 		progress++;
 
-		if(progress > this.duration) {
+		if(progress > duration) {
 
 			this.progress = 0;
 
 			if(slots[2] != null) {
 				slots[2].stackSize++;
 			} else {
-				slots[2] = out.output.copy();
+				slots[2] = out.getKey().copy();
 			}
 
 			slots[1].stackSize--;
@@ -351,10 +369,16 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 			this.markDirty();
 		}
 	}
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
+		return this.isItemValidForSlot(slot, itemStack);
+	}
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack stack, int side) {
-		return slot == 2; // only allow removing breeder outputs
+
+		return slot == 2 || slot == 4;
+
 	}
 
 	@Override
@@ -365,7 +389,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
 
-		if(i == 1 && BreederRecipes.getOutput(stack) != null)
+		if(i == 1 && BreederRecipes.getRecipes() != null)
 			return true;
 
 		return false;
@@ -717,14 +741,14 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 
 	@Override
 	public String runRORFunction(String name, String[] params) {
-		
+
 		if((PREFIX_FUNCTION + "toggle").equals(name)) {
 			this.isOn = !this.isOn;
 			this.markChanged();
 			return null;
 		}
-			
-		
+
+
 		if((PREFIX_FUNCTION + "switch").equals(name) && params.length > 0) {
 			if("on".equals(params[0])) {
 				this.isOn = true;
@@ -737,7 +761,7 @@ public class TileEntityITER extends TileEntityMachineBase implements IEnergyRece
 				return null;
 			}
 		}
-		
+
 		return null;
 	}
 }

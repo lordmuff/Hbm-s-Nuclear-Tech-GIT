@@ -110,6 +110,8 @@ public class ModItems {
 
 	public static Item mp_thruster_30_balefire_large;
 
+	public static Item powder_bffr_plasma_slag;
+
 //mayo zone end
 
 	public static Item redstone_sword;
@@ -2532,9 +2534,11 @@ public class ModItems {
 		rod_zirnox_meaus_depleted = new Item().setUnlocalizedName("rod_zirnox_meaus_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
 		rod_zirnox_heaus_depleted = new Item().setUnlocalizedName("rod_zirnox_heaus_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
 		rod_zirnox_gravel_enriched = new Item().setUnlocalizedName("rod_zirnox_gravel_enriched").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_zirnox_empty).setTextureName(RefStrings.MODID + ":rod_zirnox_zfb_mox_depleted");
+
 		nugget_francium = new Item().setUnlocalizedName("nugget_francium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":nugget_francium");
 		ingot_francium = new Item().setUnlocalizedName("ingot_francium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":ingot_francium");
 
+		powder_bffr_plasma_slag = new Item().setUnlocalizedName("powder_bffr_plasma_slag").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_bffr_plasma_slag");
 
 		GameRegistry.registerItem(rod_zirnox_pu_mix_depleted, rod_zirnox_pu_mix_depleted.getUnlocalizedName());
 		GameRegistry.registerItem(rod_zirnox_pu241_depleted, rod_zirnox_pu241_depleted.getUnlocalizedName());
@@ -2550,6 +2554,7 @@ public class ModItems {
 		GameRegistry.registerItem(rod_zirnox_meaus_depleted, rod_zirnox_meaus_depleted.getUnlocalizedName());
 		GameRegistry.registerItem(rod_zirnox_heaus_depleted, rod_zirnox_heaus_depleted.getUnlocalizedName());
 		GameRegistry.registerItem(rod_zirnox_gravel_enriched, rod_zirnox_gravel_enriched.getUnlocalizedName());
+
 		GameRegistry.registerItem(waste_pu_mix, waste_pu_mix.getUnlocalizedName());
 		GameRegistry.registerItem(waste_pu241, waste_pu241.getUnlocalizedName());
 		GameRegistry.registerItem(waste_amrg, waste_amrg.getUnlocalizedName());
@@ -2564,8 +2569,10 @@ public class ModItems {
 		GameRegistry.registerItem(waste_meaus, waste_meaus.getUnlocalizedName());
 		GameRegistry.registerItem(waste_heaus, waste_heaus.getUnlocalizedName());
 		GameRegistry.registerItem(waste_gravel, waste_gravel.getUnlocalizedName());
+
 		GameRegistry.registerItem(nugget_francium, nugget_francium.getUnlocalizedName());
 		GameRegistry.registerItem(ingot_francium, ingot_francium.getUnlocalizedName());
+		GameRegistry.registerItem(powder_bffr_plasma_slag, powder_bffr_plasma_slag.getUnlocalizedName());
 
 
 
@@ -4498,7 +4505,7 @@ public class ModItems {
 		fusion_shield_tungsten = new ItemFusionShield(60 * 60 * 60 * 5, 3500).setUnlocalizedName("fusion_shield_tungsten").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":fusion_shield_tungsten");
 		fusion_shield_desh = new ItemFusionShield(60 * 60 * 60 * 10, 4500).setUnlocalizedName("fusion_shield_desh").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":fusion_shield_desh");
 		fusion_shield_chlorophyte = new ItemFusionShield(60 * 60 * 60 * 15, 9000).setUnlocalizedName("fusion_shield_chlorophyte").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":fusion_shield_chlorophyte");
-		fusion_shield_vaporwave = new ItemFusionShield(60 * 60 * 60 * 10, 1916169).setUnlocalizedName("fusion_shield_vaporwave").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":fusion_shield_vaporwave");
+		fusion_shield_vaporwave = new ItemFusionShield(60 * 60 * 60 * 75, 1916169).setUnlocalizedName("fusion_shield_vaporwave").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":fusion_shield_vaporwave");
 
 		upgrade_muffler = new ItemMuffler().setUnlocalizedName("upgrade_muffler").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":upgrade_muffler");
 

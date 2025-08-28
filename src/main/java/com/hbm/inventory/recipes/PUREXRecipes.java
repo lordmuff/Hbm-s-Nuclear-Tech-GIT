@@ -589,11 +589,37 @@ public class PUREXRecipes extends GenericRecipes<GenericRecipe> {
 			.inputFluids(new FluidStack(Fluids.BALEFIRE, 8000), new FluidStack(Fluids.PEROXIDE, 4000))
 			.outputFluids(new FluidStack(Fluids.BALEFIRE_FRANCIUM, 12_000))
 			.setIconToFirstIngredient());
-
 		this.register(new GenericRecipe("purex.bffrfuel.gt6").setNameWrapper("purex.bffrfuel").setup(120, 3_750)
 			.inputItems(new OreDictStack("blockIngotFrancium", 1))
 			.inputFluids(new FluidStack(Fluids.BALEFIRE, 8000), new FluidStack(Fluids.PEROXIDE, 4000))
 			.outputFluids(new FluidStack(Fluids.BALEFIRE_FRANCIUM, 12_000))
+			.setIconToFirstIngredient());
+
+		this.register(new GenericRecipe("purex.amat").setNameWrapper("purex.amat").setup(400, 18_777)
+			.inputItems(new OreDictStack("dustCopper", 32))
+			.inputFluids(new FluidStack(Fluids.HYDROGEN, 20_000))
+			.outputItems(new ItemStack(ModItems.pellet_charged, 2))
+			.outputFluids(new FluidStack(Fluids.AMAT, 1000))
+			.setIconToFirstIngredient());
+		this.register(new GenericRecipe("purex.aschrab").setNameWrapper("purex.aschrab").setup(720, 24_444)
+			.inputItems(new OreDictStack("billetPlutoniumRG", 6))
+			.inputFluids(new FluidStack(Fluids.AMAT, 200))
+			.outputItems(new ItemStack(ModItems.waste_pu_mix, 4))
+			.outputFluids(new FluidStack(Fluids.ASCHRAB, 2000))
+			.setIconToFirstIngredient());
+		this.register(new GenericRecipe("purex.bffrplasmaslag").setNameWrapper("purex.bffrplasma").setup(220, 12_666)
+			.inputItems(new ComparableStack(ModItems.powder_bffr_plasma_slag, 3))
+			.inputFluids(new FluidStack(Fluids.RADIOSOLVENT, 1250), new FluidStack(Fluids.NITRIC_ACID, 2750), new FluidStack(Fluids.PEROXIDE, 8000))
+			.outputItems(new ItemStack(ModItems.ingot_francium, 3),
+				new ItemStack(ModItems.powder_tennessine, 3),
+				new ItemStack(ModItems.powder_balefire, 3),
+				new ItemStack(ModBlocks.block_waste, 12))
+			.outputFluids(new FluidStack(Fluids.ASCHRAB, 1250), new FluidStack(Fluids.BALEFIRE, 1250))
+			.setIconToFirstIngredient());
+		this.register(new GenericRecipe("purex.gelaschrab_ts").setNameWrapper("purex.gelaschrab_ts").setup(220, 13_133)
+			.inputItems(new ComparableStack(ModItems.powder_tennessine, 3))
+			.inputFluids(new FluidStack(Fluids.ASCHRAB, 1675))
+			.outputFluids(new FluidStack(Fluids.GELASCHRAB_TS, 3875))
 			.setIconToFirstIngredient());
 	}
 

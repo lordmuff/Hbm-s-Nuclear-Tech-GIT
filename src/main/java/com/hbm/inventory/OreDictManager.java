@@ -135,6 +135,7 @@ public class OreDictManager {
 	public static final DictFrame U235 = new DictFrame("Uranium235", "U235");
 	public static final DictFrame U238 = new DictFrame("Uranium238", "U238");
 	public static final DictFrame TH232 = new DictFrame("Thorium232", "Th232", "Thorium");
+	public static final DictFrame THF = new DictFrame("ThoriumFuel");
 	public static final DictFrame PU = new DictFrame("Plutonium");
 	public static final DictFrame PURG = new DictFrame("PlutoniumRG");
 	public static final DictFrame PU238 = new DictFrame("Plutonium238", "Pu238");
@@ -399,6 +400,7 @@ public class OreDictManager {
 		U235	.rad(HazardRegistry.u235)							.nugget(nugget_u235)		.billet(billet_u235)		.ingot(ingot_u235)																	.block(block_u235);
 		U238	.rad(HazardRegistry.u238)							.nugget(nugget_u238)		.billet(billet_u238)		.ingot(ingot_u238)																	.block(block_u238);
 		TH232	.rad(HazardRegistry.th232)							.nugget(nugget_th232)		.billet(billet_th232)		.ingot(ingot_th232)			.dust(powder_thorium)									.block(block_thorium)		.oreAll(ore_thorium);
+		THF	.rad(HazardRegistry.thf)							.nugget(nugget_thorium_fuel)		.billet(billet_thorium_fuel)		.ingot(ingot_thorium_fuel)								.block(block_thorium_fuel);
 		PU		.rad(HazardRegistry.pu)								.nugget(nugget_plutonium)	.billet(billet_plutonium)	.ingot(ingot_plutonium)		.dust(powder_plutonium)									.block(block_plutonium)		.ore(ore_nether_plutonium)	.oreNether(ore_nether_plutonium) .oreAll(ore_plutonium);
 		PURG	.rad(HazardRegistry.purg).neutron(HazardRegistry.purg/60f)							.nugget(nugget_pu_mix)		.billet(billet_pu_mix)		.ingot(ingot_pu_mix)																.block(block_pu_mix);
 		PU238	.rad(HazardRegistry.pu238)	.hot(3F)				.nugget(nugget_pu238)		.billet(billet_pu238)		.ingot(ingot_pu238)																	.block(block_pu238);

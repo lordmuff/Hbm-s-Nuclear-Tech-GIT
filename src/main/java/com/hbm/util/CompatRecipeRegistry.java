@@ -11,7 +11,6 @@ import com.hbm.inventory.recipes.*;
 import com.hbm.inventory.recipes.AmmoPressRecipes.AmmoPressRecipe;
 import com.hbm.inventory.recipes.ArcFurnaceRecipes.ArcFurnaceRecipe;
 import com.hbm.inventory.recipes.ArcWelderRecipes.ArcWelderRecipe;
-import com.hbm.inventory.recipes.BreederRecipes.BreederRecipe;
 import com.hbm.inventory.recipes.CrucibleRecipes.CrucibleRecipe;
 import com.hbm.inventory.recipes.CrystallizerRecipes.CrystallizerRecipe;
 import com.hbm.inventory.recipes.ElectrolyserFluidRecipes.ElectrolysisRecipe;
@@ -80,7 +79,7 @@ public class CompatRecipeRegistry {
 		if(outputFluids != null) recipe.outputFluids(copyFirst(outputFluids, 2));
 		ChemplantRecipes.recipes.add(recipe);
 	}
-	
+
 	/** Chemical plant recipe needs a unique name for the registry. Zero length arrays should stay null*/
 	public static void registerChemicalPlant(String name, boolean named, ItemStack icon, int duration, long power, AStack[] inputItems, FluidStack[] inputFluids, IOutput[] outputItems, FluidStack[] outputFluids) {
 		GenericRecipe recipe = new GenericRecipe(name).setDuration(duration).setPower(power);
@@ -169,7 +168,7 @@ public class CompatRecipeRegistry {
 
 	/** Breeding reactor does not handle OreDictStacks */
 	public static void registerBreeder(ComparableStack input, ItemStack output, int flux) {
-		BreederRecipes.recipes.put(input, new BreederRecipe(output, flux));
+		BreederRecipes.recipes.put(input, new Pair(output, flux));
 	}
 
 	public static void registerCyclotron(ComparableStack box, AStack target, ItemStack output, int antimatter) {

@@ -112,7 +112,7 @@ public abstract class SerializableRecipe {
 		MainRegistry.logger.info("Starting recipe init!");
 
 		GenericRecipes.clearPools();
-		
+
 		for(SerializableRecipe recipe : recipeHandlers) {
 
 			recipe.deleteRecipes();
@@ -342,6 +342,14 @@ public abstract class SerializableRecipe {
 		} catch(Exception ex) { }
 		MainRegistry.logger.error("Error reading stack array " + array.toString());
 		return new Pair[0];
+	}
+
+	public static void writeInt(Integer integer, JsonWriter writer) throws IOException {
+		writer.beginArray();
+		writer.setIndent("");
+		writer.value(integer);
+		writer.endArray();
+		writer.setIndent("  ");
 	}
 
 	public static void writeItemStack(ItemStack stack, JsonWriter writer) throws IOException {

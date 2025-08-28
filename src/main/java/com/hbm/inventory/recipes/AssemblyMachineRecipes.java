@@ -501,6 +501,9 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
 				.inputItems(new OreDictStack(DESH.block(), 16), new OreDictStack(CO.block(), 16), new OreDictStack(BIGMT.plate(), 64)));
 		this.register(new GenericRecipe("ass.blanketchlorophyte").setup(600, 100).outputItems(new ItemStack(ModItems.fusion_shield_chlorophyte, 1))
 				.inputItems(new OreDictStack(W.block(), 16), new OreDictStack(DURA.block(), 16), new OreDictStack(OreDictManager.getReflector(), 48), new ComparableStack(ModItems.powder_chlorophyte, 48)));
+		this.register(new GenericRecipe("ass.blanketvaporwave").setup(1200, 300).outputItems(new ItemStack(ModItems.fusion_shield_vaporwave, 1))
+			.inputItems(new OreDictStack(CMB.block(), 16), new OreDictStack("dustTennessine", 48), new OreDictStack(OreDictManager.getReflector(), 64), new OreDictStack(OreDictManager.getReflector(), 64), new OreDictStack(OreDictManager.getReflector(), 64), new OreDictStack(OreDictManager.W.plateCast(), 28), new OreDictStack(CDALLOY.plateCast(), 12), new OreDictStack(TCALLOY.plateCast(), 12)));
+
 
 		// watz
 		this.register(new GenericRecipe("ass.watzrod").setup(200, 100).outputItems(new ItemStack(ModBlocks.watz_element, 3))
