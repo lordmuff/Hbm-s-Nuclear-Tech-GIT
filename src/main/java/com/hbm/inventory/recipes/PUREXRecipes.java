@@ -584,8 +584,14 @@ public class PUREXRecipes extends GenericRecipes<GenericRecipe> {
 				.outputFluids(new FluidStack(Fluids.WATZ, 1_000))
 				.setIconToFirstIngredient());
 
-		this.register(new GenericRecipe("purex.bffrfuel").setup(120, 3_750)
-			.inputItems(new ComparableStack((ModBlocks.block_francium), 1))
+		this.register(new GenericRecipe("purex.bffrfuel").setNameWrapper("purex.bffrfuel").setup(120, 3_750)
+			.inputItems(new OreDictStack((FRANCIUM.block()), 1))
+			.inputFluids(new FluidStack(Fluids.BALEFIRE, 8000), new FluidStack(Fluids.PEROXIDE, 4000))
+			.outputFluids(new FluidStack(Fluids.BALEFIRE_FRANCIUM, 12_000))
+			.setIconToFirstIngredient());
+
+		this.register(new GenericRecipe("purex.bffrfuel.gt6").setNameWrapper("purex.bffrfuel").setup(120, 3_750)
+			.inputItems(new OreDictStack("blockIngotFrancium", 1))
 			.inputFluids(new FluidStack(Fluids.BALEFIRE, 8000), new FluidStack(Fluids.PEROXIDE, 4000))
 			.outputFluids(new FluidStack(Fluids.BALEFIRE_FRANCIUM, 12_000))
 			.setIconToFirstIngredient());

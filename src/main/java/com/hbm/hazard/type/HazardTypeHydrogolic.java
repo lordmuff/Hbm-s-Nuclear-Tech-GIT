@@ -51,6 +51,6 @@ public class HazardTypeHydrogolic extends HazardTypeBase {
 
     @Override
     public void addHazardInformation(EntityPlayer player, List list, float level, ItemStack stack, List<HazardModifier> modifiers) {
-        list.add(BobMathUtil.getBlink() ? EnumChatFormatting.RED : EnumChatFormatting.YELLOW + "[ !!!" + I18nUtil.resolveKey("trait.hydrosuper") + "!!! ]");
+        list.add((BobMathUtil.getBlink() ? EnumChatFormatting.RED : EnumChatFormatting.YELLOW) + "[ !!! " + I18nUtil.resolveKey("trait.hydrosuper") + " !!! ]");
     }
 }

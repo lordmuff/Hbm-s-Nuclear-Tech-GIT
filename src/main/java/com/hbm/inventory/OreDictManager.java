@@ -173,6 +173,8 @@ public class OreDictManager {
 	public static final DictFrame GH336 = new DictFrame("Ghiorsium336", "Gh336");
 	public static final DictFrame MUD = new DictFrame("WatzMud");
 	public static final DictFrame CN989 = new DictFrame("Chinesium989", "Cn989");
+	public static final DictFrame FRANCIUM = new DictFrame("Francium");
+
 	/*
 	 * STABLE
 	 */
@@ -434,6 +436,8 @@ public class OreDictManager {
 		GH336	.rad(HazardRegistry.gh336)							.nugget(nugget_gh336)		.billet(billet_gh336)		.ingot(ingot_gh336);
 		MUD		.rad(HazardRegistry.mud)																					.ingot(ingot_mud);
 		CN989   .rad(HazardRegistry.cn989)  .hot(4F)                .nugget(nugget_cn989)       .billet(billet_cn989)       .ingot(ingot_cn989)         .dust(powder_cn989)         .plate(plate_cn989);
+		FRANCIUM   .rad(HazardRegistry.francium)  .hot(12F)  .blinding(4F)  .hydrosuper(6F)             .nugget(nugget_francium)      .ingot(ingot_francium)       .block(block_francium);
+
 
 		/*
 		 * STABLE
@@ -903,6 +907,7 @@ public class OreDictManager {
 		public DictFrame coal(float time) { 	return this.haz(new HazardEntry(HazardRegistry.COAL, time)); }
 		public DictFrame explosive(float e) { 	return this.haz(new HazardEntry(HazardRegistry.EXPLOSIVE, e)); }
 		public DictFrame neutron(float neut) {		return this.haz(new HazardEntry(HazardRegistry.NEUTRON, neut)); }
+		public DictFrame hydrosuper(float hydrosuper) {		return this.haz(new HazardEntry(HazardRegistry.HYDROGOLIC, hydrosuper)); }
 
 		public DictFrame haz(HazardEntry hazard) {
 			hazards.add(hazard);
