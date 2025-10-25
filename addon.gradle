@@ -1,0 +1,4 @@
+minecraft {
+	extraRunJvmArguments.add("-noverify") // Wtf Reika, asm is borked...
+	extraRunJvmArguments.add("-DragonAPI_ForceMethodStrip") // Wtf Reika your stripping is borked
+}

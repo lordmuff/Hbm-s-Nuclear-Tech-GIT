@@ -98,7 +98,8 @@ public class OreDictManager {
 	public static final String KEY_CRACK_TAR = "cracktar";
 	public static final String KEY_COAL_TAR = "coaltar";
 	public static final String KEY_WOOD_TAR = "woodtar";
-
+	public static final String KEY_PARAFFIN_GT6_1 = "dustParaffinWax";
+	public static final String KEY_PARAFFIN_GT6_2 = "dustWaxParaffin";
 	public static final String KEY_UNIVERSAL_TANK = "ntmuniversaltank";
 	public static final String KEY_HAZARD_TANK = "ntmhazardtank";
 	public static final String KEY_UNIVERSAL_BARREL = "ntmuniversalbarrel";
@@ -503,9 +504,6 @@ public class OreDictManager {
 		HAFNIUM		.nugget(nugget_hafnium)									.ingot(ingot_hafnium);
 		IRIDIUM		.ingot(ingot_iridium);
 
-
-		OSMIRIDIUM	.nugget(nugget_osmiridium)								.ingot(ingot_osmiridium);
-
 		/*
 		 * DUST AND GEM ORES
 		 */
@@ -607,7 +605,8 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_CRACK_TAR, fromOne(oil_tar, EnumTarType.CRACK));
 		OreDictionary.registerOre(KEY_COAL_TAR, fromOne(oil_tar, EnumTarType.COAL));
 		OreDictionary.registerOre(KEY_WOOD_TAR, fromOne(oil_tar, EnumTarType.WOOD));
-
+		OreDictionary.registerOre(KEY_PARAFFIN_GT6_1, fromOne(oil_tar, EnumTarType.PARAFFIN));
+		OreDictionary.registerOre(KEY_PARAFFIN_GT6_2, fromOne(oil_tar, EnumTarType.PARAFFIN));
 		/*
 		 * TANKS
 		 */
