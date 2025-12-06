@@ -790,6 +790,8 @@ public class Fluids {
 		metaOrder.add(BALEFIRE_FRANCIUM);
 		metaOrder.add(PLASMA_BFFR);
 		metaOrder.add(GELASCHRAB_TS);
+		metaOrder.add(DHC);
+
 
 		//ANY INTERNAL RENAMING MUST BE REFLECTED HERE - DON'T FORGET TO CHANGE: LANG FILES + TYPE'S STRING ID + NAME OF TANK/GUI TEXTURE FILES!
 		// V
