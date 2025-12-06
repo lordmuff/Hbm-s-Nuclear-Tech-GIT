@@ -44,7 +44,7 @@ public class PacketDispatcher {
 		//Signals server to do coord based satellite stuff
 		wrapper.registerMessage(SatCoordPacket.Handler.class, SatCoordPacket.class, i++, Side.SERVER);
 		//Triggers gun animations of the client
-		wrapper.registerMessage(GunAnimationPacket.Handler.class, GunAnimationPacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(HbmAnimationPacket.Handler.class, HbmAnimationPacket.class, i++, Side.CLIENT);
 		//Sends a funi text to display like a music disc announcement
 		wrapper.registerMessage(PlayerInformPacket.Handler.class, PlayerInformPacket.class, i++, Side.CLIENT);
 		//Universal keybind packet
@@ -65,6 +65,8 @@ public class PacketDispatcher {
 		wrapper.registerMessage(BiomeSyncPacket.Handler.class, BiomeSyncPacket.class, i++, Side.CLIENT);
 		//The not-so-convenient but not laggy one
 		wrapper.registerMessage(BufPacket.Handler.class, BufPacket.class, i++, Side.CLIENT);
+		//Same as above, but for entities
+		wrapper.registerMessage(EntityBufPacket.Handler.class, EntityBufPacket.class, i++, Side.CLIENT);
 		//Syncs server recipe configs to the client
 		wrapper.registerMessage(SerializableRecipePacket.Handler.class, SerializableRecipePacket.class, i++, Side.CLIENT);
 		//Syncing of NBT for guns
@@ -75,7 +77,7 @@ public class PacketDispatcher {
 
 		// Sync current GUI layer to server
 		wrapper.registerMessage(GuiLayerPacket.Handler.class, GuiLayerPacket.class, i++, Side.SERVER);
-		
+
 		wrapper.registerMessage(SatActivatePacket.Handler.class, SatActivatePacket.class, i++, Side.SERVER);
 
 	}

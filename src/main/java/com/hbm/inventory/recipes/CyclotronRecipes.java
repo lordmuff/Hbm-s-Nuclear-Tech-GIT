@@ -98,8 +98,8 @@ public class CyclotronRecipes extends SerializableRecipe {
 		makeRecipe(new ComparableStack(ModItems.part_plutonium), new ComparableStack(ModItems.cell_antimatter), new ItemStack(ModItems.cell_anti_schrabidium), 0);
 		/// PLUTONIUM END ///
 
-		makeRecipe(new ComparableStack(ModItems.nugget_solinium), new OreDictStack("blockLithium"), new ItemStack(ModItems.ingot_francium), 750);
 		makeRecipe(new ComparableStack(ModBlocks.block_euphemium), new ComparableStack(ModBlocks.bf_log), new ItemStack(ModBlocks.eu_log), 0);
+
 	}
 
 	private static void makeRecipe(ComparableStack part, AStack in, ItemStack out, int amat) {
@@ -108,16 +108,12 @@ public class CyclotronRecipes extends SerializableRecipe {
 
 	public static Object[] getOutput(ItemStack stack, ItemStack box) {
 
-		if(stack == null || stack.getItem() == null || box == null)
-			return null;
-
-		ComparableStack boxStack = new ComparableStack(box).makeSingular();
-		ComparableStack comp = new ComparableStack(stack).makeSingular();
+		if(stack == null || stack.getItem() == null || box == null) return null;
 
 		//boo hoo we iterate over a hash map, cry me a river
 		for(Entry<Pair<ComparableStack, AStack>, Pair<ItemStack, Integer>> entry : recipes.entrySet()) {
 
-			if(entry.getKey().getKey().isApplicable(boxStack) && entry.getKey().getValue().isApplicable(comp)) {
+			if(entry.getKey().getKey().matchesRecipe(box, true) && entry.getKey().getValue().matchesRecipe(stack, true)) {
 				return new Object[] { entry.getValue().getKey().copy(), entry.getValue().getValue() };
 			}
 		}

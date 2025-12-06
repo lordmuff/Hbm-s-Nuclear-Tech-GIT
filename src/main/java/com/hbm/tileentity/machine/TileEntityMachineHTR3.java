@@ -55,6 +55,7 @@ public class TileEntityMachineHTR3 extends TileEntityMachineBase implements IPro
 			if(!hasRegistered) {
 				if(isFacingPrograde()) registerPropulsion();
 				hasRegistered = true;
+				isOn = false;
 			}
 
 			for(DirPos pos : getConPos()) {
@@ -71,7 +72,7 @@ public class TileEntityMachineHTR3 extends TileEntityMachineBase implements IPro
 				} else if(soundtime > 20) {
 					soundtime = 20;
 				}
-			}else {
+			} else {
 				soundtime--;
 
 				if(soundtime == 19) {
@@ -267,13 +268,13 @@ public class TileEntityMachineHTR3 extends TileEntityMachineBase implements IPro
 		for(FluidTank tank : tanks) {
 			tank.setFill(tank.getFill() - fuelCost);
 		}
-		return 20;
+		return 80;
 	}
 
 	@Override
 	public int endBurn() {
 		isOn = false;
-		return 20; // Cooldown
+		return 80; // Cooldown
 	}
 
 	@Override

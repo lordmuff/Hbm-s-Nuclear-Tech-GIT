@@ -38,11 +38,11 @@ public class ItemBedrockOreBase extends Item {
 	}
 
 	public static SolarSystem.Body getOreBody(ItemStack stack) {
-		if(stack.getItemDamage() >= SolarSystem.Body.values().length) return SolarSystem.Body.KERBIN;
+		if(stack.getItemDamage() >= SolarSystem.Body.values().length || stack.getItemDamage() <= 0) return SolarSystem.Body.KERBIN;
 		return SolarSystem.Body.values()[stack.getItemDamage()];
 	}
 
-	public static void setOreAmount(World world, ItemStack stack, int x, int z) {
+	public static void setOreAmount(World world, ItemStack stack, int x, int z, double mult) {
 		if(!stack.hasTagCompound()) stack.stackTagCompound = new NBTTagCompound();
 		NBTTagCompound data = stack.getTagCompound();
 
@@ -51,7 +51,7 @@ public class ItemBedrockOreBase extends Item {
 		stack.setItemDamage(body.ordinal());
 
 		for(CelestialBedrockOreType type : CelestialBedrockOre.get(body).types) {
-			data.setDouble(type.suffix, getOreLevel(world, x, z, type));
+			data.setDouble(type.suffix, getOreLevel(world, x, z, type) * mult);
 		}
 	}
 

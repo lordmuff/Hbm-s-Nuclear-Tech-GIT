@@ -59,6 +59,7 @@ import com.hbm.render.util.RenderAccessoryUtility;
 import com.hbm.render.util.RenderOverhead;
 import com.hbm.render.util.RenderScreenOverlay;
 import com.hbm.render.util.SoyuzPronter;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.sound.MovingSoundChopper;
 import com.hbm.sound.MovingSoundChopperMine;
 import com.hbm.sound.MovingSoundCrashing;
@@ -823,17 +824,6 @@ public class ModEventHandlerClient {
 		}
 
 		try {
-			CanneryBase cannery = Jars.canneries.get(comp);
-			if(cannery != null) {
-				list.add(EnumChatFormatting.GREEN + I18nUtil.resolveKey("cannery.f1"));
-				lastCannery = comp;
-				canneryTimestamp = Clock.get_ms();
-			}
-		} catch(Exception ex) {
-			list.add(EnumChatFormatting.RED + "Error loading cannery: " + ex.getLocalizedMessage());
-		}
-
-		try {
 			QuickManualAndWiki qmaw = QMAWLoader.triggers.get(comp);
 			if(qmaw == null) {
 				qmaw = QMAWLoader.triggers.get(new ComparableStack(comp.item, 1, OreDictionary.WILDCARD_VALUE));
@@ -842,6 +832,17 @@ public class ModEventHandlerClient {
 				list.add(EnumChatFormatting.YELLOW + I18nUtil.resolveKey("qmaw.tab", Keyboard.getKeyName(HbmKeybinds.qmaw.getKeyCode())));
 				lastQMAW = qmaw;
 				qmawTimestamp = Clock.get_ms();
+			}
+		} catch(Exception ex) {
+			list.add(EnumChatFormatting.RED + "Error loading cannery: " + ex.getLocalizedMessage());
+		}
+
+		try {
+			CanneryBase cannery = Jars.canneries.get(comp);
+			if(cannery != null) {
+				list.add(EnumChatFormatting.GREEN + I18nUtil.resolveKey("cannery.f1", Keyboard.getKeyName(Keyboard.KEY_LSHIFT) + " + " + Keyboard.getKeyName(HbmKeybinds.qmaw.getKeyCode())));
+				lastCannery = comp;
+				canneryTimestamp = Clock.get_ms();
 			}
 		} catch(Exception ex) {
 			list.add(EnumChatFormatting.RED + "Error loading cannery: " + ex.getLocalizedMessage());
@@ -990,7 +991,7 @@ public class ModEventHandlerClient {
 			}
 		}
 
-		if(Keyboard.isKeyDown(Keyboard.KEY_F1) && Minecraft.getMinecraft().currentScreen != null) {
+		if(Keyboard.isKeyDown(HbmKeybinds.qmaw.getKeyCode()) && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && Minecraft.getMinecraft().currentScreen != null) {
 
 			ComparableStack comp = canneryTimestamp > Clock.get_ms() - 100 ? lastCannery : null;
 
@@ -1008,7 +1009,7 @@ public class ModEventHandlerClient {
 			}
 		}
 
-		if(Keyboard.isKeyDown(HbmKeybinds.qmaw.getKeyCode()) && Minecraft.getMinecraft().currentScreen != null) {
+		if(Keyboard.isKeyDown(HbmKeybinds.qmaw.getKeyCode()) && !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && Minecraft.getMinecraft().currentScreen != null) {
 
 			QuickManualAndWiki qmaw = qmawTimestamp > Clock.get_ms() - 100 ? lastQMAW : null;
 
@@ -1098,27 +1099,26 @@ public class ModEventHandlerClient {
 			}
 		}
 
-		if (!mc.isGamePaused() && event.phase == Phase.END) {
+		if(!mc.isGamePaused() && event.phase == Phase.END) {
 			for(CelestialBody body : CelestialBody.getAllBodies()) {
 				if(SolarSystemWorldSavedData.getClientTraits(body.name) != null) {
-				for(CelestialBodyTrait trait : SolarSystemWorldSavedData.getClientTraits(body.name).values()) {
+					for(CelestialBodyTrait trait : SolarSystemWorldSavedData.getClientTraits(body.name).values()) {
 						trait.update(true);
 					}
 				}
 			}
 
-		    CBT_War war = CelestialBody.getTrait(mc.theWorld, CBT_War.class);
+			CBT_War war = CelestialBody.getTrait(mc.theWorld, CBT_War.class);
 
-		    if (war != null) {
-		        for (int i = 0; i < war.getProjectiles().size(); i++) {
-		            CBT_War.Projectile projectile = war.getProjectiles().get(i);
-		            if (projectile != null && projectile.getTravel() >= 18 && projectile.getTravel() <= 18) {
-		            	  Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.impact", 10F, 1F);
-
-	                    }
-		            }
-		        }
-		    }
+			if(war != null) {
+				for(int i = 0; i < war.getProjectiles().size(); i++) {
+					CBT_War.Projectile projectile = war.getProjectiles().get(i);
+					if(projectile != null && projectile.getTravel() >= 18 && projectile.getTravel() <= 18) {
+						Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.impact", 10F, 1F);
+					}
+				}
+			}
+		}
 
 		if(event.phase == Phase.END) {
 
@@ -1194,6 +1194,8 @@ public class ModEventHandlerClient {
 	public static long lastLoadScreenReplacement = 0L;
 	public static int loadingScreenReplacementRetry = 0;
 
+	private static AudioWrapper shipHum;
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onClientTickLast(ClientTickEvent event) {
@@ -1228,6 +1230,19 @@ public class ModEventHandlerClient {
 						renderLodeStar = true;
 					}
 				}
+			}
+
+			if(player != null && world.provider instanceof WorldProviderOrbit && HbmLivingProps.hasGravity(player)) {
+				if(shipHum == null || !shipHum.isPlaying()) {
+					shipHum = MainRegistry.proxy.getLoopedSound("hbm:misc.stationhum", player, ClientConfig.AUDIO_SHIP_HUM_VOLUME.get(), 5.0F, 1.0F, 10);
+					shipHum.startSound();
+				}
+
+				shipHum.updateVolume(ClientConfig.AUDIO_SHIP_HUM_VOLUME.get());
+				shipHum.keepAlive();
+			} else if(shipHum != null) {
+				shipHum.stopSound();
+				shipHum = null;
 			}
 		}
 
@@ -1533,11 +1548,11 @@ public class ModEventHandlerClient {
 			case 10: main.splashText = "Fentanyl!"; break;
 			case 11: main.splashText = "Do drugs!"; break;
 			case 12: main.splashText = "Imagine being scared by splash texts!"; break;
+			case 13: main.splashText = "Semantic versioning? More like pedantic versioning."; break;
 			}
 
 			double d = Math.random();
 			if(d < 0.1) main.splashText = "Redditors aren't people!";
-			else if(d < 0.2) main.splashText = "Can someone tell me what corrosive fumes the people on Reddit are huffing so I can avoid those more effectively?";
 		}
 	}
 }

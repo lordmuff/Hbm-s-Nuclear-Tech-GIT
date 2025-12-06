@@ -30,7 +30,7 @@ import com.hbm.inventory.recipes.anvil.AnvilRecipes;
 import com.hbm.inventory.recipes.loader.SerializableRecipe;
 import com.hbm.items.ItemEnums.EnumAchievementType;
 import com.hbm.items.ModItems;
-import com.hbm.items.weapon.sedna.mods.WeaponModManager;
+import com.hbm.items.weapon.sedna.mods.XWeaponModManager;
 import com.hbm.lib.HbmWorld;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
@@ -262,6 +262,7 @@ public class MainRegistry {
 		configHbmDir = new File(configDir.getAbsolutePath() + File.separatorChar + "hbmConfig");
 
 		if(!configHbmDir.exists()) configHbmDir.mkdir();
+		Identity.init(configDir);
 
 		logger.info("Let us celebrate the fact that the logger finally works again!");
 
@@ -297,7 +298,7 @@ public class MainRegistry {
 		SiegeTier.registerTiers();
 		HazardRegistry.registerItems();
 		HazardRegistry.registerTrafos();
-		WeaponModManager.init();
+		XWeaponModManager.init();
 
 		SolarSystem.init();
 
@@ -323,6 +324,7 @@ public class MainRegistry {
 		aMatSecurity.customCraftingMaterial = ModItems.plate_kevlar;
 		aMatCobalt.customCraftingMaterial = ModItems.ingot_cobalt;
 		aMatStarmetal.customCraftingMaterial = ModItems.ingot_starmetal;
+		aMatBismuth.customCraftingMaterial = ModItems.plate_bismuth;
 		tMatSchrab.setRepairItem(new ItemStack(ModItems.ingot_schrabidium));
 		tMatHammmer.setRepairItem(new ItemStack(Item.getItemFromBlock(ModBlocks.block_schrabidium)));
 		tMatChainsaw.setRepairItem(new ItemStack(ModItems.ingot_steel));
@@ -737,6 +739,7 @@ public class MainRegistry {
 		event.registerServerCommand(new CommandReloadServer());
 		event.registerServerCommand(new CommandLocate());
 		event.registerServerCommand(new CommandTotalTime());
+		event.registerServerCommand(new CommandCustomize());
 		ArcFurnaceRecipes.registerFurnaceSmeltables(); // because we have to wait for other mods to take their merry ass time to register recipes
 	}
 
@@ -1501,6 +1504,36 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.mp_f_20");
 		ignoreMappings.add("hbm:item.mp_thruster_10_kerosene_tec");
 		ignoreMappings.add("hbm:item.mp_thruster_15_kerosene_tec");
+		ignoreMappings.add("hbm:item.powder_platnium");
+		ignoreMappings.add("hbm:item.ingot_platnium");
+		ignoreMappings.add("hbm:item.nugget_platnium");
+		ignoreMappings.add("hbm:item.t45_kit");
+		ignoreMappings.add("hbm:item.fusion_core_infinite");
+		ignoreMappings.add("hbm:item.fluid_identifier");
+		ignoreMappings.add("hbm:tile.sand_boron");
+		ignoreMappings.add("hbm:tile.sand_lead");
+		ignoreMappings.add("hbm:tile.sand_uranium");
+		ignoreMappings.add("hbm:tile.sand_polonium");
+		ignoreMappings.add("hbm:tile.sand_quartz");
+		ignoreMappings.add("hbm:tile.hadron_power_10m");
+		ignoreMappings.add("hbm:tile.hadron_power_100m");
+		ignoreMappings.add("hbm:tile.hadron_power_1g");
+		ignoreMappings.add("hbm:tile.hadron_power_10g");
+		ignoreMappings.add("hbm:item.bob_metalworks");
+		ignoreMappings.add("hbm:item.bob_assembly");
+		ignoreMappings.add("hbm:item.bob_chemistry");
+		ignoreMappings.add("hbm:item.bob_oil");
+		ignoreMappings.add("hbm:item.bob_nuclear");
+		ignoreMappings.add("hbm:item.multitool_hit");
+		ignoreMappings.add("hbm:item.multitool_dig");
+		ignoreMappings.add("hbm:item.multitool_silk");
+		ignoreMappings.add("hbm:item.multitool_ext");
+		ignoreMappings.add("hbm:item.multitool_miner");
+		ignoreMappings.add("hbm:item.multitool_beam");
+		ignoreMappings.add("hbm:item.multitool_sky");
+		ignoreMappings.add("hbm:item.multitool_mega");
+		ignoreMappings.add("hbm:item.multitool_joule");
+		ignoreMappings.add("hbm:item.multitool_decon");
 
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);

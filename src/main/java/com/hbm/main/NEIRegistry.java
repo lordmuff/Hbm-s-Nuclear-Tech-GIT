@@ -53,6 +53,8 @@ public class NEIRegistry {
 
 		//universal boyes
 		handlers.add(new ZirnoxRecipeHandler());
+		handlers.add(new PWRRecipeHandler());
+		handlers.add(new WatzRecipeHandler());
 		if(VersatileConfig.rtgDecay()) handlers.add(new RTGRecipeHandler());
 		handlers.add(new LiquefactionHandler());
 		handlers.add(new SolidificationHandler());
@@ -64,6 +66,7 @@ public class NEIRegistry {
 		handlers.add(new SawmillHandler());
 		handlers.add(new MixerHandler());
 		handlers.add(new OutgasserHandler());
+		handlers.add(new FusionBreederHandler());
 		handlers.add(new ElectrolyserFluidHandler());
 		handlers.add(new ElectrolyserMetalHandler());
 		handlers.add(new AshpitHandler());

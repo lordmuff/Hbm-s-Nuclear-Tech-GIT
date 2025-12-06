@@ -127,7 +127,7 @@ public class TileEntityPneumoTube extends TileEntityMachineBase implements IGUIP
 
 			if(this.isEndpoint() && this.node != null && this.node.net != null && worldObj.getTotalWorldTime() % 10 == 0) {
 				TileEntity tile = Compat.getTileStandard(worldObj, xCoord + this.ejectionDir.offsetX, yCoord + this.ejectionDir.offsetY, zCoord + this.ejectionDir.offsetZ);
-				if(tile instanceof IInventory) this.node.net.addReceiver((IInventory) tile, this.ejectionDir);
+				if(tile instanceof IInventory) this.node.net.addReceiver((IInventory) tile, this.ejectionDir, this);
 			}
 
 			this.networkPackNT(15);
@@ -229,7 +229,7 @@ public class TileEntityPneumoTube extends TileEntityMachineBase implements IGUIP
 
 		this.sendOrder = nbt.getByte("sendOrder");
 		this.receiveOrder = nbt.getByte("receiveOrder");
-		
+
 		this.whitelist = nbt.getBoolean("whitelist");
 		this.redstone = nbt.getBoolean("redstone");
 	}
@@ -257,7 +257,7 @@ public class TileEntityPneumoTube extends TileEntityMachineBase implements IGUIP
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Object provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		return new GUIPneumoTube(player.inventory, this);
+		return new GUIPneumoTube(player.inventory, this, ID == 1);
 	}
 
 	@Override

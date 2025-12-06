@@ -98,6 +98,7 @@ public class TileEntityMachineChemicalFactory extends TileEntityMachineBase impl
 		if(i >= 15 && i <= 17) return true;
 		if(i >= 22 && i <= 24) return true;
 		if(i >= 29 && i <= 31) return true;
+		for(int k = 0; k < 4; k++) if(this.chemplantModule[k].isSlotClogged(i)) return true;
 		return false;
 	}
 
@@ -144,14 +145,6 @@ public class TileEntityMachineChemicalFactory extends TileEntityMachineBase impl
 			
 			this.power = Library.chargeTEFromItems(slots, 0, power, maxPower);
 			upgradeManager.checkSlots(slots, 1, 3);
-
-			inputTanks[0].loadTank(10, 13, slots);
-			inputTanks[1].loadTank(11, 14, slots);
-			inputTanks[2].loadTank(12, 15, slots);
-
-			outputTanks[0].unloadTank(16, 19, slots);
-			outputTanks[1].unloadTank(17, 20, slots);
-			outputTanks[2].unloadTank(18, 21, slots);
 			
 			for(DirPos pos : getConPos()) {
 				this.trySubscribe(worldObj, pos);
@@ -187,6 +180,7 @@ public class TileEntityMachineChemicalFactory extends TileEntityMachineBase impl
 				}
 			}
 			
+			// internal fluid sharing logic
 			for(FluidTank in : inputTanks) if(in.getTankType() != Fluids.NONE) for(FluidTank out : outputTanks) { // up to 144 iterations, but most of them are NOP anyway
 				if(out.getTankType() == Fluids.NONE) continue;
 				if(out.getTankType() != in.getTankType()) continue;
@@ -326,7 +320,7 @@ public class TileEntityMachineChemicalFactory extends TileEntityMachineBase impl
 		super.readFromNBT(nbt);
 
 		for(int i = 0; i < inputTanks.length; i++) this.inputTanks[i].readFromNBT(nbt, "i" + i);
-		for(int i = 0; i < outputTanks.length; i++) this.outputTanks[i].readFromNBT(nbt, "i" + i);
+		for(int i = 0; i < outputTanks.length; i++) this.outputTanks[i].readFromNBT(nbt, "o" + i);
 
 		this.water.readFromNBT(nbt, "w");
 		this.lps.readFromNBT(nbt, "s");
@@ -341,7 +335,7 @@ public class TileEntityMachineChemicalFactory extends TileEntityMachineBase impl
 		super.writeToNBT(nbt);
 
 		for(int i = 0; i < inputTanks.length; i++) this.inputTanks[i].writeToNBT(nbt, "i" + i);
-		for(int i = 0; i < outputTanks.length; i++) this.outputTanks[i].writeToNBT(nbt, "i" + i);
+		for(int i = 0; i < outputTanks.length; i++) this.outputTanks[i].writeToNBT(nbt, "o" + i);
 
 		this.water.writeToNBT(nbt, "w");
 		this.lps.writeToNBT(nbt, "s");
