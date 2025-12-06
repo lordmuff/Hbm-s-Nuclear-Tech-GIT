@@ -1,0 +1,13 @@
+{
+  "ideaDirPath": "C:/Users/tranq/IdeaProjects/Hbm-s-Nuclear-Tech-GIT/.idea",
+  "modulesMap": {
+    "PolyNTM": "C:/Users/tranq/IdeaProjects/Hbm-s-Nuclear-Tech-GIT/PolyNTM.iml",
+    "PolyNTM:api": "C:/Users/tranq/IdeaProjects/Hbm-s-Nuclear-Tech-GIT/.idea/modules/PolyNTM.api.iml",
+    "PolyNTM:ideVirtualMain": "C:/Users/tranq/IdeaProjects/Hbm-s-Nuclear-Tech-GIT/.idea/modules/PolyNTM.ideVirtualMain.iml",
+    "PolyNTM:injectedTags": "C:/Users/tranq/IdeaProjects/Hbm-s-Nuclear-Tech-GIT/.idea/modules/PolyNTM.injectedTags.iml",
+    "PolyNTM:main": "C:/Users/tranq/IdeaProjects/Hbm-s-Nuclear-Tech-GIT/.idea/modules/PolyNTM.main.iml",
+    "PolyNTM:mcLauncher": "C:/Users/tranq/IdeaProjects/Hbm-s-Nuclear-Tech-GIT/.idea/modules/PolyNTM.mcLauncher.iml",
+    "PolyNTM:patchedMc": "C:/Users/tranq/IdeaProjects/Hbm-s-Nuclear-Tech-GIT/.idea/modules/PolyNTM.patchedMc.iml",
+    "PolyNTM:test": "C:/Users/tranq/IdeaProjects/Hbm-s-Nuclear-Tech-GIT/.idea/modules/PolyNTM.test.iml"
+  }
+}
