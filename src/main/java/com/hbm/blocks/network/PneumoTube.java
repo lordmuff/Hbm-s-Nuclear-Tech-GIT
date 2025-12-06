@@ -237,7 +237,7 @@ public class PneumoTube extends BlockContainer implements IToolable, ITooltipPro
 	}
 
 	public boolean canConnectToAir(IBlockAccess world, int x, int y, int z, ForgeDirection dir) {
-		FluidType air = Fluids.AIR;
+		FluidType air = Fluids.EARTHAIR;
 		TileEntity te = world.getTileEntity(x, y, z);
 		if(te instanceof TileEntityPneumoTube) {
 			TileEntityPneumoTube tube = (TileEntityPneumoTube) te;

@@ -54,7 +54,7 @@ public class TileEntityPneumoTube extends TileEntityMachineBase implements IGUIP
 
 	public TileEntityPneumoTube() {
 		super(15);
-		this.compair = new FluidTank(Fluids.AIR, 4_000).withPressure(1);
+		this.compair = new FluidTank(Fluids.EARTHAIR, 4_000).withPressure(1);
 	}
 
 	@Override

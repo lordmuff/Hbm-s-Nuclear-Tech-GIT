@@ -156,7 +156,7 @@ public class ChunkAtmosphereHandler {
 		return list;
 	}
 
-	// Assuming 21% AIR/9% OXY is required for breathable atmosphere
+	// Assuming 21% EARTHAIR/9% OXY is required for breathable atmosphere
 	public boolean canBreathe(EntityLivingBase entity) {
 		CBT_Atmosphere atmosphere = getAtmosphere(entity);
 

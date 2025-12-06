@@ -53,15 +53,15 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 
 		// Provided by cryodistil
 		// this.register(new GenericRecipe("chem.oxygen").setupNamed(20, 400).setIcon(ModItems.gas_full, Fluids.OXYGEN.getID())
-		// 		.inputFluids(new FluidStack(Fluids.AIR, 8_000))
+		// 		.inputFluids(new FluidStack(Fluids.EARTHAIR, 8_000))
 		// 		.outputFluids(new FluidStack(Fluids.OXYGEN, 500)));
 
 		// this.register(new GenericRecipe("chem.xenon").setupNamed(300, 1_000).setIcon(ModItems.gas_full, Fluids.XENON.getID())
-		// 		.inputFluids(new FluidStack(Fluids.AIR, 16_000))
+		// 		.inputFluids(new FluidStack(Fluids.EARTHAIR, 16_000))
 		// 		.outputFluids(new FluidStack(Fluids.XENON, 50)));
 
 		// this.register(new GenericRecipe("chem.xenonoxy").setupNamed(20, 1_000).setIcon(ModItems.gas_full, Fluids.XENON.getID())
-		// 		.inputFluids(new FluidStack(Fluids.AIR, 8_000), new FluidStack(Fluids.OXYGEN, 250))
+		// 		.inputFluids(new FluidStack(Fluids.EARTHAIR, 8_000), new FluidStack(Fluids.OXYGEN, 250))
 		// 		.outputFluids(new FluidStack(Fluids.XENON, 50)).setPools(GenericRecipes.POOL_PREFIX_ALT + ".xenonoxy"));
 
 		this.register(new GenericRecipe("chem.helium3").setupNamed(25, 2_000).setIcon(ModItems.gas_full, Fluids.HELIUM3.getID())
@@ -129,7 +129,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputFluids(new FluidStack(Fluids.WATER, 1_000), new FluidStack(Fluids.LAVA, 25))
 				.outputItems(new ItemStack(Blocks.cobblestone)));
 		this.register(new GenericRecipe("chem.stone").setup(60, 500).setPools(GenericRecipes.POOL_PREFIX_DISCOVER)
-				.inputFluids(new FluidStack(Fluids.WATER, 1_000), new FluidStack(Fluids.LAVA, 25), new FluidStack(Fluids.AIR, 4_000))
+				.inputFluids(new FluidStack(Fluids.WATER, 1_000), new FluidStack(Fluids.LAVA, 25), new FluidStack(Fluids.EARTHAIR, 4_000))
 				.outputItems(new ItemStack(Blocks.stone)));
 		this.register(new GenericRecipe("chem.concrete").setup(100, 100)
 				.inputItems(new ComparableStack(ModItems.powder_cement, 1), new ComparableStack(Blocks.gravel, 8), new OreDictStack(KEY_SAND, 8))
@@ -251,7 +251,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 
 		// Provided by cryodistil
 		// this.register(new GenericRecipe("chem.birkeland").setupNamed(200, 5_000)
-		// 		.inputFluids(new FluidStack(Fluids.AIR, 8_000), new FluidStack(Fluids.WATER, 2_000))
+		// 		.inputFluids(new FluidStack(Fluids.EARTHAIR, 8_000), new FluidStack(Fluids.WATER, 2_000))
 		// 		.outputFluids(new FluidStack(Fluids.NITRIC_ACID, 1_000)).setPools(GenericRecipes.POOL_PREFIX_ALT + ".birkeland"));
 
 		this.register(new GenericRecipe("chem.schrabidic").setup(60, 5_000)

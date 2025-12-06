@@ -32,7 +32,7 @@ public class TileEntityMachineIntake extends TileEntityLoadedBase implements IEn
 	private AudioWrapper audio;
 
 	public TileEntityMachineIntake() {
-		this.compair = new FluidTank(Fluids.AIR, 1_000);
+		this.compair = new FluidTank(Fluids.EARTHAIR, 1_000);
 	}
 
 	@Override
@@ -171,7 +171,7 @@ public class TileEntityMachineIntake extends TileEntityLoadedBase implements IEn
 	}
 
 	@Override public boolean canConnect(ForgeDirection dir) { return dir != ForgeDirection.UP && dir != ForgeDirection.DOWN; }
-	@Override public boolean canConnect(FluidType type, ForgeDirection dir) { return type == Fluids.AIR && dir != ForgeDirection.UP && dir != ForgeDirection.DOWN; }
+	@Override public boolean canConnect(FluidType type, ForgeDirection dir) { return type == Fluids.EARTHAIR && dir != ForgeDirection.UP && dir != ForgeDirection.DOWN; }
 
 	@Override public void setPower(long i) { power = i; }
 	@Override public long getPower() { return power; }

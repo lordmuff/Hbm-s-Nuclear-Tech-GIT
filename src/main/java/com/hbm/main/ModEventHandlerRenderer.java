@@ -582,7 +582,7 @@ public class ModEventHandlerRenderer {
 			double horizontal = MathHelper.clamp_double(Math.sin(System.currentTimeMillis() * 0.02), -0.7, 0.7) * 15;
 			double vertical = MathHelper.clamp_double(Math.sin(System.currentTimeMillis() * 0.01 + 2), -0.7, 0.7) * 3;
 			GL11.glTranslated(horizontal * mult, vertical * mult, 0);
-		} else if(event.type == ElementType.AIR) {
+		} else if(event.type == ElementType.EARTHAIR) {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			int width = event.resolution.getScaledWidth();
 			int height = event.resolution.getScaledHeight();

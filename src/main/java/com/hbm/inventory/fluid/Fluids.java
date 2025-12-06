@@ -535,7 +535,7 @@ public class Fluids {
 		PLASMA_BFFR =		    new FluidType("PLASMA_BFFR",			0x0f330f, 5, 5, 5, EnumSymbol.ANTIMATTER).setTemp(66666).addTraits(NOCON, NOID, PLASMA, new FT_Rocket(125000, 777_777));
 		GELASCHRAB_TS =			new FluidType("GELASCHRAB_TS",	0x663e47, 3, 0, 3, EnumSymbol.ANTIMATTER).addTraits(ANTI, GASEOUS).addTraits(new FT_VentRadiation(8F));
 		DHC =					new FluidType("DHC",				0xD2AFFF, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
-		AIR =					new FluidType("AIR",				0xE7EAEB, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
+		EARTHAIR =					new FluidType("EARTHAIR",				0xE7EAEB, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
 
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
@@ -702,7 +702,7 @@ public class Fluids {
 		metaOrder.add(UGAS);
 		metaOrder.add(NGAS);
 		metaOrder.add(TEKTOAIR);
-		metaOrder.add(AIR); //do it for love, do it for life, for mankiiiiiind!!
+		metaOrder.add(EARTHAIR); //do it for love, do it for life, for mankiiiiiind!!
 		//NITRIC_ACID
 		metaOrder.add(NITRIC_ACID);
 		metaOrder.add(HCL);
