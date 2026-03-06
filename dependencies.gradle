@@ -34,19 +34,8 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-	runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.5.4-GTNH:dev")
 	compile "com.gregoriust.gregtech:gregtech_1.7.10:+:dev"
 	compile fileTree(dir: 'lib', include: '*.jar')
-
-	compile("com.github.GTNewHorizons:waila:1.6.0:dev")
-	compile("com.github.GTNewHorizons:Baubles:1.0.1.16:dev")
-	implementation("com.github.GTNewHorizons:Avaritia:1.45:dev")
-	implementation("com.github.GTNewHorizons:WitcheryExtras:1.1.14:dev")
-	implementation("curse.maven:witchery-69673:2234410")
-	compile("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev")
-	api("com.github.GTNewHorizons:Botania:1.9.24-GTNH:dev")
-	api("com.github.GTNewHorizons:BloodMagic:1.4.3:dev")
-	implementation("com.github.GTNewHorizons:ForgeMultipart:1.3.4:dev")
 
 	// REIKA MOD DEPS
 	// please note that while i include a way to reliably compile Reika's mods here,
@@ -55,7 +44,6 @@ dependencies {
 	runtimeOnly("appeng:appliedenergistics2:rv3-beta-6:dev")
 	runtimeOnly("net.sengir.forestry:forestry_1.7.10:4.2.16.64:dev")
 	runtimeOnly("ic2:IC2Classic:1.2.1.8:dev")
-	implementation("com.github.GTNewHorizons:NotEnoughItems:2.3.83-GTNH:dev")
 	runtimeOnly("com.xcompwiz:mystcraft:1.7.10-0.12.3.04:dev")
 	compileOnly("com.mod-buildcraft:buildcraft:7.1.23:dev")
 
