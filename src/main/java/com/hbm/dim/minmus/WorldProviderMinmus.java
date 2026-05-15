@@ -32,17 +32,12 @@ public class WorldProviderMinmus extends WorldProviderCelestial {
 
 	@Override
 	public IChunkProvider createChunkGenerator() {
-		return new ChunkProviderMinmus(this.worldObj, this.getSeed(), false);
+		return new ChunkProviderMinmus(this.worldObj, this.getSeed());
 	}
 
 	@Override
 	public Block getStone() {
 		return ModBlocks.minmus_stone;
-	}
-
-	@Override
-	public boolean hasIce() {
-		return true;
 	}
 
 	private static BiomeGenLayers createBiomeGenerators(long seed) {

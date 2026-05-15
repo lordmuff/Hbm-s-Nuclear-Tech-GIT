@@ -11,10 +11,12 @@ import com.hbm.items.weapon.sedna.Crosshair;
 import com.hbm.items.weapon.sedna.GunConfig;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT;
 import com.hbm.items.weapon.sedna.Receiver;
+import com.hbm.items.weapon.sedna.ItemGunBaseNT.GunState;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT.LambdaContext;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT.WeaponQuality;
 import com.hbm.items.weapon.sedna.factory.GunFactory.EnumAmmo;
 import com.hbm.items.weapon.sedna.mags.MagazineFullReload;
+import com.hbm.main.NTMSounds;
 import com.hbm.particle.SpentCasing;
 import com.hbm.particle.SpentCasing.CasingType;
 import com.hbm.render.anim.AnimationEnums.GunAnimation;
@@ -22,6 +24,8 @@ import com.hbm.render.anim.BusAnimation;
 import com.hbm.render.anim.BusAnimationSequence;
 import com.hbm.render.anim.BusAnimationKeyframe.IType;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 
@@ -50,28 +54,28 @@ public class XFactory10ga {
 		ModItems.gun_double_barrel = new ItemGunBaseNT(WeaponQuality.SPECIAL, new GunConfig()
 				.dura(1000).draw(10).inspect(39).crosshair(Crosshair.L_CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
 				.rec(new Receiver(0)
-						.dmg(30F).rounds(2).delay(10).reload(41).reloadOnEmpty(true).sound("hbm:weapon.fire.shotgun", 1.0F, 0.9F)
+						.dmg(30F).rounds(2).delay(10).reload(41).reloadOnEmpty(true).sound(NTMSounds.GUN_SHOTGUN_FIRE, 1.0F, 0.9F)
 						.mag(new MagazineFullReload(0, 2).addConfigs(g10, g10_shrapnel, g10_du, g10_slug, g10_explosive))
 						.offset(0.75, -0.0625, -0.1875)
 						.setupStandardFire().recoil(LAMBDA_RECOIL_DOUBLE_BARREL))
-				.setupStandardConfiguration()
+				.setupStandardConfiguration().ps(LAMBDA_DOUBLE_SECONDARY)
 				.anim(LAMBDA_DOUBLE_BARREL_ANIMS).orchestra(Orchestras.ORCHESTRA_DOUBLE_BARREL)
 				).setDefaultAmmo(EnumAmmo.G10, 6).setUnlocalizedName("gun_double_barrel");
 		ModItems.gun_double_barrel_sacred_dragon = new ItemGunBaseNT(WeaponQuality.B_SIDE, new GunConfig()
 				.dura(6000).draw(10).inspect(39).crosshair(Crosshair.L_CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
 				.rec(new Receiver(0)
-						.dmg(45F).spreadAmmo(1.35F).rounds(2).delay(10).reload(41).reloadOnEmpty(true).sound("hbm:weapon.fire.shotgun", 1.0F, 0.9F)
+						.dmg(45F).spreadAmmo(1.35F).rounds(2).delay(10).reload(41).reloadOnEmpty(true).sound(NTMSounds.GUN_SHOTGUN_FIRE, 1.0F, 0.9F)
 						.mag(new MagazineFullReload(0, 2).addConfigs(g10, g10_shrapnel, g10_du, g10_slug, g10_explosive))
 						.offset(0.75, -0.0625, -0.1875)
 						.setupStandardFire().recoil(LAMBDA_RECOIL_DOUBLE_BARREL))
-				.setupStandardConfiguration()
+				.setupStandardConfiguration().ps(LAMBDA_DOUBLE_SECONDARY)
 				.anim(LAMBDA_DOUBLE_BARREL_ANIMS).orchestra(Orchestras.ORCHESTRA_DOUBLE_BARREL)
 				).setDefaultAmmo(EnumAmmo.G10_DU, 6).setUnlocalizedName("gun_double_barrel_sacred_dragon");
 
 		ModItems.gun_autoshotgun_heretic = new ItemGunBaseNT(WeaponQuality.DEBUG, new GunConfig()
 				.draw(20).inspect(65).reloadSequential(true).inspectCancel(false).crosshair(Crosshair.L_CIRCLE).hideCrosshair(false).smoke(Lego.LAMBDA_STANDARD_SMOKE)
 				.rec(new Receiver(0)
-						.dmg(100F).delay(3).auto(true).dryfireAfterAuto(true).reload(110).jam(19).sound("hbm:weapon.fire.shotgunAuto", 1.0F, 1.0F)
+						.dmg(100F).delay(3).auto(true).dryfireAfterAuto(true).reload(110).jam(19).sound(NTMSounds.GUN_SHREDDER_FIRE, 1.0F, 1.0F)
 						.mag(new MagazineFullReload(0, 250).addConfigs(g10, g10_shrapnel, g10_du, g10_slug, g10_explosive))
 						.offset(0.75, -0.125, -0.25)
 						.canFire(Lego.LAMBDA_STANDARD_CAN_FIRE).fire(Lego.LAMBDA_NOWEAR_FIRE).recoil(XFactory12ga.LAMBDA_RECOIL_SEXY))
@@ -82,6 +86,39 @@ public class XFactory10ga {
 
 	public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_DOUBLE_BARREL = (stack, ctx) -> {
 		ItemGunBaseNT.setupRecoil(10, (float) (ctx.getPlayer().getRNG().nextGaussian() * 1.5));
+	};
+
+	public static BiConsumer<ItemStack, LambdaContext> LAMBDA_DOUBLE_SECONDARY = (stack, ctx) -> {
+
+		EntityLivingBase entity = ctx.entity;
+		EntityPlayer player = ctx.getPlayer();
+		Receiver rec = ctx.config.getReceivers(stack)[0];
+		int index = ctx.configIndex;
+		GunState state = ItemGunBaseNT.getState(stack, index);
+
+		if(state == GunState.IDLE) {
+
+			if(rec.getCanFire(stack).apply(stack, ctx)) {
+				rec.getOnFire(stack).accept(stack, ctx);
+
+				if(rec.getFireSound(stack) != null)
+					entity.worldObj.playSoundEffect(entity.posX, entity.posY, entity.posZ, rec.getFireSound(stack), rec.getFireVolume(stack), rec.getFirePitch(stack));
+
+				ItemGunBaseNT.setState(stack, index, GunState.COOLDOWN);
+				ItemGunBaseNT.setTimer(stack, index, rec.getDelayAfterFire(stack));
+			} else {
+
+				if(rec.getDoesDryFire(stack)) {
+					ItemGunBaseNT.playAnimation(player, stack, GunAnimation.CYCLE_DRY, index);
+					ItemGunBaseNT.setState(stack, index, rec.getRefireAfterDry(stack) ? GunState.COOLDOWN : GunState.DRAWING);
+					ItemGunBaseNT.setTimer(stack, index, rec.getDelayAfterDryFire(stack));
+				}
+			}
+		}
+
+		if(state == GunState.RELOADING) {
+			ItemGunBaseNT.setReloadCancel(stack, true);
+		}
 	};
 
 	@SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_DOUBLE_BARREL_ANIMS = (stack, type) -> {

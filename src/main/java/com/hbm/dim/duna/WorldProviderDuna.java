@@ -42,7 +42,7 @@ public class WorldProviderDuna extends WorldProviderCelestial {
 
 	@Override
 	public IChunkProvider createChunkGenerator() {
-		return new ChunkProviderDuna(this.worldObj, this.getSeed(), false);
+		return new ChunkProviderDuna(this.worldObj, this.getSeed());
 	}
 
 
@@ -130,11 +130,6 @@ public class WorldProviderDuna extends WorldProviderCelestial {
 	@Override
 	public Block getStone() {
 		return ModBlocks.duna_rock;
-	}
-
-	@Override
-	public boolean hasIce() {
-		return true;
 	}
 
 	@Override

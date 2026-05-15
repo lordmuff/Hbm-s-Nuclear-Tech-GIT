@@ -15,7 +15,6 @@ import static com.hbm.inventory.material.MaterialShapes.*;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockOreBasalt.EnumBasaltOreType;
 import com.hbm.blocks.BlockEnums.EnumStoneType;
-import com.hbm.config.GeneralConfig;
 import com.hbm.crafting.MineralRecipes;
 import com.hbm.hazard.HazardData;
 import com.hbm.hazard.HazardEntry;
@@ -111,6 +110,12 @@ public class OreDictManager {
 	public static final String KEY_TOOL_TORCH = "ntmtorch";
 
 	public static final String KEY_GLYPHID_MEAT = "glyphidMeat";
+	public static final String KEY_FLOUR = "foodFlour";
+	public static final String KEY_BUTTER = "foodButter";
+	public static final String KEY_CHEESE = "foodCheese";
+	public static final String KEY_STRAWBERRY = "cropStrawberry";
+	public static final String KEY_STRAWBERRY_ICECREAM = "foodStrawberryicecream";
+	public static final String KEY_STRAWBERRY_MILKSHAKE = "foodStrawberrymilkshake";
 
 	/*
 	 * MATERIALS
@@ -193,6 +198,7 @@ public class OreDictManager {
 	public static final DictFrame NIM = new DictFrame("Pentlandite"); // Compat with "ferrous metal" so thermal isn't invalidated and neither is our intended progression!
 	/** TUNGSTEN */
 	public static final DictFrame W = new DictFrame("Tungsten");
+	public static final DictFrame WC = new DictFrame("TungstenCarbide");
 	/** ALUMINUM */
 	public static final DictFrame AL = new DictFrame("Aluminum");
 	public static final DictFrame STEEL = new DictFrame("Steel");
@@ -308,11 +314,6 @@ public class OreDictManager {
 	public static final DictFrame TASMANITE = new DictFrame("Tasmanite");
 	public static final DictFrame AYERITE = new DictFrame("Ayerite");
 
-	public static final DictFrame REIIUM = new DictFrame("Reiium");
-	public static final DictFrame WEIDANIUM = new DictFrame("Weidanium");
-	public static final DictFrame UNOBTAINIUM = new DictFrame("Unobtainium");
-	public static final DictFrame VERTICIUM = new DictFrame("Verticium");
-	public static final DictFrame DAFFERGON = new DictFrame("Daffergon");
 	/*
 	 * RARE EARTHS
 	 */
@@ -455,6 +456,7 @@ public class OreDictManager {
 		MINGRADE															.ingot(ingot_red_copper)											.dust(powder_red_copper)		.billet(billet_red_copper)		.block(block_red_copper);
 		ALLOY																.ingot(ingot_advanced_alloy)										.dust(powder_advanced_alloy)	.plate(plate_advanced_alloy)	.block(block_advanced_alloy);
 		W																	.ingot(ingot_tungsten)												.dust(powder_tungsten)											.block(block_tungsten)		.ore(ore_nether_tungsten)	.oreNether(ore_nether_tungsten) .oreAll(ore_tungsten);
+		WC																	.ingot(ingot_tungsten_carbide);
 		AL																	.ingot(ingot_aluminium)												.dust(powder_aluminium)			.plate(plate_aluminium)			.block(block_aluminium)		.oreAll(ore_aluminium);
 		STEEL																.ingot(ingot_steel)				.dustSmall(powder_steel_tiny)		.dust(powder_steel)				.plate(plate_steel)				.block(block_steel);
 		STAINLESS															.ingot(ingot_stainless)			 																	.plate(plate_stainless);
@@ -548,14 +550,9 @@ public class OreDictManager {
 		 * RARE METALS
 		 */
 		AUSTRALIUM	.nugget(nugget_australium)			.billet(billet_australium)			.ingot(ingot_australium)	.dust(powder_australium)	.block(block_australium)	.oreAll(ore_australium);
-		TASMANITE	.nugget(nugget_australium_lesser)	.billet(billet_australium_lesser);
-		AYERITE		.nugget(nugget_australium_greater)	.billet(billet_australium_greater);
+		TASMANITE	.nugget(nugget_australium_lesser)	.billet(billet_australium_lesser)	.ingot(ingot_australium_lesser);
+		AYERITE		.nugget(nugget_australium_greater)	.billet(billet_australium_greater)	.ingot(ingot_australium_greater);
 
-		REIIUM		.block(block_reiium);
-		WEIDANIUM	.block(block_weidanium);
-		UNOBTAINIUM	.block(block_unobtainium);
-		VERTICIUM	.block(block_verticium);
-		DAFFERGON	.block(block_daffergon);
 
 		/*
 		 * RARE EARTHS
@@ -634,6 +631,16 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_GLYPHID_MEAT, new ItemStack(glyphid_meat));
 		OreDictionary.registerOre(KEY_GLYPHID_MEAT, new ItemStack(glyphid_meat_grilled));
 
+		/*
+		 * foude
+		 */
+		OreDictionary.registerOre(KEY_FLOUR, new ItemStack(flour));
+		OreDictionary.registerOre(KEY_BUTTER, new ItemStack(butter));
+		OreDictionary.registerOre(KEY_CHEESE, new ItemStack(cheese));
+		OreDictionary.registerOre(KEY_STRAWBERRY, new ItemStack(strawberry));
+		OreDictionary.registerOre(KEY_STRAWBERRY_ICECREAM, new ItemStack(s_cream));
+		OreDictionary.registerOre(KEY_STRAWBERRY_MILKSHAKE, new ItemStack(glass_smilk));
+
 		for(NTMMaterial mat : Mats.orderedList) {
 			if(mat.smeltable == SmeltingBehavior.SMELTABLE) {
 				if(mat.autogen.contains(MaterialShapes.CASTPLATE)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.CASTPLATE.name() + name, new ItemStack(ModItems.plate_cast, 1, mat.id));
@@ -676,8 +683,6 @@ public class OreDictManager {
 		OreDictionary.registerOre("briquetteCoal", fromOne(briquette, EnumBriquetteType.COAL));
 		OreDictionary.registerOre("briquetteLignite", fromOne(briquette, EnumBriquetteType.LIGNITE));
 		OreDictionary.registerOre("briquetteWood", fromOne(briquette, EnumBriquetteType.WOOD));
-
-		OreDictionary.registerOre(getReflector(), neutron_reflector);
 
 		OreDictionary.registerOre("logWood", pink_log);
 		OreDictionary.registerOre("logWoodPink", pink_log);
@@ -791,10 +796,6 @@ public class OreDictManager {
 		compensateMojangSpaghettiBullshit();
 	}
 
-	public static String getReflector() {
-		return GeneralConfig.enableReflectorCompat ? "plateDenseLead" : "plateTungCar"; //let's just mangle the name into "tungCar" so that it can't conflict with anything ever
-	}
-
 	public static void registerGroups() {
 		ANY_RUBBER.addPrefix(INGOT, true);
 		ANY_PLASTIC.addPrefix(INGOT, true).addPrefix(DUST, true).addPrefix(BLOCK, true).addPrefix(GRIP, true).addPrefix(STOCK, true);
@@ -896,9 +897,6 @@ public class OreDictManager {
 		public String stock() {			return STOCK.name()				+ mats[0]; }
 		public String grip() {			return GRIP.name()				+ mats[0]; }
 		public String[] all(MaterialShapes shape) {				return appendToAll(shape.prefixes); }
-
-		/** Returns cast (triple) plates if 528 mode is enabled or normal plates if not */
-		public String plate528() { return GeneralConfig.enable528 ? plateCast() : plate(); }
 
 		private String[] appendToAll(String... prefix) {
 

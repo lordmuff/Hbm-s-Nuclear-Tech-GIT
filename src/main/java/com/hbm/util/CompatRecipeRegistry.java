@@ -11,17 +11,18 @@ import com.hbm.inventory.recipes.*;
 import com.hbm.inventory.recipes.AmmoPressRecipes.AmmoPressRecipe;
 import com.hbm.inventory.recipes.ArcFurnaceRecipes.ArcFurnaceRecipe;
 import com.hbm.inventory.recipes.ArcWelderRecipes.ArcWelderRecipe;
+import com.hbm.inventory.recipes.BreederRecipes.BreederRecipe;
 import com.hbm.inventory.recipes.CrucibleRecipes.CrucibleRecipe;
 import com.hbm.inventory.recipes.CrystallizerRecipes.CrystallizerRecipe;
 import com.hbm.inventory.recipes.ElectrolyserFluidRecipes.ElectrolysisRecipe;
 import com.hbm.inventory.recipes.ElectrolyserMetalRecipes.ElectrolysisMetalRecipe;
 import com.hbm.inventory.recipes.ExposureChamberRecipes.ExposureChamberRecipe;
+import com.hbm.inventory.recipes.OutgasserRecipes.OutgasserRecipe;
 import com.hbm.inventory.recipes.ParticleAcceleratorRecipes.ParticleAcceleratorRecipe;
 import com.hbm.inventory.recipes.PedestalRecipes.PedestalExtraCondition;
 import com.hbm.inventory.recipes.PedestalRecipes.PedestalRecipe;
 import com.hbm.inventory.recipes.PyroOvenRecipes.PyroOvenRecipe;
 import com.hbm.inventory.recipes.RotaryFurnaceRecipes.RotaryFurnaceRecipe;
-import com.hbm.inventory.recipes.ChemplantRecipes.ChemRecipe;
 import com.hbm.inventory.recipes.CompressorRecipes.CompressorRecipe;
 import com.hbm.inventory.recipes.SolderingRecipes.SolderingRecipe;
 import com.hbm.inventory.recipes.anvil.AnvilRecipes;
@@ -71,13 +72,16 @@ public class CompatRecipeRegistry {
 		SolderingRecipes.recipes.add(new SolderingRecipe(output, time, power, fluid, copyFirst(toppings, 3), copyFirst(pcb, 2), copyFirst(solder, 1)));
 	}
 
-	@Deprecated public static void registerChemplant(int id, String name, int duration, AStack[] inputItems, FluidStack[] inputFluids, ItemStack[] outputItems, FluidStack[] outputFluids) {
-		ChemRecipe recipe = new ChemRecipe(id, name, duration);
-		if(inputItems != null) recipe.inputItems(copyFirst(inputItems, 4));
-		if(inputFluids != null) recipe.inputFluids(copyFirst(inputFluids, 2));
-		if(outputItems != null) recipe.outputItems(copyFirst(outputItems, 4));
-		if(outputFluids != null) recipe.outputFluids(copyFirst(outputFluids, 2));
-		ChemplantRecipes.recipes.add(recipe);
+	/** Assembly machine recipe needs a unique name for the registry. Zero length arrays should stay null*/
+	public static void registerAssembler(String name, boolean named, ItemStack icon, int duration, long power, AStack[] inputItems, FluidStack inputFluids, IOutput[] outputItems, FluidStack outputFluids) {
+		GenericRecipe recipe = new GenericRecipe(name).setDuration(duration).setPower(power);
+		if(named) recipe.setNamed();
+		if(icon != null) recipe.setIcon(icon);
+		if(inputItems != null && inputItems.length > 0) recipe.inputItems(inputItems);
+		if(inputFluids != null) recipe.inputFluids(inputFluids);
+		if(outputItems != null && outputItems.length > 0) recipe.outputItems(outputItems);
+		if(outputFluids != null) recipe.outputFluids(outputFluids);
+		AssemblyMachineRecipes.INSTANCE.register(recipe);
 	}
 
 	/** Chemical plant recipe needs a unique name for the registry. Zero length arrays should stay null*/
@@ -99,10 +103,10 @@ public class CompatRecipeRegistry {
 		CombinationRecipes.recipes.put(o, new Pair(output, fluid));
 	}
 
-	/** Crucible recipes need unique IDs, game will crash when an ID collision is detected! */
+	/** Numeric IDs are now unused, names need to be unique! */
 	public static void registerCrucible(int index, String name, int frequency, ItemStack icon, MaterialStack[] input, MaterialStack[] output) {
-		CrucibleRecipe recipe = new CrucibleRecipe(index, name, frequency, icon).inputs(input).outputs(output);
-		CrucibleRecipes.recipes.add(recipe);
+		CrucibleRecipe recipe = new CrucibleRecipe(name).setup(frequency, icon).inputs(input).outputs(output);
+		CrucibleRecipes.INSTANCE.register(recipe);
 	}
 
 	public static void registerCentrifuge(AStack input, ItemStack[] outputs) {
@@ -182,8 +186,14 @@ public class CompatRecipeRegistry {
 
 	//TBI mixer
 
-	public static void registerOutgasser(AStack input, ItemStack output, FluidStack fluid) {
-		OutgasserRecipes.recipes.put(input, new Pair(output, fluid));
+	@Deprecated public static void registerOutgasser(AStack input, ItemStack output, FluidStack fluid) {
+		OutgasserRecipes.recipes.put(input, new OutgasserRecipe(output, fluid));
+	}
+
+	public static void registerOutgasser(AStack input, ItemStack output, FluidStack fluid, boolean fusionOnly) {
+		OutgasserRecipe recipe = new OutgasserRecipe(output, fluid);
+		if(fusionOnly) recipe.fusionOnly();
+		OutgasserRecipes.recipes.put(input, recipe);
 	}
 
 	public static void registerCompressor(FluidStack input, FluidStack output, int time) {
@@ -219,7 +229,7 @@ public class CompatRecipeRegistry {
 	public static void registerExposureChamber(AStack particle, AStack input, ItemStack output) {
 		ExposureChamberRecipes.recipes.add(new ExposureChamberRecipe(particle, input, output));
 	}
-	
+
 	public static void registerFusionReactor(String name, int time, long power, long klystron, long plasma, double neutrons, FluidStack[] inputs, ItemStack outputItem, FluidStack outputFluid) {
 		FusionRecipe recipe = (FusionRecipe) new FusionRecipe(name).setInputEnergy(klystron).setOutputEnergy(klystron).setup(time, power);
 		if(inputs != null) recipe.inputFluids(copyFirst(inputs, 3));
@@ -241,16 +251,6 @@ public class CompatRecipeRegistry {
 	public static void registerAmmoPress(ItemStack output, AStack[] input) {
 		if(input.length != 9) return;
 		AmmoPressRecipes.recipes.add(new AmmoPressRecipe(output, input));
-	}
-
-	/** Assembler recipes are identified by the output as a ComparableStack, so no two recipes can share output. */
-	public static void registerAssembler(ItemStack output, AStack[] input, int time) {
-		AssemblerRecipes.makeRecipe(new ComparableStack(output), copyFirst(input, 12), time);
-	}
-
-	/** Registers an assembler recipe but with the template only being obtainable via the specified folders */
-	public static void registerAssembler(ItemStack output, AStack[] input, int time, Item... folder) {
-		AssemblerRecipes.makeRecipe(new ComparableStack(output), copyFirst(input, 12), time, folder);
 	}
 
 	public static void registerAnvilConstruction(AStack[] input, AnvilOutput[] output, int tier, int overlayIndex) {
@@ -284,4 +284,11 @@ public class CompatRecipeRegistry {
 		if(array.length <= amount) return array;
 		return Arrays.copyOf(array, amount);
 	}
+
+	/** NOP */
+	@Deprecated public static void registerAssembler(ItemStack output, AStack[] input, int time) { }
+	/** NOP */
+	@Deprecated public static void registerAssembler(ItemStack output, AStack[] input, int time, Item... folder) { }
+	/** NOP */
+	@Deprecated public static void registerChemplant(int id, String name, int duration, AStack[] inputItems, FluidStack[] inputFluids, ItemStack[] outputItems, FluidStack[] outputFluids) { }
 }

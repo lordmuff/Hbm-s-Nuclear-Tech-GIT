@@ -12,8 +12,14 @@ import com.hbm.blocks.machine.BlockOrbitalStation;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
 import com.hbm.dim.SolarSystemWorldSavedData;
+import com.hbm.dim.WorldProviderCelestial;
+import com.hbm.dim.SolarSystem.AstroMetric;
+import com.hbm.entity.missile.EntityRideableRocket;
+import com.hbm.entity.missile.EntityRideableRocket.RocketState;
 import com.hbm.handler.ThreeInts;
+import com.hbm.items.ItemVOTVdrive.Destination;
 import com.hbm.tileentity.machine.TileEntityOrbitalStation;
+import com.hbm.util.BobMathUtil;
 import com.hbm.util.BufferUtil;
 
 import api.hbm.tile.IPropulsion;
@@ -29,6 +35,8 @@ public class OrbitalStation {
 
 	public CelestialBody orbiting;
 	public CelestialBody target;
+
+	private double eclipseAmount;
 
 	public StationState state = StationState.ORBIT;
 	public int stateTimer;
@@ -60,6 +68,7 @@ public class OrbitalStation {
 	private HashSet<IPropulsion> engines = new HashSet<>();
 
 	public static OrbitalStation clientStation = new OrbitalStation(CelestialBody.getBody(0));
+	public static List<OrbitalStation> orbitingStations = new ArrayList<OrbitalStation>();
 
 	public static final int STATION_SIZE = 1024; // total area for each station
 	public static final int BUFFER_SIZE = 256; // size of the buffer region that drops you out of orbit (preventing seeing other stations)
@@ -98,6 +107,8 @@ public class OrbitalStation {
 
 	public void update(World world) {
 		if(!world.isRemote) {
+			eclipseAmount = -1;
+
 			if(state == StationState.LEAVING) {
 				if(stateTimer > maxStateTimer) {
 					setState(StationState.TRANSFER, getTransferTime());
@@ -198,6 +209,29 @@ public class OrbitalStation {
 		maxStateTimer = timeUntilNext;
 	}
 
+	public boolean recallPod(Destination destination) {
+		if(!hasStation) return false;
+		if(destination.body.getBody() != orbiting) return false;
+
+		for(TileEntityOrbitalStation port : ports.values()) {
+			EntityRideableRocket rocket = port.getDocked();
+
+			if(rocket == null || !rocket.isReusable()) continue;
+
+			// ensure the rocket has fuel before sending it off
+			RocketState state = rocket.getState();
+			if(state != RocketState.AWAITING && state != RocketState.LANDED) continue;
+
+			// and make sure it doesn't have a rider!!
+			if(rocket.riddenByEntity != null) continue;
+
+			rocket.recallPod(destination);
+			return true;
+		}
+
+		return false;
+	}
+
 	public static void addPropulsion(IPropulsion propulsion) {
 		TileEntity te = propulsion.getTileEntity();
 		OrbitalStation station = getStationFromPosition(te.xCoord, te.zCoord);
@@ -296,6 +330,34 @@ public class OrbitalStation {
 	public double getTransferProgress(float partialTicks) {
 		if(state != StationState.TRANSFER) return 0;
 		return easeInOutCirc(getUnscaledProgress(partialTicks));
+	}
+
+	public double getEclipseAmount(World world) {
+		if(eclipseAmount > -1) return eclipseAmount;
+		
+		double sunSize = SolarSystem.calculateSunSize(orbiting);
+
+		double progress = getTransferProgress(0);
+
+		List<AstroMetric> metrics;
+
+		// Get our orrery of bodies, this is cached for reuse in sky rendering
+		if(state == StationState.ORBIT) {
+			double altitude = WorldProviderOrbit.getOrbitalAltitude(orbiting);
+			metrics = SolarSystem.calculateMetricsFromSatellite(world, 0, orbiting, altitude);
+		} else {
+			double fromAlt = WorldProviderOrbit.getOrbitalAltitude(orbiting);
+			double toAlt = WorldProviderOrbit.getOrbitalAltitude(target);
+			metrics = SolarSystem.calculateMetricsBetweenSatelliteOrbits(world, 0, orbiting, target, fromAlt, toAlt, progress);
+
+			double sunTargetSize = SolarSystem.calculateSunSize(target);
+			sunSize = BobMathUtil.lerp(progress, sunSize, sunTargetSize);
+		}
+
+		// Get our eclipse amount
+		eclipseAmount = WorldProviderCelestial.getEclipseFactor(metrics, sunSize, SolarSystem.MAX_APPARENT_SIZE_ORBIT);
+
+		return eclipseAmount;
 	}
 
 	private double easeInOutCirc(double t) {

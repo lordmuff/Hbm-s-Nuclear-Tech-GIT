@@ -18,6 +18,7 @@ import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
+import com.hbm.main.NTMSounds;
 import com.hbm.module.machine.ModuleMachineAssembler;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.IGUIProvider;
@@ -156,7 +157,7 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 				}
 				
 				if(!this.muffled && arm.prevAngles[3] != arm.angles[3] && arm.angles[3] == -0.75) {
-					MainRegistry.proxy.playSoundClient(xCoord, yCoord, zCoord, "hbm:block.assemblerStrike", this.getVolume(0.5F), 1F);
+					MainRegistry.proxy.playSoundClient(xCoord, yCoord, zCoord, NTMSounds.ASSEMBLER_STRIKE, this.getVolume(0.5F), 1F);
 				}
 			}
 			
@@ -169,25 +170,18 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 					if(this.ringTarget > this.ring) this.ring += this.ringSpeed;
 					if(this.ringTarget < this.ring) this.ring -= this.ringSpeed;
 					if(this.ringTarget == this.ring) {
-						if(ringTarget >= 360) {
-							this.ringTarget -= 360D;
-							this.ring -= 360D;
-							this.prevRing -= 360D;
-						}
-						if(ringTarget <= -360) {
-							this.ringTarget += 360D;
-							this.ring += 360D;
-							this.prevRing += 360D;
-						}
+						double sub = ringTarget >= 360 ? -360D : 360D;
+						this.ringTarget += sub;
+						this.ring += sub;
+						this.prevRing += sub;
 						this.ringDelay = 20 + worldObj.rand.nextInt(21);
-						//MainRegistry.proxy.playSoundClient(xCoord, yCoord, zCoord, "hbm:block.assemblerStop", this.getVolume(0.25F), 1.5F);
 					}
 				} else {
 					if(this.ringDelay > 0) this.ringDelay--;
 					if(this.ringDelay <= 0) {
 						this.ringTarget += (worldObj.rand.nextDouble() * 2 - 1) * 135;
 						this.ringSpeed = 10D + worldObj.rand.nextDouble() * 5D;
-						if(!this.muffled) MainRegistry.proxy.playSoundClient(xCoord, yCoord, zCoord, "hbm:block.assemblerStart", this.getVolume(0.25F), 1.25F + worldObj.rand.nextFloat() * 0.25F);
+						if(!this.muffled) MainRegistry.proxy.playSoundClient(xCoord, yCoord, zCoord, NTMSounds.ASSEMBLER_START, this.getVolume(0.25F), 1.25F + worldObj.rand.nextFloat() * 0.25F);
 					}
 				}
 			}
@@ -195,7 +189,7 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 	}
 
 	@Override public AudioWrapper createAudioLoop() {
-		return MainRegistry.proxy.getLoopedSound("hbm:block.motor", xCoord, yCoord, zCoord, 0.5F, 15F, 0.75F, 20);
+		return MainRegistry.proxy.getLoopedSound(NTMSounds.ELECTRIC_MOTOR_LOOP, xCoord, yCoord, zCoord, 0.5F, 15F, 0.75F, 20);
 	}
 
 	@Override public void onChunkUnload() {
@@ -247,7 +241,7 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 		this.assemblerModule.deserialize(buf);
 		
 		if(wasProcessing && !didProcess) {
-			MainRegistry.proxy.playSoundClient(xCoord, yCoord, zCoord, "hbm:block.assemblerStop", this.getVolume(0.25F), 1.5F);
+			MainRegistry.proxy.playSoundClient(xCoord, yCoord, zCoord, NTMSounds.ASSEMBLER_STOP, this.getVolume(0.25F), 1.5F);
 		}
 	}
 	

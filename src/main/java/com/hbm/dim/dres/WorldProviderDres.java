@@ -33,7 +33,7 @@ public class WorldProviderDres extends WorldProviderCelestial {
 
 	@Override
 	public IChunkProvider createChunkGenerator() {
-		return new ChunkProviderDres(this.worldObj, this.getSeed(), false);
+		return new ChunkProviderDres(this.worldObj, this.getSeed());
 	}
 
 	// sorry mellow...
@@ -42,11 +42,6 @@ public class WorldProviderDres extends WorldProviderCelestial {
 	@Override
 	public Block getStone() {
 		return ModBlocks.dres_rock;
-	}
-
-	@Override
-	public boolean hasIce() {
-		return true;
 	}
 
 	@Override

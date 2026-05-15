@@ -25,17 +25,12 @@ public class WorldProviderIke extends WorldProviderCelestial {
 
 	@Override
 	public IChunkProvider createChunkGenerator() {
-		return new ChunkProviderIke(this.worldObj, this.getSeed(), false);
+		return new ChunkProviderIke(this.worldObj, this.getSeed());
 	}
 
 	@Override
 	public Block getStone() {
 		return ModBlocks.ike_stone;
-	}
-
-	@Override
-	public boolean hasIce() {
-		return true;
 	}
 
 	@Override

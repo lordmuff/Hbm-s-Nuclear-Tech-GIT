@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.orbit.OrbitalStation;
@@ -16,8 +17,12 @@ import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.dim.trait.CBT_Water;
 import com.hbm.dim.trait.CelestialBodyTrait;
 import com.hbm.extprop.HbmLivingProps;
+import com.hbm.inventory.FluidStack;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
+import com.hbm.inventory.fluid.trait.FT_Gaseous;
+import com.hbm.inventory.recipes.AtmosphereRecipes;
+import com.hbm.inventory.recipes.AtmosphereRecipes.AtmosphereRecipe;
 import com.hbm.items.ItemVOTVdrive.Target;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.shader.Shader;
@@ -75,6 +80,8 @@ public class CelestialBody {
 	public float[] ringColor = new float[] {0.5F, 0.5F, 0.5F};
 	public float ringSize = 2;
 
+	public boolean hasIce = false; // has bedrock ice?
+
 	public FluidType gas;
 
 	public List<CelestialBody> satellites = new ArrayList<CelestialBody>(); // moon boyes
@@ -82,7 +89,8 @@ public class CelestialBody {
 
 	private HashMap<Class<? extends CelestialBodyTrait>, CelestialBodyTrait> traits = new HashMap<Class<? extends CelestialBodyTrait>, CelestialBodyTrait>();
 
-	public String stoneTexture = "stone";
+	public ResourceLocation stoneTexture;
+	public ResourceLocation surfaceTexture;
 	public SolarSystem.Body type;
 
 	@SideOnly(Side.CLIENT)
@@ -155,8 +163,9 @@ public class CelestialBody {
 		return this;
 	}
 
-	public CelestialBody withBlockTextures(String stone, String sand, String silt, String sravel) {
-		this.stoneTexture = stone;
+	public CelestialBody withBlockTextures(String stone, String surface) {
+		this.stoneTexture = new ResourceLocation(stone);
+		this.surfaceTexture = new ResourceLocation(surface);
 		return this;
 	}
 
@@ -205,6 +214,11 @@ public class CelestialBody {
 
 		shader = new Shader(fragmentShader);
 		shaderScale = scale;
+		return this;
+	}
+
+	public CelestialBody withIce(boolean hasIce) {
+		this.hasIce = hasIce;
 		return this;
 	}
 
@@ -373,13 +387,39 @@ public class CelestialBody {
 		setTraits(world, currentTraits);
 	}
 
+	public static boolean reactAtmosphere(World world, Entry<FluidStack, AtmosphereRecipe> recipe) {
+		HashMap<Class<? extends CelestialBodyTrait>, CelestialBodyTrait> currentTraits = getTraits(world);
+		CBT_Atmosphere atmosphere = (CBT_Atmosphere) currentTraits.get(CBT_Atmosphere.class);
+
+		int scale = 64;
+
+		// because atmochem runs infrequently, we will automatically scale this to react all it can immediately
+		for(FluidStack recipeFluid : recipe.getValue().inputFluids) {
+			boolean hasInput = false;
+
+			for(CBT_Atmosphere.FluidEntry entry : atmosphere.fluids) {
+				if(entry.fluid == recipeFluid.type && entry.pressure * AstronomyUtil.MB_PER_ATM >= recipeFluid.fill * scale) hasInput = true;
+			}
+
+			if(!hasInput) return false;
+		}
+
+		for(FluidStack recipeFluid : recipe.getValue().inputFluids) {
+			FT_Gaseous.capture(world, recipeFluid.type, recipeFluid.fill * scale);
+		}
+
+		FT_Gaseous.release(world, recipe.getKey().type, recipe.getKey().fill * scale);
+
+		return true;
+	}
+
 	public static void updateChemistry(World world) {
 		boolean hasUpdated = false;
 		HashMap<Class<? extends CelestialBodyTrait>, CelestialBodyTrait> currentTraits = getTraits(world);
+		CBT_Atmosphere atmosphere = (CBT_Atmosphere) currentTraits.get(CBT_Atmosphere.class);
 
 		CBT_Water water = (CBT_Water) currentTraits.get(CBT_Water.class);
 		if(water == null) {
-			CBT_Atmosphere atmosphere = (CBT_Atmosphere) currentTraits.get(CBT_Atmosphere.class);
 
 			if(atmosphere != null) {
 				double pressure = 0;
@@ -400,7 +440,17 @@ public class CelestialBody {
 			}
 		}
 
-		if(hasUpdated) setTraits(world, currentTraits);
+		if(atmosphere != null) {
+			for(Entry<FluidStack, AtmosphereRecipe> recipe : AtmosphereRecipes.getRecipesMap().entrySet()) {
+				if(reactAtmosphere(world, recipe)) {
+					hasUpdated = true;
+				}
+			}
+
+		}
+
+		if(hasUpdated)
+			setTraits(world, currentTraits);
 	}
 
 	// Called once per tick to attenuate swarm counts based on a swarm half-life
@@ -463,6 +513,9 @@ public class CelestialBody {
 	}
 
 	// bit of a dumb one but the other function is already used widely
+	public static CelestialBody getBodyOrNull(String name) {
+		return nameToBodyMap.get(name);
+	}
 	public static CelestialBody getBodyOrNull(int id) {
 		return dimToBodyMap.get(id);
 	}

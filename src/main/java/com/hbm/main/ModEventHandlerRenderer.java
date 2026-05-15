@@ -1,5 +1,6 @@
 package com.hbm.main;
 
+import java.util.List;
 import com.hbm.blocks.ICustomBlockHighlight;
 import com.hbm.config.ClientConfig;
 import com.hbm.config.RadiationConfig;
@@ -18,6 +19,7 @@ import com.hbm.packet.PermaSyncHandler;
 import com.hbm.render.item.weapon.sedna.ItemRenderWeaponBase;
 import com.hbm.render.model.ModelMan;
 import com.hbm.util.ArmorUtil;
+import com.hbm.render.util.RenderScreenOverlay;
 import com.hbm.util.Clock;
 import com.hbm.world.biome.BiomeGenCraterBase;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -25,10 +27,15 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.EntityDropParticleFX;
+import net.minecraft.client.particle.EntityRainFX;
+import net.minecraft.client.particle.EntitySplashFX;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.model.ModelRenderer;
@@ -66,8 +73,13 @@ import org.lwjgl.opengl.GLContext;
 
 public class ModEventHandlerRenderer {
 
+	private float previousZoom = 4.0F;
+	private boolean previousZoomActive = false;
+
 	private static ModelMan manlyModel;
 	private static boolean[] partsHidden = new boolean[7];
+	private static final String[] FX_LAYER_FIELDS = new String[] { "fxLayers", "field_78876_b" };
+	private static final String[] DROP_PARTICLE_MATERIAL_FIELDS = new String[] { "materialType", "field_70563_a" };
 
 	@SubscribeEvent
 	public void onRenderTickPre(TickEvent.RenderTickEvent event) {
@@ -77,11 +89,81 @@ public class ModEventHandlerRenderer {
 		if(event.phase == Phase.START) {
 			// Zoom out third person view when inside a rocket
 			if(player != null && player.ridingEntity != null && player.ridingEntity instanceof EntityRideableRocket) {
+				if(previousZoomActive == false) {
+					previousZoom = mc.entityRenderer.thirdPersonDistance;
+					previousZoomActive = true;
+				}
 				mc.entityRenderer.thirdPersonDistance = 12.0F;
 			} else {
-				mc.entityRenderer.thirdPersonDistance = 4.0F;
+				if(previousZoomActive == true) {
+					previousZoomActive = false;
+					mc.entityRenderer.thirdPersonDistance = previousZoom;
+				}
+			}
+
+			tintWeatherParticles(mc);
+		}
+	}
+
+	private void tintWeatherParticles(Minecraft mc) {
+		if(mc == null || mc.theWorld == null || !(mc.theWorld.provider instanceof WorldProviderCelestial) || mc.effectRenderer == null) {
+			return;
+		}
+
+		WorldProviderCelestial provider = (WorldProviderCelestial)mc.theWorld.provider;
+		if(!provider.hasWeatherCycle() || mc.theWorld.getRainStrength(1.0F) <= 0.0F) {
+			return;
+		}
+
+		Vec3 weatherColor = provider.getWeatherColor();
+
+		List[] fxLayers = ReflectionHelper.getPrivateValue(EffectRenderer.class, mc.effectRenderer, FX_LAYER_FIELDS);
+		if(fxLayers == null) {
+			return;
+		}
+
+		for(List layer : fxLayers) {
+			if(layer == null || layer.isEmpty()) {
+				continue;
+			}
+
+				for(int i = 0; i < layer.size(); i++) {
+					Object particle = layer.get(i);
+					if(particle instanceof EntityRainFX) {
+						EntityRainFX rainParticle = (EntityRainFX)particle;
+						if(!(rainParticle instanceof EntitySplashFX)) {
+							rainParticle.setParticleTextureIndex(Math.abs(rainParticle.getEntityId()) % 3);
+						}
+						rainParticle.setRBGColorF((float)weatherColor.xCoord, (float)weatherColor.yCoord, (float)weatherColor.zCoord);
+					} else if(shouldTintWaterDropParticle(particle)) {
+						((EntityDropParticleFX)particle).setRBGColorF((float)weatherColor.xCoord, (float)weatherColor.yCoord, (float)weatherColor.zCoord);
+				}
 			}
 		}
+	}
+
+	private boolean shouldTintWaterDropParticle(Object particle) {
+		if(!(particle instanceof EntityDropParticleFX)) {
+			return false;
+		}
+
+		EntityDropParticleFX dropParticle = (EntityDropParticleFX)particle;
+		Material material = ReflectionHelper.getPrivateValue(EntityDropParticleFX.class, dropParticle, DROP_PARTICLE_MATERIAL_FIELDS);
+		return material == Material.water && !hasWaterSourceAbove(dropParticle);
+	}
+
+	private boolean hasWaterSourceAbove(EntityDropParticleFX dropParticle) {
+		World world = dropParticle.worldObj;
+		if(world == null) {
+			return false;
+		}
+
+		int particleX = MathHelper.floor_double(dropParticle.posX);
+		int particleY = MathHelper.floor_double(dropParticle.posY);
+		int particleZ = MathHelper.floor_double(dropParticle.posZ);
+
+		return World.doesBlockHaveSolidTopSurface(world, particleX, particleY + 1, particleZ)
+			&& world.getBlock(particleX, particleY + 2, particleZ).getMaterial() == Material.water;
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
@@ -109,7 +191,7 @@ public class ModEventHandlerRenderer {
 			IItemRenderer customRenderer = MinecraftForgeClient.getItemRenderer(held, IItemRenderer.ItemRenderType.EQUIPPED);
 			if(customRenderer instanceof ItemRenderWeaponBase) {
 				ItemRenderWeaponBase renderGun = (ItemRenderWeaponBase) customRenderer;
-				if(renderGun.isAkimbo()) {
+				if(renderGun.isAkimbo(player)) {
 					partsHidden[EnumPlayerPart.LEFT_ARM.ordinal()] = true;
 					ModelRenderer box = getBoxFromType(renderer, EnumPlayerPart.LEFT_ARM);
 					box.isHidden = true;
@@ -160,7 +242,7 @@ public class ModEventHandlerRenderer {
 			IItemRenderer customRenderer = MinecraftForgeClient.getItemRenderer(held, IItemRenderer.ItemRenderType.EQUIPPED);
 			if(customRenderer instanceof ItemRenderWeaponBase) {
 				ItemRenderWeaponBase renderGun = (ItemRenderWeaponBase) customRenderer;
-				if(renderGun.isAkimbo()) akimbo = true;
+				if(renderGun.isAkimbo(player)) akimbo = true;
 				if(renderGun.isLeftHanded()) leftHand = true;
 			}
 		}
@@ -273,7 +355,7 @@ public class ModEventHandlerRenderer {
 			IItemRenderer customRenderer = MinecraftForgeClient.getItemRenderer(held, IItemRenderer.ItemRenderType.EQUIPPED);
 			if(customRenderer instanceof ItemRenderWeaponBase) {
 				ItemRenderWeaponBase renderGun = (ItemRenderWeaponBase) customRenderer;
-				if(renderGun.isAkimbo()) {
+				if(renderGun.isAkimbo(player)) {
 					ModelBiped biped = renderer.modelBipedMain;
 					renderer.modelArmorChestplate.bipedLeftArm.rotateAngleY = renderer.modelArmor.bipedLeftArm.rotateAngleY = biped.bipedLeftArm.rotateAngleY = 0.1F + biped.bipedHead.rotateAngleY;
 				}
@@ -298,7 +380,7 @@ public class ModEventHandlerRenderer {
 
 		if(customRenderer instanceof ItemRenderWeaponBase) {
 			ItemRenderWeaponBase renderWeapon = (ItemRenderWeaponBase) customRenderer;
-			if(renderWeapon.isAkimbo() || renderWeapon.isLeftHanded()) {
+			if(renderWeapon.isAkimbo(player) || renderWeapon.isLeftHanded()) {
 				GL11.glPushMatrix();
 				renderer.modelBipedMain.bipedLeftArm.isHidden = false;
 				renderer.modelBipedMain.bipedLeftArm.postRender(0.0625F);
@@ -320,10 +402,10 @@ public class ModEventHandlerRenderer {
 				if(renderWeapon.isLeftHanded()) {
 					GL11.glTranslatef(0.1875F, 0F, 0.0F);
 					renderWeapon.setupThirdPerson(held);
-					renderWeapon.renderEquippedAkimbo(held);
+					renderWeapon.renderEquippedAkimbo(held, player);
 				} else {
 					renderWeapon.setupThirdPersonAkimbo(held);
-					renderWeapon.renderEquippedAkimbo(held);
+					renderWeapon.renderEquippedAkimbo(held, player);
 				}
 				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 				GL11.glPopMatrix();
@@ -560,7 +642,7 @@ public class ModEventHandlerRenderer {
 	@SubscribeEvent
 	public void onRenderHand(RenderHandEvent event) {
 
-		//can't use plaxer.getHeldItem() here because the item rendering persists for a few frames after hitting the switch key
+		//can't use player.getHeldItem() here because the item rendering persists for a few frames after hitting the switch key
 		ItemStack toRender = Minecraft.getMinecraft().entityRenderer.itemRenderer.itemToRender;
 
 		if(toRender != null) {
@@ -576,6 +658,11 @@ public class ModEventHandlerRenderer {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onRenderHUD(RenderGameOverlayEvent.Pre event) {
 		Tessellator tess = Tessellator.instance;
+		
+		//TODO: using ALL doesn't work as anticipated - still hides in F1. need a different event for this
+		if(event.type == ElementType.ALL) {
+			if(ClientConfig.BADGES_HUD.get()) RenderScreenOverlay.renderBadges(event.resolution, Minecraft.getMinecraft().ingameGUI);
+		}
 
 		if(event.type == ElementType.HOTBAR && (ModEventHandlerClient.shakeTimestamp + ModEventHandlerClient.shakeDuration - System.currentTimeMillis()) > 0 && ClientConfig.NUKE_HUD_SHAKE.get()) {
 			double mult = (ModEventHandlerClient.shakeTimestamp + ModEventHandlerClient.shakeDuration - System.currentTimeMillis()) / (double) ModEventHandlerClient.shakeDuration * 2;
