@@ -1,76 +1,92 @@
-import org.gradle.plugins.ide.eclipse.model.internal.FileReferenceFactory
-
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.nio.file.StandardCopyOption
-
 buildscript {
 	repositories {
-		maven { url = 'https://maven.ntmr.dev/proxy/' }
-		maven { url = 'https://maven.minecraftforge.net/' }
-		maven { url = 'https://plugins.gradle.org/m2' }
 		mavenCentral()
+		maven {
+			name = "gt"
+			url = "https://gregtech.mechaenetia.com/"
+		}
+		maven {
+			name = "gtnh"
+			url = "https://nexus.gtnewhorizons.com/repository/public/"
+		}
+		maven {
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+		maven {
+			name = "falsepattern"
+			url = "https://mvn.falsepattern.com/jitpack/"
+		}
+		maven {
+			name = "forge"
+			url = "https://maven.minecraftforge.net/"
+		}
+		maven {
+			name = 'ModMaven'
+			url = 'https://modmaven.dev'
+		}
+		maven {
+			name = "gt"
+			url = "https://gregtech.mechaenetia.com/"
+		}
+		maven {
+			name = "CurseForge"
+			url = "https://minecraft.curseforge.com/api/maven/"
+		}
+		maven {
+			name = "Jitpack"
+			url = "https://jitpack.io"
+		}
+		maven {
+			name = "CurseMaven"
+			url = "https://cursemaven.com"
+		}
+		maven {
+			name = "OpenComputers"
+			url = "https://maven.cil.li/"
+		}
 	}
 	dependencies {
-		classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.0.+') {changing = true}
+		classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.1.+') {
+			changing = true
+		}
 	}
 }
 
 apply plugin: 'forge'
-apply plugin: 'curseforge'
+apply plugin: 'idea'
 
-
-if(Files.exists(Paths.get("curseforge.properties"))) {
-	// Load CurseForge configuration
-	ext.cfprops = parseConfig(file("curseforge.properties"))
-}
-
-def version_name = version = mod_version
-if(!mod_build_number.isEmpty()) {
-	version_name = mod_version + "_X" + mod_build_number + "_H261"
-	version = "[${version_name}]"
-}
-group = "com.hbm" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "HBM-NTM"
-compileJava.options.encoding = 'UTF-8'
-
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
-
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+version = "1.0.27-5687-SNUSKORELLA-FUNNIMAYO"
+group= "com.hbm.ntm" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "PolyNTM"
 minecraft {
 	version = "1.7.10-10.13.4.1614-1.7.10"
 	runDir = "eclipse"
 }
 
-// A little hack to fix codechicken's crazy maven structure (at least in 1.7.10)
-eclipse.classpath.file.whenMerged { cp ->
-	// Find all codechicken source jars
-	def srcent = cp.entries.findAll { entry -> entry.path.contains("codechicken") && entry.path.endsWith("-src.jar") }
-	
-	// Remove them from classpath
-	cp.entries.removeAll srcent
-
-	// Map the source entries to their dev counterparts based on basename
-	Map<String, File> srcmap = new HashMap<String, File>()
-	srcent.forEach { entry ->
-		def file = new File(entry.path)
-		srcmap.put(file.getName().replace("-src.jar", "-dev.jar"), file)
-	}
-	
-	// Create file reference factory
-	def fileref = new FileReferenceFactory()
-	
-	// Find all codechicken development jars
-	cp.entries.findAll { entry -> entry.path.contains("codechicken") && entry.path.endsWith("-dev.jar") }.forEach { entry ->
-		File srcmapping = new File(entry.path) // Initialize the srcmapping from the dev jar path
-		srcmapping = srcmap.get(srcmapping.getName()) // Transform it using the sourcemap
-		entry.sourcePath = fileref.fromFile(srcmapping) // Set the source path
-	}
-}
-
 repositories {
+	mavenCentral()
 	maven {
-		name = 'Blerg'
-		url = 'https://maven.ntmr.dev/proxy/'
+		name = "gt"
+		url = "https://gregtech.mechaenetia.com/"
+	}
+	maven {
+		name = "gtnh"
+		url = "https://nexus.gtnewhorizons.com/repository/public/"
+	}
+	maven {
+		name = "sonatype"
+		url = "https://oss.sonatype.org/content/repositories/snapshots/"
+	}
+	maven {
+		name = "falsepattern"
+		url = "https://mvn.falsepattern.com/jitpack/"
+	}
+	maven {
+		name = "forge"
+		url = "https://maven.minecraftforge.net/"
 	}
 	maven {
 		name = 'ModMaven'
@@ -80,10 +96,10 @@ repositories {
 		name = "gt"
 		url = "https://gregtech.mechaenetia.com/"
 	}
-	//maven {
-	//	name = "CurseForge"
-	//	url = "https://minecraft.curseforge.com/api/maven/"
-	//}
+	maven {
+		name = "CurseForge"
+		url = "https://minecraft.curseforge.com/api/maven/"
+	}
 	maven {
 		name = "Jitpack"
 		url = "https://jitpack.io"
@@ -99,91 +115,218 @@ repositories {
 }
 
 dependencies {
-	implementation 'codechicken:CodeChickenCore:1.7.10-1.0.4.29:dev'
-	compileOnly 'codechicken:CodeChickenCore:1.7.10-1.0.4.29:src'
-	
-	implementation 'codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev'
-	compileOnly 'codechicken:CodeChickenLib:1.7.10-1.1.3.140:src'
-	
-	implementation 'codechicken:NotEnoughItems:1.7.10-1.0.3.74:dev'
-	compileOnly 'codechicken:NotEnoughItems:1.7.10-1.0.3.74:src'
+	// you may put jars on which you depend on in ./libs
+	// or you may define them like so..
+	//compile "some.group:artifact:version:classifier"
+	//compile "some.group:artifact:version"
 
+	// real examples
+	//compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
+	//compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
+
+	// for more info...
+	// http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+	// http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+	implementation("com.gregoriust.gregtech:gregtech_1.7.10:+:dev")
+	implementation fileTree(dir: 'lib', include: '*.jar')
+
+	// REIKA MOD DEPS
+	// please note that while i include a way to reliably compile Reika's mods here,
+	// i do NOT encourage you to compile her mods and redistribute them.
+	// tl;dr: do not anger the dragoness
+	runtimeOnly("appeng:appliedenergistics2:rv3-beta-6:dev")
+	runtimeOnly("net.sengir.forestry:forestry_1.7.10:4.2.16.64:dev")
+	runtimeOnly("ic2:IC2Classic:1.2.1.8:dev")
+	runtimeOnly("com.xcompwiz:mystcraft:1.7.10-0.12.3.04:dev")
+	compileOnly("com.mod-buildcraft:buildcraft:7.1.23:dev")
+
+	runtimeOnly("com.InfinityRaider.AgriCraft:AgriCraft:1.7.10-1.5.0:dev")
+	runtimeOnly("thehippomaster:AnimationAPI:1.7.10-1.2.4")
+	runtimeOnly("am2:AM2:1.5.0-hotfix1")
+	runtimeOnly("java.moze_intel:ProjectE:1.7.10-PE1.10.1:dev")
+	runtimeOnly("pneumaticCraft:PneumaticCraft:1.7.10-1.12.7-153:userdev")
+	runtimeOnly("com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.7.10-2.1.0.1465:deobf")
+	runtimeOnly("dan200.computercraft:ComputerCraft:1.75")
+	implementation("li.cil.oc:OpenComputers:MC1.7.10-1.7.2.1204:dev")
+
+	implementation("Reika:DragonAPI:v33a:dev")
+	implementation("Reika:ChromatiCraft:v33a:dev")
+	implementation("Reika:RotaryCraft:v33a:dev")
+	implementation("Reika:ReactorCraft:v33a:dev")
+
+	//Greg dependencies...
+
+	implementation "codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev"
+	implementation "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
+	implementation "codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev"
 	compileOnly "inventorytweaks:InventoryTweaks:1.59-dev:deobf"
+	compileOnly "net.electricalage.eln:ElectricalAge-jrddunbr:1.16.3:dev"
+	compileOnly "net.sengir.forestry:forestry_1.7.10:4.2.16.64:dev"
+	compileOnly "com.mod-buildcraft:buildcraft:7.1.23:dev"
+	compileOnly "com.azanor.baubles:Baubles:1.7.10-1.0.1.10:deobf"
+	compileOnly "cr0s.warpdrive:WarpDrive-1.7.10:1.4.2.1:dev"
+	compileOnly "micdoodle8.mods:MicdoodleCore:1.7-3.0.12.504:Dev"
+	compileOnly "micdoodle8.mods:GalacticraftCore:1.7-3.0.12.504:Dev"
+	compileOnly "micdoodle8.mods:Galacticraft-Planets:1.7-3.0.12.504:Dev"
+	compileOnly "thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev"
+	compileOnly "enviromine:EnviroMine:1.3.124:deobf"
+	compileOnly "vazkii.botania:Botania:r1.8-250:deobf"
+	compileOnly "mods.railcraft:Railcraft_1.7.10:9.12.3.0:dev"
+	compileOnly "twilightforest:twilightforest:1.7.10-2.3.8dev:dev"
+	compileOnly "appeng:appliedenergistics2:rv3-beta-6:dev"
+	compileOnly "cofh:CoFHCore:1.7.10R3.0.4:dev"
+	compileOnly "cofh:CoFHLib:1.7.10R3.0.3:dev"
+	compileOnly "applecore:AppleCore:1.7.10-3.1.1:deobf"
+	compileOnly "iguanaman:HungerOverhaul:1.7.10-1.0.0-basic:deobf"
+	compileOnly "li.cil.oc:OpenComputers:MC1.7.10-1.7.2.1204:dev"
+	compileOnly "mekanism:MekanismAll:1.7.10-9.1.1.283:dev"
+	// This ComputerCraft thing is *SUCH* a hack, but ComputerCraft is... not right...  This only works because of CodeChickenCore Magic being included up above...
+	compileOnly "dan200.computercraft:ComputerCraft:1.75"
+	compileOnly "openblocks:OpenBlocks:1.7.10-1.6-1.7.10:deobf"
+	compileOnly "openmods:OpenModsLib:1.7.10-0.10:deobf"
+	compileOnly "pneumaticCraft:PneumaticCraft:1.7.10-1.12.7-153:userdev"
+	compileOnly "powercrystals:MineFactoryReloaded:[1.7.10]2.8.2B1-201:dev"
+	compileOnly "ic2:IC2Classic:1.2.1.8:dev"
+	compileOnly "com.builtbroken:AddictedToRed:1.7.10-0.4.0b145:deobf"
+	compileOnly "com.builtbroken:Assembly-Line:1.7.10-0.5.7b180:deobf-dev"
+	compileOnly "com.builtbroken:BasicIndustry:1.7.10-0.1.0b162:deobf"
+	compileOnly "com.builtbroken:ComeCloser:1.7.10-0.7.0b10:deobf"
+	compileOnly "com.builtbroken:ICBM-classic:1.7.10-2.16.4b239:deobf"
+	compileOnly "com.builtbroken:Mffs:1.7.10-4.0.0b160:deobf"
+	compileOnly "com.builtbroken:MilitaryBaseDecor:1.7.10-0.1.0b203:deobf"
+	compileOnly "com.builtbroken:VoltzEngine:1.7.10-1.11.0b466:deobf"
+	compileOnly "com.celestek.hexcraft:HEXCraft:1.7.10-0.13.1:dev"
+	compileOnly "team.chisel.ctmlib:CTMLib:MC1.7.10-1.4.1.5:deobf"
+	compileOnly "team.chisel:Chisel:2.9.5.12:deobf"
+	implementation "ganymedes01.etfuturum:Et-Futurum-Requiem:2.6.2.21-GTNH-daily"
+	compileOnly "blusunrize:ImmersiveEngineering:0.7.7:deobf"
+	compileOnly "com.rwtema.funkylocomotion:funky-locomotion-1.7.10:beta-7:deobf"
 
-	implementation "li.cil.oc:OpenComputers:MC1.7.10-1.5.+:api"
+	// List of potentially useful mods that may or may not be linked in here:
+	//compileOnly "appeng:appliedenergistics2:rv3-beta-6:dev"
+	//compileOnly "applecore:AppleCore:1.7.10-3.1.1:deobf"
+	//compileOnly "binnie:binnie-mods:1.7.10-2.0.22:dev"
+	//compileOnly "blusunrize:AquaTweaks-1.7.10:1.0:deobf"
+	//compileOnly "blusunrize:ImmersiveEngineering:0.7.7:deobf"
+	//compileOnly "climateControl:ClimateControl:0.6.61" // Hack
+	//compileOnly "climateControl:ClimateControl:0.8.2" // Hack
+	//compileOnly "climateControl:climateControl:0.6.beta59:dev" // Does nothing but compiles successfully
+	//compileOnly "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
+	//compileOnly "codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev"
+	//compileOnly "codechicken:ForgeMultipart:1.7.10-1.2.0.347:dev"
+	//compileOnly "codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev"
+	//compileOnly "cofh:CoFHCore:1.7.10R3.0.4:dev"
+	//compileOnly "cofh:CoFHLib:1.7.10R3.0.3:dev"
+	//compileOnly "coloredlightscore:ColoredLightsCore:1.3.7.d524c02:deobf"
+	//compileOnly "com.InfinityRaider.AgriCraft:AgriCraft:1.7.10-1.5.0:dev"
+	//compileOnly "com.amadornes.framez:Framez:1.7.10-0.2-33:deobf"
+	//compileOnly "com.amadornes.jtraits:JTraits:0.1"
+	//compileOnly "com.azanor.baubles:Baubles:1.7.10-1.0.1.10:deobf"
+	//compileOnly "com.bioxx.tfc:TerraFirmaCraft_1.7.10:0.79.28.908:deobf"
+	//compileOnly "com.bluepowermod:BluePower:1.7.10-0.2.963:deobf"
+	//compileOnly "com.builtbroken:AddictedToRed:1.7.10-0.4.0b145:deobf"
+	//compileOnly "com.builtbroken:Assembly-Line:1.7.10-0.5.7b180:deobf-dev"
+	//compileOnly "com.builtbroken:BasicIndustry:1.7.10-0.1.0b162:deobf"
+	//compileOnly "com.builtbroken:ComeCloser:1.7.10-0.7.0b10:deobf"
+	//compileOnly "com.builtbroken:ICBM:1.7.10-2.15.5b514:deobf-dev"
+	//compileOnly "com.builtbroken:ICBM-classic:1.7.10-2.16.4b239:deobf"
+	//compileOnly "com.builtbroken:Mffs:1.7.10-4.0.0b160:deobf"
+	//compileOnly "com.builtbroken:MilitaryBaseDecor:1.7.10-0.1.0b203:deobf"
+	//compileOnly "com.builtbroken:VoltzEngine:1.7.10-1.11.0b466:deobf"
+	//compileOnly "com.carpentersblocks:CarpentersBlocks:3.3.8.2:dev"
+	//compileOnly "com.celestek.hexcraft:HEXCraft:1.7.10-0.13.2:dev"
+	//compileOnly "com.chocolate.chocolateQuest:chocolateQuest:1.7.10-1.1d" // Hack
+	//compileOnly "com.creativemd:craftingmanager:0.7.6:dev"
+	//compileOnly "com.creativemd:creativecore:1.3.24:dev"
+	//compileOnly "com.enderio:EnderIO/1.7.10-2.3.0.430_beta:dev"
+	//compileOnly "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.7.10-2.1.0.1465:deobf"
+	//compileOnly "com.gregoriust.gregtech:gregtech_1.7.10:6.09.00:dev"
+	//compileOnly "com.hbm:hbm:1.0.27:dev"
+	//compileOnly "com.mod-buildcraft:buildcraft:7.1.23:dev"
+	//compileOnly "com.pahimar.ee3:EquivalentExchange3:1.7.10-0.3.0.0:dev"
+	//compileOnly "com.rwtema.funkylocomotion:funky-locomotion-1.7.10:beta-7:deobf"
+	//compileOnly "com.shedar.IC2NuclearControl:IC2NuclearControl:2.4.3a:dev"
+	//compileOnly "com.wayoftime.bloodmagic:BloodMagic:1.7.10-1.3.3-18:deobf"
+	//compileOnly "com.xcompwiz:mystcraft:1.7.10-0.12.3.04:dev"
+	//compileOnly "cr0s.warpdrive:WarpDrive-1.7.10:1.4.2.1:dev"
+	//compileOnly "dan200.computercraft:ComputerCraft:1.75" // Hack
+	//compileOnly "delvr.streams:Streams:1.7.10-0.3.4:deobf"
+	//compileOnly "enviromine:EnviroMine:1.3.124:deobf"
+	//compileOnly "ganymedes01.etfuturum:Et_Futurum_Requiem:2.5.0:dev"
+	//compileOnly "extracells:ExtraCells:1.7.10-2.3.14b200:deobf"
+	//compileOnly "ic2:IC2Classic:1.2.1.8:dev"
+	//compileOnly "iguanaman:HungerOverhaul:1.7.10-1.0.0-basic:deobf"
+	//compileOnly "io.netty-opis:Netty-opis:4.0.23" // Needed for dev opis because it doesn't know how to specify dependencies properly
+	//compileOnly "inventorytweaks:InventoryTweaks:1.59-dev:deobf"
+	//compileOnly "java.moze_intel:ProjectE:1.7.10-PE1.10.1:dev"
+	//compileOnly "k4unl:HydCraft:1.7.10-2.1.253:deobf"
+	//compileOnly "k4unl:k4lib:1.7.10-0.1.55:deobf"
+	//compileOnly "li.cil.oc:OpenComputers:MC1.7.10-1.7.2.1204:dev"
+	//compileOnly "mcp.mobius.opis:Opis:1.2.5_1.7.10:dev"
+	//compileOnly "mcp.mobius.waila:Waila:1.5.10_1.7.10:dev"
+	//compileOnly "mcp.mobius.waila:Waila:1.5.11-RC2-NONEI_1.7.10:dev"
+	//compileOnly "mekanism:MekanismAll:1.7.10-9.1.1.283:dev"
+	//compileOnly "micdoodle8.mods:Galacticraft-Planets:1.7-3.0.12.504:Dev"
+	//compileOnly "micdoodle8.mods:GalacticraftCore:1.7-3.0.12.504:Dev"
+	//compileOnly "micdoodle8.mods:MicdoodleCore:1.7-3.0.12.504:Dev"
+	//compileOnly "minechem:Minechem:1.7.10-6.0.407:dev"
+	//compileOnly "minetweaker:MineTweaker3:1.7.10-3.0.10:dev-full"
+	//compileOnly "mods.railcraft:Railcraft_1.7.10:9.12.3.0:dev"
+	//compileOnly "mrtjp:ForgeRelocation:0.0.1.4:dev"
+	//compileOnly "mrtjp:MrTJPCore:1.1.0.34:dev"
+	//compileOnly "mrtjp:ProjectRed:1.7.10-4.7.0pre11.52:dev"
+	//compileOnly "net.bdew:bdlib:1.9.4.110-mc1.7.10:dev"
+	//compileOnly "net.bdew:gendustry:1.6.4-133-mc1.7.10:dev"
+	//compileOnly "net.electricalage.eln:ElectricalAge-jrddunbr:1.16.3:dev"
+	//compileOnly "net.machinemuse:ModularPowersuits:1.7.10-0.11.1.114" // Hack
+	//compileOnly "net.machinemuse:Numina:0.4.1.105" // Hack
+	//compileOnly "net.sengir.forestry:forestry_1.7.10:4.2.16.64:dev"
+	//compileOnly "openblocks:OpenBlocks:1.7.10-1.6-1.7.10:deobf"
+	//compileOnly "openmods.codecs:NotEnoughCodecs:1.7.10-0.6:deobf"
+	//compileOnly "openmods:OpenModsLib:1.7.10-0.10:deobf"
+	//compileOnly "pneumaticCraft:PneumaticCraft:1.7.10-1.12.7-153:userdev"
+	//compileOnly "powercrystals:MineFactoryReloaded:[1.7.10]2.8.2B1-201:dev"
+	//compileOnly "qmunity:QmunityLib:0.2.118:deobf"
+	//compileOnly "santa:hairy-spice:0.1:dev"
+	//compileOnly "train:Traincraft:5.0.2:dev"
+	//compileOnly "team.chisel.ctmlib:CTMLib:MC1.7.10-1.4.1.5:deobf"
+	//compileOnly "team.chisel:Chisel:2.9.5.12:deobf"
+	//compileOnly "thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev"
+	//compileOnly "thaumicenergistics:thaumicenergistics:1.1.3.0:dev"
+	//compileOnly "thermalexpansion:ThermalExpansion:1.7.10R4.0.3:dev"
+	//compileOnly "thermalfoundation:ThermalFoundation:1.7.10R1.2.0:dev"
+	//compileOnly "ttftcuts.atg:ATG:1.7.10-0.12.0:DEV"
+	//compileOnly "tuhljin:automagy:0.28.2:api"
+	//compileOnly "twilightforest:twilightforest:1.7.10-2.3.8dev:dev"
+	//compileOnly "vazkii.botania:Botania:r1.8-250:deobf"
+	//compileOnly 'com.miglayout:miglayout-swing:4.2' // Needed for dev opis because it doesn't know how to specify dependencies properly
+	//compileOnly 'net.sf.opencsv:opencsv:2.3' // Needed for dev opis because it doesn't know how to specify dependencies properly
+	//compileOnly 'org.apache.commons:commons-math3:3.2' // Needed for dev opis because it doesn't know how to specify dependencies properly
+	//compileOnly 'org.jfree:jcommon:1.0.21' // Needed for dev opis because it doesn't know how to specify dependencies properly
+	//compileOnly 'org.jfree:jfreechart:1.0.17' // Needed for dev opis because it doesn't know how to specify dependencies properly
+	//compileOnly "zmaster587.advancedRocketry:AdvancedRocketry:1.7.10-1.4.0-21:deobf"
 
-	compileOnly "com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta.56-GTNH:dev"
 }
 
-processResources {
-	// this will ensure that this task is redone when the versions change.
-	inputs.property "version", project.version
-	inputs.property "mcversion", project.minecraft.version
+processResources
+	{
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+		// this will ensure that this task is redone when the versions change.
+		inputs.property "version", project.version
+		inputs.property "mcversion", project.minecraft.version
 
-	// replace stuff in mcmod.info, nothing else
-	from(sourceSets.main.resources.srcDirs) {
-		include 'mcmod.info'
-		
-		// replace version and mcversion
-		filesMatching('mcmod.info') {
-			// replace version, mcversion and credits
-			expand([
-					version: version_name,
-					credits: project.credits
-			])
+		// replace stuff in mcmod.info, nothing else
+		from(sourceSets.main.resources.srcDirs) {
+			include 'mcmod.info'
+
+			// replace version and mcversion
+			expand 'version':project.version, 'mcversion':project.minecraft.version
 		}
-	}
-		
-	// copy everything else, thats not the mcmod.info
-	from(sourceSets.main.resources.srcDirs) {
-		exclude 'mcmod.info'
-	}
-}
 
-// add AT to meta-inf
-jar {
-    manifest {
-        attributes 'FMLAT': 'HBM_at.cfg'
-    }
-}
-
-task version {
-	doFirst {
-		println project.version
-	}
-}
-
-if(Files.exists(Paths.get("curseforge.properties"))) {
-	curse {
-		apiKey = cfprops.api_key
-		projectId = cfprops.project_id
-		releaseType = "release"
-
-		displayName = "Hbm's Nuclear Tech Mod " + version_name.replace("_", "") + " for Minecraft 1.7.10"
-
-		gameVersions.addAll([
-				"Forge",
-				"Java 8",
-				"Client", "Server"
-		])
-
-		if (Files.exists(Paths.get("changelog"))) {
-			changelog = String.join("\r\n", Files.readAllLines(Paths.get("changelog")))
-
-			// Perform a backup of the changelog and create a new file for next changes
-			doLast {
-				Files.move(Paths.get("changelog"), Paths.get("changelog.bak"), StandardCopyOption.REPLACE_EXISTING)
-				Files.createFile(Paths.get("changelog"))
-			}
+		// copy everything else, thats not the mcmod.info
+		from(sourceSets.main.resources.srcDirs) {
+			exclude 'mcmod.info'
 		}
-	}
-}
 
-// Properties file parsing helper
-static def parseConfig(File config) {
-	config.withReader {
-		def prop = new Properties()
-		prop.load(it)
-		return (new ConfigSlurper().parse(prop))
 	}
-}

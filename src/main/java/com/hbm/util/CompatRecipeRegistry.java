@@ -11,8 +11,6 @@ import com.hbm.inventory.recipes.*;
 import com.hbm.inventory.recipes.AmmoPressRecipes.AmmoPressRecipe;
 import com.hbm.inventory.recipes.ArcFurnaceRecipes.ArcFurnaceRecipe;
 import com.hbm.inventory.recipes.ArcWelderRecipes.ArcWelderRecipe;
-import com.hbm.inventory.recipes.BreederRecipes.BreederRecipe;
-import com.hbm.inventory.recipes.CrucibleRecipes.CrucibleRecipe;
 import com.hbm.inventory.recipes.CrystallizerRecipes.CrystallizerRecipe;
 import com.hbm.inventory.recipes.ElectrolyserFluidRecipes.ElectrolysisRecipe;
 import com.hbm.inventory.recipes.ElectrolyserMetalRecipes.ElectrolysisMetalRecipe;
