@@ -330,3 +330,11 @@ processResources
 		}
 
 	}
+
+
+// add AT to meta-inf
+jar {
+	manifest {
+		attributes 'FMLAT': 'HBM_at.cfg'
+	}
+}
