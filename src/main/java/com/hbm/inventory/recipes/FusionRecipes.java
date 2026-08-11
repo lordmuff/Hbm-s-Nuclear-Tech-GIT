@@ -102,6 +102,25 @@ public class FusionRecipes extends GenericRecipes<FusionRecipe> {
 				.inputFluids(new FluidStack(Fluids.DHC, 20))
 				.outputItems(new ItemStack(ModItems.powder_chlorophyte)));
 
+		// THIS IS GONNA BE CRAZYGONUTS
+		// "What IS this? Did the quadratic formula explode? I see a 'Strong Ba' in there, but... it's getting eaten up, by some Linux or something..."
+		this.register((FusionRecipe) new FusionRecipe("fus.bffr").setInputEnergy(500_000).setOutputEnergy(45_250_000).setOutputFlux(breederCapacity / 2)
+			.setRGB(0.5F, 1F, 0.5F) // what do you think?
+			.setNamed().setIcon(new ItemStack(ModItems.powder_bffr_plasma_slag))
+			.setPower(solenoid).setDuration(50)
+			.inputFluids(new FluidStack(Fluids.GELASCHRAB_TS, 5), new FluidStack(Fluids.BALEFIRE_FRANCIUM, 1)) // *WWE AI channel having a stroke sounds*
+			.outputItems(new ItemStack(ModItems.powder_bffr_plasma_slag)));
+
+		// like balefire antimatter but easier
+		// "Who knows?" - me when asked about if an important gameplay mechanic is real or not
+		this.register((FusionRecipe) new FusionRecipe("fus.aschrab").setInputEnergy(250_000).setOutputEnergy(11_111_111).setOutputFlux(breederCapacity / 2)
+			.setRGB(0.2F, 1F, 1F) // im eating these indian butter chicken samosas and fuck they're so good fr
+			.setNamed().setIcon(new ItemStack(ModItems.fluid_icon, 1, Fluids.ASCHRAB.getID()))
+			.setPower(solenoid).setDuration(100)
+			.inputFluids(new FluidStack(Fluids.ASCHRAB, 10), new FluidStack(Fluids.AMAT, 10)) // self explanatory, methinks
+			.outputItems(new ItemStack(ModItems.nugget_solinium)));
+
+
 		// high fuel, low ignition point
 		// 20MHE/s to 250MHE/s
 		this.register((FusionRecipe) new FusionRecipe("fus.bf").setInputEnergy(1_000_000).setOutputEnergy(12_500_000).setOutputFlux(breederCapacity / 5)
@@ -124,9 +143,9 @@ public class FusionRecipes extends GenericRecipes<FusionRecipe> {
 	@Override
 	public void registerPost() {
 		super.registerPost();
-		
+
 		this.maxInput = 0;
-		
+
 		// set max value for creative klystron
 		for(FusionRecipe recipe : this.recipeOrderedList) {
 			if(recipe.ignitionTemp > this.maxInput) this.maxInput = recipe.ignitionTemp;

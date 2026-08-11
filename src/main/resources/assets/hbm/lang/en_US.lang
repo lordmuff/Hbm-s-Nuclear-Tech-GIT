@@ -1268,6 +1268,9 @@ foundry.inverted=Redstone inverted
 foundry.invertFilter=Filter inverted
 foundry.noCast=No mold installed!
 
+fus.aschrab=Antischrabidium-Antimatter Plasma
+fus.bffr=Balefire-Tennessine Antischrabidate-Francium Plasma
+
 fus.bf=Balefire Plasma
 fus.cl=Chlorine Plasma
 fus.dd=Deuterium Plasma
