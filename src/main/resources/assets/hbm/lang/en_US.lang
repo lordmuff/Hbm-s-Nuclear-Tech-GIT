@@ -7352,6 +7352,7 @@ tile.rbmk_lever.desc=Can be configured with a screwdriver.$Allows up to two leve
 tile.rbmk_loader.name=RBMK Steam Connector
 tile.rbmk_loader.desc=Allows RBMKs to have both water and steam connections at the bottom$Place one water pipe below the RBMK column, then the connector,$then connect the steam duct to the connector.
 tile.rbmk_moderator.name=RBMK Graphite Moderator
+tile.rbmk_elevator_column.name=RBMK Elevator Column
 tile.rbmk_numitron.name=Redstone-over-Radio Numeric Display
 tile.rbmk_numitron.desc=Can be configured with a screwdriver.$Displays up to two numeric values$from different RoR signal sources.
 tile.rbmk_outgasser.name=RBMK Irradiation Channel

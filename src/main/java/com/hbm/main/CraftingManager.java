@@ -822,6 +822,7 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(ModItems.rbmk_lid_glass, 4), new Object[] { "BBB", "LLL", "P P", 'P', STEEL.plate(), 'L', ModBlocks.glass_lead, 'B', ModBlocks.glass_boron });
 
 		addRecipeAuto(new ItemStack(ModBlocks.rbmk_moderator, 1), new Object[] { " G ", "GRG", " G ", 'G', GRAPHITE.block(), 'R', ModBlocks.rbmk_blank });
+		addRecipeAuto(new ItemStack(ModBlocks.rbmk_elevator_column, 1), new Object[] { " G ", "GRG", " G ", 'G', STEEL.ingot(), 'R', ModBlocks.rbmk_blank });
 		addRecipeAuto(new ItemStack(ModBlocks.rbmk_absorber, 1), new Object[] { "GGG", "GRG", "GGG", 'G', B.ingot(), 'R', ModBlocks.rbmk_blank });
 		addRecipeAuto(new ItemStack(ModBlocks.rbmk_reflector, 1), new Object[] { "GGG", "GRG", "GGG", 'G', ModItems.neutron_reflector, 'R', ModBlocks.rbmk_blank });
 		if(!GeneralConfig.enable528) {

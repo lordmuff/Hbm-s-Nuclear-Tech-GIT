@@ -1298,6 +1298,7 @@ public class ModBlocks {
 	public static Block rbmk_reflector;
 	public static Block rbmk_absorber;
 	public static Block rbmk_moderator;
+	public static Block rbmk_elevator_column;
 	public static Block rbmk_outgasser;
 	public static Block rbmk_storage;
 	public static Block rbmk_cooler;
@@ -2560,6 +2561,7 @@ public class ModBlocks {
 		rbmk_reflector = new RBMKReflector().setBlockName("rbmk_reflector").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":rbmk/rbmk_reflector");
 		rbmk_absorber = new RBMKAbsorber().setBlockName("rbmk_absorber").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":rbmk/rbmk_absorber");
 		rbmk_moderator = new RBMKModerator().setBlockName("rbmk_moderator").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":rbmk/rbmk_moderator");
+		rbmk_elevator_column = new RBMKElevatorColumn().setBlockName("rbmk_elevator_column").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":rbmk/rbmk_elevator_column");
 		rbmk_outgasser = new RBMKOutgasser().setBlockName("rbmk_outgasser").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":rbmk/rbmk_outgasser");
 		rbmk_storage = new RBMKStorage().setBlockName("rbmk_storage").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":rbmk/rbmk_storage");
 		rbmk_cooler = new RBMKCooler().setBlockName("rbmk_cooler").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":rbmk/rbmk_cooler");
@@ -3829,6 +3831,7 @@ public class ModBlocks {
 		GameRegistry.registerBlock(rbmk_reflector, rbmk_reflector.getUnlocalizedName());
 		GameRegistry.registerBlock(rbmk_absorber, rbmk_absorber.getUnlocalizedName());
 		GameRegistry.registerBlock(rbmk_moderator, rbmk_moderator.getUnlocalizedName());
+		GameRegistry.registerBlock(rbmk_elevator_column, rbmk_elevator_column.getUnlocalizedName());
 		GameRegistry.registerBlock(rbmk_outgasser, rbmk_outgasser.getUnlocalizedName());
 		GameRegistry.registerBlock(rbmk_storage, rbmk_storage.getUnlocalizedName());
 		GameRegistry.registerBlock(rbmk_cooler, rbmk_cooler.getUnlocalizedName());

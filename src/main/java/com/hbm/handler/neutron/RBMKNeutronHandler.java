@@ -312,6 +312,11 @@ public class RBMKNeutronHandler {
 				if(nodeTE instanceof IRBMKFluxReceiver) {
 					IRBMKFluxReceiver column = (IRBMKFluxReceiver) nodeTE;
 
+					if(nodeTE instanceof TileEntityRBMKElevatorColumn) {
+						column.receiveFlux(this);
+						return;
+					}
+
 					if(type == RBMKType.ROD) {
 						TileEntityRBMKRod rod = (TileEntityRBMKRod) column;
 
