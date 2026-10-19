@@ -1,12 +1,19 @@
 package com.hbm.tileentity.machine.rbmk;
 
+import com.hbm.handler.neutron.NeutronNodeWorld;
+import com.hbm.handler.neutron.NeutronNodeWorld.StreamWorld;
 import com.hbm.handler.neutron.NeutronStream;
+import com.hbm.handler.neutron.RBMKNeutronHandler;
+import com.hbm.handler.neutron.RBMKNeutronHandler.RBMKNeutronNode;
+import com.hbm.handler.neutron.RBMKNeutronHandler.RBMKNeutronStream;
 import com.hbm.handler.neutron.RBMKNeutronHandler.RBMKType;
 import com.hbm.handler.radiation.ChunkRadiationManager;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
+import com.hbm.util.fauxpointtwelve.BlockPos;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Vec3;
 
 public class TileEntityRBMKElevatorColumn extends TileEntityRBMKBase implements IRBMKFluxReceiver {
 
@@ -55,9 +62,31 @@ public class TileEntityRBMKElevatorColumn extends TileEntityRBMKBase implements 
 				return;
 			}
 
+			if(te instanceof IRBMKFluxReceiver) {
+				this.deliverFlux((IRBMKFluxReceiver) te, quantity, ratio);
+				return;
+			}
+
 			this.irradiateArea(y, quantity);
 			return;
 		}
+	}
+
+	protected void deliverFlux(IRBMKFluxReceiver receiver, double quantity, double ratio) {
+
+		StreamWorld streamWorld = NeutronNodeWorld.getOrAddWorld(worldObj);
+		BlockPos pos = new BlockPos(this);
+		RBMKNeutronNode node = (RBMKNeutronNode) streamWorld.getNode(pos);
+
+		if(node == null) {
+			node = RBMKNeutronHandler.makeNode(streamWorld, this);
+			streamWorld.addNode(node);
+		}
+
+		RBMKNeutronStream stream = new RBMKNeutronStream(node, Vec3.createVectorHelper(0, 1, 0));
+		stream.fluxQuantity = quantity;
+		stream.fluxRatio = ratio;
+		receiver.receiveFlux(stream);
 	}
 
 	protected void irradiateArea(int y, double quantity) {
