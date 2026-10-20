@@ -294,6 +294,11 @@ public class RBMKNeutronHandler {
 
 				RBMKType type = (RBMKType) targetNode.data.get("type");
 
+				if(targetNode.tile instanceof TileEntityRBMKElevatorColumn) {
+					((TileEntityRBMKElevatorColumn) targetNode.tile).receiveFlux(this);
+					return;
+				}
+
 				if(type == RBMKType.OTHER || type == null) // pass right on by!
 					continue;
 
@@ -311,11 +316,6 @@ public class RBMKNeutronHandler {
 
 				if(nodeTE instanceof IRBMKFluxReceiver) {
 					IRBMKFluxReceiver column = (IRBMKFluxReceiver) nodeTE;
-
-					if(nodeTE instanceof TileEntityRBMKElevatorColumn) {
-						column.receiveFlux(this);
-						return;
-					}
 
 					if(type == RBMKType.ROD) {
 						TileEntityRBMKRod rod = (TileEntityRBMKRod) column;

@@ -37,7 +37,11 @@ public class TileEntityRBMKElevatorColumn extends TileEntityRBMKBase implements 
 	public void updateEntity() {
 		super.updateEntity();
 
-		if(worldObj.isRemote || this.flux <= 0) return;
+		if(worldObj.isRemote) return;
+
+		this.transferHeat();
+
+		if(this.flux <= 0) return;
 
 		double quantity = this.flux;
 		double ratio = this.fluxRatio;
@@ -49,27 +53,47 @@ public class TileEntityRBMKElevatorColumn extends TileEntityRBMKBase implements 
 
 	protected void routeFlux(double quantity, double ratio) {
 
-		int start = yCoord + RBMKDials.getColumnHeight(worldObj) + 1;
+		int aboveY = yCoord + RBMKDials.getColumnHeight(worldObj) + 1;
+		TileEntity above = worldObj.getTileEntity(xCoord, aboveY, zCoord);
 
-		for(int y = start; y < worldObj.getHeight(); y++) {
-
-			Block block = worldObj.getBlock(xCoord, y, zCoord);
-			if(block.isAir(worldObj, xCoord, y, zCoord)) continue;
-
-			TileEntity te = worldObj.getTileEntity(xCoord, y, zCoord);
-			if(te instanceof TileEntityRBMKElevatorColumn) {
-				((TileEntityRBMKElevatorColumn) te).addFlux(quantity, ratio);
-				return;
-			}
-
-			if(te instanceof IRBMKFluxReceiver) {
-				this.deliverFlux((IRBMKFluxReceiver) te, quantity, ratio);
-				return;
-			}
-
-			this.irradiateArea(y, quantity);
+		if(above instanceof TileEntityRBMKElevatorColumn) {
+			((TileEntityRBMKElevatorColumn) above).addFlux(quantity, ratio);
 			return;
 		}
+
+		if(above instanceof IRBMKFluxReceiver) {
+			this.deliverFlux((IRBMKFluxReceiver) above, quantity, ratio);
+			return;
+		}
+
+		Block block = worldObj.getBlock(xCoord, aboveY, zCoord);
+		if(!block.isAir(worldObj, xCoord, aboveY, zCoord)) {
+			this.irradiateArea(aboveY, quantity);
+		}
+	}
+
+	protected void transferHeat() {
+
+		double step = RBMKDials.getColumnHeatFlow(worldObj);
+		int column = RBMKDials.getColumnHeight(worldObj) + 1;
+
+		TileEntity above = worldObj.getTileEntity(xCoord, yCoord + column, zCoord);
+		if(above instanceof TileEntityRBMKElevatorColumn) {
+			this.exchangeHeat((TileEntityRBMKBase) above, step);
+		}
+
+		TileEntity below = worldObj.getTileEntity(xCoord, yCoord - column, zCoord);
+		if(below instanceof TileEntityRBMKBase) {
+			this.exchangeHeat((TileEntityRBMKBase) below, step);
+		}
+	}
+
+	protected void exchangeHeat(TileEntityRBMKBase other, double step) {
+
+		double average = (this.heat + other.heat) / 2D;
+		this.heat += (average - this.heat) * step;
+		other.heat += (average - other.heat) * step;
+		this.markDirty();
 	}
 
 	protected void deliverFlux(IRBMKFluxReceiver receiver, double quantity, double ratio) {
