@@ -39,7 +39,6 @@ public class Fluids {
 	public static List<IFluidRegisterListener> additionalListeners = new ArrayList();
 
 	public static FluidType NONE;
-	public static FluidType AIR;
 	public static FluidType AIRBLAST;
 	public static FluidType WATER;
 	public static FluidType STEAM;
@@ -1145,7 +1144,7 @@ public class Fluids {
 		REDMUD.addTraits(new FT_Toxin().addEntry(new ToxinEffects(HazardClass.GAS_BLISTERING, false).add(new PotionEffect(Potion.wither.id, 30 * 20, 2))));
 		NETHERAIR.addTraits(new FT_Toxin().addEntry(new ToxinDirectDamage(ModDamageSource.cloud, 1.5F, 20, HazardClass.GAS_MONOXIDE, false)).addEntry(new ToxinDirectDamage(ModDamageSource.cloud, 1.5F, 20, HazardClass.GAS_LUNG, false)));
 
-		AIR.addTraits(new FT_Heatable().setEff(HeatingType.BOILER, 1.0D).addStep(5, 1, AIRBLAST, 1));
+		EARTHAIR.addTraits(new FT_Heatable().setEff(HeatingType.BOILER, 1.0D).addStep(5, 1, AIRBLAST, 1));
 
 		double eff_steam_boil = 1.0D;
 		double eff_steam_heatex = 0.25D;
