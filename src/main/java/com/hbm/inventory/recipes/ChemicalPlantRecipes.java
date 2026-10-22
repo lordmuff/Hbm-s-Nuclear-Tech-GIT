@@ -55,15 +55,15 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 
 		// Provided by cryodistil
 		// this.register(new GenericRecipe("chem.oxygen").setupNamed(20, 400).setIcon(ModItems.gas_full, Fluids.OXYGEN.getID())
-		// 		.inputFluids(new FluidStack(Fluids.AIR, 8_000))
+		// 		.inputFluids(new FluidStack(Fluids.EARTHAIR, 8_000))
 		// 		.outputFluids(new FluidStack(Fluids.OXYGEN, 500)));
 
 		// this.register(new GenericRecipe("chem.xenon").setupNamed(300, 1_000).setIcon(ModItems.gas_full, Fluids.XENON.getID())
-		// 		.inputFluids(new FluidStack(Fluids.AIR, 16_000))
+		// 		.inputFluids(new FluidStack(Fluids.EARTHAIR, 16_000))
 		// 		.outputFluids(new FluidStack(Fluids.XENON, 50)));
 
 		// this.register(new GenericRecipe("chem.xenonoxy").setupNamed(20, 1_000).setIcon(ModItems.gas_full, Fluids.XENON.getID())
-		// 		.inputFluids(new FluidStack(Fluids.AIR, 8_000), new FluidStack(Fluids.OXYGEN, 250))
+		// 		.inputFluids(new FluidStack(Fluids.EARTHAIR, 8_000), new FluidStack(Fluids.OXYGEN, 250))
 		// 		.outputFluids(new FluidStack(Fluids.XENON, 50)).setPools(GenericRecipes.POOL_PREFIX_ALT + ".xenonoxy"));
 
 		this.register(new GenericRecipe("chem.helium3").setupNamed(25, 2_000).setIcon(ModItems.gas_full, Fluids.HELIUM3.getID())
@@ -383,7 +383,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 
 		// Provided by cryodistil
 		// this.register(new GenericRecipe("chem.birkeland").setupNamed(200, 5_000)
-		// 		.inputFluids(new FluidStack(Fluids.AIR, 8_000), new FluidStack(Fluids.WATER, 2_000))
+		// 		.inputFluids(new FluidStack(Fluids.EARTHAIR, 8_000), new FluidStack(Fluids.WATER, 2_000))
 		// 		.outputFluids(new FluidStack(Fluids.NITRIC_ACID, 1_000)).setPools(GenericRecipes.POOL_PREFIX_ALT + ".birkeland"));
 
 		this.register(new GenericRecipe("chem.schrabidic").setup(60, 5_000)
@@ -658,6 +658,15 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 			.inputFluids(new FluidStack(Fluids.AMMONIA, 1000))
 			.inputItems(new ComparableStack(ModItems.salt, 1), new ComparableStack(ModItems.powder_limestone))
 			.outputItems(new ItemStack(ModItems.sodium_carbonate)));
+		// WARNING: NILERED CHEMISTRY ZONE //
+		this.register(new GenericRecipe("chem.thoriumsalt").setup(60, 250)
+			.inputFluids(new FluidStack(Fluids.THORIUM_SALT_DEPLETED, 16_000))
+			.inputItems(new OreDictStack(TH232.nugget(), 2))
+			.outputFluids(new FluidStack(Fluids.THORIUM_SALT, 16_000))
+			.outputItems(
+				new ItemStack(ModItems.nugget_u233, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1)));
+
 	}
 
 	public static HashMap getRecipes() {

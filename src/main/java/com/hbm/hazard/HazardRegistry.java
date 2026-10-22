@@ -128,6 +128,7 @@ public class HazardRegistry {
 	public static final float gh336 = 5.0F;
 	public static final float mud = 1.0F;
 	public static final float cn989 = 89.0F;
+	public static final float francium = 2500.0F;
 	public static final float radsource_mult = 3.0F;
 	public static final float pobe = po210 * radsource_mult;
 	public static final float rabe = ra226 * radsource_mult;
@@ -172,6 +173,8 @@ public class HazardRegistry {
 	public static final HazardTypeBase BLINDING = new HazardTypeBlinding();
 	public static final HazardTypeBase ASBESTOS = new HazardTypeAsbestos();
 	public static final HazardTypeBase COAL = new HazardTypeCoal();
+	public static final HazardTypeBase HYDROGOLIC = new HazardTypeHydrogolic();
+
 	public static final HazardTypeBase HYDROACTIVE = new HazardTypeHydroactive();
 	public static final HazardTypeBase EXPLOSIVE = new HazardTypeExplosive();
 	public static final HazardTypeBase AUTISM = new HazardTypeAutism();
@@ -179,6 +182,14 @@ public class HazardRegistry {
 	public static final HazardTypeBase NEUTRON = new HazardTypeNeutron();
 
 	public static void registerItems() {
+
+		HazardSystem.register(nugget_francium, makeData(HYDROGOLIC, 20 * nugget));
+		HazardSystem.register(ingot_francium, makeData(HYDROGOLIC, 20));
+		HazardSystem.register(block_francium, makeData(HYDROGOLIC, 20 * block));
+
+		HazardSystem.register(nugget_francium, makeData(RADIATION, francium * nugget));
+		HazardSystem.register(ingot_francium, makeData(RADIATION, francium));
+		HazardSystem.register(block_francium, makeData(RADIATION, francium * block));
 
 		HazardSystem.register(Items.gunpowder, makeData(EXPLOSIVE, 1F));
 		HazardSystem.register(Blocks.tnt, makeData(EXPLOSIVE, 4F));

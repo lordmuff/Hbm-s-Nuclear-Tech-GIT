@@ -26,10 +26,7 @@ import com.hbm.tileentity.IFluidCopiable;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.IUpgradeInfoProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-import com.hbm.util.Compat;
-import com.hbm.util.EnumUtil;
-import com.hbm.util.InventoryUtil;
-import com.hbm.util.ItemStackUtil;
+import com.hbm.util.*;
 import com.hbm.util.fauxpointtwelve.BlockPos;
 import com.hbm.util.fauxpointtwelve.DirPos;
 import com.hbm.util.i18n.I18nUtil;
@@ -40,8 +37,20 @@ import api.hbm.fluid.IFluidStandardReceiver;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregapi.block.prefixblock.PrefixBlockTileEntity;
+import gregapi.code.ArrayListNoNulls;
+import gregapi.data.CS;
+import gregapi.data.IL;
+import gregapi.data.MT;
+import gregapi.data.OP;
+import gregapi.oredict.OreDictMaterial;
+import gregapi.oredict.OreDictMaterialStack;
+import gregapi.util.ST;
+import gregapi.util.UT;
+import gregapi.util.WD;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -58,7 +67,14 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import static gregapi.data.CS.RNGSUS;
+import static gregapi.data.CS.SIDE_TOP;
+
 public class TileEntityMachineExcavator extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidStandardReceiver, IControlReceiver, IGUIProvider, IUpgradeInfoProvider, IFluidCopiable {
+
+	public int rng(int aRange) {return RNGSUS.nextInt(aRange);}
+	public final List<OreDictMaterial> mList = new ArrayListNoNulls<>();
+	int tSelector = rng(128);
 
 	public static final long maxPower = 1_000_000;
 	public long power;
@@ -73,7 +89,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 	protected int ticksWorked = 0;
 	protected int targetDepth = 0; //0 is the first block below null position
 	protected boolean bedrockDrilling = false;
-
+	public UpgradeManagerNT UpgradeManager = new UpgradeManagerNT();
 	public float drillRotation = 0F;
 	public float prevDrillRotation = 0F;
 	public float drillExtension = 0F;
@@ -88,11 +104,9 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 
 	public FluidTank tank;
 
-	public UpgradeManagerNT upgradeManager = new UpgradeManagerNT();
-
 	public TileEntityMachineExcavator() {
 		super(14);
-		this.tank = new FluidTank(Fluids.NONE, 16_000);
+		this.tank = new FluidTank(Fluids.SULFURIC_ACID, 16_000);
 	}
 
 	@Override
@@ -104,9 +118,9 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 	public void updateEntity() {
 
 		//needs to happen on client too for GUI rendering
-		upgradeManager.checkSlots(this, slots, 2, 3);
-		int speedLevel = upgradeManager.getLevel(UpgradeType.SPEED);
-		int powerLevel = upgradeManager.getLevel(UpgradeType.POWER);
+		UpgradeManager.checkSlots(this, slots, 2, 3);
+		int speedLevel = Math.min(UpgradeManager.getLevel(UpgradeType.SPEED), 3);
+		int powerLevel = Math.min(UpgradeManager.getLevel(UpgradeType.POWER), 3);
 
 		consumption = baseConsumption * (1 + speedLevel);
 		consumption /= (1 + powerLevel);
@@ -128,7 +142,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 
 			this.power = Library.chargeTEFromItems(slots, 0, this.getPower(), this.getMaxPower());
 			this.operational = false;
-			int radiusLevel = upgradeManager.getLevel(UpgradeType.EFFECT);
+			int radiusLevel = Math.min(UpgradeManager.getLevel(UpgradeType.EFFECT), 3);
 
 			EnumDrillType type = this.getInstalledDrill();
 			if(this.enableDrill && type != null && this.power >= this.getPowerConsumption()) {
@@ -198,10 +212,10 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
 		return new DirPos[] {
-				new DirPos(xCoord + dir.offsetX * 4 + rot.offsetX, yCoord + 1, zCoord + dir.offsetZ * 4 + rot.offsetZ, dir),
-				new DirPos(xCoord + dir.offsetX * 4 - rot.offsetX, yCoord + 1, zCoord + dir.offsetZ * 4 - rot.offsetZ, dir),
-				new DirPos(xCoord + rot.offsetX * 4, yCoord + 1, zCoord + rot.offsetZ * 4, rot),
-				new DirPos(xCoord - rot.offsetX * 4, yCoord + 1, zCoord - rot.offsetZ * 4, rot.getOpposite())
+			new DirPos(xCoord + dir.offsetX * 4 + rot.offsetX, yCoord + 1, zCoord + dir.offsetZ * 4 + rot.offsetZ, dir),
+			new DirPos(xCoord + dir.offsetX * 4 - rot.offsetX, yCoord + 1, zCoord + dir.offsetZ * 4 - rot.offsetZ, dir),
+			new DirPos(xCoord + rot.offsetX * 4, yCoord + 1, zCoord + rot.offsetZ * 4, rot),
+			new DirPos(xCoord - rot.offsetX * 4, yCoord + 1, zCoord - rot.offsetZ * 4, rot.getOpposite())
 		};
 	}
 
@@ -262,8 +276,8 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 
 						Block b = worldObj.getBlock(x, y, z);
 
-						if(b == ModBlocks.ore_bedrock) {
-							combinedHardness = 60 * 20 * 5;
+						if(b == ModBlocks.ore_bedrock || b == CS.BlocksGT.oreBedrock || b == CS.BlocksGT.oreSmallBedrock || b == IL.HBM_Bedrock_Oil.getBlock()) {
+							combinedHardness = 60 * 20;
 							bedrockOre = new BlockPos(x, y, z);
 							bedrockDrilling = true;
 							enableCrusher = false;
@@ -315,7 +329,13 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 	}
 
 	protected void collectBedrock(BlockPos pos) {
+
+		//many thanks to Mellow and gammawave from the NTM discord(s) for heavy support with this code!
+
+		Block oreBlock = worldObj.getBlock(pos.getX(), pos.getY(), pos.getZ());
 		TileEntity oreTile = Compat.getTileStandard(worldObj, pos.getX(), pos.getY(), pos.getZ());
+		ItemStack stack = null;
+		List<ItemStack> stacks = new ArrayList<>();
 
 		if(oreTile instanceof TileEntityBedrockOre) {
 			TileEntityBedrockOre ore = (TileEntityBedrockOre) oreTile;
@@ -329,8 +349,48 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 				tank.setFill(tank.getFill() - ore.acidRequirement.fill);
 			}
 
-			ItemStack stack = ore.resource.copy();
-			List<ItemStack> stacks = new ArrayList();
+			if (rng(1000) == 0) {
+				// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
+				stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+			}
+
+			stack = ore.resource.copy();
+		}
+		else if(oreTile instanceof PrefixBlockTileEntity) {
+			PrefixBlockTileEntity ore = (PrefixBlockTileEntity) oreTile;
+
+			if (oreBlock == CS.BlocksGT.oreBedrock) {
+				OreDictMaterialStack tMaterial = CS.BlocksGT.oreBedrock.getMaterialAtSide(worldObj, oreTile.xCoord, oreTile.yCoord, oreTile.zCoord, SIDE_TOP);
+				mList.add(tMaterial.mMaterial); mList.add(tMaterial.mMaterial);
+				OreDictMaterial matstack = (UT.Code.select(mList.get(0), mList.get(0).mByProducts));
+				stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+				if (rng(750) == 0) {
+					// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
+					stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+				}
+			}
+
+			if (oreBlock == CS.BlocksGT.oreSmallBedrock) {
+				OreDictMaterialStack tMaterial = CS.BlocksGT.oreSmallBedrock.getMaterialAtSide(worldObj, oreTile.xCoord, oreTile.yCoord, oreTile.zCoord, SIDE_TOP);
+				mList.add(tMaterial.mMaterial);
+				OreDictMaterial matstack = (UT.Code.select(mList.get(0), mList.get(0).mByProducts));
+				stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+				if (rng(500) == 0) {
+					// 0.1% Chance to get Bedrock Dust. Only really useful for the Byproducts it has, and Rotarycraft.
+					stacks.add(0, OP.dust.mat(MT.Bedrock, 1));
+				}
+			}
+		}
+
+		else if (oreBlock == IL.HBM_Bedrock_Oil.getBlock()) {
+
+			OreDictMaterial matstack = (MT.Oilshale);
+			stack = ST.make((Block) CS.BlocksGT.oreBroken, 1, matstack.mID);
+
+		}
+
+		if(stack != null) {
+
 			stacks.add(stack);
 
 			if(stack.getItem() == ModItems.bedrock_ore_base) {
@@ -627,7 +687,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		int z = zCoord + dir.offsetZ * 4;
 
 		List<ItemStack> stacks = new ArrayList();
-		items.forEach(i -> { if(!i.isDead) stacks.add(i.getEntityItem());});
+		items.forEach(i -> stacks.add(i.getEntityItem()));
 
 		/* try to insert into a valid container */
 		TileEntity tile = worldObj.getTileEntity(x, y, z);
@@ -646,7 +706,6 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		/* collect remaining items in internal buffer */
 		outer:
 		for(EntityItem item : items) {
-			if(item.isDead) continue;
 
 			ItemStack stack = item.getEntityItem();
 
@@ -810,7 +869,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Object provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return new GUIMachineExcavator(player.inventory, this);
 	}
 
@@ -821,13 +880,13 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 
 		if(bb == null) {
 			bb = AxisAlignedBB.getBoundingBox(
-					xCoord - 3,
-					0,
-					zCoord - 3,
-					xCoord + 4,
-					yCoord + 5,
-					zCoord + 4
-					);
+				xCoord - 3,
+				0,
+				zCoord - 3,
+				xCoord + 4,
+				yCoord + 5,
+				zCoord + 4
+			);
 		}
 
 		return bb;
@@ -888,10 +947,5 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		upgrades.put(UpgradeType.POWER, 3);
 		upgrades.put(UpgradeType.EFFECT, 3);
 		return upgrades;
-	}
-
-	@Override
-	public FluidTank getTankToPaste() {
-		return tank;
 	}
 }

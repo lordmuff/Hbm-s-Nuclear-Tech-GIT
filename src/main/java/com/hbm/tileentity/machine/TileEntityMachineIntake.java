@@ -34,7 +34,7 @@ public class TileEntityMachineIntake extends TileEntityLoadedBase implements IEn
 	private AudioWrapper audio;
 
 	public TileEntityMachineIntake() {
-		this.compair = new FluidTank(Fluids.AIR, 1_000);
+		this.compair = new FluidTank(Fluids.EARTHAIR, 1_000);
 	}
 
 	@Override

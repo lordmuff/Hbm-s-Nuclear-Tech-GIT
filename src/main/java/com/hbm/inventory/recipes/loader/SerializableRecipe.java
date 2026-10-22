@@ -383,6 +383,14 @@ public abstract class SerializableRecipe {
 		return new Pair[0];
 	}
 
+	public static void writeInt(Integer integer, JsonWriter writer) throws IOException {
+		writer.beginArray();
+		writer.setIndent("");
+		writer.value(integer);
+		writer.endArray();
+		writer.setIndent("  ");
+	}
+
 	public static void writeItemStack(ItemStack stack, JsonWriter writer) throws IOException {
 		writer.beginArray();
 		writer.setIndent("");

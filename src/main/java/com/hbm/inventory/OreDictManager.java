@@ -15,11 +15,16 @@ import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.material.NTMMaterial;
 import com.hbm.inventory.material.NTMMaterial.SmeltingBehavior;
 import com.hbm.items.ItemEnums.*;
+import com.hbm.inventory.recipes.GasCentrifugeRecipes;
+import com.hbm.inventory.recipes.MixerRecipes;
+import com.hbm.inventory.recipes.MixerRecipes.MixerRecipe;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemBedrockOre.EnumBedrockOre;
+import com.hbm.items.special.ItemBedrockOreNew;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.Compat;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import gregapi.data.OP;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -89,7 +94,8 @@ public class OreDictManager {
 	public static final String KEY_CRACK_TAR = "cracktar";
 	public static final String KEY_COAL_TAR = "coaltar";
 	public static final String KEY_WOOD_TAR = "woodtar";
-
+	public static final String KEY_PARAFFIN_GT6_1 = "dustParaffinWax";
+	public static final String KEY_PARAFFIN_GT6_2 = "dustWaxParaffin";
 	public static final String KEY_UNIVERSAL_TANK = "ntmuniversaltank";
 	public static final String KEY_HAZARD_TANK = "ntmhazardtank";
 	public static final String KEY_UNIVERSAL_BARREL = "ntmuniversalbarrel";
@@ -133,6 +139,7 @@ public class OreDictManager {
 	public static final DictFrame U235 = new DictFrame("Uranium235", "U235");
 	public static final DictFrame U238 = new DictFrame("Uranium238", "U238");
 	public static final DictFrame TH232 = new DictFrame("Thorium232", "Th232", "Thorium");
+	public static final DictFrame THF = new DictFrame("ThoriumFuel");
 	public static final DictFrame PU = new DictFrame("Plutonium");
 	public static final DictFrame PURG = new DictFrame("PlutoniumRG");
 	public static final DictFrame PU238 = new DictFrame("Plutonium238", "Pu238");
@@ -171,6 +178,8 @@ public class OreDictManager {
 	public static final DictFrame GH336 = new DictFrame("Ghiorsium336", "Gh336");
 	public static final DictFrame MUD = new DictFrame("WatzMud");
 	public static final DictFrame CN989 = new DictFrame("Chinesium989", "Cn989");
+	public static final DictFrame FRANCIUM = new DictFrame("Francium");
+
 	/*
 	 * STABLE
 	 */
@@ -180,8 +189,8 @@ public class OreDictManager {
 	public static final DictFrame CU = new DictFrame("Copper");
 	public static final DictFrame MINGRADE = new DictFrame("Mingrade");
 	/** NICKEL */
-	public static final DictFrame NI = new DictFrame("NickelPure");
-	public static final DictFrame NIM = new DictFrame("Nickel"); // Compat with "ferrous metal" so thermal isn't invalidated and neither is our intended progression!
+	public static final DictFrame NI = new DictFrame("Nickel");
+	public static final DictFrame NIM = new DictFrame("Pentlandite"); // Compat with "ferrous metal" so thermal isn't invalidated and neither is our intended progression!
 	/** TUNGSTEN */
 	public static final DictFrame W = new DictFrame("Tungsten");
 	public static final DictFrame WC = new DictFrame("TungstenCarbide");
@@ -235,7 +244,7 @@ public class OreDictManager {
 	public static final DictFrame SEMTEX = new DictFrame("Semtex");
 	public static final DictFrame MAGTUNG = new DictFrame("MagnetizedTungsten");
 	public static final DictFrame CMB = new DictFrame("CMBSteel");
-	public static final DictFrame DESH = new DictFrame("Desh");
+	public static final DictFrame DESH = new DictFrame(Compat.isModLoaded(Compat.MOD_GT6) ? "WorkersAlloy" : "Desh");
 	public static final DictFrame STAR = new DictFrame("Starmetal");
 	public static final DictFrame GUNMETAL = new DictFrame("GunMetal");
 	public static final DictFrame SOLDERALLOY = new DictFrame("SolderingAlloy");
@@ -407,6 +416,7 @@ public class OreDictManager {
 		U235	.rad(HazardRegistry.u235)							.nugget(nugget_u235)		.billet(billet_u235)		.ingot(ingot_u235)																	.block(block_u235);
 		U238	.rad(HazardRegistry.u238)							.nugget(nugget_u238)		.billet(billet_u238)		.ingot(ingot_u238)																	.block(block_u238);
 		TH232	.rad(HazardRegistry.th232)							.nugget(nugget_th232)		.billet(billet_th232)		.ingot(ingot_th232)			.dust(powder_thorium)									.block(block_thorium)		.oreAll(ore_thorium);
+		THF	.rad(HazardRegistry.thf)							.nugget(nugget_thorium_fuel)		.billet(billet_thorium_fuel)		.ingot(ingot_thorium_fuel)								.block(block_thorium_fuel);
 		PU		.rad(HazardRegistry.pu)								.nugget(nugget_plutonium)	.billet(billet_plutonium)	.ingot(ingot_plutonium)		.dust(powder_plutonium)									.block(block_plutonium)		.ore(ore_nether_plutonium)	.oreNether(ore_nether_plutonium) .oreAll(ore_plutonium);
 		PURG	.rad(HazardRegistry.purg).neutron(HazardRegistry.purg/60f)							.nugget(nugget_pu_mix)		.billet(billet_pu_mix)		.ingot(ingot_pu_mix)																.block(block_pu_mix);
 		PU238	.rad(HazardRegistry.pu238)	.hot(3F)				.nugget(nugget_pu238)		.billet(billet_pu238)		.ingot(ingot_pu238)																	.block(block_pu238);
@@ -444,6 +454,8 @@ public class OreDictManager {
 		GH336	.rad(HazardRegistry.gh336)							.nugget(nugget_gh336)		.billet(billet_gh336)		.ingot(ingot_gh336);
 		MUD		.rad(HazardRegistry.mud)																					.ingot(ingot_mud);
 		CN989   .rad(HazardRegistry.cn989)  .hot(4F)                .nugget(nugget_cn989)       .billet(billet_cn989)       .ingot(ingot_cn989)         .dust(powder_cn989)         .plate(plate_cn989);
+		FRANCIUM   .rad(HazardRegistry.francium)  .hot(12F)  .blinding(4F)  .hydrosuper(6F)             .nugget(nugget_francium)      .ingot(ingot_francium)       .block(block_francium);
+
 
 		/*
 		 * STABLE
@@ -490,7 +502,7 @@ public class OreDictManager {
 		SALT		.crystal(salt_cluster)									.ingot(salt_shard)												.dust(salt);
 		//PET																	.ingot(ingot_pet);
 		PC																	.ingot(ingot_pc);
-		PVC																	.ingot(ingot_pvc)													.dust(powder_pvc);
+		PVC																	.ingot(ingot_pvc);
 		SEMTEX																.ingot(ingot_semtex)																												.block(block_semtex);
 		MAGTUNG																.ingot(ingot_magnetized_tungsten)									.dust(powder_magnetized_tungsten)								.block(block_magnetized_tungsten);
 		CMB																	.ingot(ingot_combine_steel)											.dust(powder_combine_steel)		.plate(plate_combine_steel)		.block(block_combine_steel);
@@ -511,9 +523,6 @@ public class OreDictManager {
 		HAFNIUM		.nugget(nugget_hafnium)									.ingot(ingot_hafnium);
 		IRIDIUM		.ingot(ingot_iridium);
 
-
-		OSMIRIDIUM	.nugget(nugget_osmiridium)								.ingot(ingot_osmiridium);
-
 		/*
 		 * DUST AND GEM ORES
 		 */
@@ -528,8 +537,8 @@ public class OreDictManager {
 		HAEMACOKE						.gem(fromOne(coke, EnumCokeType.HAEMACOKE))		.dust(fromOne(powder_coke, EnumCokeType.HAEMACOKE))	.block(fromOne(block_coke, EnumCokeType.HAEMACOKE));
 		CINNABAR	.crystal(cinnebar)	.gem(cinnebar)																					.ore(ore_depth_cinnebar) .oreAll(ore_cinnebar);
 		BORAX																			.dust(powder_borax)								.ore(ore_depth_borax);
-		CHLOROCALCITE																	.dust(powder_chlorocalcite);
-		MOLYSITE																		.dust(powder_molysite)							.ore(DictFrame.fromOne(ore_basalt, EnumBasaltOreType.MOLYSITE));
+		CHLOROCALCITE																	.dust(powder_chlorocalcite)						.dustSmall(Mats.MAT_CHLOROCALCITE.make(bedrock_ore_fragment));
+		MOLYSITE																		.dust(powder_molysite)							.dustSmall(Mats.MAT_MOLYSITE.make(bedrock_ore_fragment))    .ore(DictFrame.fromOne(ore_basalt, EnumBasaltOreType.MOLYSITE));
 		SODALITE						.gem(gem_sodalite);
 		VOLCANIC						.gem(gem_volcanic)																				.ore(DictFrame.fromOne(ore_basalt, EnumBasaltOreType.GEM));
 		HEMATITE																														.ore(fromOne(stone_resource, EnumStoneType.HEMATITE));
@@ -550,7 +559,7 @@ public class OreDictManager {
 		 * HAZARDS, MISC
 		 */
 		LI	.hydro(1F)	.ingot(lithium)	.dustSmall(powder_lithium_tiny)	.dust(powder_lithium)	.block(block_lithium)	.ore(ore_gneiss_lithium) .oreAll(ore_lithium);
-		NA	.hydro(1F)	.hazIngot()										.dust(powder_sodium);
+		NA	.hydro(1F)													.dust(powder_sodium);
 
 		/*
 		 * PHOSPHORUS
@@ -588,7 +597,7 @@ public class OreDictManager {
 		/*
 		 * FISSION FRAGMENTS
 		 */
-		SR									.hot(1F)	.hydro(1F)	.hazIngot()						.dust(powder_strontium);
+		SR									.hot(1F)	.hydro(1F)									.dust(powder_strontium);
 		SR90	.rad(HazardRegistry.sr90)	.hot(1F)	.hydro(1F)	.dustSmall(powder_sr90_tiny)	.dust(powder_sr90)	.ingot(ingot_sr90)	.billet(billet_sr90)	.nugget(nugget_sr90);
 		I131	.rad(HazardRegistry.i131)	.hot(1F)				.dustSmall(powder_i131_tiny)	.dust(powder_i131);
 		XE135	.rad(HazardRegistry.xe135)	.hot(10F)				.dustSmall(powder_xe135_tiny)	.dust(powder_xe135);
@@ -615,7 +624,8 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_CRACK_TAR, fromOne(oil_tar, EnumTarType.CRACK));
 		OreDictionary.registerOre(KEY_COAL_TAR, fromOne(oil_tar, EnumTarType.COAL));
 		OreDictionary.registerOre(KEY_WOOD_TAR, fromOne(oil_tar, EnumTarType.WOOD));
-
+		OreDictionary.registerOre(KEY_PARAFFIN_GT6_1, fromOne(oil_tar, EnumTarType.PARAFFIN));
+		OreDictionary.registerOre(KEY_PARAFFIN_GT6_2, fromOne(oil_tar, EnumTarType.PARAFFIN));
 		/*
 		 * TANKS
 		 */
@@ -664,6 +674,9 @@ public class OreDictManager {
 			if(mat.autogen.contains(MaterialShapes.SHELL)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.SHELL.name() + name, new ItemStack(ModItems.shell, 1, mat.id));
 			if(mat.autogen.contains(MaterialShapes.PIPE)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.PIPE.name() + name, new ItemStack(ModItems.pipe, 1, mat.id));
 			if(mat.autogen.contains(MaterialShapes.FRAGMENT)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.FRAGMENT.name() + name, new ItemStack(ModItems.bedrock_ore_fragment, 1, mat.id));
+
+			if(mat.autogen.contains(MaterialShapes.FRAGMENT)) for(String name : mat.names) OreDictionary.registerOre(DUSTTINY.name() + name, new ItemStack(ModItems.bedrock_ore_fragment, 1, mat.id));
+
 			if(mat.autogen.contains(MaterialShapes.WIRE)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.WIRE.name() + name, new ItemStack(ModItems.wire_fine, 1, mat.id));
 
 			if(mat.autogen.contains(MaterialShapes.LIGHTBARREL)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.LIGHTBARREL.name() + name, new ItemStack(ModItems.part_barrel_light, 1, mat.id));
@@ -1054,6 +1067,7 @@ public class OreDictManager {
 		public DictFrame coal(float time) { 	return this.haz(new HazardEntry(HazardRegistry.COAL, time)); }
 		public DictFrame explosive(float e) { 	return this.haz(new HazardEntry(HazardRegistry.EXPLOSIVE, e)); }
 		public DictFrame neutron(float neut) {		return this.haz(new HazardEntry(HazardRegistry.NEUTRON, neut)); }
+		public DictFrame hydrosuper(float hydrosuper) {		return this.haz(new HazardEntry(HazardRegistry.HYDROGOLIC, hydrosuper)); }
 
 		public DictFrame haz(HazardEntry hazard) {
 			hazards.add(hazard);
@@ -1198,21 +1212,6 @@ public class OreDictManager {
 			return this;
 		}
 
-		public DictFrame hazIngot() {
-			hazMult = HazardRegistry.ingot;
-			return autoRegHazard(INGOT);
-		}
-
-		// TODO: rethink this. currently, keys are only registered on-demand if the dict frame has a valid entry, even though we can maximize compatibility
-		// by simply registereing all known shapes in the haz reg, whether it exists or not
-		public DictFrame autoRegHazard(MaterialShapes shape) {
-			String tag = shape.name();
-			for(String mat : mats) {
-				registerHazards(hazards, hazMult, tag + mat);
-			}
-			return this;
-		}
-
 		public static void registerHazards(List<HazardEntry> hazards, float hazMult, String dictKey) {
 
 			if(!hazards.isEmpty() && hazMult > 0F) {
@@ -1272,6 +1271,7 @@ public class OreDictManager {
 
 		/**
 		 * Will add a reregistration entry for every mat name of every added DictFrame for the given prefix
+		 * @param inputPrefix The prefix of both the input and result of the reregistration
 		 * @return
 		 */
 		public DictGroup addPrefix(MaterialShapes shape, boolean inputPrefix) {

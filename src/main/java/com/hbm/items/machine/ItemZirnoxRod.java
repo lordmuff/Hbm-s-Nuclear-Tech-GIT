@@ -109,8 +109,23 @@ public class ItemZirnoxRod extends ItemEnumMulti {
 		U235_FUEL(165_000, 85),
 		LES_FUEL(150_000, 150),
 		LITHIUM(20_000, 0, true),
-		ZFB_MOX(50_000, 35);
-		
+		ZFB_MOX(50_000, 35),
+		PU_MIX(185_000, 60),
+		PU241(180_000,120),
+		AMRG(145_000, 165),
+		AMF(155_000, 180),
+		CMRG(175_500, 185),
+		CMF(180_000, 200),
+		CF251(750_000, 50),
+		CF252(250_000, 75),
+		BK247(75_000, 245),
+		ES253(25_000, 375),
+		LEAUS(1_000_000, 20),
+		MEAUS(750_000, 40),
+		HEAUS(400_000, 90),
+		GRAVEL(4_000_000, 10, true);
+
+
 		public final int maxLife;
 		public final int heat;
 		public final boolean breeding;

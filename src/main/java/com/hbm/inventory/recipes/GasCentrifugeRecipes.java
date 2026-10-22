@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.FluidStack;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
@@ -23,6 +24,12 @@ public class GasCentrifugeRecipes {
 
 		public static PseudoFluidType NONE		= new PseudoFluidType("NONE",		0,		0,		null,		false,	(ItemStack[])null);
 
+		public static PseudoFluidType HEGRAV		= new PseudoFluidType("HEGRAV",		175,	0,		NONE,		true,	new ItemStack(ModBlocks.block_australium, 1));
+		public static PseudoFluidType MEGRAV		= new PseudoFluidType("MEGRAV",		325,	250,	HEGRAV,		false,	(ItemStack[])null);
+		public static PseudoFluidType LEGRAV 	= new PseudoFluidType("LEGRAV",		550,	475,	MEGRAV,		false,	    (ItemStack[])null);
+		public static PseudoFluidType NUGRAV 		= new PseudoFluidType("NUGRAV",		1_750,	625,	LEGRAV,		false,	(ItemStack[])null);
+
+
 		public static PseudoFluidType HEUF6		= new PseudoFluidType("HEUF6",		300,	0,		NONE,		true,	new ItemStack(ModItems.nugget_u238, 2), new ItemStack(ModItems.nugget_u235, 1), new ItemStack(ModItems.fluorite, 1));
 		public static PseudoFluidType MEUF6		= new PseudoFluidType("MEUF6",		200,	100,	HEUF6,		false,	new ItemStack(ModItems.nugget_u238, 1));
 		public static PseudoFluidType LEUF6 	= new PseudoFluidType("LEUF6",		300,	200,	MEUF6,		false,	new ItemStack(ModItems.nugget_u238, 1), new ItemStack(ModItems.fluorite, 1));
@@ -37,7 +44,7 @@ public class GasCentrifugeRecipes {
 		public static PseudoFluidType MINSOL	=	new PseudoFluidType ("MINSOL", 500, 500,	MINSOLSEP,	false,	new ItemStack(ModItems.powder_iron, 1));
 
 
-		
+
 		public String name;
 		int fluidConsumed;
 		int fluidProduced;
@@ -96,10 +103,13 @@ public class GasCentrifugeRecipes {
 
 	public static void register() {
 
+		fluidConversions.put(Fluids.GRAVELSLOODGE, PseudoFluidType.NUGRAV);
 		fluidConversions.put(Fluids.UF6, PseudoFluidType.NUF6);
 		fluidConversions.put(Fluids.PUF6, PseudoFluidType.PF6);
 		fluidConversions.put(Fluids.WATZ, PseudoFluidType.MUD);
 		fluidConversions.put(Fluids.MINSOL, PseudoFluidType.MINSOL);
+
+		gasCent.put(new FluidStack(1200, Fluids.GRAVELSLOODGE), new Object[] { new ItemStack[] {new ItemStack(ModBlocks.block_australium, 1)}, true, 1 });
 
 		gasCent.put(new FluidStack(1200, Fluids.UF6), new Object[] { new ItemStack[] {new ItemStack(ModItems.nugget_u238, 11), new ItemStack(ModItems.nugget_u235, 1), new ItemStack(ModItems.fluorite, 4)}, true, 4 });
 		gasCent.put(new FluidStack(1200, Fluids.UF6), new Object[] { new ItemStack[] {new ItemStack(ModItems.nugget_u238, 6), new ItemStack(ModItems.nugget_uranium_fuel, 6), new ItemStack(ModItems.fluorite, 4)}, false, 2 });

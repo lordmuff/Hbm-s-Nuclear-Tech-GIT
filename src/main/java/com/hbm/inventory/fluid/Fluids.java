@@ -261,9 +261,13 @@ public class Fluids {
 	public static FluidType TCRUDE;
 	public static FluidType CBENZ; //chlorobenzene
 	public static FluidType HALOLIGHT;
+	public static FluidType BALEFIRE_FRANCIUM;
+	public static FluidType GELASCHRAB_TS;
+	public static FluidType PLASMA_BFFR;
 	public static FluidType DHC;
 	public static FluidType LITHYDRO;
 	public static FluidType LITHCARBONATE;
+	public static FluidType GRAVELSLOODGE;
 
 	public static FluidType STIMPAK;
 	public static FluidType SUPER_STIMPAK;
@@ -385,6 +389,7 @@ public class Fluids {
 	public static final FT_LeadContainer LEADCON = new FT_LeadContainer();
 	public static final FT_NoContainer NOCON = new FT_NoContainer();
 	public static final FT_NoID NOID = new FT_NoID();
+	public static final FT_Delicious DELICIOUS = new FT_Delicious();
 	public static final FT_ULTRAKILL ULTRAKILL = new FT_ULTRAKILL();
 	public static final FT_EXPLOSIVE EXPLOSIVE = new FT_EXPLOSIVE();
 	public static final FT_Leaded LEADED = new FT_Leaded();
@@ -457,8 +462,6 @@ public class Fluids {
 		NITAN =					new FluidType("NITAN",				0x8018ad, 2, 4, 1, EnumSymbol.NONE).addContainers(new CD_Canister(0x6B238C)).addTraits(new FT_Flammable(2_000_000), new FT_Combustible(FuelGrade.HIGH, 5_000_000), LIQUID, P_FUEL);
 		UF6 =					new FluidType("UF6",				0xD1CEBE, 4, 0, 2, EnumSymbol.RADIATION).addTraits(new FT_VentRadiation(0.2F), new FT_Corrosive(15), GASEOUS);
 		PUF6 =					new FluidType("PUF6",				0x4C4C4C, 4, 0, 4, EnumSymbol.RADIATION).addTraits(new FT_VentRadiation(0.1F), new FT_Corrosive(15), GASEOUS);
-		HUMAN_BLOOD =				new FluidType("HUMAN_BLOOD",			0x8A0A0A, 0, 0, 0, EnumSymbol.NONE).addTraits(new FT_Pathogen());
-		ANTISERUM =					new FluidType("ANTISERUM",			0x88FF88, 0, 0, 0, EnumSymbol.NONE).addTraits(new FT_Pharma());
 		SAS3 =					new FluidType("SAS3",				0x4ffffc, 5, 0, 4, EnumSymbol.RADIATION).addTraits(new FT_VentRadiation(1F), new FT_Corrosive(30), LIQUID);
 		SCHRABIDIC =			new FluidType("SCHRABIDIC",			0x006B6B, 5, 0, 5, EnumSymbol.ACID).addTraits(new FT_VentRadiation(1F), new FT_Corrosive(75), new FT_Poison(true, 2), LIQUID);
 		AMAT =					new FluidType("AMAT",				0x010101, 5, 0, 5, EnumSymbol.ANTIMATTER).addTraits(ANTI, GASEOUS);
@@ -545,7 +548,7 @@ public class Fluids {
 		SMILK =					new FluidType("SMILK",				0xF5DEE4, 0, 0, 0, EnumSymbol.NONE).addTraits(new FT_Consumable().setClearsEffects(true).setFood(0.1F, 0.02F), LIQUID);
 		CCL =					new FluidType("CCL",				0x0C3B2F, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, new FT_Corrosive(10));
 		COLLOID =				new FluidType("COLLOID",			0x787878, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
-		EVEAIR =				new FluidType("EVEAIR",				0xDCABF8, 4, 0, 0, EnumSymbol.OXIDIZER).addContainers(new CD_Gastank(0x8C21FF, 0xFFFFFF)).addTraits(GASEOUS, new FT_Corrosive(25), new FT_Poison(true, 1));
+		EVEAIR =				new FluidType("EVEAIR",				0xDCABF8, 4, 0, 0, EnumSymbol.OXIDIZER).addTraits(GASEOUS, new FT_Corrosive(25), new FT_Poison(true, 1));
 		KMnO4 =					new FluidType("KMnO4",				0x560046, 4, 0, 0, EnumSymbol.ACID).addTraits(LIQUID, new FT_Corrosive(15), new FT_Poison(true, 1));
 		CHLOROMETHANE =			new FluidType("CHLOROMETHANE",		0xD3CF9E, 2, 4, 0, EnumSymbol.NONE).addTraits(GASEOUS, new FT_Corrosive(15)).addTraits(new FT_Flammable(50_000));
 		METHANOL =				new FluidType("METHANOL",			0x88739F, 3, 4, 0, EnumSymbol.NONE).addTraits(GASEOUS).addTraits(new FT_Flammable(400_000)).addTraits(new FT_Combustible(FuelGrade.HIGH, 600_000), LIQUID);	//ethanol but more etha per nol
@@ -553,8 +556,7 @@ public class Fluids {
 		CHLOROETHANE =			new FluidType("CHLOROETHANE",		0xBBA9A0, 2, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
 		POLYTHYLENE =			new FluidType("POLYTHYLENE",		0x35302E, 1, 2, 0, EnumSymbol.NONE).addTraits(LIQUID).addTraits(new FT_Flammable(50_000));
 		FLUORINE =				new FluidType("FLUORINE",			0xC5C539, 4, 4, 4, EnumSymbol.OXIDIZER).addTraits(GASEOUS, new FT_Corrosive(40), new FT_Poison(true, 1)).addTraits(new FT_Flammable(10_000));
-		TEKTOAIR =				new FluidType("TEKTOAIR",			0x245F46, 4, 2, 0, EnumSymbol.OXIDIZER).addContainers(new CD_Gastank(0x388C69, 0x303030)).addTraits(GASEOUS,new FT_Poison(true, 1)).addTraits(new FT_Flammable(30_000));
-		DROSSAIR =				new FluidType("DROSSAIR",			0x1E5B2E, 4, 0, 0, EnumSymbol.NONE).addContainers(new CD_Gastank(0x1E5B2E, 0x0A2E15)).addTraits(GASEOUS, new FT_Poison(true, 1));
+		TEKTOAIR =				new FluidType("TEKTOAIR",			0x245F46, 4, 2, 0, EnumSymbol.OXIDIZER).addTraits(GASEOUS,new FT_Poison(true, 1)).addTraits(new FT_Flammable(30_000));
 		PHOSGENE =				new FluidType("PHOSGENE",			0xCFC4A4, 4, 0, 1, EnumSymbol.NONE).addContainers(new CD_Gastank(0xCFC4A4, 0x361414)).addTraits(GASEOUS, new FT_Polluting().release(PollutionType.POISON, POISON_EXTREME));
 		MUSTARDGAS =			new FluidType("MUSTARDGAS",			0xBAB572, 4, 1, 1, EnumSymbol.NONE).addContainers(new CD_Gastank(0xBAB572, 0x361414)).addTraits(GASEOUS, new FT_Polluting().release(PollutionType.POISON, POISON_EXTREME));
 		IONGEL =				new FluidType("IONGEL",				0xB8FFFF, 1, 0, 4, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
@@ -590,7 +592,6 @@ public class Fluids {
 		CMILK =					new FluidType("CMILK",				0xCFCFCF, 0, 0, 0, EnumSymbol.NONE).addTraits(new FT_Consumable().setClearsEffects(true), LIQUID);//F5DEE4
 		CREAM =					new FluidType("CREAM",				0xCFCFCF, 0, 0, 0, EnumSymbol.NONE).addTraits(new FT_Consumable(), LIQUID);//F5DEE4
 		MAGMA =					new FluidType("MAGMA",				0xFF3300, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
-		SOLDERING_ALLOY =		new FluidType("SOLDERING_ALLOY",	0x999999, 2, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		DICYANOACETYLENE =		new FluidType("DICYANOACETYLENE",	0x675A9F, 1, 2, 1, EnumSymbol.NONE).addTraits(new FT_Flammable(4_000_000), GASEOUS);
 		BRINE =					new FluidType("BRINE",				0xD1A73E, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
 		CONGLOMERA =			new FluidType("CONGLOMERA",			0x364D47, 0, 0, 2, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
@@ -640,12 +641,18 @@ public class Fluids {
 		TCRUDE =				new FluidType("TCRUDE",				0x051914, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		CBENZ =					new FluidType("CBENZ",				0x91C6BB, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		HALOLIGHT =				new FluidType("HALOLIGHT",			0xB6F9CF, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
+		BALEFIRE_FRANCIUM =				new FluidType("BALEFIRE_FRANCIUM",			0xe5fbe5, 4, 4, 4, EnumSymbol.ANTIMATTER).setTemp(6666).addTraits(new FT_Corrosive(125), new FT_Flammable(10_000_000), new FT_Combustible(FuelGrade.HIGH, 25_000_000), LIQUID, VISCOUS, P_FUEL, ANTI, new FT_VentRadiation(2F), new FT_Rocket(444, 6_666_666), new FT_Polluting().burn(PollutionType.FALLOUT, PollutionHandler.POISON_PER_SECOND * 0.01F));
+		PLASMA_BFFR =		    new FluidType("PLASMA_BFFR",			0x0f330f, 5, 5, 5, EnumSymbol.ANTIMATTER).setTemp(66666).addTraits(NOCON, NOID, PLASMA, new FT_Rocket(125000, 777_777));
+		GELASCHRAB_TS =			new FluidType("GELASCHRAB_TS",	0x663e47, 3, 0, 3, EnumSymbol.ANTIMATTER).addTraits(ANTI, GASEOUS).addTraits(new FT_VentRadiation(8F));
 		DHC =					new FluidType("DHC",				0xD2AFFF, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
 		AIR =					new FluidType("AIR",				0xE7EAEB, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
 		LITHYDRO =				new FluidType("LITHYDRO",			0xD1CEBE, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
+		LITHCARBONATE =		       new FluidType("LITHCARBONATE",	       0xD1CEBE, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
+		GRAVELSLOODGE =					new FluidType("GRAVELSLOODGE",				0x929D45, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
 		LITHCARBONATE =			new FluidType("LITHCARBONATE",		0xD1CEBE, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
 		AIRBLAST =				new FluidType("AIRBLAST",			0xFFDADA, 0, 3, 0, EnumSymbol.NONE).setTemp(1_200).addTraits(GASEOUS);
 		FLUE =					new FluidType("FLUE",				0x131313, 1, 4, 1, EnumSymbol.NONE).addContainers(new CD_Gastank(0xFF4545, 0xFFE97F)).addTraits(new FT_Flammable(25_000), GASEOUS, new FT_Polluting().burn(PollutionType.SOOT, SOOT_GAS).release(PollutionType.SOOT, SOOT_GAS * 25));
+		DROSSAIR =				new FluidType("DROSSAIR",			0x1E5B2E, 4, 0, 0, EnumSymbol.NONE).addContainers(new CD_Gastank(0x1E5B2E, 0x0A2E15)).addTraits(GASEOUS, new FT_Poison(true, 1));
 
 		STIMPAK =			new FluidType("STIMPAK",			0xFF4444, 0, 0, 0, EnumSymbol.NONE).addTraits(new FT_Drug().setThreshold(0.01F).setDissipationRate(10F).addEffect(HbmPotion.stimulated.id, 0).addSideEffect("cough"), LIQUID);
 		SUPER_STIMPAK =		new FluidType("SUPER_STIMPAK",		0xFF6666, 0, 0, 0, EnumSymbol.NONE).addTraits(new FT_Drug().setThreshold(0.01F).setDissipationRate(15F).addEffect(HbmPotion.stimulated.id, 1).addSideEffect("hemorrhage"), LIQUID);
@@ -729,10 +736,11 @@ public class Fluids {
 		INK_BLACK =		new FluidType("INK_BLACK",		0x1D1D21, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, new FT_Ink(15));
 		GANJA =			new FluidType("GANJA",			0x4E7A27, 0, 0, 0, EnumSymbol.NONE).addTraits(new FT_Drug().setConsumption(50).setThreshold(0.02F).setDissipationRate(30F).addEffect(HbmPotion.ganja.id, 0), LIQUID);
 		CONSTRUCTION_FOAM =	new FluidType("CONSTRUCTION_FOAM", 0xE6E2DA, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS, new FT_ConstructionFoam());
+		SOLDERING_ALLOY =		new FluidType("SOLDERING_ALLOY",	0x999999, 2, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
+		HUMAN_BLOOD =				new FluidType("HUMAN_BLOOD",			0x8A0A0A, 0, 0, 0, EnumSymbol.NONE).addTraits(new FT_Pathogen());
+		ANTISERUM =					new FluidType("ANTISERUM",			0x88FF88, 0, 0, 0, EnumSymbol.NONE).addTraits(new FT_Pharma());
 
 		STALEAIR = new FluidType("STALEAIR", 0xCCCCCC, 0, 0, 0, EnumSymbol.NONE).addContainers(new CD_Gastank(0xCCCCCC, 0xFFFF00)).addTraits(GASEOUS);
-		// ^ ^ ^ ^ ^ ^ ^ ^
-		//ADD NEW FLUIDS HERE
 
 		CONSTRUCTION_FOAM_CONCRETE = new FluidType("CONSTRUCTION_FOAM_CONCRETE", 0xC6C2BA, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS, new FT_ConstructionFoam(1));
 		CONSTRUCTION_FOAM_REINFORCED_CONCRETE = new FluidType("CONSTRUCTION_FOAM_REINFORCED_CONCRETE", 0xB0ACA4, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS, new FT_ConstructionFoam(2));
@@ -756,6 +764,8 @@ public class Fluids {
 		FERTILIZER = new FluidType("FERTILIZER", 0x808853, 2, 0, 3, EnumSymbol.OXIDIZER).addTraits(LIQUID);
 		COMPOST = new FluidType("COMPOST", 0x4F3F17, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS, UNSIPHONABLE);
 
+		// ^ ^ ^ ^ ^ ^ ^ ^
+		//ADD NEW FLUIDS HERE
 		File folder = MainRegistry.configHbmDir;
 		File customTypes = new File(folder.getAbsolutePath() + File.separatorChar + "hbmFluidTypes.json");
 		if(!customTypes.exists()) initDefaultFluids(customTypes);
@@ -770,7 +780,6 @@ public class Fluids {
 		metaOrder.add(NONE);
 		//vanilla
 		metaOrder.add(AIR);
-		metaOrder.add(AIRBLAST);
 		metaOrder.add(WATER);
 		metaOrder.add(HEAVYWATER);
 		metaOrder.add(HEAVYWATER_HOT);
@@ -800,7 +809,6 @@ public class Fluids {
 		//blood
 		metaOrder.add(BLOOD);
 		metaOrder.add(BLOODGAS);
-		metaOrder.add(BLOOD_VAPORS);
 		metaOrder.add(BLOOD_HOT);
 		metaOrder.add(SCUTTERBLOOD);
 		metaOrder.add(SODIUM);
@@ -849,7 +857,6 @@ public class Fluids {
 		metaOrder.add(HEATINGOIL_VACUUM);
 		metaOrder.add(RECLAIMED);
 		metaOrder.add(LUBRICANT);
-		metaOrder.add(FLUE);
 		metaOrder.add(GAS);
 		metaOrder.add(GAS_COKER);
 		metaOrder.add(PETROLEUM);
@@ -867,7 +874,6 @@ public class Fluids {
 		metaOrder.add(DIESEL_CRACK_REFORM);
 		metaOrder.add(KEROSENE);
 		metaOrder.add(KEROSENE_REFORM);
-		metaOrder.add(LUNG_FUEL);
 		metaOrder.add(PETROIL);
 		metaOrder.add(PETROIL_LEADED);
 		metaOrder.add(GASOLINE);
@@ -902,8 +908,6 @@ public class Fluids {
 		metaOrder.add(COLLOID);
 		metaOrder.add(VITRIOL);
 		metaOrder.add(SLOP);
-		metaOrder.add(NUTRIENT_SLOP);
-		metaOrder.add(TAMSLOP);
 		metaOrder.add(IONGEL);
 		metaOrder.add(PEROXIDE);
 		metaOrder.add(SULFURIC_ACID);
@@ -922,7 +926,6 @@ public class Fluids {
 		metaOrder.add(CHLOROETHANE); //oh yeah this is meant to be that inbetween step for making the cast fluid
 		//airs
 		metaOrder.add(EARTHAIR); //do it for love, do it for life, for mankiiiiiind!!
-		metaOrder.add(NETHERAIR);
 		metaOrder.add(DUNAAIR);
 		metaOrder.add(EVEAIR); //iodine, mercury, potassium permenganate
 		metaOrder.add(JOOLGAS);
@@ -930,7 +933,7 @@ public class Fluids {
 		metaOrder.add(UGAS);
 		metaOrder.add(NGAS);
 		metaOrder.add(TEKTOAIR);
-		metaOrder.add(DROSSAIR);
+
 		//NITRIC_ACID
 		metaOrder.add(NITRIC_ACID);
 		metaOrder.add(HCL);
@@ -942,8 +945,6 @@ public class Fluids {
 		metaOrder.add(SCHRABIDIC);
 		metaOrder.add(UF6);
 		metaOrder.add(PUF6);
-		metaOrder.add(HUMAN_BLOOD);
-		metaOrder.add(ANTISERUM);
 		metaOrder.add(SAS3);
 		metaOrder.add(PAIN);
 		metaOrder.add(DEATH);
@@ -997,50 +998,6 @@ public class Fluids {
 		metaOrder.add(XENON);
 		metaOrder.add(ARGON);
 		metaOrder.add(NEON);
-		//injectable drugs
-		metaOrder.add(STIMPAK);
-		metaOrder.add(SUPER_STIMPAK);
-		metaOrder.add(MEDX);
-		metaOrder.add(PSYCHO);
-		metaOrder.add(BLOATMUSK);
-		metaOrder.add(MUSTY_BLOATMUSK);
-		metaOrder.add(BURNING_BLOATMUSK);
-		metaOrder.add(MUSKY_PHEROMONE);
-		metaOrder.add(SATANS_BLOOD);
-		metaOrder.add(CURDLING_BLOOD);
-		metaOrder.add(CURDLING_BLOOD_HOT);
-		metaOrder.add(WORMWOOD);
-		metaOrder.add(BRIMSTONE);
-		metaOrder.add(VERDIGRIS);
-		metaOrder.add(GALL);
-		metaOrder.add(BRIMTUMEN);
-		metaOrder.add(BLOOD_OF_THE_MARTYR);
-		metaOrder.add(HAEMOGLOBIN);
-		metaOrder.add(AMBROSIA);
-		metaOrder.add(MORNINGSTARS_FIRE);
-		metaOrder.add(HEPARIN);
-		metaOrder.add(DNA);
-		metaOrder.add(CHEVREUL_SALT);
-		metaOrder.add(DIALYSATE);
-		metaOrder.add(DEW_OF_THE_GARDEN);
-		metaOrder.add(VITREOUS_VAPOR);
-		metaOrder.add(CERTUS_SUSPENSION);
-		metaOrder.add(URANUS_TEARS);
-		metaOrder.add(FERROFLUID);
-		metaOrder.add(CERTIC_VAPORS);
-		metaOrder.add(CERTUS_GAS);
-		metaOrder.add(ARGENT_BLOAT_PUS);
-		metaOrder.add(BLOAT_PUS);
-		metaOrder.add(BLOATSPIRIT);
-		metaOrder.add(AWESOME);
-		metaOrder.add(ANTIDOTE);
-	metaOrder.add(RADAWAY);
-	metaOrder.add(RADX);
-	metaOrder.add(CAY);
-		metaOrder.add(POISON);
-		metaOrder.add(TICL4);
-		metaOrder.add(HEAVY_SAND_SLOP);
-		metaOrder.add(MONAZITE_SLOP);
 		//misc for cute dates
 		metaOrder.add(TEA);
 		metaOrder.add(HONEY);
@@ -1059,6 +1016,10 @@ public class Fluids {
 		//bug meth
 		metaOrder.add(PHEROMONE);
 		metaOrder.add(PHEROMONE_M);
+		metaOrder.add(BALEFIRE_FRANCIUM);
+		metaOrder.add(PLASMA_BFFR);
+		metaOrder.add(GELASCHRAB_TS);
+		metaOrder.add(GRAVELSLOODGE);
 		//bannable offense
 		metaOrder.add(PISS);
 		metaOrder.add(PISS_HOT);
@@ -1110,6 +1071,61 @@ public class Fluids {
 		metaOrder.add(SALT_WATER);
 		metaOrder.add(FERTILIZER);
 		metaOrder.add(COMPOST);
+		//injectable drugs
+		metaOrder.add(STIMPAK);
+		metaOrder.add(SUPER_STIMPAK);
+		metaOrder.add(MEDX);
+		metaOrder.add(PSYCHO);
+		metaOrder.add(BLOATMUSK);
+		metaOrder.add(MUSTY_BLOATMUSK);
+		metaOrder.add(BURNING_BLOATMUSK);
+		metaOrder.add(MUSKY_PHEROMONE);
+		metaOrder.add(SATANS_BLOOD);
+		metaOrder.add(CURDLING_BLOOD);
+		metaOrder.add(CURDLING_BLOOD_HOT);
+		metaOrder.add(WORMWOOD);
+		metaOrder.add(BRIMSTONE);
+		metaOrder.add(VERDIGRIS);
+		metaOrder.add(GALL);
+		metaOrder.add(BRIMTUMEN);
+		metaOrder.add(BLOOD_OF_THE_MARTYR);
+		metaOrder.add(HAEMOGLOBIN);
+		metaOrder.add(AMBROSIA);
+		metaOrder.add(MORNINGSTARS_FIRE);
+		metaOrder.add(HEPARIN);
+		metaOrder.add(DNA);
+		metaOrder.add(CHEVREUL_SALT);
+		metaOrder.add(DIALYSATE);
+		metaOrder.add(DEW_OF_THE_GARDEN);
+		metaOrder.add(VITREOUS_VAPOR);
+		metaOrder.add(CERTUS_SUSPENSION);
+		metaOrder.add(URANUS_TEARS);
+		metaOrder.add(FERROFLUID);
+		metaOrder.add(CERTIC_VAPORS);
+		metaOrder.add(CERTUS_GAS);
+		metaOrder.add(ARGENT_BLOAT_PUS);
+		metaOrder.add(BLOAT_PUS);
+		metaOrder.add(BLOATSPIRIT);
+		metaOrder.add(AWESOME);
+		metaOrder.add(ANTIDOTE);
+		metaOrder.add(RADAWAY);
+		metaOrder.add(RADX);
+		metaOrder.add(CAY);
+		metaOrder.add(POISON);
+		metaOrder.add(TICL4);
+		metaOrder.add(HEAVY_SAND_SLOP);
+		metaOrder.add(MONAZITE_SLOP);
+		metaOrder.add(HUMAN_BLOOD);
+		metaOrder.add(ANTISERUM);
+		metaOrder.add(NETHERAIR);
+		metaOrder.add(NUTRIENT_SLOP);
+		metaOrder.add(TAMSLOP);
+		metaOrder.add(LUNG_FUEL);
+		metaOrder.add(FLUE);
+		metaOrder.add(BLOOD_VAPORS);
+		metaOrder.add(AIRBLAST);
+		metaOrder.add(DROSSAIR);
+
 
 		//ANY INTERNAL RENAMING MUST BE REFLECTED HERE - DON'T FORGET TO CHANGE: LANG FILES + TYPE'S STRING ID + NAME OF TANK/GUI TEXTURE FILES!
 		// V
@@ -1144,6 +1160,10 @@ public class Fluids {
 				.addStep(220, 1, HOTSTEAM, 10)
 				.addStep(238, 1, SUPERHOTSTEAM, 1)
 				.addStep(2500, 10, ULTRAHOTSTEAM, 1));
+
+		STEAM.addTraits(new FT_Heatable().setEff(HeatingType.BOILER, eff_steam_boil).setEff(HeatingType.HEATEXCHANGER, eff_steam_heatex).addStep(2, 10, HOTSTEAM, 1));
+		HOTSTEAM.addTraits(new FT_Heatable().setEff(HeatingType.BOILER, eff_steam_boil).setEff(HeatingType.HEATEXCHANGER, eff_steam_heatex).addStep(18, 10, SUPERHOTSTEAM, 1));
+		SUPERHOTSTEAM.addTraits(new FT_Heatable().setEff(HeatingType.BOILER, eff_steam_boil).setEff(HeatingType.HEATEXCHANGER, eff_steam_heatex).addStep(120, 10, ULTRAHOTSTEAM, 1));
 
 		double eff_steam_turbine = 1.0D;
 		double eff_steam_cool = 0.5D;

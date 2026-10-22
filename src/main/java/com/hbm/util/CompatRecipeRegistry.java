@@ -11,7 +11,6 @@ import com.hbm.inventory.recipes.*;
 import com.hbm.inventory.recipes.AmmoPressRecipes.AmmoPressRecipe;
 import com.hbm.inventory.recipes.ArcFurnaceRecipes.ArcFurnaceRecipe;
 import com.hbm.inventory.recipes.ArcWelderRecipes.ArcWelderRecipe;
-import com.hbm.inventory.recipes.BreederRecipes.BreederRecipe;
 import com.hbm.inventory.recipes.CrystallizerRecipes.CrystallizerRecipe;
 import com.hbm.inventory.recipes.ElectrolyserFluidRecipes.ElectrolysisRecipe;
 import com.hbm.inventory.recipes.ElectrolyserMetalRecipes.ElectrolysisMetalRecipe;
@@ -70,7 +69,7 @@ public class CompatRecipeRegistry {
 	public static void registerSoldering(ItemStack output, int time, long power, FluidStack fluid, AStack[] toppings, AStack[] pcb, AStack[] solder) {
 		SolderingRecipes.recipes.add(new SolderingRecipe(output, time, power, fluid, copyFirst(toppings, 3), copyFirst(pcb, 2), copyFirst(solder, 1)));
 	}
-	
+
 	/** Assembly machine recipe needs a unique name for the registry. Zero length arrays should stay null*/
 	public static void registerAssembler(String name, boolean named, ItemStack icon, int duration, long power, AStack[] inputItems, FluidStack inputFluids, IOutput[] outputItems, FluidStack outputFluids) {
 		GenericRecipe recipe = new GenericRecipe(name).setDuration(duration).setPower(power);
@@ -82,7 +81,7 @@ public class CompatRecipeRegistry {
 		if(outputFluids != null) recipe.outputFluids(outputFluids);
 		AssemblyMachineRecipes.INSTANCE.register(recipe);
 	}
-	
+
 	/** Chemical plant recipe needs a unique name for the registry. Zero length arrays should stay null*/
 	public static void registerChemicalPlant(String name, boolean named, ItemStack icon, int duration, long power, AStack[] inputItems, FluidStack[] inputFluids, IOutput[] outputItems, FluidStack[] outputFluids) {
 		GenericRecipe recipe = new GenericRecipe(name).setDuration(duration).setPower(power);
@@ -171,7 +170,7 @@ public class CompatRecipeRegistry {
 
 	/** Breeding reactor does not handle OreDictStacks */
 	public static void registerBreeder(ComparableStack input, ItemStack output, int flux) {
-		BreederRecipes.recipes.put(input, new BreederRecipe(output, flux));
+		BreederRecipes.recipes.put(input, new Pair(output, flux));
 	}
 
 	public static void registerCyclotron(ComparableStack box, AStack target, ItemStack output, int antimatter) {
@@ -188,7 +187,7 @@ public class CompatRecipeRegistry {
 	@Deprecated public static void registerOutgasser(AStack input, ItemStack output, FluidStack fluid) {
 		OutgasserRecipes.recipes.put(input, new OutgasserRecipe(output, fluid));
 	}
-	
+
 	public static void registerOutgasser(AStack input, ItemStack output, FluidStack fluid, boolean fusionOnly) {
 		OutgasserRecipe recipe = new OutgasserRecipe(output, fluid);
 		if(fusionOnly) recipe.fusionOnly();
@@ -228,7 +227,7 @@ public class CompatRecipeRegistry {
 	public static void registerExposureChamber(AStack particle, AStack input, ItemStack output) {
 		ExposureChamberRecipes.recipes.add(new ExposureChamberRecipe(particle, input, output));
 	}
-	
+
 	public static void registerFusionReactor(String name, int time, long power, long klystron, long plasma, double neutrons, FluidStack[] inputs, ItemStack outputItem, FluidStack outputFluid) {
 		FusionRecipe recipe = (FusionRecipe) new FusionRecipe(name).setInputEnergy(klystron).setOutputEnergy(klystron).setup(time, power);
 		if(inputs != null) recipe.inputFluids(copyFirst(inputs, 3));
