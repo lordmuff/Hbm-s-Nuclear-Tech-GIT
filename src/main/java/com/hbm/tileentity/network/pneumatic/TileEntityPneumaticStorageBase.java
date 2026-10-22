@@ -33,7 +33,7 @@ public abstract class TileEntityPneumaticStorageBase extends TileEntityMachineBa
 
 	public TileEntityPneumaticStorageBase(int slots) {
 		super(slots);
-		this.compair = new FluidTank(Fluids.AIR, 4_000).withPressure(1);
+		this.compair = new FluidTank(Fluids.EARTHAIR, 4_000).withPressure(1);
 		this.monitors = new SlotMonitor[slots];
 
 		for(int i = 0; i < monitors.length; i++) this.monitors[i] = new SlotMonitor(i, this);
@@ -50,7 +50,7 @@ public abstract class TileEntityPneumaticStorageBase extends TileEntityMachineBa
 		if(data.hasKey("pressure")) {
 			int pressure = this.compair.getPressure() + 1;
 			if(pressure > 5) pressure = 1;
-			this.compair.setTankType(Fluids.AIR);
+			this.compair.setTankType(Fluids.EARTHAIR);
 			this.compair.withPressure(pressure);
 			for(SlotMonitor monitor : this.monitors) monitor.availabilityHasChanged();
 		}

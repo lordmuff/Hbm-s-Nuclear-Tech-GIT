@@ -58,7 +58,7 @@ public class FluidPipeAnchorPressurizer extends BlockDummyable implements IFluid
 			IItemFluidIdentifier id = (IItemFluidIdentifier) player.getHeldItem().getItem();
 			FluidType type = id.getType(world, pos[0], pos[1], pos[2], player.getHeldItem());
 
-			if(type != Fluids.AIR) {
+			if(type != Fluids.EARTHAIR) {
 				press.tanks[0].setTankType(type);
 				press.markDirty();
 				return true;
@@ -80,9 +80,9 @@ public class FluidPipeAnchorPressurizer extends BlockDummyable implements IFluid
 		TileEntityPipeAnchorPressurizer press = (TileEntityPipeAnchorPressurizer) te;
 
 		ForgeDirection facing = ForgeDirection.getOrientation(press.getBlockMetadata() - BlockDummyable.offset);
-		if(dir == ForgeDirection.DOWN) return type == Fluids.AIR;
+		if(dir == ForgeDirection.DOWN) return type == Fluids.EARTHAIR;
 		if(dir == facing) return type == press.tanks[0].getTankType() || press.tanks[0].getTankType() == Fluids.NONE;
-		if(dir == facing.getOpposite()) return type == Fluids.AIR;
+		if(dir == facing.getOpposite()) return type == Fluids.EARTHAIR;
 		return false;
 	}
 

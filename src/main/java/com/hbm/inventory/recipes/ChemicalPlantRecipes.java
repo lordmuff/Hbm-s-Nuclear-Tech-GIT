@@ -175,19 +175,19 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputFluids(new FluidStack(Fluids.WATER, 1_000), new FluidStack(Fluids.LAVA, 25))
 				.outputItems(new ItemStack(Blocks.cobblestone)));
 		this.register(new GenericRecipe("chem.stone").setup(60, 500).setPools(GenericRecipes.POOL_PREFIX_DISCOVER + ".stone")
-				.inputFluids(new FluidStack(Fluids.WATER, 1_000), new FluidStack(Fluids.LAVA, 25), new FluidStack(Fluids.AIR, 4_000))
+				.inputFluids(new FluidStack(Fluids.WATER, 1_000), new FluidStack(Fluids.LAVA, 25), new FluidStack(Fluids.EARTHAIR, 4_000))
 				.outputItems(new ItemStack(Blocks.stone)));
 		this.register(new GenericRecipe("chem.obsidian").setup(60, 500).setPools(GenericRecipes.POOL_PREFIX_DISCOVER + ".stone")
-				.inputFluids(new FluidStack(Fluids.WATER, 1_000), new FluidStack(Fluids.LAVA, 500), new FluidStack(Fluids.AIR, 4_000))
+				.inputFluids(new FluidStack(Fluids.WATER, 1_000), new FluidStack(Fluids.LAVA, 500), new FluidStack(Fluids.EARTHAIR, 4_000))
 				.outputItems(new ItemStack(Blocks.obsidian)));
 		this.register(new GenericRecipe("chem.cobble.tears").setup(20, 100)
 				.inputFluids(new FluidStack(Fluids.URANUS_TEARS, 1_000), new FluidStack(Fluids.LAVA, 25))
 				.outputItems(new ItemStack(Blocks.cobblestone, 64)));
 		this.register(new GenericRecipe("chem.stone.tears").setup(60, 500).setPools(GenericRecipes.POOL_PREFIX_DISCOVER + ".stone")
-				.inputFluids(new FluidStack(Fluids.URANUS_TEARS, 1_000), new FluidStack(Fluids.LAVA, 25), new FluidStack(Fluids.AIR, 4_000))
+				.inputFluids(new FluidStack(Fluids.URANUS_TEARS, 1_000), new FluidStack(Fluids.LAVA, 25), new FluidStack(Fluids.EARTHAIR, 4_000))
 				.outputItems(new ItemStack(Blocks.stone, 64)));
 		this.register(new GenericRecipe("chem.obsidian.tears").setup(60, 500).setPools(GenericRecipes.POOL_PREFIX_DISCOVER + ".stone")
-				.inputFluids(new FluidStack(Fluids.URANUS_TEARS, 1_000), new FluidStack(Fluids.LAVA, 500), new FluidStack(Fluids.AIR, 4_000))
+				.inputFluids(new FluidStack(Fluids.URANUS_TEARS, 1_000), new FluidStack(Fluids.LAVA, 500), new FluidStack(Fluids.EARTHAIR, 4_000))
 				.outputItems(new ItemStack(Blocks.obsidian, 64)));
 		this.register(new GenericRecipe("chem.aggregate").setupNamed(320, 500).setPools(GenericRecipes.POOL_PREFIX_DISCOVER + ".stone")
 				.inputItems(new ComparableStack(Blocks.cobblestone, 16))
@@ -635,7 +635,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 		);
 		this.register(new GenericRecipe("chem.buurmic_acid").setup(200, 1000).setIcon(ModItems.fluid_icon, Fluids.BUURMIC_ACID.getID())
 			.inputItems(new ComparableStack(ModItems.powder_pure_buurmium))
-			.inputFluids(new FluidStack(Fluids.NITRIC_ACID, 1000, 1), new FluidStack(Fluids.AIR, 1000))
+			.inputFluids(new FluidStack(Fluids.NITRIC_ACID, 1000, 1), new FluidStack(Fluids.EARTHAIR, 1000))
 			.outputFluids(new FluidStack(Fluids.BUURMIC_ACID, 500))
 		);
 		this.register(new GenericRecipe("chem.diluted_buurmic_acid").setup(100, 500).setIcon(ModItems.fluid_icon, Fluids.DILUTED_BUURMIC_ACID.getID())

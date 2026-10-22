@@ -16,20 +16,20 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityPileVent extends TileEntityPileDeviceBase implements IFluidStandardReceiverMK2 {
-	
+
 	public FluidTank compair;
 	public boolean isActive = false;
-	
+
 	public float fan;
 	public float lastFan;
-	
+
 	public TileEntityPileVent() {
-		this.compair = new FluidTank(Fluids.AIR, 4_000).withPressure(1);
+		this.compair = new FluidTank(Fluids.EARTHAIR, 4_000).withPressure(1);
 	}
 
 	@Override public FluidTank[] getAllTanks() { return new FluidTank[] {compair}; }
 	@Override public FluidTank[] getReceivingTanks() { return new FluidTank[] {compair}; }
-	
+
 	@Override
 	public boolean canConnect(FluidType type, ForgeDirection dir) {
 		if(type != compair.getTankType()) return false;
@@ -39,14 +39,14 @@ public class TileEntityPileVent extends TileEntityPileDeviceBase implements IFlu
 
 	@Override
 	public void updateEntity() {
-		
+
 		if(!worldObj.isRemote) {
-			
+
 			ForgeDirection dir = getOrientation();
 			this.trySubscribe(compair.getTankType(), worldObj, xCoord + dir.offsetX, yCoord, zCoord + dir.offsetZ, dir);
-			
+
 			this.isActive = false;
-			
+
 			int x = xCoord - dir.offsetX;
 			int y = yCoord;
 			int z = zCoord - dir.offsetZ;
@@ -71,17 +71,17 @@ public class TileEntityPileVent extends TileEntityPileDeviceBase implements IFlu
 					}
 				}
 			}
-			
+
 			this.networkPackNT(35);
-			
+
 		} else {
-			
+
 			this.lastFan = fan;
 			if(this.isActive) {
 				this.fan += 45;
 				if(worldObj.rand.nextInt(20) == 0) worldObj.spawnParticle("cloud", xCoord + 0.5, yCoord + 1, zCoord + 0.5, 0, 0.05, 0);
 			}
-			
+
 			if(this.fan >= 360) {
 				this.lastFan -= 360;
 				this.fan -= 360;

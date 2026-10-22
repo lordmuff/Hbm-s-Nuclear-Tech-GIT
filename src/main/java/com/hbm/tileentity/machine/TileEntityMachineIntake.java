@@ -50,7 +50,7 @@ public class TileEntityMachineIntake extends TileEntityLoadedBase implements IEn
 					if(this.compair.getTankType() != Fluids.VITREOUS_VAPOR) this.compair.setTankType(Fluids.VITREOUS_VAPOR);
 					if(worldObj.getTotalWorldTime() % 5 == 0 && this.compair.getFill() < this.compair.getMaxFill()) this.compair.setFill(this.compair.getFill() + 1);
 				} else {
-					if(this.compair.getTankType() != Fluids.AIR) this.compair.setTankType(Fluids.AIR);
+					if(this.compair.getTankType() != Fluids.EARTHAIR) this.compair.setTankType(Fluids.EARTHAIR);
 					if(canCompress()) {
 						this.compair.setFill(this.compair.getMaxFill());
 					}
@@ -119,7 +119,7 @@ public class TileEntityMachineIntake extends TileEntityLoadedBase implements IEn
 
 		List<AtmosphereBlob> blobs = ChunkAtmosphereManager.proxy.getBlobs(worldObj, xCoord, yCoord, zCoord);
 		for(AtmosphereBlob blob : blobs) {
-			if(!blob.hasFluid(Fluids.AIR) && blob.hasPressure(0.1)) {
+			if(!blob.hasFluid(Fluids.EARTHAIR) && blob.hasPressure(0.1)) {
 				blob.consume(consumption);
 				return true;
 			}
@@ -188,7 +188,7 @@ public class TileEntityMachineIntake extends TileEntityLoadedBase implements IEn
 	}
 
 	@Override public boolean canConnect(ForgeDirection dir) { return dir != ForgeDirection.UP && dir != ForgeDirection.DOWN; }
-	@Override public boolean canConnect(FluidType type, ForgeDirection dir) { return (type == Fluids.AIR || type == Fluids.VITREOUS_VAPOR) && dir != ForgeDirection.UP && dir != ForgeDirection.DOWN; }
+	@Override public boolean canConnect(FluidType type, ForgeDirection dir) { return (type == Fluids.EARTHAIR || type == Fluids.VITREOUS_VAPOR) && dir != ForgeDirection.UP && dir != ForgeDirection.DOWN; }
 
 	@Override public void setPower(long i) { power = i; }
 	@Override public long getPower() { return power; }

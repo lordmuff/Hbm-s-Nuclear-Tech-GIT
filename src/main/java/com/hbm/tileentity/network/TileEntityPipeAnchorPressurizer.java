@@ -18,7 +18,7 @@ public class TileEntityPipeAnchorPressurizer extends TileEntityLoadedBase implem
 
 	public TileEntityPipeAnchorPressurizer() {
 		tanks[0] = new FluidTank(Fluids.NONE, 24_000);
-		tanks[1] = new FluidTank(Fluids.AIR, 24_000);
+		tanks[1] = new FluidTank(Fluids.EARTHAIR, 24_000);
 	}
 
 	@Override
@@ -45,8 +45,8 @@ public class TileEntityPipeAnchorPressurizer extends TileEntityLoadedBase implem
 					}
 				}
 
-				this.trySubscribe(Fluids.AIR, worldObj, bx + back.offsetX, yCoord, bz + back.offsetZ, back);
-				this.trySubscribe(Fluids.AIR, worldObj, bx, yCoord - 1, bz, ForgeDirection.DOWN);
+				this.trySubscribe(Fluids.EARTHAIR, worldObj, bx + back.offsetX, yCoord, bz + back.offsetZ, back);
+				this.trySubscribe(Fluids.EARTHAIR, worldObj, bx, yCoord - 1, bz, ForgeDirection.DOWN);
 			}
 
 			this.networkPackNT(20);
@@ -94,9 +94,9 @@ public class TileEntityPipeAnchorPressurizer extends TileEntityLoadedBase implem
 	@Override
 	public boolean canConnect(FluidType type, ForgeDirection dir) {
 		ForgeDirection facing = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
-		if(dir == ForgeDirection.DOWN) return type == Fluids.AIR;
+		if(dir == ForgeDirection.DOWN) return type == Fluids.EARTHAIR;
 		if(dir == facing) return type == tanks[0].getTankType() || tanks[0].getTankType() == Fluids.NONE;
-		if(dir == facing.getOpposite()) return type == Fluids.AIR;
+		if(dir == facing.getOpposite()) return type == Fluids.EARTHAIR;
 		return false;
 	}
 

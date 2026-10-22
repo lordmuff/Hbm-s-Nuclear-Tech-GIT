@@ -57,7 +57,7 @@ public class MagneticSeparatorRecipes extends GenericRecipes<GenericRecipe> {
 		this.register(new GenericRecipe("magsep.certicVapors").setup(200, 500)
 				.inputFluids(new FluidStack(Fluids.CERTIC_VAPORS, 1_000))
 				.outputItems(new ItemStack(ModItems.powder_certus_quartz, 1))
-				.outputFluids(new FluidStack(Fluids.AIR, 1_000)));
+				.outputFluids(new FluidStack(Fluids.EARTHAIR, 1_000)));
 	}
 
 	private static ItemStack bloodVial() {
