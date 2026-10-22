@@ -779,7 +779,7 @@ public class PUREXRecipes extends GenericRecipes<GenericRecipe> {
 				new ItemStack(ModItems.powder_boron_tiny, 1)));
 
 		this.register(new GenericRecipe("purex.gravelsloodge").setNameWrapper("purex.gravelsloodge").setup(444, 20_000).setIcon(ModBlocks.block_australium)
-			.inputFluids(new FluidStack(Fluids.RADIOSOLVENT, 12_000), new FluidStack(Fluids.LEAD_HOT, 3_000), new FluidStack(Fluids.GASEOUS_URANIUM_BROMIDE, 500))
+			.inputFluids(new FluidStack(Fluids.RADIOSOLVENT, 6_000), new FluidStack(Fluids.LEAD_HOT, 3_000), new FluidStack(Fluids.GASEOUS_URANIUM_BROMIDE, 500))
 			.inputItems(new ComparableStack(Blocks.gravel, 64), new ComparableStack(Blocks.gravel, 64), new ComparableStack(Blocks.gravel, 64))
 			.outputFluids(new FluidStack(Fluids.GRAVELSLOODGE, 1_750)));
 
