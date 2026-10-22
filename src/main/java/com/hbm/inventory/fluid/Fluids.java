@@ -389,7 +389,6 @@ public class Fluids {
 	public static final FT_LeadContainer LEADCON = new FT_LeadContainer();
 	public static final FT_NoContainer NOCON = new FT_NoContainer();
 	public static final FT_NoID NOID = new FT_NoID();
-	public static final FT_Delicious DELICIOUS = new FT_Delicious();
 	public static final FT_ULTRAKILL ULTRAKILL = new FT_ULTRAKILL();
 	public static final FT_EXPLOSIVE EXPLOSIVE = new FT_EXPLOSIVE();
 	public static final FT_Leaded LEADED = new FT_Leaded();
@@ -645,12 +644,9 @@ public class Fluids {
 		PLASMA_BFFR =		    new FluidType("PLASMA_BFFR",			0x0f330f, 5, 5, 5, EnumSymbol.ANTIMATTER).setTemp(66666).addTraits(NOCON, NOID, PLASMA, new FT_Rocket(125000, 777_777));
 		GELASCHRAB_TS =			new FluidType("GELASCHRAB_TS",	0x663e47, 3, 0, 3, EnumSymbol.ANTIMATTER).addTraits(ANTI, GASEOUS).addTraits(new FT_VentRadiation(8F));
 		DHC =					new FluidType("DHC",				0xD2AFFF, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
-		AIR =					new FluidType("AIR",				0xE7EAEB, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
 		LITHYDRO =				new FluidType("LITHYDRO",			0xD1CEBE, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
 		LITHCARBONATE =		       new FluidType("LITHCARBONATE",	       0xD1CEBE, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
-		GRAVELSLOODGE =					new FluidType("GRAVELSLOODGE",				0x929D45, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
-		LITHCARBONATE =			new FluidType("LITHCARBONATE",		0xD1CEBE, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
-		AIRBLAST =				new FluidType("AIRBLAST",			0xFFDADA, 0, 3, 0, EnumSymbol.NONE).setTemp(1_200).addTraits(GASEOUS);
+		GRAVELSLOODGE =					new FluidType("GRAVELSLOODGE",				0x929D45, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);AIRBLAST =				new FluidType("AIRBLAST",			0xFFDADA, 0, 3, 0, EnumSymbol.NONE).setTemp(1_200).addTraits(GASEOUS);
 		FLUE =					new FluidType("FLUE",				0x131313, 1, 4, 1, EnumSymbol.NONE).addContainers(new CD_Gastank(0xFF4545, 0xFFE97F)).addTraits(new FT_Flammable(25_000), GASEOUS, new FT_Polluting().burn(PollutionType.SOOT, SOOT_GAS).release(PollutionType.SOOT, SOOT_GAS * 25));
 		DROSSAIR =				new FluidType("DROSSAIR",			0x1E5B2E, 4, 0, 0, EnumSymbol.NONE).addContainers(new CD_Gastank(0x1E5B2E, 0x0A2E15)).addTraits(GASEOUS, new FT_Poison(true, 1));
 
@@ -779,7 +775,6 @@ public class Fluids {
 		//null
 		metaOrder.add(NONE);
 		//vanilla
-		metaOrder.add(AIR);
 		metaOrder.add(WATER);
 		metaOrder.add(HEAVYWATER);
 		metaOrder.add(HEAVYWATER_HOT);

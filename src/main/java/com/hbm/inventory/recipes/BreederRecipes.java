@@ -67,8 +67,6 @@ public class BreederRecipes extends SerializableRecipe {
 		recipes.put((new OreDictStack(BI.ingot())),		    new Tuple.Pair<>(new ItemStack(ModItems.ingot_polonium), 1200));
 		recipes.put((new OreDictStack(BI.nugget())),	    new Tuple.Pair<>(new ItemStack(ModItems.nugget_polonium), 120));
 		recipes.put((new OreDictStack(BI.dust())),		    new Tuple.Pair<>(new ItemStack(ModItems.powder_polonium), 1200));
-
-		recipes.put(new ComparableStack(ModItems.meteorite_sword_etched), new Tuple.Pair<>(new ItemStack(ModItems.meteorite_sword_bred), 1000));
 	}
 
 	/** Sets recipes for single, dual, and quad rods **/
